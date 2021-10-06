@@ -15,9 +15,9 @@ export class UserComponent {
 
   user: User | undefined;
 
-  userToRegister: User = new User(0, '', '');
+  userToRegister: User = new User(0, '', '', '','','','',0,0,0,0);
 
-  userToLogin: User = new User(0, '', '');
+  userToLogin: User = new User(0, '', '', '','','','',0,0,0,0);
 
   endpointMsgUser: string = '';
   endpointMsgAdmin: string = '';
