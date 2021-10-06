@@ -11,7 +11,7 @@ export class User {
     public houseNumber: string,
     public zipCode: string,
     public city: string,
-    public birthday: string, // form ddmmyyyy -> maybe change to number -> not yet clear, which data type will fit best
+    public birthday: string, // form yyyy-mm-dd
     public phoneNumber: string
   ) {}
 }
