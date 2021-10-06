@@ -6,6 +6,15 @@ export interface UserAttributes {
     userName: string;
     password: string;
     admin: boolean;
+    firstName: string;
+    lastName: string;
+    email: string;
+    street: string;
+    houseNumber: string;
+    zipCode: string;
+    city: string;
+    birthday: Date;
+    phoneNumber: string;
 }
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'userId'> { }
@@ -15,6 +24,15 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
     userName!: string;
     password!: string;
     admin!: boolean;
+    firstName: string;
+    lastName: string;
+    email: string;
+    street: string;
+    houseNumber: string;
+    zipCode: string;
+    city: string;
+    birthday: Date;
+    phoneNumber: string;
 
     public static initialize(sequelize: Sequelize) {
         User.init({
@@ -34,6 +52,33 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
             admin: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false
+            },
+            firstName: {
+                type: DataTypes.STRING,
+            },
+            lastName: {
+                type: DataTypes.STRING,
+            },
+            email: {
+                type: DataTypes.STRING,
+            },
+            street: {
+                type: DataTypes.STRING,
+            },
+            houseNumber: {
+                type: DataTypes.STRING,
+            },
+            zipCode: {
+                type: DataTypes.STRING,
+            },
+            city: {
+                type: DataTypes.STRING,
+            },
+            birthday: {
+                type: DataTypes.DATE,
+            },
+            phoneNumber: {
+                type: DataTypes.STRING,
             }
         },
             {
