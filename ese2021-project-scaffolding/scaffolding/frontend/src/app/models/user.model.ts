@@ -8,10 +8,10 @@ export class User {
     public lastName: string,
     public email: string,
     public street: string,
-    public houseNr: number,
-    public zipCode: number,
-    public birthday: number,
-    // form ddmmyyyy -> maybe change to string -> not yet clear, which data type will fit best
-    public phoneNumber: number
+    public houseNumber: string,
+    public zipCode: string,
+    public city: string,
+    public birthday: string, // form ddmmyyyy -> maybe change to number -> not yet clear, which data type will fit best
+    public phoneNumber: string
   ) {}
 }
