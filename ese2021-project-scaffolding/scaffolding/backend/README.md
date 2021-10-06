@@ -292,7 +292,7 @@ Some endpoints can be called in a [browser](http://localhost:3000), others have 
 		"zipCode": "string(optional)",
 		"city": "string(optional)",
 		"phoneNumber": "string(optional)",
-		"birthday": "string, format: 2001-09-19 18:52:45.550 +00:00",
+		"birthday": "string(optional, format: 2001-09-19 18:52:45.550 +00:00)"
 	}
 
 	```
