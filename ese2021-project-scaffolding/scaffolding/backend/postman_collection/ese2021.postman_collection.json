@@ -119,7 +119,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+					"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
