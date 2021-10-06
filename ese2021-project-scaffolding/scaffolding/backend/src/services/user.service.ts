@@ -4,6 +4,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export class UserService {
+    // TODO: Only purpose is to test the correct configuration of the testing framework. Remove this function after writing new tests
+    static returnTrue(): boolean {
+        return true;
+    }
 
     public register(user: UserAttributes): Promise<UserAttributes> {
         const saltRounds = 12;
