@@ -259,8 +259,17 @@ Some endpoints can be called in a [browser](http://localhost:3000), others have 
 		Body:
 	```json
 	{
-		"userName":"string",
-		"password":"stiring"
+		"userName": "string",
+		"password": "string",
+		"firstName": "string(optional)",
+		"lastName": "string(optional)",
+		"email": "string(optional)",
+		"street": "string(optional)",
+		"houseNumber": "string(optional)",
+		"zipCode": "string(optional)",
+		"city": "string(optional)",
+		"phoneNumber": "string(optional)",
+		"birthday": "string(optional, format: 2001-09-19)"
 	}
 
 	```
@@ -274,7 +283,16 @@ Some endpoints can be called in a [browser](http://localhost:3000), others have 
 	{
 		"userId": "number",
 		"userName":"string",
-		"password":"string(hashed)"
+		"password":"string(hashed)",
+		"firstName": "string(optional)",
+		"lastName": "string(optional)",
+		"email": "string(optional)",
+		"street": "string(optional)",
+		"houseNumber": "string(optional)",
+		"zipCode": "string(optional)",
+		"city": "string(optional)",
+		"phoneNumber": "string(optional)",
+		"birthday": "string(optional, format: 2001-09-19)"
 	}
 
 	```
@@ -285,10 +303,11 @@ Some endpoints can be called in a [browser](http://localhost:3000), others have 
 		<summary>Request</summary>
 
 		Code: 200
-		Body:
+		Body: one of the fields userName or email must be present
 	```json
 	{
-		"userName":"string",
+		"userName":"string(optional)",
+		"email":"string(optional)",
 		"password":"string"
 	}
 
