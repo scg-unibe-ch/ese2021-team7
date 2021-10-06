@@ -13,11 +13,16 @@ export class UserService {
 
     public login(loginRequestee: LoginRequest): Promise<User | LoginResponse> {
         const secret = process.env.JWT_SECRET;
-        return User.findOne({
-            where: {
-                userName: loginRequestee.userName
-            }
-        })
+        const where = {};
+        if (loginRequestee.userName) {
+            // @ts-ignore
+            where.userName = loginRequestee.userName;
+        }
+        if (loginRequestee.email) {
+            // @ts-ignore
+            where.email = loginRequestee.email;
+        }
+        return User.findOne({where})
         .then(user => {
             if (bcrypt.compareSync(loginRequestee.password, user.password)) {// compares the hash with the password from the login request
                 const token: string = jwt.sign({ userName: user.userName, userId: user.userId, admin: user.admin }, secret, { expiresIn: '2h' });
