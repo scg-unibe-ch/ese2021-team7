@@ -15,9 +15,9 @@ export class UserComponent {
 
   user: User | undefined;
 
-  userToRegister: User = new User(0, '', '');
+  userToRegister: User = new User(0, '', '', '','','','','','','','','');
 
-  userToLogin: User = new User(0, '', '');
+  userToLogin: User = new User(0, '', '', '','','','','','','','','');
 
   endpointMsgUser: string = '';
   endpointMsgAdmin: string = '';
@@ -47,15 +47,18 @@ export class UserComponent {
   loginUser(): void {
     this.httpClient.post(environment.endpointURL + "user/login", {
       userName: this.userToLogin.username,
-      password: this.userToLogin.password
+      password: this.userToLogin.password,
+      email: this.userToLogin.email
     }).subscribe((res: any) => {
-      this.userToLogin.username = this.userToLogin.password = '';
+      this.userToLogin.username = this.userToLogin.email = this.userToLogin.password = '';
 
       localStorage.setItem('userName', res.user.userName);
       localStorage.setItem('userToken', res.token);
 
       this.userService.setLoggedIn(true);
-      this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password));
+      this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.firstName,
+        res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city
+        ,res.user.birthday,res.user.phoneNumber));
     });
   }
 
