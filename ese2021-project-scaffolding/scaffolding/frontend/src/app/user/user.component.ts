@@ -21,6 +21,7 @@ export class UserComponent {
 
   endpointMsgUser: string = '';
   endpointMsgAdmin: string = '';
+  endpointLogin: string = '';
 
   constructor(
     public httpClient: HttpClient,
@@ -38,9 +39,21 @@ export class UserComponent {
   registerUser(): void {
     this.httpClient.post(environment.endpointURL + "user/register", {
       userName: this.userToRegister.username,
-      password: this.userToRegister.password
-    }).subscribe(() => {
-      this.userToRegister.username = this.userToRegister.password = '';
+      password: this.userToRegister.password,
+      firstName: this.userToRegister.firstName,
+      lastName: this.userToRegister.lastName,
+      email: this.userToRegister.email,
+      street: this.userToRegister.street,
+      houseNumber: this.userToRegister.houseNumber,
+      zipCode: this.userToRegister.zipCode,
+      city: this.userToRegister.city,
+      phoneNumber: this.userToRegister.phoneNumber,
+      birthday: this.userToRegister.birthday
+    }).subscribe((res: any) => {
+      //console.log(res);
+      this.userToRegister.username = this.userToRegister.password = this.userToRegister.firstName = this.userToRegister.lastName = this.userToRegister.email =
+        this.userToRegister.street = this.userToRegister.houseNumber = this.userToRegister.zipCode = this.userToRegister.city = this.userToRegister.phoneNumber =
+          this.userToRegister.birthday ='';
     });
   }
 
@@ -53,17 +66,29 @@ export class UserComponent {
       this.userToLogin.username = this.userToLogin.email = this.userToLogin.password = '';
 
       localStorage.setItem('userName', res.user.userName);
+      localStorage.setItem('email', res.user.email);
       localStorage.setItem('userToken', res.token);
 
       this.userService.setLoggedIn(true);
       this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.firstName,
         res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city
         ,res.user.birthday,res.user.phoneNumber));
+    }, () => {
+      //this.endpointLogin = "Wrong login information";
+      this.loginCheck();
     });
+  }
+
+  loginCheck(): void{
+    // needs to be extended to define if the error comes from the login or the username
+    if (1) {
+      this.endpointLogin = "Wrong login information";
+    }
   }
 
   logoutUser(): void {
     localStorage.removeItem('userName');
+    localStorage.removeItem('email');
     localStorage.removeItem('userToken');
 
     this.userService.setLoggedIn(false);
