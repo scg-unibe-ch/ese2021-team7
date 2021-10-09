@@ -49,7 +49,7 @@
     <mat-form-field>
       <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="userToLogin.password">
     </mat-form-field>
-    <button mat-flat-button color="primary" (click)="loginUser()">Login</button>
+    <button mat-flat-button color="primary" (click)="loginUser()">Login</button>{{ endpointLogin }}
   </div>
 
   <div *ngIf="loggedIn">

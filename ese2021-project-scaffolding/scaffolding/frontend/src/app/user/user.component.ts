@@ -21,6 +21,7 @@ export class UserComponent {
 
   endpointMsgUser: string = '';
   endpointMsgAdmin: string = '';
+  endpointLogin: string = '';
 
   constructor(
     public httpClient: HttpClient,
@@ -72,11 +73,22 @@ export class UserComponent {
       this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.firstName,
         res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city
         ,res.user.birthday,res.user.phoneNumber));
+    }, () => {
+      //this.endpointLogin = "Wrong login information";
+      this.loginCheck();
     });
+  }
+
+  loginCheck(): void{
+    // needs to be extended to define if the error comes from the login or the username
+    if (1) {
+      this.endpointLogin = "Wrong login information";
+    }
   }
 
   logoutUser(): void {
     localStorage.removeItem('userName');
+    localStorage.removeItem('email');
     localStorage.removeItem('userToken');
 
     this.userService.setLoggedIn(false);
