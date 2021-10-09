@@ -10,6 +10,10 @@ import {LoginResponse} from '../src/models/login.model';
 chai.use(require('chai-as-promised'));
 const assert = chai.assert;
 
+before(() => {
+    process.env.JWT_SECRET = 'not_secure';
+});
+
 describe('Test User.register', () => {
     describe('Test whether registering with an existing user name is rejected', () => {
         it('Should reject promise if the user name is already existing', function() {
@@ -28,7 +32,11 @@ describe('Test User.register', () => {
                 birthday: new Date(1995, 12, 3),
                 phoneNumber: '123456'
             };
-            sinon.stub(UserService, 'findUserByNameOrMail').resolves(user);
+            const userPromise = new Promise((resolve, reject) => {
+                resolve(user);
+            });
+
+            sinon.stub(UserService, 'findUserByNameOrMail').resolves(userPromise);
             const userService = new UserService();
             return assert.isRejected(userService.register(user));
         });
@@ -61,9 +69,12 @@ describe('Test user login with existing user', () => {
                 birthday: new Date(1995, 12, 3),
                 phoneNumber: '123456'
             };
+            const userPromise = new Promise((resolve, reject) => {
+                resolve(user);
+            });
 
-            const stubFindUsername = sinon.stub(UserService, 'findUserByNameOrMail').resolves(user);
-            const stubCheckPassword = sinon.createStubInstance(bcrypt);
+            const stubFindUsername = sinon.stub(UserService, 'findUserByNameOrMail').resolves(userPromise);
+            const stubCheckPassword = sinon.stub(bcrypt, 'compareSync').returns(true);
             stubCheckPassword.compareSync.returnsThis(false);
 
             const userService = new UserService();
@@ -90,7 +101,6 @@ describe('Test login with not existing user', () => {
     });
 });
 
-// TODO: Fix this idiotic test who's not working because bcrypt can't be stubed properly
 describe('Successful login', () => {
     describe('Successful login', () => {
         it('Should return a fulfilled promise', () => {
@@ -114,8 +124,11 @@ describe('Successful login', () => {
                 birthday: new Date(1995, 12, 3),
                 phoneNumber: '123456'
             };
+            const userPromise = new Promise((resolve, reject) => {
+                resolve(user);
+            });
 
-            const stubFindUsername = sinon.stub(UserService, 'findUserByNameOrMail').resolves(user);
+            const stubFindUsername = sinon.stub(UserService, 'findUserByNameOrMail').resolves(userPromise);
             const stubCheckPassword = sinon.stub(bcrypt, 'compareSync').returns(true);
 
             const userService = new UserService();

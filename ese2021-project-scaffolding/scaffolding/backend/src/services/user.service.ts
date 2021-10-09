@@ -3,18 +3,27 @@ import { LoginResponse, LoginRequest } from '../models/login.model';
 import { ErrorCodes } from '../errorCodes';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import {Op} from 'sequelize';
 
 export class UserService {
 
     public static findUserByNameOrMail(credentialsRequestee: LoginRequest): Promise<User> {
         const where = {};
-        if (credentialsRequestee.userName) {
-            // @ts-ignore
-            where.userName = credentialsRequestee.userName;
-        }
-        if (credentialsRequestee.email) {
+        if (credentialsRequestee.userName && credentialsRequestee.email) {
+            return User.findOne({
+                where: {
+                    [Op.or]: [
+                        {userName: credentialsRequestee.userName},
+                        {email: credentialsRequestee.email}
+                    ]
+                }
+            });
+        } else if (credentialsRequestee.email) {
             // @ts-ignore
             where.email = credentialsRequestee.email;
+        }  else if (credentialsRequestee.userName) {
+            // @ts-ignore
+            where.userName = credentialsRequestee.userName;
         }
 
         return User.findOne({where});
@@ -25,29 +34,50 @@ export class UserService {
         const credentials: LoginRequest = {userName: user.userName, email: user.email, password: user.password};
         user.password = bcrypt.hashSync(user.password, saltRounds); // hashes the password, never store passwords as plaintext
 
-        if (UserService.findUserByNameOrMail(credentials)) {
-            return Promise.reject({message: ErrorCodes.getUserNameOrMailAlreadyInUse()});
-        }
-        return User.create(user).then(inserted => Promise.resolve(inserted)).catch(err => Promise.reject(err));
+        return UserService.findUserByNameOrMail(credentials)
+            .then(existingUser => {
+                    if (existingUser) {
+                        return Promise.reject({message: ErrorCodes.getUserNameOrMailAlreadyInUse()});
+                    } else {
+                        return User.create(user).then(inserted => Promise.resolve(inserted)).catch(err => Promise.reject(err));
+                    }
+                }
+            ).catch(
+                err => Promise.reject({message: err})
+            );
     }
 
     public login(loginRequestee: LoginRequest): Promise<User | LoginResponse> {
         const secret = process.env.JWT_SECRET;
         const requestee = UserService.findUserByNameOrMail(loginRequestee);
-        if (!requestee) {
+
+        if (!loginRequestee.email && !loginRequestee.userName) {
             return Promise.reject({message: ErrorCodes.getNoUserNameOrMailProvided()});
         }
 
         return requestee
-        .then(user => {
-            if (bcrypt.compareSync(loginRequestee.password, user.password)) {// compares the hash with the password from the login request
-                const token: string = jwt.sign({ userName: user.userName, userId: user.userId, admin: user.admin }, secret, { expiresIn: '2h' });
-                return Promise.resolve({ user, token });
-            } else {
-                return Promise.reject({ message: ErrorCodes.getWrongUserNameOrMailOrPassword() });
-            }
-        })
-        .catch(err => Promise.reject({ message: err }));
+            .then(user => {
+                    if (user) {
+                        // compares the hash with the password from the login request
+                        if (bcrypt.compareSync(loginRequestee.password, user.password)) {
+                            const token: string = jwt.sign({
+                                userName: user.userName,
+                                userId: user.userId,
+                                admin: user.admin
+                            }, secret, {expiresIn: '2h'});
+                            return Promise.resolve({user, token});
+                        } else {
+                            // user found in DB, but wrong password
+                            return Promise.reject({message: ErrorCodes.getWrongUserNameOrMailOrPassword()});
+                        }
+                    } else {
+                        // user not found in DB
+                        return Promise.reject({message: ErrorCodes.getWrongUserNameOrMailOrPassword()});
+                    }
+                }
+            ).catch(
+                err => Promise.reject({message: err})
+            );
     }
 
     public getAll(): Promise<User[]> {
