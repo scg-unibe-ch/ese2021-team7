@@ -65,6 +65,7 @@ export class UserComponent {
       this.userToLogin.username = this.userToLogin.email = this.userToLogin.password = '';
 
       localStorage.setItem('userName', res.user.userName);
+      localStorage.setItem('email', res.user.email);
       localStorage.setItem('userToken', res.token);
 
       this.userService.setLoggedIn(true);

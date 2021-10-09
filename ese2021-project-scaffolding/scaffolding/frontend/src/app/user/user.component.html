@@ -44,6 +44,9 @@
       <input matInput type="text" placeholder="User Name" name="name" [(ngModel)]="userToLogin.username">
     </mat-form-field>
     <mat-form-field>
+      <input matInput type="text" placeholder="Email" name="email" [(ngModel)]="userToLogin.email">
+    </mat-form-field>
+    <mat-form-field>
       <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="userToLogin.password">
     </mat-form-field>
     <button mat-flat-button color="primary" (click)="loginUser()">Login</button>
