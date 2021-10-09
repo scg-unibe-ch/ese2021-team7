@@ -38,9 +38,21 @@ export class UserComponent {
   registerUser(): void {
     this.httpClient.post(environment.endpointURL + "user/register", {
       userName: this.userToRegister.username,
-      password: this.userToRegister.password
-    }).subscribe(() => {
-      this.userToRegister.username = this.userToRegister.password = '';
+      password: this.userToRegister.password,
+      firstName: this.userToRegister.firstName,
+      lastName: this.userToRegister.lastName,
+      email: this.userToRegister.email,
+      street: this.userToRegister.street,
+      houseNumber: this.userToRegister.houseNumber,
+      zipCode: this.userToRegister.zipCode,
+      city: this.userToRegister.city,
+      phoneNumber: this.userToRegister.phoneNumber,
+      birthday: this.userToRegister.birthday
+    }).subscribe((res: any) => {
+      //console.log(res);
+      this.userToRegister.username = this.userToRegister.password = this.userToRegister.firstName = this.userToRegister.lastName = this.userToRegister.email =
+        this.userToRegister.street = this.userToRegister.houseNumber = this.userToRegister.zipCode = this.userToRegister.city = this.userToRegister.phoneNumber =
+          this.userToRegister.birthday ='';
     });
   }
 
