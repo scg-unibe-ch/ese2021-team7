@@ -40,6 +40,10 @@
   <h3>Login</h3>
 
   <div *ngIf="!loggedIn">
+
+    <mat-card-subtitle>
+    Login with username or email
+    </mat-card-subtitle>
     <mat-form-field>
       <input matInput type="text" placeholder="User Name or Email" name="name or email" [(ngModel)]="userToLogin.username">
     </mat-form-field>
