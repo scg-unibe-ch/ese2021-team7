@@ -9,19 +9,10 @@ export class UserService {
 
     public static findUserByNameOrMail(credentialsRequestee: LoginRequest): Promise<User> {
         const where = {};
-        if (credentialsRequestee.userName && credentialsRequestee.email) {
-            return User.findOne({
-                where: {
-                    [Op.or]: [
-                        {userName: credentialsRequestee.userName},
-                        {email: credentialsRequestee.email}
-                    ]
-                }
-            });
-        } else if (credentialsRequestee.email) {
+        if (credentialsRequestee.email) {
             // @ts-ignore
             where.email = credentialsRequestee.email;
-        }  else if (credentialsRequestee.userName) {
+        } else if (credentialsRequestee.userName) {
             // @ts-ignore
             where.userName = credentialsRequestee.userName;
         }
@@ -53,6 +44,8 @@ export class UserService {
 
         if (!loginRequestee.email && !loginRequestee.userName) {
             return Promise.reject({message: ErrorCodes.getNoUserNameOrMailProvided()});
+        } else if (loginRequestee.email && loginRequestee.userName) {
+            return Promise.reject({message: ErrorCodes.getIllegalRequestFormat()});
         }
 
         return requestee
@@ -68,11 +61,11 @@ export class UserService {
                             return Promise.resolve({user, token});
                         } else {
                             // user found in DB, but wrong password
-                            return Promise.reject({message: ErrorCodes.getWrongUserNameOrMailOrPassword()});
+                            return Promise.reject({message: ErrorCodes.getWrongPassword()});
                         }
                     } else {
                         // user not found in DB
-                        return Promise.reject({message: ErrorCodes.getWrongUserNameOrMailOrPassword()});
+                        return Promise.reject({message: ErrorCodes.getUserNotFound()});
                     }
                 }
             ).catch(
