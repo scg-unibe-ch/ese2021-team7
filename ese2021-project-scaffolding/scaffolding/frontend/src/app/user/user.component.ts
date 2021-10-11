@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { User } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from '../services/user.service';
 
@@ -63,6 +63,7 @@ export class UserComponent {
       password: this.userToLogin.password,
       email: this.userToLogin.email
     }).subscribe((res: any) => {
+      //console.log(res);
       this.userToLogin.username = this.userToLogin.email = this.userToLogin.password = '';
 
       localStorage.setItem('userName', res.user.userName);
@@ -73,16 +74,17 @@ export class UserComponent {
       this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.firstName,
         res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city
         ,res.user.birthday,res.user.phoneNumber));
-    }, () => {
-      //this.endpointLogin = "Wrong login information";
-      this.loginCheck();
+    }, (error) => {
+      this.handleLoginError(error);
     });
   }
 
-  loginCheck(): void{
-    // needs to be extended to define if the error comes from the login or the username
-    if (1) {
-      this.endpointLogin = "Wrong login information";
+  handleLoginError(error: HttpErrorResponse){
+    if(error.error.message.message == '20') {
+      this.endpointLogin = "Wrong username, email or password";
+    }
+    if(error.error.message == '21'){
+      this.endpointLogin = "No username or email provided";
     }
   }
 
