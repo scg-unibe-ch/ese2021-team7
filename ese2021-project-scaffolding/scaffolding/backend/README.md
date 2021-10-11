@@ -303,7 +303,7 @@ Some endpoints can be called in a [browser](http://localhost:3000), others have 
 		<summary>Request</summary>
 
 		Code: 200
-		Body: one of the fields userName or email must be present
+		Body: exactly one of the fields userName or email must be present
 	```json
 	{
 		"userName":"string(optional)",
