@@ -63,7 +63,6 @@ export class UserComponent {
       password: this.userToLogin.password,
       email: this.userToLogin.email
     }).subscribe((res: any) => {
-      //console.log(res);
       this.userToLogin.username = this.userToLogin.email = this.userToLogin.password = '';
 
       localStorage.setItem('userName', res.user.userName);
@@ -80,11 +79,17 @@ export class UserComponent {
   }
 
   handleLoginError(error: HttpErrorResponse){
-    if(error.error.message.message == '20') {
-      this.endpointLogin = "Wrong username, email or password";
-    }
     if(error.error.message == '21'){
       this.endpointLogin = "No username or email provided";
+    }
+    if(error.error.message.message == '22') {
+      this.endpointLogin = "User not found";
+    }
+    if(error.error.message.message == '23') {
+      this.endpointLogin = "Wrong password";
+    }
+    if(error.error.message == '24') {
+      this.endpointLogin = "Illegal request format";
     }
   }
 

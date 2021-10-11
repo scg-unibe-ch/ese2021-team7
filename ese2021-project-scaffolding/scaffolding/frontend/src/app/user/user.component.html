@@ -41,7 +41,10 @@
 
   <div *ngIf="!loggedIn">
     <mat-form-field>
-      <input matInput type="text" placeholder="User Name or Email" name="name or email" [(ngModel)]="userToLogin.username" [(ngModel)]="userToLogin.email">
+      <input matInput type="text" placeholder="User Name or Email" name="name or email" [(ngModel)]="userToLogin.username">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" placeholder="User Name or Email" name="name or email"  [(ngModel)]="userToLogin.email">
     </mat-form-field>
     <mat-form-field>
       <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="userToLogin.password">
