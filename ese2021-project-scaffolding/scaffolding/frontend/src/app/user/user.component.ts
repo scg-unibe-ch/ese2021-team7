@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { User } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from '../services/user.service';
 
@@ -73,16 +73,23 @@ export class UserComponent {
       this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.firstName,
         res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city
         ,res.user.birthday,res.user.phoneNumber));
-    }, () => {
-      //this.endpointLogin = "Wrong login information";
-      this.loginCheck();
+    }, (error) => {
+      this.handleLoginError(error);
     });
   }
 
-  loginCheck(): void{
-    // needs to be extended to define if the error comes from the login or the username
-    if (1) {
-      this.endpointLogin = "Wrong login information";
+  handleLoginError(error: HttpErrorResponse){
+    if(error.error.message == '21'){
+      this.endpointLogin = "No username or email provided";
+    }
+    if(error.error.message.message == '22') {
+      this.endpointLogin = "User not found";
+    }
+    if(error.error.message.message == '23') {
+      this.endpointLogin = "Wrong password";
+    }
+    if(error.error.message == '24') {
+      this.endpointLogin = "Illegal request format";
     }
   }
 
