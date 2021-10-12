@@ -89,10 +89,10 @@ export class UserComponent {
     if(error.error.message == '21'){
       this.endpointLogin = "No username or email provided";
     }
-    if(error.error.message.message == '22') {
+    if(error.error.message == '22') {
       this.endpointLogin = "User not found";
     }
-    if(error.error.message.message == '23') {
+    if(error.error.message == '23') {
       this.endpointLogin = "Wrong password";
     }
     if(error.error.message == '24') {
