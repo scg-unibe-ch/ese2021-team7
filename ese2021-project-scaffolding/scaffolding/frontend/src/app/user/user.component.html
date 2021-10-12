@@ -45,10 +45,10 @@
     Login with username or email
     </mat-card-subtitle>
     <mat-form-field>
-      <input matInput type="text" placeholder="User Name or Email" name="name or email" [(ngModel)]="userToLogin.username">
+      <input matInput type="text" [disabled]="!activeUserNameField" placeholder="User Name" name="userName" (click)="disableEmailField()" [(ngModel)]="userToLogin.username">
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" placeholder="User Name or Email" name="name or email"  [(ngModel)]="userToLogin.email">
+      <input matInput type="text" [disabled]="!activeEmailField" placeholder="Email" name="email" (click)="disableUserNameField()" [(ngModel)]="userToLogin.email">
     </mat-form-field>
     <mat-form-field>
       <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="userToLogin.password">
