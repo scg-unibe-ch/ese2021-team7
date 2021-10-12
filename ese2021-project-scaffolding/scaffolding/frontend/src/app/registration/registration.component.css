@@ -1,0 +1,7 @@
+.is-invalid{
+  color: red !important;
+}
+
+.valid {
+  color: green !important;
+}
