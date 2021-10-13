@@ -12,15 +12,17 @@ import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, Valid
 })
 export class RegistrationComponent {
 
+  userNameAlreadyInUse: boolean;
+
   registrationForm = this.fb.group({
-    userName: new FormControl('', Validators.required),
+    userName: new FormControl('', Validators.compose([Validators.required])),
     password: new FormControl(null, Validators.compose([Validators.required,
       this.patternValidator(/(?=.*[0-9])[0-9]{1,}/, {'noNumberInPassword': true}),
       this.patternValidator(/(?=.*[a-z])[a-z]{1,}/, {'noSmallLetter': true}),
       this.patternValidator(/(?=.*[A-Z])[A-Z]{1,}/, {'noCapitalLetter': true}),
       this.patternValidator(/(?=.*[@#$%^&-+=()])[@#$%^&-+=()]{1,}/, {'noSpecialCharacter': true}),
       Validators.minLength(8)])),
-    email: new FormControl(''),
+    email: new FormControl('', Validators.email),
     firstName: new FormControl(''),
     lastName: new FormControl(''),
     street: new FormControl(''),
@@ -32,6 +34,7 @@ export class RegistrationComponent {
   });
 
   constructor(public httpClient: HttpClient, private fb: FormBuilder) {
+    this.userNameAlreadyInUse = false;
   }
 
   onSubmit(): void {
@@ -52,7 +55,16 @@ export class RegistrationComponent {
         birthday: this.registrationForm.value.birthday
       }).subscribe((res: any) => {
         console.log(res);
-      });
+        this.userNameAlreadyInUse = false;
+      },
+        (error: any) =>{
+        console.log(error);
+        if(error.error.message == 10){
+          console.log("Username already in use");
+          this.userNameAlreadyInUse = true;
+          console.log(this.userNameAlreadyInUse);
+        }
+        });
     }
   }
 
@@ -73,6 +85,17 @@ export class RegistrationComponent {
     };
   }
 
+  //currently not set
+  userNameValidator(control: FormControl): {[s: string]: boolean}{
+    if(this.userNameAlreadyInUse){
+      return {'userNameAlreadyInUse': true};
+    }
+    return null;
+  }
+
+  isUserNameValid(): boolean {
+    return !this.userNameAlreadyInUse;
+  }
 
 }
 
