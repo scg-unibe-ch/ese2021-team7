@@ -83,10 +83,10 @@ export class UserService {
     }
 
     private checkPassword(password: string): boolean {
-        const contLowercase = new RegExp(/(?=.*[a-z]){1,}/).test(password);
-        const contCapital = new RegExp(/(?=.*[A-Z]){1,}/).test(password);
-        const contNumber = new RegExp(/(?=.*[0-9]){1,}/).test(password);
-        const contSpecChar = new RegExp(/(?=.*[@#$%^&-+=()\]\)\[@#$%^&-+=()]){1,}/).test(password);
+        const contLowercase = new RegExp(/.*[a-z]+.*/).test(password);
+        const contCapital = new RegExp(/.*[A-Z]+.*/).test(password);
+        const contNumber = new RegExp(/.*[0-9]+.*/).test(password);
+        const contSpecChar = new RegExp(/.*[@#$%^&-+=()\\]+.*/).test(password);
         const longerThanEight = password.length >= 8;
 
         const matches = contLowercase && contCapital && contNumber && contSpecChar && longerThanEight;
