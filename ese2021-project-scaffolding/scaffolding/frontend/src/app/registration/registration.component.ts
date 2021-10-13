@@ -3,7 +3,7 @@ import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from '../services/user.service';
-import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl} from '@angular/forms';
+import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
 
 @Component({
   selector: 'app-registration',
@@ -37,7 +37,7 @@ export class RegistrationComponent {
     this.userNameAlreadyInUse = false;
   }
 
-  onSubmit(): void {
+  onSubmit(formDirective: FormGroupDirective): void {
     console.log(this.registrationForm);
     console.log(this.registrationForm.valid);
     if(this.registrationForm.valid) {
@@ -56,6 +56,8 @@ export class RegistrationComponent {
       }).subscribe((res: any) => {
         console.log(res);
         this.userNameAlreadyInUse = false;
+        this.registrationForm.reset();
+        formDirective.resetForm();
       },
         (error: any) =>{
         console.log(error);
