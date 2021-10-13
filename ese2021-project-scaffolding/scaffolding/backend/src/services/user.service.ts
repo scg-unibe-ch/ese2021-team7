@@ -51,13 +51,14 @@ export class UserService {
 
     public login(loginRequestee: LoginRequest): Promise<User | LoginResponse> {
         const secret = process.env.JWT_SECRET;
-        const requestee = UserService.findUserByNameOrMail(loginRequestee);
 
         if (!loginRequestee.email && !loginRequestee.userName) {
             return Promise.reject({message: ErrorCodes.getNoUserNameOrMailProvided()});
         } else if (loginRequestee.email && loginRequestee.userName) {
             return Promise.reject({message: ErrorCodes.getIllegalRequestFormat()});
         }
+
+        const requestee = UserService.findUserByNameOrMail(loginRequestee);
 
         return requestee
             .then(user => {
