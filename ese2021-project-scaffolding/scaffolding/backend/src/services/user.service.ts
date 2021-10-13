@@ -3,7 +3,6 @@ import { LoginResponse, LoginRequest } from '../models/login.model';
 import { ErrorCodes } from '../errorCodes';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import {Op} from 'sequelize';
 
 export class UserService {
 
@@ -38,8 +37,6 @@ export class UserService {
                         return User.create(user).then(inserted => Promise.resolve(inserted)).catch(err => Promise.reject(err));
                     }
                 }
-            ).catch(
-                err => Promise.reject({message: err})
             );
     }
 
@@ -73,8 +70,6 @@ export class UserService {
                         return Promise.reject({message: ErrorCodes.getUserNotFound()});
                     }
                 }
-            ).catch(
-                err => Promise.reject({message: err})
             );
     }
 

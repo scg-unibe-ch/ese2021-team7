@@ -75,7 +75,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
                 type: DataTypes.STRING,
             },
             birthday: {
-                type: DataTypes.DATEONLY,
+                type: DataTypes.DATE,
             },
             phoneNumber: {
                 type: DataTypes.STRING,
