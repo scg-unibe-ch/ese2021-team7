@@ -16,8 +16,7 @@ export class RegistrationComponent {
     userName: new FormControl('', Validators.required),
     password: new FormControl(null, Validators.compose([Validators.required,
       this.patternValidator(/(?=.*[0-9])[0-9]{1,}/, {'noNumberInPassword': true}),
-      this.patternValidator(/(?=.*[a-z])[a-z]{1,}/, {'noNumberInPassword': true}),
-      this.patternValidator(/(?=.*[A-Z])[A-Z]{1,}/, {'noSmallLetter': true}),
+      this.patternValidator(/(?=.*[a-z])[a-z]{1,}/, {'noSmallLetter': true}),
       this.patternValidator(/(?=.*[A-Z])[A-Z]{1,}/, {'noCapitalLetter': true}),
       this.patternValidator(/(?=.*[@#$%^&-+=()])[@#$%^&-+=()]{1,}/, {'noSpecialCharacter': true}),
       Validators.minLength(8)])),
@@ -36,7 +35,8 @@ export class RegistrationComponent {
   }
 
   onSubmit(): void {
-   /* this.httpClient.post(environment.endpointURL + "user/register", {
+    console.log(this.registrationForm);
+    this.httpClient.post(environment.endpointURL + "user/register", {
       userName: this.registrationForm.value.username,
       password: this.registrationForm.value.password,
       firstName: this.registrationForm.value.firstName,
@@ -50,9 +50,8 @@ export class RegistrationComponent {
       birthday: this.registrationForm.value.birthday
     }).subscribe((res: any) => {
       console.log(res);
+    });
 
-    });*/
-    console.log(this.registrationForm);
   }
 
 
