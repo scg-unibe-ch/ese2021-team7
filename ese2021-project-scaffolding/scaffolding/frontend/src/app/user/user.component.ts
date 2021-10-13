@@ -13,6 +13,9 @@ export class UserComponent {
 
   loggedIn: boolean | undefined;
 
+  activeEmailField: boolean | undefined;
+  activeUserNameField: boolean | undefined;
+
   user: User | undefined;
 
   userToRegister: User = new User(0, '', '', '','','','','','','','','');
@@ -34,6 +37,10 @@ export class UserComponent {
     // Current value
     this.loggedIn = userService.getLoggedIn();
     this.user = userService.getUser();
+
+    // Activate Login Fields
+    this.activeEmailField = true;
+    this.activeUserNameField = true;
   }
 
   registerUser(): void {
@@ -82,15 +89,23 @@ export class UserComponent {
     if(error.error.message == '21'){
       this.endpointLogin = "No username or email provided";
     }
-    if(error.error.message.message == '22') {
+    if(error.error.message == '22') {
       this.endpointLogin = "User not found";
     }
-    if(error.error.message.message == '23') {
+    if(error.error.message == '23') {
       this.endpointLogin = "Wrong password";
     }
     if(error.error.message == '24') {
       this.endpointLogin = "Illegal request format";
     }
+  }
+
+  disableEmailField(): void {
+    this.activeEmailField = false;
+  }
+
+  disableUserNameField(): void {
+    this.activeUserNameField = false;
   }
 
   logoutUser(): void {
