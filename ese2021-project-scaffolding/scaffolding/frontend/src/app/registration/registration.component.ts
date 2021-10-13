@@ -36,22 +36,24 @@ export class RegistrationComponent {
 
   onSubmit(): void {
     console.log(this.registrationForm);
-    this.httpClient.post(environment.endpointURL + "user/register", {
-      userName: this.registrationForm.value.username,
-      password: this.registrationForm.value.password,
-      firstName: this.registrationForm.value.firstName,
-      lastName: this.registrationForm.value.lastName,
-      email: this.registrationForm.value.email,
-      street: this.registrationForm.value.street,
-      houseNumber: this.registrationForm.value.houseNumber,
-      zipCode: this.registrationForm.value.zipCode,
-      city: this.registrationForm.value.city,
-      phoneNumber: this.registrationForm.value.phoneNumber,
-      birthday: this.registrationForm.value.birthday
-    }).subscribe((res: any) => {
-      console.log(res);
-    });
-
+    console.log(this.registrationForm.valid);
+    if(this.registrationForm.valid) {
+      this.httpClient.post(environment.endpointURL + "user/register", {
+        userName: this.registrationForm.value.userName,
+        password: this.registrationForm.value.password,
+        firstName: this.registrationForm.value.firstName,
+        lastName: this.registrationForm.value.lastName,
+        email: this.registrationForm.value.email,
+        street: this.registrationForm.value.street,
+        houseNumber: this.registrationForm.value.houseNumber,
+        zipCode: this.registrationForm.value.zipCode,
+        city: this.registrationForm.value.city,
+        phoneNumber: this.registrationForm.value.phoneNumber,
+        birthday: this.registrationForm.value.birthday
+      }).subscribe((res: any) => {
+        console.log(res);
+      });
+    }
   }
 
 
