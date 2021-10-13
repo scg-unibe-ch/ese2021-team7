@@ -18,7 +18,7 @@ export class UserService {
                     ]
                 }
             });
-        } else if (credentialsRequestee.email && credentialsRequestee.email.length > 0) {
+        } else if (credentialsRequestee.email) {
             // @ts-ignore
             where.email = credentialsRequestee.email;
         } else if (credentialsRequestee.userName) {
@@ -33,6 +33,10 @@ export class UserService {
         const saltRounds = 12;
         const credentials: LoginRequest = {userName: user.userName, email: user.email, password: user.password};
         user.password = bcrypt.hashSync(user.password, saltRounds); // hashes the password, never store passwords as plaintext
+
+        if (!credentials.email && !credentials.userName) {
+            return Promise.reject({message: ErrorCodes.getNoUserNameOrMailProvided()});
+        }
 
         return UserService.findUserByNameOrMail(credentials)
             .then(existingUser => {
