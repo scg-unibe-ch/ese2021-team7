@@ -18,7 +18,7 @@ export class UserComponent {
 
   user: User | undefined;
 
-  userToRegister: User = new User(0, '', '', '','','','','','','','','');
+  //userToRegister: User = new User(0, '', '', '','','','','','','','','');
 
   userToLogin: User = new User(0, '', '', '','','','','','','','','');
 
@@ -42,7 +42,7 @@ export class UserComponent {
     this.activeEmailField = true;
     this.activeUserNameField = true;
   }
-
+/*
   registerUser(): void {
     this.httpClient.post(environment.endpointURL + "user/register", {
       userName: this.userToRegister.username,
@@ -63,7 +63,7 @@ export class UserComponent {
           this.userToRegister.birthday ='';
     });
   }
-
+*/
   loginUser(): void {
     this.httpClient.post(environment.endpointURL + "user/login", {
       userName: this.userToLogin.username,

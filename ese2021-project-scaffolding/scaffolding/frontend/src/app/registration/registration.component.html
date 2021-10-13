@@ -1,6 +1,6 @@
 <mat-card>
 
-<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm">
 <mat-form-field><input matInput type="text"  placeholder="User Name" id="username" [formControlName]="'userName'" required></mat-form-field>
   <mat-form-field>
     <input matInput type="email" placeholder="Email" id="email" [formControlName]="'email'">
