@@ -3,12 +3,22 @@ import { LoginResponse, LoginRequest } from '../models/login.model';
 import { ErrorCodes } from '../errorCodes';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import {Op} from 'sequelize';
 
 export class UserService {
 
     public static findUserByNameOrMail(credentialsRequestee: LoginRequest): Promise<User> {
         const where = {};
-        if (credentialsRequestee.email) {
+        if (credentialsRequestee.userName && credentialsRequestee.email) {
+            return User.findOne({
+                where: {
+                    [Op.or]: [
+                        {userName: credentialsRequestee.userName},
+                        {email: credentialsRequestee.email}
+                    ]
+                }
+            });
+        } else if (credentialsRequestee.email && credentialsRequestee.email.length > 0) {
             // @ts-ignore
             where.email = credentialsRequestee.email;
         } else if (credentialsRequestee.userName) {
