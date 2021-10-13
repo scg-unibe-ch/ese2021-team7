@@ -1,5 +1,6 @@
 import { describe } from 'mocha';
 import * as sinon from 'sinon';
+// @ts-ignore
 import bcrypt from 'bcrypt';
 import * as chai from 'chai';
 
@@ -20,7 +21,7 @@ describe('Test User.register', () => {
             const user = {
                 userId: 1,
                 userName: 'lion50',
-                password: 'asdf',
+                password: 'as12DaF*(',
                 admin: false,
                 firstName: 'Hans-Peter',
                 lastName: 'Kurth',

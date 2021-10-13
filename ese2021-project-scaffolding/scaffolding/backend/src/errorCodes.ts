@@ -1,5 +1,6 @@
 export class ErrorCodes {
     static userNameOrMailAlreadyInUse = 10;
+    static illegalPassword = 11;
     static noUserNameOrMailProvided = 21;
     static userNotFound = 22;
     static wrongPassword = 23;
@@ -28,4 +29,7 @@ export class ErrorCodes {
         return ErrorCodes.illegalRequestFormat;
     }
 
+    public static getIllegalPassword() {
+        return ErrorCodes.illegalPassword;
+    }
 }

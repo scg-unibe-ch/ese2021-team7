@@ -23,6 +23,11 @@ export class UserService {
     public register(user: UserAttributes): Promise<UserAttributes> {
         const saltRounds = 12;
         const credentials: LoginRequest = {userName: user.userName, email: user.email, password: user.password};
+
+        if (!this.checkPassword(user.password)) {
+            return Promise.reject({message: ErrorCodes.getIllegalPassword()});
+        }
+
         user.password = bcrypt.hashSync(user.password, saltRounds); // hashes the password, never store passwords as plaintext
 
         return UserService.findUserByNameOrMail(credentials)
@@ -75,5 +80,16 @@ export class UserService {
 
     public getAll(): Promise<User[]> {
         return User.findAll();
+    }
+
+    private checkPassword(password: string): boolean {
+        const contLowercase = new RegExp(/(?=.*[a-z]){1,}/).test(password);
+        const contCapital = new RegExp(/(?=.*[A-Z]){1,}/).test(password);
+        const contNumber = new RegExp(/(?=.*[0-9]){1,}/).test(password);
+        const contSpecChar = new RegExp(/(?=.*[@#$%^&-+=()\]\)\[@#$%^&-+=()]){1,}/).test(password);
+        const longerThanEight = password.length >= 8;
+
+        const matches = contLowercase && contCapital && contNumber && contSpecChar && longerThanEight;
+        return matches;
     }
 }
