@@ -80,6 +80,7 @@ export class UserComponent {
         res.user.birthday,res.user.phoneNumber));
 
       this.resetLoginForm();
+      this.endpointLogin = '';
     }, (error) => {
       this.handleLoginError(error);
       this.resetLoginForm();
@@ -123,7 +124,7 @@ export class UserComponent {
     this.userService.setLoggedIn(false);
     this.userService.setUser(undefined);
 
-    this.endpointLogin = '';
+    //this.endpointLogin = '';
   }
 
   accessUserEndpoint(): void {
