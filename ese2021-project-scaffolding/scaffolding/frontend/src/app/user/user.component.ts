@@ -70,18 +70,19 @@ export class UserComponent {
       password: this.userToLogin.password,
       email: this.userToLogin.email
     }).subscribe((res: any) => {
-      this.userToLogin.username = this.userToLogin.email = this.userToLogin.password = '';
-
       localStorage.setItem('userName', res.user.userName);
       localStorage.setItem('email', res.user.email);
       localStorage.setItem('userToken', res.token);
 
       this.userService.setLoggedIn(true);
       this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.firstName,
-        res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city
-        ,res.user.birthday,res.user.phoneNumber));
+        res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city,
+        res.user.birthday,res.user.phoneNumber));
+
+      this.resetLoginForm();
     }, (error) => {
       this.handleLoginError(error);
+      this.resetLoginForm();
     });
   }
 
@@ -106,6 +107,12 @@ export class UserComponent {
 
   disableUserNameField(): void {
     this.activeUserNameField = false;
+  }
+
+  resetLoginForm(){
+    this.userToLogin.username = this.userToLogin.email = this.userToLogin.password = '';
+    this.activeUserNameField = true;
+    this.activeEmailField = true;
   }
 
   logoutUser(): void {
