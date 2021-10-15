@@ -44,6 +44,9 @@
     <mat-card-subtitle>
     Login with username or email
     </mat-card-subtitle>
+    <div style="color: red">
+      {{ endpointLogin }}
+    </div>
     <mat-form-field>
       <input matInput type="text" [disabled]="!activeUserNameField" placeholder="User Name" name="userName" (click)="disableEmailField()" [(ngModel)]="userToLogin.username">
     </mat-form-field>
@@ -53,7 +56,7 @@
     <mat-form-field>
       <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="userToLogin.password">
     </mat-form-field>
-    <button mat-flat-button color="primary" (click)="loginUser()">Login</button>{{ endpointLogin }}
+    <button mat-flat-button color="primary" (click)="loginUser()">Login</button>
   </div>
 
   <div *ngIf="loggedIn">
