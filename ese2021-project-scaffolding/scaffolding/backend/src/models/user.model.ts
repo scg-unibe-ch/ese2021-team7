@@ -1,5 +1,5 @@
-import { TodoItem, TodoItemAttributes, TodoItemCreationAttributes } from './todoitem.model';
 import { Optional, Model, Sequelize, DataTypes } from 'sequelize';
+import {Post} from './post.model';
 
 export interface UserAttributes {
     userId: number;
@@ -75,7 +75,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
                 type: DataTypes.STRING,
             },
             birthday: {
-                type: DataTypes.DATEONLY,
+                type: DataTypes.DATE,
             },
             phoneNumber: {
                 type: DataTypes.STRING,
@@ -86,5 +86,12 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
                 tableName: 'users'
             }
         );
+    }
+
+    public static createAssociations() {
+        User.hasMany(Post, {
+            as: 'post',
+            foreignKey: 'userId'
+        });
     }
 }

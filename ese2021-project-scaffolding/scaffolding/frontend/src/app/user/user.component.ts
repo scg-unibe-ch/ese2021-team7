@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { User } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from '../services/user.service';
 
@@ -13,14 +13,18 @@ export class UserComponent {
 
   loggedIn: boolean | undefined;
 
+  activeEmailField: boolean | undefined;
+  activeUserNameField: boolean | undefined;
+
   user: User | undefined;
 
-  userToRegister: User = new User(0, '', '', '','','','','','','','','');
+  //userToRegister: User = new User(0, '', '', '','','','','','','','','');
 
   userToLogin: User = new User(0, '', '', '','','','','','','','','');
 
   endpointMsgUser: string = '';
   endpointMsgAdmin: string = '';
+  endpointLogin: string = '';
 
   constructor(
     public httpClient: HttpClient,
@@ -33,17 +37,33 @@ export class UserComponent {
     // Current value
     this.loggedIn = userService.getLoggedIn();
     this.user = userService.getUser();
-  }
 
+    // Activate Login Fields
+    this.activeEmailField = true;
+    this.activeUserNameField = true;
+  }
+/*
   registerUser(): void {
     this.httpClient.post(environment.endpointURL + "user/register", {
       userName: this.userToRegister.username,
-      password: this.userToRegister.password
-    }).subscribe(() => {
-      this.userToRegister.username = this.userToRegister.password = '';
+      password: this.userToRegister.password,
+      firstName: this.userToRegister.firstName,
+      lastName: this.userToRegister.lastName,
+      email: this.userToRegister.email,
+      street: this.userToRegister.street,
+      houseNumber: this.userToRegister.houseNumber,
+      zipCode: this.userToRegister.zipCode,
+      city: this.userToRegister.city,
+      phoneNumber: this.userToRegister.phoneNumber,
+      birthday: this.userToRegister.birthday
+    }).subscribe((res: any) => {
+      //console.log(res);
+      this.userToRegister.username = this.userToRegister.password = this.userToRegister.firstName = this.userToRegister.lastName = this.userToRegister.email =
+        this.userToRegister.street = this.userToRegister.houseNumber = this.userToRegister.zipCode = this.userToRegister.city = this.userToRegister.phoneNumber =
+          this.userToRegister.birthday ='';
     });
   }
-
+*/
   loginUser(): void {
     this.httpClient.post(environment.endpointURL + "user/login", {
       userName: this.userToLogin.username,
@@ -53,17 +73,44 @@ export class UserComponent {
       this.userToLogin.username = this.userToLogin.email = this.userToLogin.password = '';
 
       localStorage.setItem('userName', res.user.userName);
+      localStorage.setItem('email', res.user.email);
       localStorage.setItem('userToken', res.token);
 
       this.userService.setLoggedIn(true);
       this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.firstName,
         res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city
         ,res.user.birthday,res.user.phoneNumber));
+    }, (error) => {
+      this.handleLoginError(error);
     });
+  }
+
+  handleLoginError(error: HttpErrorResponse){
+    if(error.error.message == '21'){
+      this.endpointLogin = "No username or email provided";
+    }
+    if(error.error.message == '22') {
+      this.endpointLogin = "User not found";
+    }
+    if(error.error.message == '23') {
+      this.endpointLogin = "Wrong password";
+    }
+    if(error.error.message == '24') {
+      this.endpointLogin = "Illegal request format";
+    }
+  }
+
+  disableEmailField(): void {
+    this.activeEmailField = false;
+  }
+
+  disableUserNameField(): void {
+    this.activeUserNameField = false;
   }
 
   logoutUser(): void {
     localStorage.removeItem('userName');
+    localStorage.removeItem('email');
     localStorage.removeItem('userToken');
 
     this.userService.setLoggedIn(false);

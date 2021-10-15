@@ -1,14 +1,25 @@
 import { describe } from 'mocha';
 import * as sinon from 'sinon';
+// @ts-ignore
 import bcrypt from 'bcrypt';
 import * as chai from 'chai';
 
 import { UserService } from '../src/services/user.service';
-import {User} from '../src/models/user.model';
 import {LoginResponse} from '../src/models/login.model';
+import {ErrorCodes} from '../src/errorCodes';
 
 chai.use(require('chai-as-promised'));
 const assert = chai.assert;
+const sandbox = require('sinon').createSandbox();
+
+before(() => {
+    process.env.JWT_SECRET = 'not_secure';
+});
+
+afterEach(function () {
+    // completely restore all fakes created through the sandbox
+    sandbox.restore();
+});
 
 describe('Test User.register', () => {
     describe('Test whether registering with an existing user name is rejected', () => {
@@ -16,7 +27,7 @@ describe('Test User.register', () => {
             const user = {
                 userId: 1,
                 userName: 'lion50',
-                password: 'asdf',
+                password: 'as12DaF*(',
                 admin: false,
                 firstName: 'Hans-Peter',
                 lastName: 'Kurth',
@@ -28,23 +39,33 @@ describe('Test User.register', () => {
                 birthday: new Date(1995, 12, 3),
                 phoneNumber: '123456'
             };
-            sinon.stub(UserService, 'findUserByNameOrMail').resolves(user);
+            const userPromise = new Promise((resolve, reject) => {
+                resolve(user);
+            });
+
+            sandbox.stub(UserService, 'findUserByNameOrMail').resolves(userPromise);
             const userService = new UserService();
-            return assert.isRejected(userService.register(user));
+            return userService.register(user)
+                .then(() => {
+                        assert.fail('expected failure');
+                    },
+                    rejection => {
+                        assert.equal(rejection.message, ErrorCodes.getUserNameOrMailAlreadyInUse());
+                    }
+                ).catch((error) => {
+                    assert.fail('did not expect exception' + error);
+                });
         });
     });
 });
 
-const dependencyModule = require('bcrypt');
-
-// TODO: Fix this idiotic test who's not working because bcrypt can't be stubed properly
 describe('Test user login with existing user', () => {
     describe('Test whether a wrong password returns a reject', () => {
         it('Should return 20 when the password is wrong', () => {
             const loginRequest = {
                 userName: 'lion50',
                 password: 'asdf',
-                email: 'lion@safari.com'
+                email: null
             };
             const user = {
                 userId: 1,
@@ -61,12 +82,23 @@ describe('Test user login with existing user', () => {
                 birthday: new Date(1995, 12, 3),
                 phoneNumber: '123456'
             };
+            const userPromise = new Promise((resolve, reject) => {
+                resolve(user);
+            });
 
-            const stubFindUsername = sinon.stub(UserService, 'findUserByNameOrMail').resolves(user);
-            const stubCheckPassword = sinon.createStubInstance(bcrypt);
-            stubCheckPassword.compareSync.returnsThis(false);
-
+            sandbox.stub(UserService, 'findUserByNameOrMail').resolves(userPromise);
+            sandbox.stub(bcrypt, 'compareSync').returns(false);
             const userService = new UserService();
+            return userService.login(loginRequest)
+                .then(() => {
+                        assert.fail('expected failure');
+                    },
+                    rejection => {
+                        assert.equal(rejection.message, ErrorCodes.getWrongPassword());
+                    }
+                ).catch((error) => {
+                    assert.fail('did not expect exception' + error);
+                });
         });
     });
 });
@@ -78,26 +110,36 @@ describe('Test login with not existing user', () => {
                 const loginRequest = {
                     userName: 'lion50',
                     password: 'asdf',
-                    email: 'lion@safari.com'
+                    email: null
                 };
-                const stubFindUsername = sinon.stub(UserService, 'findUserByNameOrMail').rejects(null);
+                const userPromise = new Promise((resolve, reject) => {
+                    resolve(null);
+                });
+                // findUserByNameOrMail resolves null if no user is found
+                sandbox.stub(UserService, 'findUserByNameOrMail').resolves(userPromise);
                 const userService: UserService = new UserService();
-                const loginPromise: Promise<LoginResponse | User> = userService.login(loginRequest);
-
-                return assert.isRejected(loginPromise, 21);
+                return userService.login(loginRequest)
+                    .then(() => {
+                            assert.fail('expected failure');
+                        },
+                        rejection => {
+                            assert.equal(rejection.message, ErrorCodes.getUserNotFound());
+                        }
+                    ).catch((error) => {
+                        assert.fail('did not expect exception' + error);
+                    });
             });
         });
     });
 });
 
-// TODO: Fix this idiotic test who's not working because bcrypt can't be stubed properly
 describe('Successful login', () => {
     describe('Successful login', () => {
         it('Should return a fulfilled promise', () => {
             const loginRequest = {
-                userName: 'lion50',
+                userName: null,
                 password: 'asdf',
-                email: 'lion@safari.com'
+                email: 'abc@def.com'
             };
             const user = {
                 userId: 1,
@@ -114,13 +156,26 @@ describe('Successful login', () => {
                 birthday: new Date(1995, 12, 3),
                 phoneNumber: '123456'
             };
+            const userPromise = new Promise((resolve, reject) => {
+                resolve(user);
+            });
 
-            const stubFindUsername = sinon.stub(UserService, 'findUserByNameOrMail').resolves(user);
-            const stubCheckPassword = sinon.stub(bcrypt, 'compareSync').returns(true);
+            sandbox.stub(UserService, 'findUserByNameOrMail').resolves(userPromise);
+            sandbox.stub(bcrypt, 'compareSync').returns(true);
 
             const userService = new UserService();
-            const loginPromise = userService.login(loginRequest);
-            return assert.isFulfilled(loginPromise);
+            return userService.login(loginRequest)
+                .then(response => {
+                        assert.isNotNull((response as LoginResponse).token);
+                        assert((response as LoginResponse).token.length > 20);
+                        assert.equal((response as LoginResponse).user.userName, 'lion50');
+                    },
+                    rejection => {
+                        assert.fail('expected success');
+                    }
+                ).catch((error) => {
+                    assert.fail('did not expect exception' + error);
+                });
         });
     });
 });

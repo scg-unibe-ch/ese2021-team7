@@ -21,8 +21,12 @@
     ></app-todo-list>
   </mat-tab>
 
-  <mat-tab label="Authentication">
+  <mat-tab label="Login">
     <app-user></app-user>
+  </mat-tab>
+
+  <mat-tab label="Registration">
+    <app-registration></app-registration>
   </mat-tab>
 
   <mat-tab *ngIf="loggedIn" label="Profile Page">
