@@ -5,6 +5,7 @@ export class ErrorCodes {
     static userNotFound = 22;
     static wrongPassword = 23;
     static illegalRequestFormat = 24;
+    static postNotFound = 30;
 
     public static getUserNameOrMailAlreadyInUse() {
         return ErrorCodes.userNameOrMailAlreadyInUse;

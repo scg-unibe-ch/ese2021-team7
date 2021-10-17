@@ -23,13 +23,17 @@ export class PostService {
     }
 
     public upvote(post: Post): Promise<Post> {
-        // TODO: Implement logic
-        return Promise.reject();
+        return Post.findByPk(post.postId).then(dbPost => {
+            dbPost.upvote += 1;
+            return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+        });
     }
 
     public downvote(post: Post): Promise<Post> {
-        // TODO: Implement logic
-        return Promise.reject();
+        return Post.findByPk(post.postId).then(dbPost => {
+            dbPost.downvote += 1;
+            return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+        });
     }
 
     public changePost(modifiedPost: Post): Promise<Post> {
@@ -44,9 +48,18 @@ export class PostService {
     }
 
     // This could also return void, maybe this would make more sense?
-    public async createPost(post: Post): Promise<Post> {
-        const newPost = await Post.create(post);
-        return newPost;
+    public async createPost(post: Post, userId): Promise<Post> {
+        const postToCreate = post;
+        postToCreate.upvote = 0;
+        postToCreate.downvote = 0;
+        const user = await User.findByPk(userId);
+        // console.log(Post.instance.prototype);
+        // postToCreate.setUser(user);
+        const createdPost = await Post.create(postToCreate);
+        // @ts-ignore
+        createdPost.setUser(user);
+        // @ts-ignore
+        return createdPost.save().then(updatedPost => Promise.resolve(updatedPost));
     }
 
     private modifyPost(modifiedPost: Post): Promise<Post> {
