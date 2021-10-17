@@ -53,8 +53,6 @@ export class PostService {
         postToCreate.upvote = 0;
         postToCreate.downvote = 0;
         const user = await User.findByPk(userId);
-        // console.log(Post.instance.prototype);
-        // postToCreate.setUser(user);
         const createdPost = await Post.create(postToCreate);
         // @ts-ignore
         createdPost.setUser(user);
