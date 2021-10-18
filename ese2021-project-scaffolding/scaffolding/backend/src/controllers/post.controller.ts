@@ -7,9 +7,7 @@ import {PostService} from '../services/post.service';
 const postController: Router = express.Router();
 const postService = new PostService();
 
-postController.use(verifyToken);
-
-postController.post('/create',
+postController.post('/create', verifyToken,
     (req: Request, res: Response) => {
         postService.createPost(req.body, req.body.tokenPayload.userId).then(post => res.send(post)).catch(err => res.status(500).send(err));
     }
@@ -24,6 +22,12 @@ postController.post('/upvote',
 postController.post('/downvote',
     (req: Request, res: Response) => {
         postService.downvote(req.body).then(modifiedPost => res.send(modifiedPost)).catch(err => res.status(500).send(err));
+    }
+);
+
+postController.get('/all',
+    (req: Request, res: Response) => {
+        postService.getAll(req.body).then(posts => res.send(posts)).catch(err => res.status(500).send(err));
     }
 );
 //

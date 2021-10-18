@@ -17,8 +17,8 @@ export class PostService {
     }
 
     // Should this method be static?
-    public async getAllPosts(sortBy: number = 0): Promise<Post[]> {
-        const allPosts = await Post.findAll();
+    public async getAll(sortBy: number = 0): Promise<Post[]> {
+        const allPosts = await Post.findAll({order: [['createdAt', 'DESC']]});
         return allPosts;
     }
 
