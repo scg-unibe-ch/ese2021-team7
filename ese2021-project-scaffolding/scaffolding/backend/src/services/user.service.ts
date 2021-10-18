@@ -3,12 +3,22 @@ import { LoginResponse, LoginRequest } from '../models/login.model';
 import { ErrorCodes } from '../errorCodes';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import {Op} from 'sequelize';
 
 export class UserService {
 
     public static findUserByNameOrMail(credentialsRequestee: LoginRequest): Promise<User> {
         const where = {};
-        if (credentialsRequestee.email) {
+        if (credentialsRequestee.userName && credentialsRequestee.email) {
+            return User.findOne({
+                where: {
+                    [Op.or]: [
+                        {userName: credentialsRequestee.userName},
+                        {email: credentialsRequestee.email}
+                    ]
+                }
+            });
+        } else if (credentialsRequestee.email) {
             // @ts-ignore
             where.email = credentialsRequestee.email;
         } else if (credentialsRequestee.userName) {
@@ -29,6 +39,10 @@ export class UserService {
 
         user.password = bcrypt.hashSync(user.password, saltRounds); // hashes the password, never store passwords as plaintext
 
+        if (!credentials.email && !credentials.userName) {
+            return Promise.reject({message: ErrorCodes.getNoUserNameOrMailProvided()});
+        }
+
         return UserService.findUserByNameOrMail(credentials)
             .then(existingUser => {
                     if (existingUser) {
@@ -42,13 +56,14 @@ export class UserService {
 
     public login(loginRequestee: LoginRequest): Promise<User | LoginResponse> {
         const secret = process.env.JWT_SECRET;
-        const requestee = UserService.findUserByNameOrMail(loginRequestee);
 
         if (!loginRequestee.email && !loginRequestee.userName) {
             return Promise.reject({message: ErrorCodes.getNoUserNameOrMailProvided()});
         } else if (loginRequestee.email && loginRequestee.userName) {
             return Promise.reject({message: ErrorCodes.getIllegalRequestFormat()});
         }
+
+        const requestee = UserService.findUserByNameOrMail(loginRequestee);
 
         return requestee
             .then(user => {
