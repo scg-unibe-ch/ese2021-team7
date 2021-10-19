@@ -41,12 +41,6 @@ export class PostService {
         return Promise.reject();
     }
 
-    public changeCategory(newCategory: number): Promise<Post> {
-        // TODO: Change value of inputparameter of string to int of category enum
-        // TODO: Implement logic
-        return Promise.reject();
-    }
-
     // This could also return void, maybe this would make more sense?
     public async createPost(post: Post, userId): Promise<Post> {
         const postToCreate = post;
