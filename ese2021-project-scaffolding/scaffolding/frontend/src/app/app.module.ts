@@ -19,6 +19,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { UserComponent } from './user/user.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { RegistrationComponent } from './registration/registration.component';
+import { FeedComponent } from './feed/feed.component';
+import { PostComponent } from './feed/post/post.component';
+import { CreatePostComponent } from './create-post/create-post.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,10 @@ import { RegistrationComponent } from './registration/registration.component';
     TodoListComponent,
     TodoItemComponent,
     UserComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    FeedComponent,
+    PostComponent,
+    CreatePostComponent
   ],
   imports: [
     BrowserModule,
