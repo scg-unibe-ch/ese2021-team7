@@ -5,22 +5,23 @@
         <h1>Create a new post</h1>
       </mat-card-title>
     <mat-card-content>
-      <form>
+      <form [formGroup]="createPostForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm">
         <mat-form-field>
-          <input matInput type="text" label="title" placeholder="Title" required>
+          <input matInput type="text" label="postTitle" placeholder="Title" id="postTitle" [formControlName]="'postTitle'" required>
         </mat-form-field>
         <br/>
-
-          <input type="file" label="image">
-          <div>
-            <button mat-mini-fab color="primary" class="upload-btn">
+        <label for="postImage"  ><b>Image</b></label>
+          <input type="file" label="postImage" id="postImage" [formControlName]="'postImage'" class="file-upload" #fileUpload>
+        <div>
+            {{ "No file uploaded yet."}}
+            <button mat-mini-fab color="primary" class="upload-btn" type="button" (click)="fileUpload.click()">
               <mat-icon>attach_file</mat-icon>
             </button>
           </div>
         <br/>
 
         <mat-form-field>
-          <input matInput type="text" label="text" placeholder="Post text">
+          <input matInput type="text" label="postText" id="postField" placeholder="Post text" [formControlName]="'postText'">
         </mat-form-field>
         <br/>
         <button mat-flat-button type="submit" >Create Post</button>
