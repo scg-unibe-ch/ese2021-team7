@@ -1,1 +1,33 @@
-<p>create-post works!</p>
+
+<div class="wrapper">
+    <mat-card>
+      <mat-card-title>
+        <h1>Create a new post</h1>
+      </mat-card-title>
+    <mat-card-content>
+      <form>
+        <mat-form-field>
+          <input matInput type="text" label="title" placeholder="Title" required>
+        </mat-form-field>
+        <br/>
+
+          <input type="file" label="image">
+          <div>
+            <button mat-mini-fab color="primary" class="upload-btn">
+              <mat-icon>attach_file</mat-icon>
+            </button>
+          </div>
+        <br/>
+
+        <mat-form-field>
+          <input matInput type="text" label="text" placeholder="Post text">
+        </mat-form-field>
+        <br/>
+        <button mat-flat-button type="submit" >Create Post</button>
+      </form>
+    </mat-card-content>
+
+
+</mat-card>
+
+</div>
