@@ -1,44 +1,95 @@
 import { Post, PostAttributes } from '../models/post.model';
 import {User} from '../models/user.model';
-import { where } from 'sequelize';
-
+import {Sequelize} from 'sequelize';
 
 export class PostService {
     // Should this method be static?
     public async getPostById(postId: number): Promise<Post> {
-        const postPromise = await Post.findByPk(postId);
-        return postPromise;
-    }
-
-    // Should this method be static?
-    public getPostByUser(user: User, sortBy = 0): Promise<Post> {
-        // TODO: Implement logic
-        return Promise.reject();
+        return Post.findByPk(postId).then(dbPost => {
+            if (dbPost) {
+                return Promise.resolve(dbPost);
+            } else {
+                return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
+            }
+        });
     }
 
     // Should this method be static?
     public async getAll(sortBy: number = 0): Promise<Post[]> {
-        const allPosts = await Post.findAll({order: [['createdAt', 'DESC']]});
-        return allPosts;
+        if (sortBy === 1) {
+            // @ts-ignore
+            return Post.findAll({ order: [['upvote', Sequelize.literal('+'), 'downvote', 'DESC']]});
+        }
+        return Post.findAll({order: [['createdAt', 'DESC']]});
     }
 
-    public upvote(post: Post): Promise<Post> {
-        return Post.findByPk(post.postId).then(dbPost => {
-            dbPost.upvote += 1;
-            return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+    public upvote(postId: number): Promise<Post> {
+        return Post.findByPk(postId).then(dbPost => {
+            if (dbPost) {
+                dbPost.upvote += 1;
+                return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+            } else {
+                return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
+            }
         });
     }
 
-    public downvote(post: Post): Promise<Post> {
-        return Post.findByPk(post.postId).then(dbPost => {
-            dbPost.downvote += 1;
-            return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+    public downvote(postId: number): Promise<Post> {
+        return Post.findByPk(postId).then(dbPost => {
+            if (dbPost) {
+                dbPost.downvote += 1;
+                return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+            } else {
+                return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
+            }
         });
     }
 
-    public changePost(modifiedPost: Post): Promise<Post> {
-        // TODO: Implement logic
-        return Promise.reject();
+    public async modifyPost(modifiedPost: Post, userId): Promise<Post> {
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return Promise.reject({message: 'user does not exist'});
+        }
+        return Post.findByPk(modifiedPost.postId).then(async dbPost => {
+            if (dbPost) {
+                // @ts-ignore
+                const dbUser = await dbPost.getUser();
+                // @ts-ignore
+                if (!user.admin && user.userId !== dbUser.userId) {
+                    return Promise.reject({message: 'user ' + user.userName + ' is not permitted to modify posts made by different users'});
+                }
+                dbPost.title = modifiedPost.title;
+                dbPost.text = modifiedPost.text;
+                dbPost.category = modifiedPost.category;
+                dbPost.image = modifiedPost.image;
+                // allow modification of upvotes and downvotes initially
+                dbPost.upvote = modifiedPost.upvote;
+                dbPost.downvote = modifiedPost.downvote;
+                return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+            } else {
+                return Promise.reject({message: 'no post with ID ' + modifiedPost.postId + ' exists'});
+            }
+        });
+    }
+
+    public async deletePost(postId: number, userId): Promise<void> {
+        const user = await User.findByPk(userId);
+        if (!user) {
+            Promise.reject({message: 'user does not exist'});
+        }
+        return Post.findByPk(postId).then(async dbPost => {
+            if (dbPost) {
+                // @ts-ignore
+                const dbUser = await dbPost.getUser();
+                // @ts-ignore
+                if (!user.admin && user.userId !== dbUser.userId) {
+                    return Promise.reject({message: 'user ' + user.userName + ' is not permitted to modify posts made by different users'});
+                }
+                return dbPost.destroy();
+            } else {
+                return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
+            }
+        });
     }
 
     // This could also return void, maybe this would make more sense?
@@ -47,20 +98,15 @@ export class PostService {
         postToCreate.upvote = 0;
         postToCreate.downvote = 0;
         const user = await User.findByPk(userId);
+        if (!user) {
+            return Promise.reject({message: 'user does not exist'});
+        }
+        if (user.admin) {
+            return Promise.reject({message: 'admins are not permitted to create posts'});
+        }
         const createdPost = await Post.create(postToCreate);
         // @ts-ignore
         createdPost.setUser(user);
-        // @ts-ignore
         return createdPost.save().then(updatedPost => Promise.resolve(updatedPost));
-    }
-
-    private modifyPost(modifiedPost: Post): Promise<Post> {
-        // TODO: Implement logic
-        return Promise.reject();
-    }
-
-    private calculateScore(postId: number): number {
-        // TODO: Implement logic
-        return -1;
     }
 }
