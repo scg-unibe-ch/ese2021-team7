@@ -1,4 +1,4 @@
-import { UserAttributes, User } from '../models/user.model';
+import {UserAttributes, User} from '../models/user.model';
 import { LoginResponse, LoginRequest } from '../models/login.model';
 import { ErrorCodes } from '../errorCodes';
 import bcrypt from 'bcrypt';
@@ -27,6 +27,17 @@ export class UserService {
         }
 
         return User.findOne({where});
+    }
+
+    public checkUserNameOrEmailInUse(loginRequestee: LoginRequest): Promise<any> {
+        return UserService.findUserByNameOrMail(loginRequestee)
+            .then(existingUser => {
+                if (existingUser) {
+                    return Promise.resolve({inUse: true});
+                } else {
+                    return Promise.resolve({inUse: false});
+                }
+            });
     }
 
     public register(user: UserAttributes): Promise<UserAttributes> {
