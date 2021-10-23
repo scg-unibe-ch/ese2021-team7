@@ -8,7 +8,7 @@
     "build": "tsc",
     "prestart": "npm run build",
     "dev": "nodemon",
-    "start": "node .",
+    "start": "node --inspect .",
     "test": "mocha"
   },
   "dependencies": {
