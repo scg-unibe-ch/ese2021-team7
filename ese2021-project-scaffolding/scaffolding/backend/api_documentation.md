@@ -1,5 +1,20 @@
 # /user
-TODO: copy from readme.md
+TODO: copy existing endpoints from readme.md
+## POST /user/checkUserNameOrEmailInUse
+### Request
+```
+{
+    "userName": string(optional),
+    "email": string(optional)
+}
+```
+### Response
+`inUse` is true if the specified userName is in use, or if the specified email is in use.
+```
+{
+    "inUse": false
+}
+```
 # /post
 ## GET /post/all
 Returns all posts. If sortBy is 1, posts are ordered by their score. Otherwise, posts are ordered by creation time. 

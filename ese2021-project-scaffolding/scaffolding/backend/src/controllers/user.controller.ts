@@ -18,6 +18,12 @@ userController.post('/login',
     }
 );
 
+userController.post('/checkUserNameOrEmailInUse',
+    (req: Request, res: Response) => {
+        userService.checkUserNameOrEmailInUse(req.body).then(result => res.send(result)).catch(err => res.status(500).send(err));
+    }
+);
+
 userController.get('/', verifyToken, // you can add middleware on specific requests like that
     (req: Request, res: Response) => {
         userService.getAll().then(users => res.send(users)).catch(err => res.status(500).send(err));
