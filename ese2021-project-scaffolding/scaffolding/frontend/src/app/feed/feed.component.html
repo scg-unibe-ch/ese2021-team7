@@ -1,7 +1,7 @@
 
 
 <div class="card">
-  <p-dataView #dv [value]="postList" [paginator]="true" [rows]="9" layout="grid">
+  <p-dataView [value]="postList" [paginator]="true" [rows]="9" layout="grid">
     <ng-template pTemplate="header">
       <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
         <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
@@ -10,47 +10,14 @@
     <ng-template let-post pTemplate="listItem">
       <div class="p-col-12">
         <div class="product-list-item">
-          <img [src]="'assets/got.jpg'"/>
-          <div class="product-list-detail">
-            <div class="product-name">{{post.name}}</div>
-            <div class="product-description">{{post.description}}</div>
-           <!--
-            <p-rating [ngModel]="post.rating" [readonly]="true" [cancel]="false"></p-rating>
-            -->
-            <i class="pi pi-tag product-category-icon"></i><span class="product-category">{{post.category}}</span>
-          </div>
-          <div class="product-list-action">
-            <!--
-            <span class="product-price">${{product.price}}</span>
-            <p-button icon="pi pi-shopping-cart" label="Upvote" [disabled]=!loggedInUser></p-button>
-            -->
-          </div>
+          <app-post [postToDisplay]="post"></app-post>
         </div>
       </div>
     </ng-template>
     <ng-template let-post pTemplate="gridItem">
       <div class="p-col-12 p-md-4">
         <div class="product-grid-item card">
-          <div class="product-grid-item-top">
-            <div>
-              <i class="pi pi-tag product-category-icon"></i>
-              <span class="product-category">{{post.category}}</span>
-            </div>
-          </div>
-          <div class="product-grid-item-content">
-            <img [src]="'assets/got.jpg'"/>
-            <div class="product-name">{{post.name}}</div>
-            <div class="product-description">{{post.description}}</div>
-            <!--
-            <p-rating [ngModel]="post.rating" [readonly]="true" [cancel]="false"></p-rating>
-            -->
-          </div>
-          <div class="product-grid-item-bottom">
-            <!--
-            <span class="product-price">${{product.price}}</span>
-            <p-button icon="pi pi-shopping-cart" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'"></p-button>
-            -->
-          </div>
+          <app-post [postToDisplay]="post"></app-post>
         </div>
       </div>
     </ng-template>
