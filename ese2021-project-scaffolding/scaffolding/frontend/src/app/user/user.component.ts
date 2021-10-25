@@ -100,8 +100,6 @@ export class UserComponent {
 
     this.userService.setLoggedIn(false);
     this.userService.setUser(undefined);
-
-    //this.endpointLogin = '';
   }
 
   accessUserEndpoint(): void {
