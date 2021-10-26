@@ -24,7 +24,8 @@
           <input matInput type="text" label="postText" id="postField" placeholder="Post text" [formControlName]="'postText'">
         </mat-form-field>
         <br/>
-        <button mat-flat-button type="submit" >Create Post</button>
+        <button mat-flat-button type="submit" [disabled]="!createPostForm.valid">Create Post</button><br/>
+        <span *ngIf="!createPostForm.valid && isSubmitted" [ngClass]="!createPostForm.valid && isSubmitted ? 'is-invalid' : '' "><br/>Please add an image or post text</span><br/>
       </form>
     </mat-card-content>
 

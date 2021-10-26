@@ -12,12 +12,14 @@ import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, Valid
   templateUrl: './create-post.component.html',
   styleUrls: ['./create-post.component.css']
 })
-export class CreatePostComponent{
+export class CreatePostComponent {
 
   createPostForm = this.fb.group({
     postTitle: new FormControl('', Validators.required),
     postImage : new FormControl(''),
     postText : new FormControl('')
+  }, {
+    validator: (form: FormGroup) => {return this.checkPost(form);}
   });
 
 
@@ -25,10 +27,15 @@ export class CreatePostComponent{
 
   filename = '';
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService) { }
+  isSubmitted: boolean;
+
+  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService) {
+    this.isSubmitted= false;
+  }
 
   onSubmit(formDirective: FormGroupDirective): void{
     console.log(this.createPostForm)
+    this.isSubmitted = true;
     if(this.createPostForm.valid){
       this.httpClient.post(environment.endpointURL + "post/create", {
         title: this.createPostForm.value.postTitle,
@@ -36,13 +43,14 @@ export class CreatePostComponent{
         image: this.createPostForm.value.postImage,
       }, ).subscribe((res: any) => {
           console.log(res);
+          this.isSubmitted = false;
         },
         (error: any) =>{
           console.log(error);
+          this.isSubmitted = false;
         });
     }
   }
-
 
   onFileSelected(event: any){
     this.file = event.target.files[0];
@@ -54,27 +62,14 @@ export class CreatePostComponent{
   }
 
 
-/*
   //currently not set
-  checkPost(control: AbstractControl): {[s: string]: boolean}{
-    if(this.createPostForm.value.postImage == "" && this.createPostForm.value.postImage == ""){
+  checkPost(form: FormGroup): {[s: string]: boolean}{
+    if(form.value.postImage == "" && form.value.postText == ""){
+      console.log("error");
       return {'missingPostContent': true};
     }
+    console.log("correct");
     return null;
   };
-  */
 
-
-/*
-  postCompleteValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if(this.createPostForm.value.postImage == "" && this.createPostForm.value.postImage == ""){
-        console.log("error");
-        return {'missingPostContent': true};
-      }
-      console.log("correct");
-      return null;
-    };
-  }
-*/
 }
