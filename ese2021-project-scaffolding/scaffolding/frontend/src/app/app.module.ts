@@ -22,6 +22,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { FeedComponent } from './feed/feed.component';
 import { PostComponent } from './feed/post/post.component';
 import { CreatePostComponent } from './create-post/create-post.component';
+import { UpdatePostComponent } from './update-post/update-post.component';
 
 
 
@@ -34,7 +35,8 @@ import { CreatePostComponent } from './create-post/create-post.component';
     RegistrationComponent,
     FeedComponent,
     PostComponent,
-    CreatePostComponent
+    CreatePostComponent,
+    UpdatePostComponent
   ],
   imports: [
     BrowserModule,
