@@ -1,3 +1,10 @@
+<mat-card>
+
+  <button mat-flat-button color="warn" (click)="buttonClicked()">
+    Delete list
+  </button>
+
+</mat-card>
 
 
 <div class="card">
@@ -10,7 +17,7 @@
     <ng-template let-post pTemplate="listItem">
       <div class="p-col-12">
         <div class="product-list-item">
-          <app-post [postToDisplay]="post"></app-post>
+          <app-post [postToDisplay]="post" (delete)="deletePost($event)" (update)="updatePost($event)"></app-post>
         </div>
       </div>
     </ng-template>
