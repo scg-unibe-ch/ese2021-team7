@@ -57,7 +57,8 @@ import { UpdatePostComponent } from './update-post/update-post.component';
     MatIconModule,
     RouterModule.forRoot([
       { path: 'feed', component: FeedComponent },
-      { path: 'post', component: CreatePostComponent },
+      { path: 'createpost', component: CreatePostComponent },
+      { path: 'updatepost', component: UpdatePostComponent },
       { path: 'profile', component: PageNotFoundComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'login', component: UserComponent },
