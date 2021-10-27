@@ -37,6 +37,9 @@ export class FeedComponent implements OnInit {
     this.currentFeed.posts = this.createPostList();
   }
 
+  ngOnInit(): void {
+  }
+
   createPostList(): Post [] {
     let list: Post[] = [];
     for(let i = 0; i++, i<5;){
@@ -57,9 +60,8 @@ export class FeedComponent implements OnInit {
     this.httpClient.get(environment.endpointURL + "post/all").subscribe((res: any) => {
       this.currentFeed = new Feed(0,'', []);
       res.forEach((post: any) => {
-        //TODO does it make sense to create all new? Is there a possibility to say feed = res
         this.currentFeed.posts.push(
-          new Post(0,0,'Post Title','Some text','https://betanews.com/wp-content/uploads/2016/10/game-of-thrones-logo.jpg',0,0,0,'','',0))
+          new Post(post.postId, 0,post.title,post.text,post.image,post.upvote,post.downvote,0,post.category,'',0))
         },
         (error: any) => {
           console.log(error);
@@ -72,7 +74,7 @@ export class FeedComponent implements OnInit {
   1 =
   2 =
    */
-  updateList(sortBy: Number): void {
+  sortList(sortBy: Number): void {
     this.httpClient.put(environment.endpointURL + "post/all" , {
       sortBy: sortBy
     }).subscribe(
@@ -91,11 +93,8 @@ export class FeedComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
-  }
-
-
   deletePost(post: Post): void {
+    console.log("Button delete works.");
     this.httpClient.post(environment.endpointURL + "post/delete", {
       postId: post.postId
     }).subscribe(() => {
@@ -104,7 +103,7 @@ export class FeedComponent implements OnInit {
   }
 
   updatePost(post: Post): void {
-
+    console.log("Button update works.");
   }
 
 }
