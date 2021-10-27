@@ -1,0 +1,35 @@
+
+<div class="wrapper">
+  <mat-card>
+    <mat-card-title>
+      <h1>Edit your Post</h1>
+    </mat-card-title>
+    <mat-card-content>
+      <form *ngIf="post" [formGroup]="updateFormPost" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm">
+        <mat-form-field>
+          <input matInput type="text" label="postTitle" placeholder="Title" id="postTitle" [formControlName]="'postTitle'" required>
+        </mat-form-field>
+        <br/>
+        <label for="postImage"  ><b>Image</b></label>
+        <input type="file" label="postImage" id="postImage" [formControlName]="'postImage'" class="file-upload" (change)="onFileSelected($event)" #fileUpload>
+        <div>
+          {{ filename || "No file uploaded yet."}}
+          <button mat-mini-fab color="primary" class="upload-btn" type="button" (click)="fileUpload.click()">
+            <mat-icon>attach_file</mat-icon>
+          </button>
+        </div>
+        <br/>
+
+        <mat-form-field>
+          <input matInput type="text" label="postText" id="postField" placeholder="Post text" [formControlName]="'postText'">
+        </mat-form-field>
+        <br/>
+        <button mat-flat-button type="submit" [disabled]="!updateFormPost.valid">Save Changes</button><br/>
+        <span *ngIf="!updateFormPost.valid && isSubmitted" [ngClass]="!updateFormPost.valid && isSubmitted ? 'is-invalid' : '' "><br/>Please add an image or post text</span><br/>
+      </form>
+    </mat-card-content>
+
+
+  </mat-card>
+
+</div>

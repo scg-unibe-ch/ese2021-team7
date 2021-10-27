@@ -1,1 +1,16 @@
-<p>feed works!</p>
+<mat-card>
+  <button mat-flat-button color="warn" (click)="buttonClicked()">
+    Reload List
+  </button>
+</mat-card>
+
+<mat-list>
+  <li *ngFor="let post of currentFeed.posts">
+    <app-post
+      [postToDisplay]="post"
+      (delete)="deletePost($event)"
+      (update)="updatePost($event)">
+    </app-post>
+  </li>
+</mat-list>
+
