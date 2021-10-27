@@ -4,7 +4,7 @@ import {Sequelize} from 'sequelize';
 
 export class PostService {
     // Should this method be static?
-    public async getPostById(postId: number): Promise<Post> {
+    public async getPostById(postId: string): Promise<Post> {
         return Post.findByPk(postId).then(dbPost => {
             if (dbPost) {
                 return Promise.resolve(dbPost);
@@ -15,8 +15,8 @@ export class PostService {
     }
 
     // Should this method be static?
-    public async getAll(sortBy: number = 0): Promise<Post[]> {
-        if (sortBy === 1) {
+    public async getAll(sortBy: string): Promise<Post[]> {
+        if (sortBy === '1') {
             // @ts-ignore
             return Post.findAll({ order: [['upvote', Sequelize.literal('+'), 'downvote', 'DESC']]});
         }

@@ -19,10 +19,10 @@ TODO: copy existing endpoints from readme.md
 ## GET /post/all
 Returns all posts. If sortBy is 1, posts are ordered by their score. Otherwise, posts are ordered by creation time. 
 ### Request
+HTTP query param: sortBy: int (optional)
 ```
-{
-    "sortBy": int
-}
+e.g. GET /post/all
+e.g. GET /post/all?sortBy=1
 ```
 ### Response
 ```
@@ -57,10 +57,9 @@ Returns all posts. If sortBy is 1, posts are ordered by their score. Otherwise, 
 ## GET /post/byId
 Returns a post by ID. Returns HTTP status code 500 if no post with the specified postId exists.
 ### Request
+HTTP query param: postId: int
 ```
-{
-    "postId": int
-}
+GET /post/byId?postId=1
 ```
 ### Response
 ```
