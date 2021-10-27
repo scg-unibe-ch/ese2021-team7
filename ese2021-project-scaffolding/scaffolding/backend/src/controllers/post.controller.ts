@@ -39,13 +39,13 @@ postController.post('/downvote',
 
 postController.get('/all',
     (req: Request, res: Response) => {
-        postService.getAll(req.body.sortBy).then(posts => res.send(posts)).catch(err => res.status(500).send(err));
+        postService.getAll('' + req.query.sortBy).then(posts => res.send(posts)).catch(err => res.status(500).send(err));
     }
 );
 
 postController.get('/byId',
     (req: Request, res: Response) => {
-        postService.getPostById(req.body.postId).then(posts => res.send(posts)).catch(err => res.status(500).send(err));
+        postService.getPostById('' + req.query.postId).then(posts => res.send(posts)).catch(err => res.status(500).send(err));
     }
 );
 
