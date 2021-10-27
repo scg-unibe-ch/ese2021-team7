@@ -4,44 +4,55 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
+
 <mat-tab-group>
-  <mat-tab label="Todo List Example">
-    <mat-card>
-      <mat-form-field>
-        <input matInput placeholder="List Name" [(ngModel)]="newTodoListName" name="name">
-      </mat-form-field>
-      <button mat-flat-button color="primary" (click)="createList()" [disabled]="newTodoListName === ''">Create new list</button>
-    </mat-card>
+  <!--
 
-    <app-todo-list
-      *ngFor="let todoList of todoLists"
-      [todoList]="todoList"
-      (update)="updateList($event)"
-      (delete)="deleteList($event)"
-    ></app-todo-list>
-  </mat-tab>
 
-  <mat-tab label="Login">
-    <app-user></app-user>
-  </mat-tab>
+    <mat-tab label="Todo List Example">
+      <mat-card>
+        <mat-form-field>
+          <input matInput placeholder="List Name" [(ngModel)]="newTodoListName" name="name">
+        </mat-form-field>
+        <button mat-flat-button color="primary" (click)="createList()" [disabled]="newTodoListName === ''">Create new list</button>
+      </mat-card>
 
-  <mat-tab label="Registration">
-    <app-registration></app-registration>
-  </mat-tab>
+      <app-todo-list
+        *ngFor="let todoList of todoLists"
+        [todoList]="todoList"
+        (update)="updateList($event)"
+        (delete)="deleteList($event)"
+      ></app-todo-list>
+    </mat-tab>
 
-  <mat-tab label="Create Post">
-    <app-create-post></app-create-post>
-  </mat-tab>
+  -->
 
-  <mat-tab label="Update Post">
-    <app-update-post></app-update-post>
-  </mat-tab>
-
-  <mat-tab label="Post">
-    <app-post></app-post>
-  </mat-tab>
-
-  <mat-tab *ngIf="loggedIn" label="Profile Page">
-    Profile Page
-  </mat-tab>
 </mat-tab-group>
+
+<nav>
+  <ul>
+    <li>
+      <a routerLink="/feed" routerLinkActive="active">Feed</a>
+    </li>
+    <li>
+      <a routerLink="/createpost" routerLinkActive="active">Create Post</a>
+    </li>
+    <li>
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+    </li>
+    <li>
+      <a routerLink="/registration" routerLinkActive="active">Registration</a>
+    </li>
+    <li>
+      <a routerLink="/updatepost" routerLinkActive="active">Update Post</a>
+    </li>
+    <li *ngIf="loggedIn">
+      <a routerLink="/profile" routerLinkActive="active">Profile</a>
+    </li>
+  </ul>
+</nav>
+
+
+
+<!-- The routed views render in the <router-outlet>-->
+<router-outlet></router-outlet>
