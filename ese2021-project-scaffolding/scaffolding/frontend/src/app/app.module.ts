@@ -22,6 +22,9 @@ import { RegistrationComponent } from './registration/registration.component';
 import { FeedComponent } from './feed/feed.component';
 import { PostComponent } from './feed/post/post.component';
 import { CreatePostComponent } from './create-post/create-post.component';
+import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
+import {RouterModule} from "@angular/router";
+
 
 @NgModule({
   declarations: [
@@ -32,7 +35,8 @@ import { CreatePostComponent } from './create-post/create-post.component';
     RegistrationComponent,
     FeedComponent,
     PostComponent,
-    CreatePostComponent
+    CreatePostComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +52,15 @@ import { CreatePostComponent } from './create-post/create-post.component';
     FormsModule,
     MatCheckboxModule,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule.forRoot([
+      { path: 'feed', component: FeedComponent },
+      { path: 'post', component: CreatePostComponent },
+      { path: 'profile', component: PageNotFoundComponent },
+      { path: 'registration', component: RegistrationComponent },
+      { path: 'login', component: UserComponent },
+      { path: '**', component:  PageNotFoundComponent}
+    ]),
   ],
   providers: [
     {
