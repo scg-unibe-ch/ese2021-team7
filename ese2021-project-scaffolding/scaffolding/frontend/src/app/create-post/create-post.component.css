@@ -8,3 +8,8 @@
 .file-upload{
   display: none;
 }
+
+
+.is-invalid{
+  color: red !important;
+}

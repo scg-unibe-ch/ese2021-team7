@@ -27,27 +27,9 @@
 
   -->
 
-  <!--
-  <nav>
-    <ul>
-      <li>
-        <mat-tab *ngIf="loggedIn" label="Profile" routerLink="/profile" routerLinkActive="active" ></mat-tab>
-      </li>
-      <li>
-        <mat-tab label="Login" routerLink="/login" routerLinkActive="active"></mat-tab>
-      </li>
-      <li>
-        <mat-tab label="Registration" routerLink="/registration" routerLinkActive="active"></mat-tab>
-      </li>
-      <li>
-        <mat-tab label="Feed" routerLink="/feed" routerLinkActive="active"></mat-tab>
-      </li>
-      <li>
-        <mat-tab label="Create Post" routerLink="/post" routerLinkActive="active"></mat-tab>
-      </li>
-    </ul>
-  </nav>
-  -->
+  <mat-tab label="Create Post">
+    <app-create-post></app-create-post>
+  </mat-tab>
 
 </mat-tab-group>
 
@@ -57,13 +39,16 @@
       <a routerLink="/feed" routerLinkActive="active">Feed</a>
     </li>
     <li>
-      <a routerLink="/post" routerLinkActive="active">Create Post</a>
+      <a routerLink="/createpost" routerLinkActive="active">Create Post</a>
     </li>
     <li>
       <a routerLink="/login" routerLinkActive="active">Login</a>
     </li>
     <li>
       <a routerLink="/registration" routerLinkActive="active">Registration</a>
+    </li>
+    <li>
+      <a routerLink="/updatepost" routerLinkActive="active">Update Post</a>
     </li>
     <li *ngIf="loggedIn">
       <a routerLink="/profile" routerLinkActive="active">Profile</a>

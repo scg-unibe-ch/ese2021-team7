@@ -25,6 +25,7 @@ import { CreatePostComponent } from './create-post/create-post.component';
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {RouterModule} from "@angular/router";
 
+import { UpdatePostComponent } from './update-post/update-post.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import {RouterModule} from "@angular/router";
     FeedComponent,
     PostComponent,
     CreatePostComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    UpdatePostComponent
   ],
   imports: [
     BrowserModule,

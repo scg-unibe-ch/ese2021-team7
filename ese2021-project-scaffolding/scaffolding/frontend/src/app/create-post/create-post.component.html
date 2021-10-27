@@ -11,9 +11,9 @@
         </mat-form-field>
         <br/>
         <label for="postImage"  ><b>Image</b></label>
-          <input type="file" label="postImage" id="postImage" [formControlName]="'postImage'" class="file-upload" #fileUpload>
+          <input type="file" label="postImage" id="postImage" [formControlName]="'postImage'" class="file-upload" (change)="onFileSelected($event)" #fileUpload>
         <div>
-            {{ "No file uploaded yet."}}
+            {{ filename || "No file uploaded yet."}}
             <button mat-mini-fab color="primary" class="upload-btn" type="button" (click)="fileUpload.click()">
               <mat-icon>attach_file</mat-icon>
             </button>
@@ -24,7 +24,8 @@
           <input matInput type="text" label="postText" id="postField" placeholder="Post text" [formControlName]="'postText'">
         </mat-form-field>
         <br/>
-        <button mat-flat-button type="submit" >Create Post</button>
+        <button mat-flat-button type="submit" [disabled]="!createPostForm.valid">Create Post</button><br/>
+        <span *ngIf="!createPostForm.valid && isSubmitted" [ngClass]="!createPostForm.valid && isSubmitted ? 'is-invalid' : '' "><br/>Please add an image or post text</span><br/>
       </form>
     </mat-card-content>
 
