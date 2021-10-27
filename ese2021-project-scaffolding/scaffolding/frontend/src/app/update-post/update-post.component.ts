@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from '../services/user.service';
 import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
+import { Post } from '../models/post.model';
 
 @Component({
   selector: 'app-update-post',
@@ -13,19 +14,13 @@ import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, Valid
 })
 export class UpdatePostComponent implements OnInit {
 
-
-    updateFormPost = this.fb.group({
-    postTitle: new FormControl('', Validators.required),
-    postImage : new FormControl(''),
-    postText : new FormControl('')
-  }, {
-    validator: (form: FormGroup) => {return this.checkPost(form);}
-  });
-
+  updateFormPost: FormGroup | undefined;
 
   file: File;
 
-   postNumber = 1;
+  postNumber = 1;
+
+  post: Post | undefined;
 
   filename = '';
 
@@ -37,12 +32,22 @@ export class UpdatePostComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.httpClient.request("get", environment.endpointURL + "post/byId", {
-      body: {
+    this.httpClient.get(environment.endpointURL + "post/byId", {
+      params: {
         postId: 1
       }
     }).subscribe( (res:any) => {
       console.log(res);
+      this.post = new Post(res.postId, null, res.title, res.text, res.image, res.upvote, res.downvote, null, res.category, res.createdAt, res.UserUserId);
+      console.log(this.post);
+      this.updateFormPost = this.fb.group({
+        "postTitle": new FormControl(this.post.title, Validators.required),
+        "postImage" : new FormControl(this.post.image),
+        "postText" : new FormControl(this.post.text)
+      }, {
+        validator: (form: FormGroup) => {return this.checkPost(form);}
+      });
+
     }, (error: any) => {
       console.log(error);
     });
@@ -53,9 +58,13 @@ export class UpdatePostComponent implements OnInit {
     this.isSubmitted = true;
     if(this.updateFormPost.valid){
       this.httpClient.post(environment.endpointURL + "post/modify", {
+        postId: this.post.postId,
         title: this.updateFormPost.value.postTitle,
         text: this.updateFormPost.value.postText,
         image: this.updateFormPost.value.postImage,
+        category: this.post.category,
+        upvote: this.post.upvote,
+        downvote: this.post.downvote
       }, ).subscribe((res: any) => {
           console.log(res);
           this.isSubmitted = false;
