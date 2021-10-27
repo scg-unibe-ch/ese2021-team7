@@ -1,0 +1,90 @@
+import { Component, OnInit } from '@angular/core';
+import {MatCardModule} from '@angular/material/card';
+import { User } from '../models/user.model';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { UserService } from '../services/user.service';
+import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
+
+@Component({
+  selector: 'app-update-post',
+  templateUrl: './update-post.component.html',
+  styleUrls: ['./update-post.component.css']
+})
+export class UpdatePostComponent implements OnInit {
+
+
+    updateFormPost = this.fb.group({
+    postTitle: new FormControl('', Validators.required),
+    postImage : new FormControl(''),
+    postText : new FormControl('')
+  }, {
+    validator: (form: FormGroup) => {return this.checkPost(form);}
+  });
+
+
+  file: File;
+
+   postNumber = 1;
+
+  filename = '';
+
+  isSubmitted: boolean;
+
+  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService) {
+    this.isSubmitted= false;
+  }
+
+
+  ngOnInit(): void {
+    this.httpClient.request("get", environment.endpointURL + "post/byId", {
+      body: {
+        postId: 1
+      }
+    }).subscribe( (res:any) => {
+      console.log(res);
+    }, (error: any) => {
+      console.log(error);
+    });
+  }
+
+  onSubmit(formDirective: FormGroupDirective): void{
+    console.log(this.updateFormPost)
+    this.isSubmitted = true;
+    if(this.updateFormPost.valid){
+      this.httpClient.post(environment.endpointURL + "post/modify", {
+        title: this.updateFormPost.value.postTitle,
+        text: this.updateFormPost.value.postText,
+        image: this.updateFormPost.value.postImage,
+      }, ).subscribe((res: any) => {
+          console.log(res);
+          this.isSubmitted = false;
+        },
+        (error: any) =>{
+          console.log(error);
+          this.isSubmitted = false;
+        });
+    }
+  }
+
+  onFileSelected(event: any){
+    this.file = event.target.files[0];
+    this.filename = this.file.name;
+    if(this.updateFormPost.value.postImage){
+      console.log(this.filename);
+      console.log(this.updateFormPost.value.postImage);
+    }
+  }
+
+
+  //currently not set
+  checkPost(form: FormGroup): {[s: string]: boolean}{
+    if(form.value.postImage == "" && form.value.postText == ""){
+      console.log("error");
+      return {'missingPostContent': true};
+    }
+    console.log("correct");
+    return null;
+  };
+
+}
