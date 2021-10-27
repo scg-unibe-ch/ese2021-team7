@@ -22,7 +22,6 @@ import { RegistrationComponent } from './registration/registration.component';
 import { FeedComponent } from './feed/feed.component';
 import { PostComponent } from './feed/post/post.component';
 import { CreatePostComponent } from './create-post/create-post.component';
-import {DataViewModule} from 'primeng/dataview';
 
 
 
@@ -51,8 +50,7 @@ import {DataViewModule} from 'primeng/dataview';
     FormsModule,
     MatCheckboxModule,
     ReactiveFormsModule,
-    MatIconModule,
-    DataViewModule
+    MatIconModule
   ],
   providers: [
     {
