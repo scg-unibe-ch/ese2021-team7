@@ -34,12 +34,23 @@ export class FeedComponent implements OnInit {
     this.loggedIn = userService.getLoggedIn();
     this.currentUser = userService.getUser();
     // TODO this.readPosts();
+    this.currentFeed.posts = this.createPostList();
+  }
+
+  createPostList(): Post [] {
+    let list: Post[] = [];
+    for(let i = 0; i++, i<5;){
+      list.push(new Post(i,0,'Post Title','Some text',
+        'https://betanews.com/wp-content/uploads/2016/10/game-of-thrones-logo.jpg',
+        0,0,0,'','',0)
+    );
+    }
+    return list;
   }
 
   buttonClicked(): void {
     this.readPosts();
   }
-
 
   // READ all created posts
   readPosts(): void {

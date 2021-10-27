@@ -1,33 +1,16 @@
 <mat-card>
-
   <button mat-flat-button color="warn" (click)="buttonClicked()">
-    Delete list
+    Reload List
   </button>
-
 </mat-card>
 
-
-<div class="card">
-  <p-dataView [value]="postList" [paginator]="true" [rows]="9" layout="grid">
-    <ng-template pTemplate="header">
-      <div class="p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
-        <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
-      </div>
-    </ng-template>
-    <ng-template let-post pTemplate="listItem">
-      <div class="p-col-12">
-        <div class="product-list-item">
-          <app-post [postToDisplay]="post" (delete)="deletePost($event)" (update)="updatePost($event)"></app-post>
-        </div>
-      </div>
-    </ng-template>
-    <ng-template let-post pTemplate="gridItem">
-      <div class="p-col-12 p-md-4">
-        <div class="product-grid-item card">
-          <app-post [postToDisplay]="post"></app-post>
-        </div>
-      </div>
-    </ng-template>
-  </p-dataView>
-</div>
+<mat-list>
+  <li *ngFor="let post of currentFeed.posts">
+    <app-post
+      [postToDisplay]="post"
+      (delete)="deletePost($event)"
+      (update)="updatePost($event)">
+    </app-post>
+  </li>
+</mat-list>
 
