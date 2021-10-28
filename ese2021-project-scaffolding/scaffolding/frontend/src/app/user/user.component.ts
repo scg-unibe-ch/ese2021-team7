@@ -11,7 +11,7 @@ import { OnInit } from '@angular/core';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit{
 
   loggedIn: boolean | undefined;
 
@@ -20,7 +20,7 @@ export class UserComponent implements OnInit {
 
   user: User | undefined;
 
-  registeredUser: User | undefined;
+  fromRegistration: boolean;
 
   userToLogin: User = new User(0, '', '', '','','','','','','','','');
 
@@ -45,11 +45,16 @@ export class UserComponent implements OnInit {
     // Activate Login Fields
     this.activeEmailField = true;
     this.activeUserNameField = true;
+
+    this.fromRegistration = false;
   }
+
 
   ngOnInit(): void {
     this.route.queryParams.subscribe( params =>{
       if(params['registered']== 'true'){
+        this.fromRegistration = true;
+        /*
         console.log(params);
         this.httpClient.post(environment.endpointURL + "user/login", {
           userName: params['userName'],
@@ -71,7 +76,7 @@ export class UserComponent implements OnInit {
           this.handleLoginError(error);
           this.resetLoginForm();
 
-        });
+        });*/
       }
     })
 

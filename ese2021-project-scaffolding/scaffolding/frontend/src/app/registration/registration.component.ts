@@ -56,7 +56,8 @@ export class RegistrationComponent {
         birthday: this.registrationForm.value.birthday
       }).subscribe((res: any) => {
         console.log(res);
-          this.router.navigate(['/login'], {queryParams : {registered : 'true', userName : res.userName, "password" : this.registrationForm.value.password }});
+          //this.router.navigate(['/login'], {queryParams : {registered : 'true', userName : res.userName, "password" : this.registrationForm.value.password }});
+          this.router.navigate(['/login'], {queryParams : {registered : 'true'}});
           this.userNameAlreadyInUse = false;
         this.registrationForm.reset();
         formDirective.resetForm();
