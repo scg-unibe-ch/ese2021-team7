@@ -100,7 +100,7 @@ export class UserComponent {
     this.userService.setUser(undefined);
   }
 
-  accessUserEndpoint(): void {
+/*  accessUserEndpoint(): void {
     this.httpClient.get(environment.endpointURL + "secured").subscribe(() => {
       this.endpointMsgUser = "Access granted";
     }, () => {
@@ -114,5 +114,5 @@ export class UserComponent {
     }, () => {
       this.endpointMsgAdmin = "Unauthorized";
     });
-  }
+  }*/
 }
