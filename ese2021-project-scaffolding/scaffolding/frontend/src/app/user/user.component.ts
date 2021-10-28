@@ -58,15 +58,22 @@ export class UserComponent {
   }
 
   handleLoginError(error: HttpErrorResponse){
+    // if neither username, nor email are provided
     if(error.error.message == '21'){
       this.endpointLogin = "No username or email provided";
     }
-    if(error.error.message == '22') {
-      this.endpointLogin = "User not found";
+    // wrong login information
+    if(error.error.message == '22' || error.error.message == '23') {
+      // for login with email
+      if (this.userToLogin.username == ''){
+        this.endpointLogin = "Wrong email or password";
+      }
+      // for login with username
+      else{
+        this.endpointLogin = "Wrong username or password";
+      }
     }
-    if(error.error.message == '23') {
-      this.endpointLogin = "Wrong password";
-    }
+    // if both, username and email are provided
     if(error.error.message == '24') {
       this.endpointLogin = "Illegal request format";
     }
