@@ -10,10 +10,10 @@
       {{ endpointLogin }}
     </div>
     <mat-form-field>
-      <input matInput type="text" [disabled]="!activeUserNameField" placeholder="User Name" name="userName" (click)="disableEmailField()" [(ngModel)]="userToLogin.username">
+      <input matInput type="text" placeholder="User Name" name="userName" (click)="clearEmailField()" [(ngModel)]="userToLogin.username">
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" [disabled]="!activeEmailField" placeholder="Email" name="email" (click)="disableUserNameField()" [(ngModel)]="userToLogin.email">
+      <input matInput type="text" placeholder="Email" name="email" (click)="clearUserNameField()" [(ngModel)]="userToLogin.email">
     </mat-form-field>
     <mat-form-field>
       <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="userToLogin.password">

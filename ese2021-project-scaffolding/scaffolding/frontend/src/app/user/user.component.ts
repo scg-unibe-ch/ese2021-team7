@@ -13,9 +13,6 @@ export class UserComponent {
 
   loggedIn: boolean | undefined;
 
-  activeEmailField: boolean | undefined;
-  activeUserNameField: boolean | undefined;
-
   user: User | undefined;
 
   userToLogin: User = new User(0, '', '', '','','','','','','','','');
@@ -35,10 +32,6 @@ export class UserComponent {
     // Current value
     this.loggedIn = userService.getLoggedIn();
     this.user = userService.getUser();
-
-    // Activate Login Fields
-    this.activeEmailField = true;
-    this.activeUserNameField = true;
   }
 
   loginUser(): void {
@@ -79,18 +72,16 @@ export class UserComponent {
     }
   }
 
-  disableEmailField(): void {
-    this.activeEmailField = false;
+  clearEmailField(): void {
+    this.userToLogin.email = '';
   }
 
-  disableUserNameField(): void {
-    this.activeUserNameField = false;
+  clearUserNameField(): void {
+    this.userToLogin.username = '';
   }
 
   resetLoginForm(){
     this.userToLogin.username = this.userToLogin.email = this.userToLogin.password = '';
-    this.activeUserNameField = true;
-    this.activeEmailField = true;
   }
 
   logoutUser(): void {
@@ -100,8 +91,6 @@ export class UserComponent {
 
     this.userService.setLoggedIn(false);
     this.userService.setUser(undefined);
-
-    //this.endpointLogin = '';
   }
 
   accessUserEndpoint(): void {
