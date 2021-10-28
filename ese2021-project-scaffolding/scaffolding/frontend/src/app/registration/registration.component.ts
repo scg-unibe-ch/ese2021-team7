@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from '../services/user.service';
 import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -33,7 +34,7 @@ export class RegistrationComponent {
     phoneNumber: new FormControl('')
   });
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder) {
+  constructor(public httpClient: HttpClient, private fb: FormBuilder, private router: Router) {
     this.userNameAlreadyInUse = false;
   }
 
@@ -55,9 +56,11 @@ export class RegistrationComponent {
         birthday: this.registrationForm.value.birthday
       }).subscribe((res: any) => {
         console.log(res);
-        this.userNameAlreadyInUse = false;
+          this.router.navigate(['/login'], {queryParams : {registered : 'true', userName : res.userName, "password" : this.registrationForm.value.password }});
+          this.userNameAlreadyInUse = false;
         this.registrationForm.reset();
         formDirective.resetForm();
+
       },
         (error: any) =>{
         console.log(error);
