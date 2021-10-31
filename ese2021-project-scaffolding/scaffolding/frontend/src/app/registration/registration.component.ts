@@ -12,6 +12,7 @@ import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, Valid
 })
 export class RegistrationComponent {
 
+  loggedIn: boolean | undefined;
   userNameAlreadyInUse: boolean;
 
   registrationForm = this.fb.group({
@@ -33,8 +34,13 @@ export class RegistrationComponent {
     phoneNumber: new FormControl('')
   });
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder) {
+  constructor(public httpClient: HttpClient, private fb: FormBuilder,public userService: UserService) {
     this.userNameAlreadyInUse = false;
+    // Listen for changes
+    userService.loggedIn$.subscribe(res => this.loggedIn = res);
+
+    // Current value
+    this.loggedIn = userService.getLoggedIn();
   }
 
   onSubmit(formDirective: FormGroupDirective): void {

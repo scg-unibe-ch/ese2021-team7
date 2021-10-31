@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card *ngIf="!loggedIn">
 
 <form [formGroup]="registrationForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm">
 <mat-form-field><input matInput type="text"  placeholder="User Name" id="username" [formControlName]="'userName'" required></mat-form-field>
