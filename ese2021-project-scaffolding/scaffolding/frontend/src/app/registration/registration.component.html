@@ -1,11 +1,11 @@
 <mat-card *ngIf="!loggedIn">
 
 <form [formGroup]="registrationForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm">
-<mat-form-field><input matInput type="text"  placeholder="User Name" id="username" [formControlName]="'userName'" required></mat-form-field>
+<mat-form-field><input matInput type="text"  placeholder="User Name" id="username" [formControlName]="'userName'" [ngClass]="registrationForm.controls['userName']?.errors?.userNameInUse ? 'is-invalid' : '' " required></mat-form-field>
   <mat-form-field>
-    <input matInput type="email" placeholder="Email" id="email" [formControlName]="'email'">
+    <input matInput type="email" placeholder="Email" id="email" [formControlName]="'email'" [ngClass]="registrationForm.controls['email']?.errors?.emailInUse ? 'is-invalid' : '' ">
   </mat-form-field><br/>
-  <span *ngIf="!isUserNameValid()" [ngClass]="!isUserNameValid() ? 'is-invalid' : '' "><br/>Username or email already in use</span><br/>
+  <span *ngIf="(registrationForm.controls['userName'].touched || registrationForm.controls['email'].touched) &&  (registrationForm.controls['userName']?.errors?.userNameInUse || registrationForm.controls['email']?.errors?.emailInUse)" class="is-invalid"><br/>Username or email already in use</span><br/>
   <mat-form-field>
     <input matInput type="password" placeholder="Password" id="password" [formControlName]="'password'" [ngClass]="registrationForm.controls['password']?.hasError('required') ? 'is-invalid' : ''" required>
 
