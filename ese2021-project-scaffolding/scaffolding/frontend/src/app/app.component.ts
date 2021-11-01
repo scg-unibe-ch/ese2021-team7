@@ -23,6 +23,8 @@ export class AppComponent implements OnInit {
 
   user: User | undefined;
 
+  enableCreatePost: boolean = false;
+
   constructor(
     public httpClient: HttpClient,
     public userService: UserService
@@ -30,15 +32,29 @@ export class AppComponent implements OnInit {
     // Listen for changes
     userService.loggedIn$.subscribe(res => this.loggedIn = res);
     userService.user$.subscribe(res => this.user = res);
+    userService.isAdmin$.subscribe(res => {
+      this.enableCreatePost = false;
+    },
+      error => {
+      this.checkPermissionConditions(false);
+      })
 
     // Current value
     this.loggedIn = userService.getLoggedIn();
     this.user = userService.getUser();
+    this.enableCreatePost = this.checkPermissionConditions(userService.getIsAdmin());
   }
 
   ngOnInit() {
     this.readLists();
     this.checkUserStatus();
+  }
+
+  checkPermissionConditions(isAdmin: boolean | undefined): boolean {
+    if(this.loggedIn && !isAdmin){
+      return true;
+    }
+    return  false;
   }
 
   // CREATE - TodoList

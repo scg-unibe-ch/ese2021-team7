@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import { UserService } from '../services/user.service';
 import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
 import { Post } from '../models/post.model';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-update-post',
@@ -18,7 +19,7 @@ export class UpdatePostComponent implements OnInit {
 
   file: File;
 
-  postNumber = 1;
+  postId: number | undefined;
 
   post: Post | undefined;
 
@@ -26,31 +27,38 @@ export class UpdatePostComponent implements OnInit {
 
   isSubmitted: boolean;
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService) {
+  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService, private route: ActivatedRoute) {
     this.isSubmitted= false;
   }
 
 
   ngOnInit(): void {
-    this.httpClient.get(environment.endpointURL + "post/byId", {
-      params: {
-        postId: 1
-      }
-    }).subscribe( (res:any) => {
-      console.log(res);
-      this.post = new Post(res.postId, null, res.title, res.text, res.image, res.upvote, res.downvote, null, res.category, res.createdAt, res.UserUserId);
-      console.log(this.post);
-      this.updateFormPost = this.fb.group({
-        "postTitle": new FormControl(this.post.title, Validators.required),
-        "postImage" : new FormControl(this.post.image),
-        "postText" : new FormControl(this.post.text)
-      }, {
-        validator: (form: FormGroup) => {return this.checkPost(form);}
-      });
-
-    }, (error: any) => {
-      console.log(error);
+    this.route.queryParams.subscribe(params => {
+      this.postId = params['postId'];
     });
+    if(this.postId != null) {
+      this.httpClient.get(environment.endpointURL + "post/byId", {
+        params: {
+          postId: this.postId
+        }
+      }).subscribe((res: any) => {
+        console.log(res);
+        this.post = new Post(res.postId, null, res.title, res.text, res.image, res.upvote, res.downvote, null, res.category, res.createdAt, res.UserUserId);
+        console.log(this.post);
+        this.updateFormPost = this.fb.group({
+          "postTitle": new FormControl(this.post.title, Validators.required),
+          "postImage": new FormControl(this.post.image),
+          "postText": new FormControl(this.post.text)
+        }, {
+          validator: (form: FormGroup) => {
+            return this.checkPost(form);
+          }
+        });
+
+      }, (error: any) => {
+        console.log(error);
+      });
+    }
   }
 
   onSubmit(formDirective: FormGroupDirective): void{

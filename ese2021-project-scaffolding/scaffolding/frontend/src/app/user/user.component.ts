@@ -15,9 +15,6 @@ export class UserComponent implements OnInit{
 
   loggedIn: boolean | undefined;
 
-  activeEmailField: boolean | undefined;
-  activeUserNameField: boolean | undefined;
-
   user: User | undefined;
 
   fromRegistration: boolean;
@@ -41,12 +38,6 @@ export class UserComponent implements OnInit{
     // Current value
     this.loggedIn = userService.getLoggedIn();
     this.user = userService.getUser();
-
-    // Activate Login Fields
-    this.activeEmailField = true;
-    this.activeUserNameField = true;
-
-    this.fromRegistration = false;
   }
 
 
@@ -106,32 +97,37 @@ export class UserComponent implements OnInit{
   }
 
   handleLoginError(error: HttpErrorResponse){
+    // if neither username, nor email are provided
     if(error.error.message == '21'){
       this.endpointLogin = "No username or email provided";
     }
-    if(error.error.message == '22') {
-      this.endpointLogin = "User not found";
+    // wrong login information
+    if(error.error.message == '22' || error.error.message == '23') {
+      // for login with email
+      if (this.userToLogin.username == ''){
+        this.endpointLogin = "Wrong email or password";
+      }
+      // for login with username
+      else{
+        this.endpointLogin = "Wrong username or password";
+      }
     }
-    if(error.error.message == '23') {
-      this.endpointLogin = "Wrong password";
-    }
+    // if both, username and email are provided
     if(error.error.message == '24') {
       this.endpointLogin = "Illegal request format";
     }
   }
 
-  disableEmailField(): void {
-    this.activeEmailField = false;
+  clearEmailField(): void {
+    this.userToLogin.email = '';
   }
 
-  disableUserNameField(): void {
-    this.activeUserNameField = false;
+  clearUserNameField(): void {
+    this.userToLogin.username = '';
   }
 
   resetLoginForm(){
     this.userToLogin.username = this.userToLogin.email = this.userToLogin.password = '';
-    this.activeUserNameField = true;
-    this.activeEmailField = true;
   }
 
   logoutUser(): void {
@@ -141,11 +137,9 @@ export class UserComponent implements OnInit{
 
     this.userService.setLoggedIn(false);
     this.userService.setUser(undefined);
-
-    //this.endpointLogin = '';
   }
 
-  accessUserEndpoint(): void {
+/*  accessUserEndpoint(): void {
     this.httpClient.get(environment.endpointURL + "secured").subscribe(() => {
       this.endpointMsgUser = "Access granted";
     }, () => {
@@ -159,5 +153,5 @@ export class UserComponent implements OnInit{
     }, () => {
       this.endpointMsgAdmin = "Unauthorized";
     });
-  }
+  }*/
 }

@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class RegistrationComponent {
 
+  loggedIn: boolean | undefined;
   userNameAlreadyInUse: boolean;
 
   registrationForm = this.fb.group({
@@ -34,8 +35,13 @@ export class RegistrationComponent {
     phoneNumber: new FormControl('')
   });
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, private router: Router) {
+  constructor(public httpClient: HttpClient, private fb: FormBuilder, private router: Router,public userService: UserService) {
     this.userNameAlreadyInUse = false;
+    // Listen for changes
+    userService.loggedIn$.subscribe(res => this.loggedIn = res);
+
+    // Current value
+    this.loggedIn = userService.getLoggedIn();
   }
 
   onSubmit(formDirective: FormGroupDirective): void {

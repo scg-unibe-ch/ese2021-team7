@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card *ngIf="!loggedIn">
 
 <form [formGroup]="registrationForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm">
 <mat-form-field><input matInput type="text"  placeholder="User Name" id="username" [formControlName]="'userName'" required></mat-form-field>
@@ -12,32 +12,50 @@
   </mat-form-field><br/>
   <div>
   <span>Password must contain:</span><br/>
-    <div><mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'">
+    <div>
+      <mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'" [color]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'">
       {{ registrationForm.controls['password'].hasError('required') ||
     registrationForm.controls['password'].hasError('minlength') ? 'cancel' :
       'check_circle' }}
-    </mat-icon><span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'"> min. 8 characters</span></div>
+      </mat-icon>
+      <span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'"> min. 8 characters</span>
+    </div>
 
-    <div><mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'">
+    <div>
+      <mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noNumberInPassword') ? 'is-invalid' : 'valid'">
       {{ registrationForm.controls['password'].hasError('required') ||
-    registrationForm.controls['password'].hasError('minlength') ? 'cancel' :
+    registrationForm.controls['password'].hasError('noNumberInPassword') ? 'cancel' :
       'check_circle' }}
-    </mat-icon><span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noNumberInPassword') ? 'is-invalid' : 'valid'">min. one number (0-9)</span></div>
-    <div><mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'">
+      </mat-icon>
+      <span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noNumberInPassword') ? 'is-invalid' : 'valid'">min. one number (0-9)</span>
+    </div>
+
+    <div>
+      <mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noSmallLetter') ? 'is-invalid' : 'valid'">
       {{ registrationForm.controls['password'].hasError('required') ||
-    registrationForm.controls['password'].hasError('minlength') ? 'cancel' :
+    registrationForm.controls['password'].hasError('noSmallLetter') ? 'cancel' :
       'check_circle' }}
-    </mat-icon><span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noSmallLetter') ? 'is-invalid' : 'valid'">min. one small letter (a-z)</span></div>
-    <div><mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'">
+    </mat-icon>
+      <span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noSmallLetter') ? 'is-invalid' : 'valid'">min. one small letter (a-z)</span>
+    </div>
+
+    <div>
+      <mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noCapitalLetter') ? 'is-invalid' : 'valid'">
       {{ registrationForm.controls['password'].hasError('required') ||
-    registrationForm.controls['password'].hasError('minlength') ? 'cancel' :
+    registrationForm.controls['password'].hasError('noCapitalLetter') ? 'cancel' :
       'check_circle' }}
-    </mat-icon><span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noCapitalLetter') ? 'is-invalid' : 'valid'">min one capital letter (A-Z)</span></div>
-    <div><mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'">
+     </mat-icon>
+      <span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noCapitalLetter') ? 'is-invalid' : 'valid'">min one capital letter (A-Z)</span>
+    </div>
+
+    <div>
+      <mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noSpecialCharacter') ? 'is-invalid' : 'valid'">
       {{ registrationForm.controls['password'].hasError('required') ||
-    registrationForm.controls['password'].hasError('minlength') ? 'cancel' :
+    registrationForm.controls['password'].hasError('noSpecialCharacter') ? 'cancel' :
       'check_circle' }}
-    </mat-icon><span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noSpecialCharacter') ? 'is-invalid' : 'valid'">min. one special character (@#$%^&-()+=)</span></div>
+    </mat-icon>
+      <span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noSpecialCharacter') ? 'is-invalid' : 'valid'">min. one special character (@#$%^&-()+=)</span>
+    </div>
   </div>
 
   <mat-form-field>

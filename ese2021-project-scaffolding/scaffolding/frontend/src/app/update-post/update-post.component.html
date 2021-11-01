@@ -27,6 +27,9 @@
         <button mat-flat-button type="submit" [disabled]="!updateFormPost.valid">Save Changes</button><br/>
         <span *ngIf="!updateFormPost.valid && isSubmitted" [ngClass]="!updateFormPost.valid && isSubmitted ? 'is-invalid' : '' "><br/>Please add an image or post text</span><br/>
       </form>
+      <div *ngIf="!post">
+        <span>No post found</span>
+      </div>
     </mat-card-content>
 
 

@@ -15,10 +15,10 @@
       {{ endpointLogin }}
     </div>
     <mat-form-field>
-      <input matInput type="text" [disabled]="!activeUserNameField" placeholder="User Name" name="userName" (click)="disableEmailField()" [(ngModel)]="userToLogin.username">
+      <input matInput type="text" placeholder="User Name" name="userName" (click)="clearEmailField()" [(ngModel)]="userToLogin.username">
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" [disabled]="!activeEmailField" placeholder="Email" name="email" (click)="disableUserNameField()" [(ngModel)]="userToLogin.email">
+      <input matInput type="text" placeholder="Email" name="email" (click)="clearUserNameField()" [(ngModel)]="userToLogin.email">
     </mat-form-field>
     <mat-form-field>
       <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="userToLogin.password">
@@ -31,11 +31,11 @@
   </div>
 </mat-card>
 
-<mat-card>
+<!--<mat-card>
   <h3>Secure Endpoints</h3>
   <button mat-flat-button color="primary" (click)="accessUserEndpoint()">User Endpoint</button>
   {{ endpointMsgUser }}
   <hr>
   <button mat-flat-button color="primary" (click)="accessAdminEndpoint()">Admin Endpoint</button>
   {{ endpointMsgAdmin }}
-</mat-card>
+</mat-card>-->
