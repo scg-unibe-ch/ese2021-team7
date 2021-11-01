@@ -17,12 +17,12 @@ export class UserComponent implements OnInit{
 
   user: User | undefined;
 
-  fromRegistration: boolean;
+  fromRegistration: boolean | undefined;
 
   userToLogin: User = new User(0, '', '', '','','','','','','','','');
 
-  endpointMsgUser: string = '';
-  endpointMsgAdmin: string = '';
+  //endpointMsgUser: string = '';
+  //endpointMsgAdmin: string = '';
   endpointLogin: string = '';
 
   constructor(
@@ -90,6 +90,7 @@ export class UserComponent implements OnInit{
 
       this.resetLoginForm();
       this.endpointLogin = '';
+      this.router.navigate(['/feed'], {queryParams: {loggedIn: 'true'}}).then(r =>{});
     }, (error) => {
       this.handleLoginError(error);
       this.resetLoginForm();
