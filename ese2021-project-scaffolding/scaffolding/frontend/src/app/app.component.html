@@ -71,7 +71,7 @@
     <li>
       <a routerLink="/login" routerLinkActive="active">Login</a>
     </li>
-    <li>
+    <li *ngIf="!loggedIn">
       <a routerLink="/registration" routerLinkActive="active">Registration</a>
     </li>
     <li>
