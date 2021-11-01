@@ -65,17 +65,17 @@
     <li>
       <a routerLink="/feed" routerLinkActive="active">Feed</a>
     </li>
-    <li>
+    <li *ngIf="enableCreatePost">
       <a routerLink="/createpost" routerLinkActive="active">Create Post</a>
     </li>
     <li>
       <a routerLink="/login" routerLinkActive="active">Login</a>
     </li>
-    <li>
+    <li *ngIf="!loggedIn">
       <a routerLink="/registration" routerLinkActive="active">Registration</a>
     </li>
     <li>
-      <a routerLink="/updatepost" routerLinkActive="active">Update Post</a>
+      <a [routerLink]="['/updatepost']" [queryParams]="{postId : 1}"  routerLinkActive="active">Update Post</a>
     </li>
     <li *ngIf="loggedIn">
       <a routerLink="/profile" routerLinkActive="active">Profile</a>

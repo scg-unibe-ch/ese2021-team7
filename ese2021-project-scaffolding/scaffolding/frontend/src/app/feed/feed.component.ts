@@ -22,6 +22,8 @@ export class FeedComponent implements OnInit {
 
   loggedIn: Boolean | undefined;
 
+  isAdmin: boolean | undefined;
+
   constructor(
     public userService: UserService,
     public httpClient: HttpClient
@@ -29,35 +31,28 @@ export class FeedComponent implements OnInit {
     // Listen for changes
     userService.loggedIn$.subscribe(res => this.loggedIn = res);
     userService.user$.subscribe(res => this.currentUser = res);
+    userService.isAdmin$.subscribe( res => this.isAdmin = res);
 
     //current Value
     this.loggedIn = userService.getLoggedIn();
     this.currentUser = userService.getUser();
-    // TODO this.readPosts();
-    this.currentFeed.posts = this.createPostList();
+    this.isAdmin = userService.getIsAdmin();
+    this.readPosts();
   }
 
   ngOnInit(): void {
   }
 
-  createPostList(): Post [] {
-    let list: Post[] = [];
-    for(let i = 0; i++, i<5;){
-      list.push(new Post(i,0,'Post Title','Some text',
-        'https://betanews.com/wp-content/uploads/2016/10/game-of-thrones-logo.jpg',
-        0,0,0,'','',0)
-    );
-    }
-    return list;
-  }
-
-  buttonClicked(): void {
-    this.readPosts();
-  }
+  checkUpdateAndDeletePermission(creatorId: number): boolean{
+    if (this.isAdmin) return true;
+    else if (this.currentUser?.userId == creatorId) return true;
+    return false;
+}
 
   // READ all created posts
   readPosts(): void {
     this.httpClient.get(environment.endpointURL + "post/all").subscribe((res: any) => {
+      console.log(res);
       this.currentFeed = new Feed(0,'', []);
       res.forEach((post: any) => {
         this.currentFeed.posts.push(
@@ -81,9 +76,8 @@ export class FeedComponent implements OnInit {
       (res: any) => {
         this.currentFeed = new Feed(0,'', []);
         res.forEach((post: any) => {
-            //TODO does it make sense to create all new? Is there a possibility to say feed = res
             this.currentFeed.posts.push(
-              new Post(0,0,'Post Title','Some text','https://betanews.com/wp-content/uploads/2016/10/game-of-thrones-logo.jpg',0,0,0,'','',0))
+              new Post(post.postId, 0,post.title,post.text,post.image,post.upvote,post.downvote,0,post.category,'',0))
           },
           (error: any) => {
             console.log(error);
@@ -94,16 +88,24 @@ export class FeedComponent implements OnInit {
 
 
   deletePost(post: Post): void {
-    console.log("Button delete works.");
-    this.httpClient.post(environment.endpointURL + "post/delete", {
-      postId: post.postId
-    }).subscribe(() => {
-      this.currentFeed.posts.splice(this.currentFeed.posts.indexOf(post), 1);
-    });
+    if (this.checkUpdateAndDeletePermission(post.CreationUser)){
+      this.httpClient.post(environment.endpointURL + "post/delete", {
+        postId: post.postId
+      }).subscribe(() => {
+        this.currentFeed.posts.splice(this.currentFeed.posts.indexOf(post), 1);
+      });
+    }
+    else console.log("Permission denied");
   }
 
   updatePost(post: Post): void {
-    console.log("Button update works.");
+    if (this.checkUpdateAndDeletePermission(post.CreationUser)){
+      // TODO routing to updatepost
+    }
+    else console.log("Permission denied");
   }
 
+  buttonClicked() {
+    this.readPosts();
+  }
 }
