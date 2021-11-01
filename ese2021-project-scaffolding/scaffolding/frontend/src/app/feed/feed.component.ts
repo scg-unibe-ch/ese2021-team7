@@ -52,6 +52,7 @@ export class FeedComponent implements OnInit {
   // READ all created posts
   readPosts(): void {
     this.httpClient.get(environment.endpointURL + "post/all").subscribe((res: any) => {
+      console.log(res);
       this.currentFeed = new Feed(0,'', []);
       res.forEach((post: any) => {
         this.currentFeed.posts.push(
@@ -75,9 +76,8 @@ export class FeedComponent implements OnInit {
       (res: any) => {
         this.currentFeed = new Feed(0,'', []);
         res.forEach((post: any) => {
-            //TODO does it make sense to create all new? Is there a possibility to say feed = res
             this.currentFeed.posts.push(
-              new Post(0,0,'Post Title','Some text','https://betanews.com/wp-content/uploads/2016/10/game-of-thrones-logo.jpg',0,0,0,'','',0))
+              new Post(post.postId, 0,post.title,post.text,post.image,post.upvote,post.downvote,0,post.category,'',0))
           },
           (error: any) => {
             console.log(error);
@@ -105,4 +105,7 @@ export class FeedComponent implements OnInit {
     else console.log("Permission denied");
   }
 
+  buttonClicked() {
+    this.readPosts();
+  }
 }
