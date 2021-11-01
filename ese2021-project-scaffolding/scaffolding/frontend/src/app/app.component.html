@@ -65,7 +65,7 @@
     <li>
       <a routerLink="/feed" routerLinkActive="active">Feed</a>
     </li>
-    <li>
+    <li *ngIf="enableCreatePost">
       <a routerLink="/createpost" routerLinkActive="active">Create Post</a>
     </li>
     <li>
