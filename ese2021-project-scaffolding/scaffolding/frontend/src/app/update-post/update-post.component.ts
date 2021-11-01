@@ -33,7 +33,6 @@ export class UpdatePostComponent implements OnInit {
 
 
   ngOnInit(): void {
-
     this.route.queryParams.subscribe(params => {
       this.postId = params['postId'];
     });
