@@ -24,7 +24,7 @@ import { PostComponent } from './feed/post/post.component';
 import { CreatePostComponent } from './create-post/create-post.component';
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {RouterModule} from "@angular/router";
-
+import {MatMenuModule} from '@angular/material/menu';
 import { UpdatePostComponent } from './update-post/update-post.component';
 
 
@@ -53,6 +53,7 @@ import { UpdatePostComponent } from './update-post/update-post.component';
     MatInputModule,
     MatButtonModule,
     MatListModule,
+    MatMenuModule,
     FormsModule,
     MatCheckboxModule,
     ReactiveFormsModule,
