@@ -13,7 +13,7 @@ button, input {
 }
 
 .mat-card {
-  margin: 0px;
+  margin: 20px;
   background-color: #EEE;
 }
 
@@ -44,4 +44,8 @@ button, input {
 
 .form-action-button{
   text-align: right;
+}
+
+.card-title{
+
 }
