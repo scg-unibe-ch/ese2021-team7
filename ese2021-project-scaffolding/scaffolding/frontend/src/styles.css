@@ -15,6 +15,7 @@ button, input {
 .mat-card {
   margin: 20px;
   background-color: #EEE;
+  padding: 40px;
 }
 
 .mat-form-field-wrapper {
@@ -47,5 +48,35 @@ button, input {
 }
 
 .card-title{
+  font-family: 'Libre Baskerville', serif !important;
+}
 
+.group7-color-overlay{
+  color: #262626 !important;
+}
+
+.mat-toolbar{
+  background-color: #262626;
+  color: #fff;
+}
+
+.mat-card{
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  border: 1px solid grey !important;
+}
+
+.mat-flat-button{
+  background-color: #191919 !important;
+  color: #fff;
+  border-radius: 0px !important;
+}
+
+.mat-form-field{
+  border-radius: 0px !important;
+}
+
+.mat-flat-button:disabled{
+  background-color: #d8d8d8 !important;
+  color: white !important;
 }

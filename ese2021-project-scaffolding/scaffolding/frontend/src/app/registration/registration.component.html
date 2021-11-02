@@ -1,7 +1,7 @@
 <div class="card-wrapper-center registration-form">
-  <mat-card *ngIf="!loggedIn">
+  <mat-card *ngIf="!loggedIn" class="group7-card">
     <mat-card-header>
-      <mat-card-title><h1 class="card-title">Sign up</h1></mat-card-title>
+      <mat-card-title><h1 class="card-title">SIGN UP</h1></mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="form-wrapper">
@@ -96,7 +96,7 @@
               <input matInput type="text" placeholder="Phone"  id="phoneNumber" [formControlName]="'phoneNumber'">
             </mat-form-field><br/>
           <div class="form-action-button">
-            <button mat-flat-button type="submit" [disabled]="!registrationForm.valid" >Sign Up</button>
+            <button mat-flat-button type="submit" [disabled]="!registrationForm.valid" class="form-action-button">Sign Up</button>
           </div>
         </form>
       </div>

@@ -1,21 +1,21 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button class="menu-icon" aria-label="Menu"  [matMenuTriggerFor]="menu">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item  routerLink="/feed" routerLinkActive="active">Feed</button>
-    <button mat-menu-item  routerLink="/createpost" routerLinkActive="active" *ngIf="enableCreatePost" >Create Post</button>
-    <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
-    <button mat-menu-item  routerLink="/registration" routerLinkActive="active">Registration</button>
-    <button mat-menu-item  [routerLink]="['/updatepost']" [queryParams]="{postId : 1}"  routerLinkActive="active" >Update Post</button>
-    <button mat-menu-item  routerLink="/profile" routerLinkActive="active">Profile</button>
-  </mat-menu>
-    <span><a routerLink="/home" class="logo">ESE Group 7 App</a></span>
-  <span class="spacer"></span>
-  <button mat-icon-button class="profile-icon" aria-label="Profile">
-    <mat-icon>help</mat-icon>
-  </button>
-</mat-toolbar>
+<mat-toolbar>
+    <button mat-icon-button class="menu-icon" aria-label="Menu"  [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item  routerLink="/feed" routerLinkActive="active">Feed</button>
+      <button mat-menu-item  routerLink="/createpost" routerLinkActive="active" *ngIf="enableCreatePost" >Create Post</button>
+      <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
+      <button mat-menu-item  routerLink="/registration" routerLinkActive="active">Registration</button>
+      <button mat-menu-item  [routerLink]="['/updatepost']" [queryParams]="{postId : 1}"  routerLinkActive="active" >Update Post</button>
+      <button mat-menu-item  routerLink="/profile" routerLinkActive="active">Profile</button>
+    </mat-menu>
+      <span><a routerLink="/home" class="logo"><img src="assets/got-logo.png"  width="150px"/></a></span>
+    <span class="spacer"></span>
+    <button mat-icon-button class="profile-icon" aria-label="Profile">
+      <mat-icon>help</mat-icon>
+    </button>
+  </mat-toolbar>
 
 
 
