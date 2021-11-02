@@ -75,7 +75,7 @@
       <a routerLink="/registration" routerLinkActive="active">Registration</a>
     </li>
     <li>
-      <a routerLink="/updatepost" routerLinkActive="active">Update Post</a>
+      <a [routerLink]="['/updatepost']" [queryParams]="{postId : 1}"  routerLinkActive="active">Update Post</a>
     </li>
     <li *ngIf="loggedIn">
       <a routerLink="/profile" routerLinkActive="active">Profile</a>

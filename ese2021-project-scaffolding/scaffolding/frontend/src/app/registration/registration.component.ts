@@ -6,6 +6,7 @@ import { UserService } from '../services/user.service';
 import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective, AsyncValidatorFn} from '@angular/forms';
 import { Observable, from, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registration',
@@ -36,7 +37,7 @@ export class RegistrationComponent {
     phoneNumber: new FormControl('')
   });
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService) {
+  constructor(public httpClient: HttpClient, private fb: FormBuilder, private router: Router,public userService: UserService) {
     this.userNameAlreadyInUse = false;
     // Listen for changes
     userService.loggedIn$.subscribe(res => this.loggedIn = res);
@@ -63,6 +64,7 @@ export class RegistrationComponent {
         birthday: this.registrationForm.value.birthday
       }).subscribe((res: any) => {
           console.log(res);
+          this.router.navigate(['/login'], {queryParams : {registered : 'true'}});
           this.userNameAlreadyInUse = false;
           this.registrationForm.reset();
           formDirective.resetForm();
