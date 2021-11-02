@@ -2,19 +2,81 @@ body {
   margin: 30px;
 }
 
-.mat-card {
-  margin: 20px 0;
-  background-color: #EEE;
-}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
 
 button, input {
   margin-left: 15px !important;
   margin-right: 15px !important;
 }
 
-.mat-form-field-wrapper {
-  margin-right: 25px !important;
+.mat-card {
+  margin: 20px;
+  background-color: #EEE;
+  padding: 40px;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-form-field-wrapper {
+  margin-right: 0px;
+}
+
+
+.card-wrapper-center{
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 400px;
+}
+
+.group7-card{
+  background-color:white !important;
+}
+
+.form-wrapper{
+  display: flex;
+  flex-direction: column;
+}
+
+
+.form-wrapper > * {
+  width: 100%;
+}
+
+.form-action-button{
+  text-align: right;
+}
+
+.card-title{
+  font-family: 'Libre Baskerville', serif !important;
+}
+
+.group7-color-overlay{
+  color: #262626 !important;
+}
+
+.mat-toolbar{
+  background-color: #262626;
+  color: #fff;
+}
+
+.mat-card{
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  border: 1px solid grey !important;
+}
+
+.mat-flat-button{
+  background-color: #191919 !important;
+  color: #fff;
+  border-radius: 0px !important;
+}
+
+.mat-form-field{
+  border-radius: 0px !important;
+}
+
+.mat-flat-button:disabled{
+  background-color: #d8d8d8 !important;
+  color: white !important;
+}
