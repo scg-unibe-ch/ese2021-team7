@@ -2,6 +2,12 @@
   <mat-card-header>
     <mat-card-title>{{Title}} </mat-card-title>
   </mat-card-header>
+  <!-- Should only be usable for logged in users -->
+  <mat-card-actions align="end">
+    {{"Score: "}}{{Score}}
+  <button mat-flat-button color="primary" (click)="upvote()">Upvote</button>
+  <button mat-flat-button color="primary" (click)="downvote()">Downvote</button>
+  </mat-card-actions>
   <img mat-card-image src="{{Image}}">
    <mat-card-content>
     <p>
@@ -9,7 +15,7 @@
     </p>
   </mat-card-content>
 
-  <!-- Should only be displayed for admins or the user who created the post -->
+  <!-- Should only be usable for admins or the user who created the post -->
   <mat-card-actions align="end">
     <button mat-flat-button color="primary" (click)="updatePost()">Update</button>
     <button mat-flat-button color="warn" (click)="deletePost()">Delete</button>
