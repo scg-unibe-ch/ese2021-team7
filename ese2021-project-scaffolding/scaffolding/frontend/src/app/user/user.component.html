@@ -2,34 +2,46 @@
   <h2 *ngIf="fromRegistration">Registration successful, please login:</h2>
 </div>
 
+<div class="wrapper">
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title>
+      <h1 class="component-title">Login</h1>
+    </mat-card-title>
+  </mat-card-header>
 
-<mat-card>
-  <h3>Login</h3>
 
-  <div *ngIf="!loggedIn">
-
-    <mat-card-subtitle>
-    Login with username or email
-    </mat-card-subtitle>
+    <div *ngIf="!loggedIn">
     <div style="color: red">
       {{ endpointLogin }}
     </div>
-    <mat-form-field>
-      <input matInput type="text" placeholder="User Name" name="userName" (click)="clearEmailField()" [(ngModel)]="userToLogin.username">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput type="text" placeholder="Email" name="email" (click)="clearUserNameField()" [(ngModel)]="userToLogin.email">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="userToLogin.password">
-    </mat-form-field>
-    <button mat-flat-button color="primary" (click)="loginUser()">Login</button>
-  </div>
+      <mat-card-content>
+        <div class="form-wrapper">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Username</mat-label>
+            <input matInput type="text" placeholder="User Name" name="userName" (click)="clearEmailField()" [(ngModel)]="userToLogin.username">
+          </mat-form-field>
+            <p class="separator"> - or - </p>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Email</mat-label>
+            <input matInput type="text" placeholder="Email" name="email" (click)="clearUserNameField()" [(ngModel)]="userToLogin.email">
+          </mat-form-field>
 
-  <div *ngIf="loggedIn">
-    <button mat-flat-button color="warn" (click)="logoutUser()">Logout</button>
+          <mat-form-field appearance="outline" class="form-field" id="password">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="userToLogin.password">
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-actions class="action-button">
+        <button mat-flat-button color="primary" (click)="loginUser()">Login</button>
+      </mat-card-actions>
   </div>
+    <div *ngIf="loggedIn" >
+      <button mat-flat-button color="warn" (click)="logoutUser()">Logout</button>
+    </div>
 </mat-card>
+</div>
 
 <!--<mat-card>
   <h3>Secure Endpoints</h3>

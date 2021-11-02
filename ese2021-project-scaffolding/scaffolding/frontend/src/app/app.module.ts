@@ -64,7 +64,8 @@ import { UpdatePostComponent } from './update-post/update-post.component';
       { path: 'profile', component: PageNotFoundComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'login', component: UserComponent },
-      { path: '**', component:  PageNotFoundComponent}
+      { path: '**', component:  PageNotFoundComponent},
+      { path: 'home', component: AppComponent}
     ]),
   ],
   providers: [
