@@ -2,8 +2,8 @@
   <h2 *ngIf="fromRegistration">Registration successful, please login:</h2>
 </div>
 
-<div class="wrapper">
-<mat-card class="card">
+<div class="card-wrapper-center">
+<mat-card class="group7-card mat-card">
   <mat-card-header>
     <mat-card-title>
       <h1 class="component-title">Login</h1>
@@ -21,7 +21,11 @@
             <mat-label>Username</mat-label>
             <input matInput type="text" placeholder="User Name" name="userName" (click)="clearEmailField()" [(ngModel)]="userToLogin.username">
           </mat-form-field>
-            <p class="separator"> - or - </p>
+          <div class="separator">
+            <div class="line"></div>
+            <p>or</p>
+            <div class="line"></div>
+          </div>
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Email</mat-label>
             <input matInput type="text" placeholder="Email" name="email" (click)="clearUserNameField()" [(ngModel)]="userToLogin.email">
@@ -33,7 +37,7 @@
           </mat-form-field>
         </div>
       </mat-card-content>
-      <mat-card-actions class="action-button">
+      <mat-card-actions class="form-action-button">
         <button mat-flat-button color="primary" (click)="loginUser()">Login</button>
       </mat-card-actions>
   </div>
