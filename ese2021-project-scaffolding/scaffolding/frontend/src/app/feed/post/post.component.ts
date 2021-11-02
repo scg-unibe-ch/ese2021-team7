@@ -11,7 +11,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css']
 })
-export class PostComponent implements OnInit {
+export class PostComponent {
 
   post: Post | undefined;
   postId: number | undefined;
@@ -50,9 +50,7 @@ export class PostComponent implements OnInit {
   upvote(): void {
       console.log("Upvote button works")
      this.httpClient.post(environment.endpointURL + "post/upvote", {
-        params: {
-          postId: this.postId
-        }
+          postId: this.postToUpvote.postId
       }).subscribe((res: any) => {
         console.log(res);
         //this.Score = res.post.upvote - res.post.downvote;
@@ -63,23 +61,21 @@ export class PostComponent implements OnInit {
   }
 
   downvote(): void{
+    console.log("Downvote button works")
     this.httpClient.post(environment.endpointURL + "post/downvote", {
-      params: {
         postId: this.postToDownvote.postId
-      }
     }).subscribe((res: any) => {
       console.log(res);
-      this.Score = res.post.upvote - res.post.downvote;
-      this.postService.setPost(new Post(res.post.postId,this.postToDownvote.feedId,this.postToDownvote.title,
-        this.postToDownvote.text,this.postToDownvote.image,this.postToDownvote.upvote,res.post.downvote,this.Score,
-        this.postToDownvote.category,this.postToDownvote.CreationDate,this.postToDownvote.CreationUser));
+      //this.Score = res.post.upvote - res.post.downvote;
+      //this.postService.setPost(new Post(res.post.postId,this.postToDownvote.feedId,this.postToDownvote.title,
+        //this.postToDownvote.text,this.postToDownvote.image,this.postToDownvote.upvote,res.post.downvote,this.Score,
+        //this.postToDownvote.category,this.postToDownvote.CreationDate,this.postToDownvote.CreationUser));
     });
   }
 
   constructor(
     public httpClient: HttpClient,
     public postService: PostService,
-    private route: ActivatedRoute
   ) {
     // Listen for changes
     postService.post$.subscribe(res => this.post = res);
@@ -92,12 +88,5 @@ export class PostComponent implements OnInit {
     this.Title = this.postToDisplay.title;
     this.Text = this.postToDisplay.text;
     this.Image = this.postToDisplay.image;
-  }
-
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      console.log(params);
-      this.postId = params['postId'];
-    });
   }
 }
