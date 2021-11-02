@@ -27,7 +27,7 @@ export class UpdatePostComponent implements OnInit {
 
   isSubmitted: boolean;
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService, private route: ActivatedRoute) {
+  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService, private route: ActivatedRoute, private router: Router) {
     this.isSubmitted= false;
   }
 
@@ -76,6 +76,7 @@ export class UpdatePostComponent implements OnInit {
       }, ).subscribe((res: any) => {
           console.log(res);
           this.isSubmitted = false;
+          this.router.navigate(['/feed'], {queryParams : {loggedIn : 'true'}});
         },
         (error: any) =>{
           console.log(error);

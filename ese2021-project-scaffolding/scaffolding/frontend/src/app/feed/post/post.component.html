@@ -1,35 +1,35 @@
 <mat-card class ="post">
   <mat-card-header class="group7-post-header">
-    <mat-card-subtitle>  {{"Score: "}}{{Score}}</mat-card-subtitle>
+    <mat-card-subtitle>  Score: ...</mat-card-subtitle>
 
     <mat-icon>dots</mat-icon>
 
 
       <!-- Should only be usable for admins or the user who created the post -->
     <mat-card-actions class="group7-post-actions" align="end">
-      <button mat-button><mat-icon (click)="updatePost()">edit</mat-icon></button>
+      <button mat-button><mat-icon [routerLink]="['/updatepost']" [queryParams]="{postId : (postToDisplay.postId)}"  routerLinkActive="active" >edit</mat-icon></button>
       <button mat-button color="warn"><mat-icon (click)="deletePost()">delete</mat-icon></button>
     </mat-card-actions>
 
   </mat-card-header>
 
   <div class="post-image-wrapper">
-    <img class="post-image" mat-card-image src="{{Image}}">
+    <img class="post-image" mat-card-image src="{{postToDisplay.image}}">
   </div>
 
 
   <mat-card-content>
-    <mat-card-title>{{Title}} </mat-card-title>
+    <mat-card-title>{{postToDisplay.title}} </mat-card-title>
     <p class="post-text">
-      {{Text}}
+      {{postToDisplay.text}}
     </p>
   </mat-card-content>
 
 
   <mat-card-actions class="group7-post-actions" align="end">
     <!-- Should only be usable for logged in users -->
-    <button mat-button><mat-icon (click)="upvote()">thumb_up</mat-icon></button>
-    <button mat-button color="primary"><mat-icon (click)="downvote()">thumb_down</mat-icon></button>
+    <button mat-button><mat-icon (click)="upvotePost()">thumb_up</mat-icon></button>
+    <button mat-button color="primary"><mat-icon (click)="downvotePost()">thumb_down</mat-icon></button>
 
   </mat-card-actions>
 
