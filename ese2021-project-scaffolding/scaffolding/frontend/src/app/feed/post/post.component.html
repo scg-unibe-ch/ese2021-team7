@@ -1,23 +1,36 @@
 <mat-card class ="post">
-  <mat-card-header>
-    <mat-card-title>{{Title}} </mat-card-title>
+  <mat-card-header class="group7-post-header">
+    <mat-card-subtitle>  {{"Score: "}}{{Score}}</mat-card-subtitle>
+
+    <mat-icon>dots</mat-icon>
+
+
+      <!-- Should only be usable for admins or the user who created the post -->
+    <mat-card-actions class="group7-post-actions" align="end">
+      <button mat-button><mat-icon (click)="updatePost()">edit</mat-icon></button>
+      <button mat-button color="warn"><mat-icon (click)="deletePost()">delete</mat-icon></button>
+    </mat-card-actions>
+
   </mat-card-header>
-  <!-- Should only be usable for logged in users -->
-  <mat-card-actions align="end">
-    {{"Score: "}}{{Score}}
-  <button mat-flat-button color="primary" (click)="upvote()">Upvote</button>
-  <button mat-flat-button color="primary" (click)="downvote()">Downvote</button>
-  </mat-card-actions>
-  <img mat-card-image src="{{Image}}">
-   <mat-card-content>
-    <p>
+
+  <div class="post-image-wrapper">
+    <img class="post-image" mat-card-image src="{{Image}}">
+  </div>
+
+
+  <mat-card-content>
+    <mat-card-title>{{Title}} </mat-card-title>
+    <p class="post-text">
       {{Text}}
     </p>
   </mat-card-content>
 
-  <!-- Should only be usable for admins or the user who created the post -->
-  <mat-card-actions align="end">
-    <button mat-flat-button color="primary" (click)="updatePost()">Update</button>
-    <button mat-flat-button color="warn" (click)="deletePost()">Delete</button>
+
+  <mat-card-actions class="group7-post-actions" align="end">
+    <!-- Should only be usable for logged in users -->
+    <button mat-button><mat-icon (click)="upvote()">thumb_up</mat-icon></button>
+    <button mat-button color="primary"><mat-icon (click)="downvote()">thumb_down</mat-icon></button>
+
   </mat-card-actions>
+
 </mat-card>

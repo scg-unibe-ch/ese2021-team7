@@ -5,6 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {Post} from "../models/post.model";
 import {Feed} from "../models/feed.model";
 import {User} from "../models/user.model";
+import {MatGridListModule} from '@angular/material/grid-list';
 
 
 @Component({

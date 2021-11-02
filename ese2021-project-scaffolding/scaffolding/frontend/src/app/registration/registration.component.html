@@ -19,7 +19,7 @@
           <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
             <input matInput type="password" placeholder="Password" id="password" [formControlName]="'password'" [ngClass]="registrationForm.controls['password']?.hasError('required') ? 'is-invalid' : ''" required>
-            </mat-form-field><br/>
+            </mat-form-field>
             <div>
               <span>Password must contain:</span><br/>
                 <div>
@@ -62,7 +62,7 @@
                   </mat-icon>
                   <span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noSpecialCharacter') ? 'is-invalid' : 'valid'">min. one special character (@#$%^&-()+=)</span>
                 </div>
-              </div>
+              </div><br/>
             <mat-form-field appearance="outline">
               <mat-label>First Name</mat-label>
               <input matInput type="text" placeholder="First Name" id="firstName" [formControlName]="'firstName'">
@@ -78,7 +78,7 @@
             <mat-form-field appearance="outline">
               <mat-label>Nr.</mat-label>
               <input matInput type="text"  placeholder="Nr." id="houseNumber" [formControlName]="'houseNumber'">
-            </mat-form-field><br/>
+            </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Zip Code</mat-label>
               <input matInput type="text" placeholder="Zip Code"  id="zipCode" [formControlName]="'zipCode'">
@@ -86,7 +86,7 @@
             <mat-form-field appearance="outline">
               <mat-label>City</mat-label>
               <input matInput type="text" placeholder="City"  id="city" [formControlName]="'city'">
-            </mat-form-field><br/>
+            </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Birthday</mat-label>
               <input matInput type="date" placeholder="Birthday"  min="1900-01-01" max="2021-10-07" id="birthday" [formControlName]="'birthday'">
@@ -94,9 +94,9 @@
             <mat-form-field appearance="outline">
               <mat-label>Phone Number</mat-label>
               <input matInput type="text" placeholder="Phone"  id="phoneNumber" [formControlName]="'phoneNumber'">
-            </mat-form-field><br/>
+            </mat-form-field>
           <div class="form-action-button">
-            <button mat-flat-button type="submit" [disabled]="!registrationForm.valid" class="form-action-button">Sign Up</button>
+            <button mat-flat-button type="submit" [disabled]="!registrationForm.valid" class="form-action-button group7-forms-button">Sign Up</button>
           </div>
         </form>
       </div>

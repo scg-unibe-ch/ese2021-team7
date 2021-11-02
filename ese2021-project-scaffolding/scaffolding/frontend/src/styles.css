@@ -29,13 +29,12 @@ button, input {
   max-width: 400px;
 }
 
-.group7-card{
-  background-color:white !important;
-}
+
 
 .form-wrapper{
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 
@@ -60,23 +59,75 @@ button, input {
   color: #fff;
 }
 
-.mat-card{
-  border-radius: 0px !important;
-  box-shadow: none !important;
-  border: 1px solid grey !important;
+.group7-card{
+  background-color:white !important;
 }
 
-.mat-flat-button{
+.group7-forms-button{
   background-color: #191919 !important;
   color: #fff;
   border-radius: 0px !important;
 }
 
-.mat-form-field{
-  border-radius: 0px !important;
-}
-
-.mat-flat-button:disabled{
+.group7-forms-button:disabled{
   background-color: #d8d8d8 !important;
   color: white !important;
+}
+
+.registration-form-form > *{
+  width:100% !important;
+}
+
+.mat-list-item{
+  display: inline-block;
+  margin: 40px;
+
+}
+
+.group7-grid-tile{
+}
+
+.post{
+  margin: 0px !important;
+}
+
+.feed-wrapper{
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px !important;
+}
+
+.feed-item{
+  display: inline-block;
+  margin: 20px;
+
+}
+
+
+.group7-post-header{
+
+  width: 100%;
+  margin: 5px !important;
+  padding: 5px !important;
+}
+
+.post-title{
+  font-size: 1em;
+  font-family: 'Libre Baskerville', serif !important;
+}
+
+.post-header-wrapper{
+
+}
+
+
+.group7-post-actions{
+
+}
+
+
+
+
+.post-image{
+  max-height: 200px;
 }
