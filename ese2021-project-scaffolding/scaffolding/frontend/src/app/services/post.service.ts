@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Post } from '../models/post.model';
+import {Post} from "../models/post.model";
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -7,53 +7,28 @@ import { Subject } from 'rxjs';
 })
 export class PostService {
 
-  /*******************************************************************************************************************
-   * VARIABLES
-   ******************************************************************************************************************/
-
-
-
+  // Variables
   private post: Post | undefined;
 
+  // Observable sources
+  private postSource = new Subject<Post>();
 
-  /*******************************************************************************************************************
-   * OBSERVABLE SOURCES & STREAMS
-   ******************************************************************************************************************/
-
-    // Observable Sources
-    private postSource = new Subject<Post>();
-
-  // Observable Streams
+  // Observable streams
   post$ = this.postSource.asObservable();
 
-
-  /*******************************************************************************************************************
-   * GETTERS
-   ******************************************************************************************************************/
-
-  getPost(): Post | undefined {
+  // Getters
+  getPost(): Post | undefined{
     return this.post;
   }
 
-
-  /*******************************************************************************************************************
-   * SETTERS
-   ******************************************************************************************************************/
-
-
-  setPost(post: Post | undefined): void {
+  // Setters
+  setPost(post: Post | undefined): void{
     this.postSource.next(post);
   }
 
-
-  /*******************************************************************************************************************
-   * CONSTRUCTOR
-   ******************************************************************************************************************/
-
+  // Constructor
   constructor() {
     // Observer
     this.post$.subscribe(res => this.post = res);
-
-    // Default values
   }
 }

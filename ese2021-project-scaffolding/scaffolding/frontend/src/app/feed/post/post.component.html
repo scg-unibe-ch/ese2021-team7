@@ -4,6 +4,7 @@
   </mat-card-header>
   <!-- Should only be usable for logged in users -->
   <mat-card-actions align="end">
+    {{"Score: "}}{{Score}}
   <button mat-flat-button color="primary" (click)="upvote()">Upvote</button>
   <button mat-flat-button color="primary" (click)="downvote()">Downvote</button>
   </mat-card-actions>
