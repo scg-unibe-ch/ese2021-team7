@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from '../services/user.service';
 import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class CreatePostComponent {
 
   isSubmitted: boolean;
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService) {
+  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService, private router: Router) {
     this.isSubmitted= false;
   }
 
@@ -44,6 +45,7 @@ export class CreatePostComponent {
       }, ).subscribe((res: any) => {
           console.log(res);
           this.isSubmitted = false;
+          this.router.navigate(['/feed'], {queryParams : {loggedIn : 'true'}});
         },
         (error: any) =>{
           console.log(error);

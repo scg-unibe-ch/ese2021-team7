@@ -37,17 +37,25 @@ export class PostComponent {
   @Output()
   delete = new EventEmitter<Post>();
 
+  @Output()
+  upvote = new EventEmitter<Post>();
+
+  @Output()
+  downvote = new EventEmitter<Post>();
+
   updatePost(): void {
     // Emits event to parent component that Post got updated
-    this.update.emit(this.post);
+    this.update.emit(this.postToDisplay);
   }
 
   deletePost(): void {
     // Emits event to parent component that Post got deleted
-    this.delete.emit(this.post);
+    this.delete.emit(this.postToDisplay);
   }
 
-  upvote(): void {
+  upvotePost(): void {
+    this.upvote.emit(this.postToDisplay);
+    /*
       console.log("Upvote button works")
      this.httpClient.post(environment.endpointURL + "post/upvote", {
           postId: this.postToUpvote.postId
@@ -58,9 +66,13 @@ export class PostComponent {
         //this.postToUpvote.text,this.postToUpvote.image,res.post.upvote,this.postToUpvote.downvote,this.Score,
         //this.postToUpvote.category,this.postToUpvote.CreationDate,this.postToUpvote.CreationUser));
       });
+
+     */
   }
 
-  downvote(): void{
+  downvotePost(): void{
+    this.downvote.emit(this.postToDisplay);
+    /*
     console.log("Downvote button works")
     this.httpClient.post(environment.endpointURL + "post/downvote", {
         postId: this.postToDownvote.postId
@@ -71,8 +83,10 @@ export class PostComponent {
         //this.postToDownvote.text,this.postToDownvote.image,this.postToDownvote.upvote,res.post.downvote,this.Score,
         //this.postToDownvote.category,this.postToDownvote.CreationDate,this.postToDownvote.CreationUser));
     });
-  }
 
+     */
+  }
+/*
   constructor(
     public httpClient: HttpClient,
     public postService: PostService,
@@ -89,4 +103,6 @@ export class PostComponent {
     this.Text = this.postToDisplay.text;
     this.Image = this.postToDisplay.image;
   }
+
+ */
 }

@@ -7,12 +7,13 @@
       <button mat-menu-item  routerLink="/createpost" routerLinkActive="active" *ngIf="enableCreatePost" >Create Post</button>
       <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
       <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
-      <button mat-menu-item  [routerLink]="['/updatepost']" [queryParams]="{postId : 1}"  routerLinkActive="active" >Update Post</button>
+
     </mat-menu>
       <span><a routerLink="/home" class="logo"><img src="assets/got-logo.png"  width="150px"/></a></span>
     <span class="spacer"></span>
     <button mat-icon-button class="profile-icon" aria-label="Profile" [matMenuTriggerFor]="profile">
-      <mat-icon>help</mat-icon>
+      <mat-icon *ngIf="!loggedIn">help</mat-icon>
+      <span *ngIf="loggedIn" color="white">{{user?.username || "ERROR"}}</span>
     </button>
     <mat-menu #profile="matMenu">
       <button mat-menu-item  routerLink="/profile" routerLinkActive="active" *ngIf="loggedIn">Profile</button>

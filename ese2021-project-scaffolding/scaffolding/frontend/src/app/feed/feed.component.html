@@ -8,11 +8,13 @@
 
 <div class="feed-wrapper">
 
-  <div  *ngFor="let post of currentFeed.posts" class="group7-grid-tile feed-item">
+  <div  *ngFor="let postToDisplay of currentFeed.posts" class="group7-grid-tile feed-item">
     <app-post
-      [postToDisplay]="post"
+      [postToDisplay]="postToDisplay"
       (delete)="deletePost($event)"
-      (update)="updatePost($event)">
+      (update)="updatePost($event)"
+      (upvote)="upvotePost($event)"
+      (downvote)="downvotePost($event)">
     </app-post>
   </div>
 
