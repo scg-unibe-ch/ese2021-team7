@@ -6,14 +6,15 @@
     <mat-card-content>
       <div class="form-wrapper">
         <form [formGroup]="registrationForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
-          <span *ngIf="!isUserNameValid()" [ngClass]="!isUserNameValid() ? 'is-invalid' : '' "><br/>Username or email already in use</span><br/>
           <mat-form-field appearance="outline">
             <mat-label>Username</mat-label>
-            <input matInput type="text"  placeholder="Username" id="username" [formControlName]="'userName'" required>
+            <input matInput type="text"  placeholder="User Name" id="username" [formControlName]="'userName'" [ngClass]="registrationForm.controls['userName']?.errors?.userNameInUse ? 'is-invalid' : '' " required>
+            <mat-error *ngIf="registrationForm.controls['email'].touched && registrationForm.controls['userName'].value != '' && registrationForm.controls['userName']?.errors?.userNameInUse" class="is-invalid">Username already in use</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
-              <input matInput type="email" placeholder="Email" id="email" [formControlName]="'email'">
+            <input matInput type="email" placeholder="Email" id="email" [formControlName]="'email'" [ngClass]="registrationForm.controls['email']?.errors?.emailInUse ? 'is-invalid' : '' " required>
+            <mat-error *ngIf="registrationForm.controls['email'].touched && registrationForm.controls['email'].value != '' && registrationForm.controls['email']?.errors?.emailInUse" class="is-invalid">Email already in use</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>

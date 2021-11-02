@@ -6,6 +6,7 @@
     <button mat-menu-item  routerLink="/feed" routerLinkActive="active">Feed</button>
     <button mat-menu-item  routerLink="/createpost" routerLinkActive="active" *ngIf="enableCreatePost" >Create Post</button>
     <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
+    <button mat-menu-item  routerLink="/registration" routerLinkActive="active">Registration</button>
     <button mat-menu-item  [routerLink]="['/updatepost']" [queryParams]="{postId : 1}"  routerLinkActive="active" >Update Post</button>
     <button mat-menu-item  routerLink="/profile" routerLinkActive="active">Profile</button>
   </mat-menu>

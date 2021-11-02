@@ -3,7 +3,9 @@ import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from '../services/user.service';
-import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
+import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective, AsyncValidatorFn} from '@angular/forms';
+import { Observable, from, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,14 +19,14 @@ export class RegistrationComponent {
   userNameAlreadyInUse: boolean;
 
   registrationForm = this.fb.group({
-    userName: new FormControl('', Validators.compose([Validators.required])),
+    userName: new FormControl('', Validators.compose([Validators.required]), [this.userNameInUseValidator()]),
     password: new FormControl(null, Validators.compose([Validators.required,
       this.patternValidator(/(?=.*[0-9])[0-9]{1,}/, {'noNumberInPassword': true}),
       this.patternValidator(/(?=.*[a-z])[a-z]{1,}/, {'noSmallLetter': true}),
       this.patternValidator(/(?=.*[A-Z])[A-Z]{1,}/, {'noCapitalLetter': true}),
       this.patternValidator(/(?=.*[@#$%^&-+=()])[@#$%^&-+=()]{1,}/, {'noSpecialCharacter': true}),
       Validators.minLength(8)])),
-    email: new FormControl('', Validators.email),
+    email: new FormControl('', Validators.email, [this.emailInUseValidator()]),
     firstName: new FormControl(''),
     lastName: new FormControl(''),
     street: new FormControl(''),
@@ -47,7 +49,7 @@ export class RegistrationComponent {
   onSubmit(formDirective: FormGroupDirective): void {
     console.log(this.registrationForm);
     console.log(this.registrationForm.valid);
-    if(this.registrationForm.valid) {
+    if (this.registrationForm.valid) {
       this.httpClient.post(environment.endpointURL + "user/register", {
         userName: this.registrationForm.value.userName,
         password: this.registrationForm.value.password,
@@ -61,25 +63,22 @@ export class RegistrationComponent {
         phoneNumber: this.registrationForm.value.phoneNumber,
         birthday: this.registrationForm.value.birthday
       }).subscribe((res: any) => {
-        console.log(res);
-          //this.router.navigate(['/login'], {queryParams : {registered : 'true', userName : res.userName, "password" : this.registrationForm.value.password }});
+          console.log(res);
           this.router.navigate(['/login'], {queryParams : {registered : 'true'}});
           this.userNameAlreadyInUse = false;
-        this.registrationForm.reset();
-        formDirective.resetForm();
-
-      },
-        (error: any) =>{
-        console.log(error);
-        if(error.error.message == 10){
-          console.log("Username already in use");
-          this.userNameAlreadyInUse = true;
-          console.log(this.userNameAlreadyInUse);
-        }
+          this.registrationForm.reset();
+          formDirective.resetForm();
+        },
+        (error: any) => {
+          console.log(error);
+          if (error.error.message == 10) {
+            console.log("Username already in use");
+            this.userNameAlreadyInUse = true;
+            console.log(this.userNameAlreadyInUse);
+          }
         });
     }
   }
-
 
 
   patternValidator(regex: RegExp, error: ValidationErrors): ValidatorFn {
@@ -98,8 +97,8 @@ export class RegistrationComponent {
   }
 
   //currently not set
-  userNameValidator(control: FormControl): {[s: string]: boolean}{
-    if(this.userNameAlreadyInUse){
+  userNameValidator(control: FormControl): { [s: string]: boolean } {
+    if (this.userNameAlreadyInUse) {
       return {'userNameAlreadyInUse': true};
     }
     return null;
@@ -109,7 +108,89 @@ export class RegistrationComponent {
     return !this.userNameAlreadyInUse;
   }
 
-}
+/*
+  checkIfEmailInUse(checkEmail: string): Observable<boolean> {
+    if (checkEmail) {
+      this.httpClient.post(environment.endpointURL + "user/checkUserNameOrEmailInUse", {
+        email: checkEmail
+      }).subscribe((res: any) => {
+        console.log(res);
+        return of(true);
+      }, error => {
+        console.log(error);
+        return of(false);
+      });
+    }
+    return of(false);
+  }
+*/
+  emailInUseValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Promise<ValidationErrors | null> => {
+      const promise = new Promise<any>((resolve, reject) => {
+        this.httpClient.post(environment.endpointURL + "user/checkUserNameOrEmailInUse", {
+          email: control.value
+        }).subscribe((res: any) => {
+          if (res.inUse == true) {
+            resolve({emailInUse: true});
+          } else {
+            resolve(null);
+          }
+        }, error => {
+          console.log(error);
+        });
+      });
+      return promise;
+    };
+  }
 
+/*
+  checkIfUserNameInUse(checkUserName: string): Observable<boolean> {
+    if (checkUserName) {
+      this.httpClient.post(environment.endpointURL + "user/checkUserNameOrEmailInUse", {
+        userName: checkUserName
+      }).subscribe((res: any) => {
+        console.log(res.inUse);
+        return of(res.inUse);
+      }, error => {
+        console.log(error);
+        return of(error);
+      });
+    }
+    return of(false);
+
+  }
+*/
+  userNameInUseValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Promise<ValidationErrors | null> => {
+      const promise = new Promise<any>((resolve, reject) => {
+        this.httpClient.post(environment.endpointURL + "user/checkUserNameOrEmailInUse", {
+          userName: control.value
+        }).subscribe((res: any) => {
+          if (res.inUse == true) {
+            resolve({userNameInUse: true});
+          } else {
+            resolve(null);
+          }
+        }, error => {
+          console.log(error);
+        });
+      });
+      return promise;
+      /*
+            return this.checkIfUserNameInUse(control.value).pipe(
+              map((res: boolean) => {
+                console.log("result: " + res);
+                return res ? {userNameInUse: true} : null;
+              })
+            );
+          };
+          */
+
+    }
+
+  }
+
+
+}
 
 
