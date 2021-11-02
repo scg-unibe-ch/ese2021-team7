@@ -29,13 +29,12 @@ button, input {
   max-width: 400px;
 }
 
-.group7-card{
-  background-color:white !important;
-}
+
 
 .form-wrapper{
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 
@@ -60,6 +59,7 @@ button, input {
   color: #fff;
 }
 
+/*
 .mat-card{
   border-radius: 0px !important;
   box-shadow: none !important;
@@ -79,4 +79,24 @@ button, input {
 .mat-flat-button:disabled{
   background-color: #d8d8d8 !important;
   color: white !important;
+}
+*/
+
+.group7-card{
+  background-color:white !important;
+}
+
+.group7-forms-button{
+  background-color: #191919 !important;
+  color: #fff;
+  border-radius: 0px !important;
+}
+
+.group7-forms-button:disabled{
+  background-color: #d8d8d8 !important;
+  color: white !important;
+}
+
+.registration-form-form > *{
+  width:100% !important;
 }

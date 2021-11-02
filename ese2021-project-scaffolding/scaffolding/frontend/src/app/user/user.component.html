@@ -3,7 +3,7 @@
 </div>
 
 <div class="card-wrapper-center">
-<mat-card class="group7-card mat-card">
+<mat-card class="group7-card mat-card group7-forms">
   <mat-card-header>
     <mat-card-title>
       <h1 class="card-title">LOGIN</h1>
@@ -38,7 +38,7 @@
         </div>
       </mat-card-content>
       <mat-card-actions class="form-action-button">
-        <button mat-flat-button  (click)="loginUser()">Login</button>
+        <button mat-flat-button  (click)="loginUser()" class="group7-forms-button">Login</button>
       </mat-card-actions>
   </div>
     <div *ngIf="loggedIn" >
