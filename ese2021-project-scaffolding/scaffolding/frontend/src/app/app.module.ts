@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -26,8 +25,7 @@ import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {RouterModule} from "@angular/router";
 import {MatMenuModule} from '@angular/material/menu';
 import { UpdatePostComponent } from './update-post/update-post.component';
-
-
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -54,6 +52,7 @@ import { UpdatePostComponent } from './update-post/update-post.component';
     MatButtonModule,
     MatListModule,
     MatMenuModule,
+    MatGridListModule,
     FormsModule,
     MatCheckboxModule,
     ReactiveFormsModule,
