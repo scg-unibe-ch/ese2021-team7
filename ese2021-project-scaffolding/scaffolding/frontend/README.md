@@ -55,7 +55,7 @@ These are links to some of the files that we have implemented/modified when deve
   Represents a todo-list
 - **TodoItemComponent** | [TS](./src/app/todo-list/todo-item/todo-item.component.ts), [HTML](./src/app/todo-list/todo-item/todo-item.component.html)  
   Represents a todo-item
-- **UserComponent** | [TS](./src/app/user/user.component.ts), [HTML](./src/app/user/user.component.html)  
+- **LoginComponent** | [TS](src/app/login/login.component.ts), [HTML](src/app/login/login.component.html)  
   Represents the user registration and login section. Contains requests to user/admin endpoints.
 - **UserService** | [TS](./src/app/services/user.service.ts)  
   Service to keep track of login state and user data to sync it between components
