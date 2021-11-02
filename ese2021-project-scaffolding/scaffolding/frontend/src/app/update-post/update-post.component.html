@@ -6,7 +6,6 @@
         <h1 class="card-title">Edit your Post</h1>
       </mat-card-title>
     </mat-card-header>
-
     <mat-card-content>
       <div class="form-wrapper">
         <form *ngIf="post" [formGroup]="updateFormPost" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
