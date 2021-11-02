@@ -31,7 +31,10 @@ export class AppComponent implements OnInit {
   ) {
     // Listen for changes
     userService.loggedIn$.subscribe(res => this.loggedIn = res);
-    userService.user$.subscribe(res => this.user = res);
+    userService.user$.subscribe(res => {
+      this.enableCreatePost = true;
+      this.user = res;
+    });
     userService.isAdmin$.subscribe(res => {
       this.enableCreatePost = false;
     },
@@ -104,4 +107,16 @@ export class AppComponent implements OnInit {
     this.userService.setLoggedIn(!!userToken);
 
   }
+
+  logoutUser(): void {
+    localStorage.removeItem('userName');
+    localStorage.removeItem('email');
+    localStorage.removeItem('userToken');
+
+    this.userService.setLoggedIn(false);
+    this.userService.setUser(undefined);
+  }
+
+
+
 }
