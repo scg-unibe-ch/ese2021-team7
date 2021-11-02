@@ -16,7 +16,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatListModule } from '@angular/material/list';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { UserComponent } from './user/user.component';
+import { LoginComponent } from './login/login.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { RegistrationComponent } from './registration/registration.component';
 import { FeedComponent } from './feed/feed.component';
@@ -34,7 +34,7 @@ import { UpdatePostComponent } from './update-post/update-post.component';
     AppComponent,
     TodoListComponent,
     TodoItemComponent,
-    UserComponent,
+    LoginComponent,
     RegistrationComponent,
     FeedComponent,
     PostComponent,
@@ -64,7 +64,7 @@ import { UpdatePostComponent } from './update-post/update-post.component';
       { path: 'updatepost', component: UpdatePostComponent },
       { path: 'profile', component: PageNotFoundComponent },
       { path: 'registration', component: RegistrationComponent },
-      { path: 'login', component: UserComponent },
+      { path: 'login', component: LoginComponent },
       { path: '**', component:  PageNotFoundComponent},
       { path: 'home', component: AppComponent}
     ]),
