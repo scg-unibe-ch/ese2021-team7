@@ -17,19 +17,19 @@ export class PostComponent {
   postId: number | undefined;
   Score: number = 0;
 
-  Title: string = '';
-  Image: string = '';
-  Text: string = '';
+  //Title: string = '';
+  //Image: string = '';
+  //Text: string = '';
+
+  //@Input()
+  //postToUpvote: Post = new Post(1,0,'','','',0,0,0,'','',1);
+
+  //@Input()
+  //postToDownvote: Post = new Post(1,0,'','','',0,0,0,'','',1);
 
   @Input()
-  postToUpvote: Post = new Post(1,0,'','','',0,0,0,'','',1);
-
-  @Input()
-  postToDownvote: Post = new Post(1,0,'','','',0,0,0,'','',1);
-
-  @Input()
-  //postToDisplay: Post = new Post(0,0,'','','',0,0,0,'','',0);
-  postToDisplay: Post = new Post(1,0,'Post Title','Some text','https://betanews.com/wp-content/uploads/2016/10/game-of-thrones-logo.jpg',0,0,0,'','',1);
+  postToDisplay: Post = new Post(0,0,'','','',0,0,0,'','',0);
+  //postToDisplay: Post = new Post(1,0,'Post Title','Some text','https://betanews.com/wp-content/uploads/2016/10/game-of-thrones-logo.jpg',0,0,0,'','',1);
 
   @Output()
   update = new EventEmitter<Post>();
