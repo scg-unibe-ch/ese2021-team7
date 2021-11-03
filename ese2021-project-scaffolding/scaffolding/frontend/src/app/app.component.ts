@@ -32,28 +32,26 @@ export class AppComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    // Listen for changes
-    userService.loggedIn$.subscribe(res => this.loggedIn = res);
-    userService.user$.subscribe(res => {
-      this.enableCreatePost = true;
-      this.user = res;
-    });
-    userService.isAdmin$.subscribe(res => {
-      this.enableCreatePost = false;
-    },
-      error => {
-      this.checkPermissionConditions(false);
-      })
-
-    // Current value
-    this.loggedIn = userService.getLoggedIn();
-    this.user = userService.getUser();
-    this.enableCreatePost = this.checkPermissionConditions(userService.getIsAdmin());
   }
 
   ngOnInit() {
     this.readLists();
-    this.checkUserStatus();
+    this.userService.loggedIn$.subscribe(res => this.loggedIn = res);
+    this.userService.user$.subscribe(res => {
+      this.enableCreatePost = true;
+      this.user = res;
+    });
+    this.userService.isAdmin$.subscribe(res => {
+        this.enableCreatePost = false;
+      },
+      error => {
+        this.checkPermissionConditions(false);
+      })
+
+    // Current value
+    this.loggedIn = this.userService.getLoggedIn();
+    this.user = this.userService.getUser();
+    this.enableCreatePost = this.checkPermissionConditions(this.userService.getIsAdmin());
   }
 
   checkPermissionConditions(isAdmin: boolean | undefined): boolean {
@@ -102,15 +100,6 @@ export class AppComponent implements OnInit {
     });
   }
 
-  checkUserStatus(): void {
-    // Get user data from local storage
-    const userToken = localStorage.getItem('userToken');
-
-    // Set boolean whether a user is logged in or not
-    this.userService.setLoggedIn(!!userToken);
-
-  }
-
   logoutUser(): void {
     localStorage.removeItem('userName');
     localStorage.removeItem('email');
@@ -118,8 +107,8 @@ export class AppComponent implements OnInit {
 
     this.userService.setLoggedIn(false);
     this.userService.setUser(undefined);
-
     this.router.navigate(['../feed']).then(r =>{});
+    this.enableCreatePost = this.checkPermissionConditions(this.userService.getIsAdmin());
   }
 
 
