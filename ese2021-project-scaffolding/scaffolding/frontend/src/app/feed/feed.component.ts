@@ -68,8 +68,8 @@ export class FeedComponent implements OnInit {
 
   // ORDER - Feed
   /*
-  1 =
-  2 =
+  1 = sorted by score
+  default = sorted by creation date
    */
   sortList(sortBy: Number): void {
     this.httpClient.put(environment.endpointURL + "post/all" , {
@@ -121,9 +121,4 @@ export class FeedComponent implements OnInit {
       post.score = res.upvote - res.downvote;
     });
   }
-
-
-
-
-
 }

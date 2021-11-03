@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
+import {HttpClient} from "@angular/common/http";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -81,4 +83,5 @@ export class UserService {
     this.setLoggedIn(false);
     this.setIsAdmin(false);
   }
+
 }
