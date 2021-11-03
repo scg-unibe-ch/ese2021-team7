@@ -6,6 +6,7 @@ import {Feed} from "../models/feed.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -15,14 +16,11 @@ import {User} from "../models/user.model";
 })
 export class FeedComponent implements OnInit {
 
-  postList: Post[] = [];
-
   currentFeed: Feed = new Feed(0,'', []);
 
   loggedIn: boolean | undefined;
   isAdmin: boolean | undefined;
   currentUser: User | undefined;
-
 
   constructor(
     public httpClient: HttpClient,
@@ -57,11 +55,18 @@ export class FeedComponent implements OnInit {
       this.currentFeed = new Feed(0,'', []);
       res.forEach((post: any) => {
         post.score = post.upvote - post.downvote;
-        this.currentFeed.posts.push(
-          new Post(post.postId, 0,post.title,post.text,post.image,post.upvote,post.downvote,post.score,post.category, post.createdAt,post.UserUserId))
-        },
-        (error: any) => {
-          console.log(error);
+        this.httpClient.get(environment.endpointURL + "user/getById" , {
+          params: {
+            userId: post.UserUserId
+          }
+        }).subscribe((res: any) => {
+          post.CreationUserName = res.userName;
+          this.currentFeed.posts.push(
+              new Post(post.postId, 0,post.title,post.text,post.image,post.upvote,post.downvote,post.score,post.category, post.createdAt,post.UserUserId,post.CreationUserName))
+          },
+          (error: any) => {
+            console.log(error);
+          });
         });
     });
   }
@@ -76,16 +81,23 @@ export class FeedComponent implements OnInit {
       sortBy: sortBy
     }).subscribe(
       (res: any) => {
-        this.currentFeed = new Feed(0,'', []);
+        this.currentFeed = new Feed(0, '', []);
         res.forEach((post: any) => {
-            this.currentFeed.posts.push(
-              new Post(post.postId, 0,post.title,post.text,post.image,post.upvote,post.downvote,0,post.category,'',0))
-          },
-          (error: any) => {
-            console.log(error);
-          });
-      }
-    );
+          post.score = post.upvote - post.downvote;
+          this.httpClient.get(environment.endpointURL + "user/getById", {
+            params: {
+              userId: post.UserUserId
+            }
+          }).subscribe((res: any) => {
+              post.CreationUserName = res.userName;
+              this.currentFeed.posts.push(
+                new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, post.creationUserUsername))
+            },
+            (error: any) => {
+              console.log(error);
+            });
+        });
+      });
   }
 
   deletePost(post: Post): void {
@@ -97,8 +109,8 @@ export class FeedComponent implements OnInit {
   }
 
   updatePost(post: Post): void {
-    this.route.navigate(['/updatepost'], { queryParams: { postId : (post.postId)}});
-  }
+    this.route.navigate(['/updatepost'], {queryParams: {postId: (post.postId)}}).then(r =>{});
+   }
 
   buttonClicked() {
     this.readPosts();

@@ -27,6 +27,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import { UpdatePostComponent } from './update-post/update-post.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
+import {Feed} from "./models/feed.model";
 
 @NgModule({
   declarations: [
@@ -66,8 +67,8 @@ import { MatSelectModule } from '@angular/material/select';
       { path: 'profile', component: PageNotFoundComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'login', component: LoginComponent },
-      { path: '**', component:  PageNotFoundComponent},
-      { path: 'home', component: AppComponent}
+      { path: '**', component:  FeedComponent},
+      { path: 'home', component: FeedComponent}
     ]),
   ],
   providers: [
