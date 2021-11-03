@@ -25,6 +25,8 @@ export class PostComponent implements OnInit{
 
   showDeleteAndUpdateButton : boolean = false;
 
+  showVotingButtons : boolean = false;
+
   @Input()
   isAdmin : boolean = false;
 
@@ -51,21 +53,35 @@ export class PostComponent implements OnInit{
   downvote = new EventEmitter<Post>();
 
   ngOnInit() {
-    this.evaluatePermission();
+    this.evaluateUpdateDeletePermission();
+    this.evaluateVotingButtons();
   }
 
   ngOnChanges(){
-    this.evaluatePermission();
+    this.evaluateUpdateDeletePermission();
+    this.evaluateVotingButtons();
   }
 
-  evaluatePermission(): void {
-    console.log("creation user "+ this.postToDisplay.CreationUser)
+  evaluateUpdateDeletePermission(): void {
     if (this.isAdmin) this.showDeleteAndUpdateButton = true;
     else if (typeof this.currentUser != 'undefined') {
       if (this.loggedIn && this.currentUser.userId == this.postToDisplay.CreationUser) this.showDeleteAndUpdateButton = true;
       else this.showDeleteAndUpdateButton = false;
     }
     else this.showDeleteAndUpdateButton = false;
+  }
+
+  evaluateVotingButtons(){
+    if (this.isAdmin){
+      this.showVotingButtons = false;
+    }
+    else if (typeof this.currentUser != 'undefined') {
+      if (this.loggedIn && this.currentUser.userId != this.postToDisplay.CreationUser){
+        this.showVotingButtons = true;
+      }
+      else this.showVotingButtons = false;
+    }
+    else this.showVotingButtons = false;
   }
 
   updatePost(): void {
