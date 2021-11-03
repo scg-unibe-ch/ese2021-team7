@@ -17,7 +17,7 @@ export class UpdatePostComponent implements OnInit {
 
   updateFormPost: FormGroup | undefined;
 
-  file: File;
+  file: File | undefined;
 
   postId: number | undefined;
 
@@ -43,7 +43,7 @@ export class UpdatePostComponent implements OnInit {
         }
       }).subscribe((res: any) => {
         console.log(res);
-        this.post = new Post(res.postId, null, res.title, res.text, res.image, res.upvote, res.downvote, null, res.category, res.createdAt, res.UserUserId);
+        this.post = new Post(res.postId, 0, res.title, res.text, res.image, res.upvote, res.downvote, 0, res.category, res.createdAt, res.UserUserId,'');
         console.log(this.post);
         this.updateFormPost = this.fb.group({
           "postTitle": new FormControl(this.post.title, Validators.required),

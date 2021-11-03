@@ -25,7 +25,7 @@ export class CreatePostComponent {
   });
 
 
-  file: File;
+  file: File | undefined;
 
   filename = '';
 

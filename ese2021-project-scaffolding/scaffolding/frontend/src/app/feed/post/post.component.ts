@@ -26,7 +26,7 @@ export class PostComponent implements OnInit{
   currentUser : User = new User(0, '', '', '','','','','','','','','');
 
   @Input()
-  postToDisplay: Post = new Post(0,0,'','','',0,0,0,'','',0);
+  postToDisplay: Post = new Post(0,0,'','','',0,0,0,'','',0,'');
 
   @Output()
   update = new EventEmitter<Post>();
