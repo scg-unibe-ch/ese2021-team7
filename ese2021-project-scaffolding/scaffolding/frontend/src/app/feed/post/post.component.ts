@@ -5,13 +5,15 @@ import {Post} from "../../models/post.model";
 import {environment} from "../../../environments/environment";
 import {ActivatedRoute} from "@angular/router";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {User} from "../../models/user.model";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css']
 })
-export class PostComponent {
+export class PostComponent implements OnInit{
 
   post: Post | undefined;
   postId: number | undefined;
@@ -21,11 +23,18 @@ export class PostComponent {
   //Image: string = '';
   //Text: string = '';
 
-  //@Input()
-  //postToUpvote: Post = new Post(1,0,'','','',0,0,0,'','',1);
+  showDeleteAndUpdateButton : boolean = false;
 
-  //@Input()
-  //postToDownvote: Post = new Post(1,0,'','','',0,0,0,'','',1);
+  showVotingButtons : boolean = false;
+
+  @Input()
+  isAdmin : boolean = false;
+
+  @Input()
+  loggedIn : boolean = false;
+
+  @Input()
+  currentUser : User = new User(0, '', '', '','','','','','','','','');
 
   @Input()
   postToDisplay: Post = new Post(0,0,'','','',0,0,0,'','',0);
@@ -43,14 +52,50 @@ export class PostComponent {
   @Output()
   downvote = new EventEmitter<Post>();
 
+  ngOnInit() {
+    this.evaluateUpdateDeletePermission();
+    this.evaluateVotingButtons();
+  }
+
+  ngOnChanges(){
+    this.evaluateUpdateDeletePermission();
+    this.evaluateVotingButtons();
+  }
+
+  evaluateUpdateDeletePermission(): void {
+    if (this.isAdmin) this.showDeleteAndUpdateButton = true;
+    else if (typeof this.currentUser != 'undefined') {
+      if (this.loggedIn && this.currentUser.userId == this.postToDisplay.CreationUser) this.showDeleteAndUpdateButton = true;
+      else this.showDeleteAndUpdateButton = false;
+    }
+    else this.showDeleteAndUpdateButton = false;
+  }
+
+  evaluateVotingButtons(){
+    if (this.isAdmin){
+      this.showVotingButtons = false;
+    }
+    else if (typeof this.currentUser != 'undefined') {
+      if (this.loggedIn && this.currentUser.userId != this.postToDisplay.CreationUser){
+        this.showVotingButtons = true;
+      }
+      else this.showVotingButtons = false;
+    }
+    else this.showVotingButtons = false;
+  }
+
   updatePost(): void {
     // Emits event to parent component that Post got updated
-    this.update.emit(this.postToDisplay);
+    if (this.showDeleteAndUpdateButton){
+      this.update.emit(this.postToDisplay);
+    }
   }
 
   deletePost(): void {
     // Emits event to parent component that Post got deleted
-    this.delete.emit(this.postToDisplay);
+    if (this.showDeleteAndUpdateButton){
+      this.delete.emit(this.postToDisplay);
+    }
   }
 
   upvotePost(): void {

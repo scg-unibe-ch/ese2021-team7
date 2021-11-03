@@ -7,8 +7,8 @@
 
       <!-- Should only be usable for admins or the user who created the post -->
     <mat-card-actions class="group7-post-actions" align="end">
-      <button mat-button><mat-icon [routerLink]="['/updatepost']" [queryParams]="{postId : (postToDisplay.postId)}"  routerLinkActive="active" >edit</mat-icon></button>
-      <button mat-button color="warn"><mat-icon (click)="deletePost()">delete</mat-icon></button>
+      <button mat-button [disabled]="!showDeleteAndUpdateButton"><mat-icon (click)="updatePost()" >edit</mat-icon></button>
+      <button mat-button [disabled]="!showDeleteAndUpdateButton" color="warn"><mat-icon (click)="deletePost()">delete</mat-icon></button>
     </mat-card-actions>
 
   </mat-card-header>
@@ -28,8 +28,8 @@
 
   <mat-card-actions class="group7-post-actions" align="end">
     <!-- Should only be usable for logged in users -->
-    <button mat-button><mat-icon (click)="upvotePost()">thumb_up</mat-icon></button>
-    <button mat-button color="primary"><mat-icon (click)="downvotePost()">thumb_down</mat-icon></button>
+    <button mat-button [disabled]="!showVotingButtons" ><mat-icon (click)="upvotePost()">thumb_up</mat-icon></button>
+    <button mat-button [disabled]="!showVotingButtons" color="primary"><mat-icon (click)="downvotePost()">thumb_down</mat-icon></button>
 
   </mat-card-actions>
 

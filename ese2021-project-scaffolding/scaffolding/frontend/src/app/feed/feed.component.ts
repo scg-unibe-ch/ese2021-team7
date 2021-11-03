@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from "../services/user.service";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Post} from "../models/post.model";
 import {Feed} from "../models/feed.model";
+import {Router} from "@angular/router";
+import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
-import {MatGridListModule} from '@angular/material/grid-list';
 
 
 @Component({
@@ -19,38 +19,36 @@ export class FeedComponent implements OnInit {
 
   currentFeed: Feed = new Feed(0,'', []);
 
+  loggedIn: boolean | undefined;
+  isAdmin: boolean | undefined;
   currentUser: User | undefined;
 
-  loggedIn: Boolean | undefined;
-
-  isAdmin: boolean | undefined;
 
   constructor(
-    public userService: UserService,
-    public httpClient: HttpClient
+    public httpClient: HttpClient,
+    private route: Router,
+    public userService: UserService
   ) {
-    // Listen for changes
-    userService.loggedIn$.subscribe(res => this.loggedIn = res);
-    userService.user$.subscribe(res => this.currentUser = res);
-    userService.isAdmin$.subscribe( res => this.isAdmin = res);
-
-    //current Value
-    this.loggedIn = userService.getLoggedIn();
-    this.currentUser = userService.getUser();
-    this.isAdmin = userService.getIsAdmin();
     this.readPosts();
   }
 
   ngOnInit(): void {
-  }
+    // Listen for changes
+    this.userService.loggedIn$.subscribe(res => {
+      this.loggedIn = res;
+    });
+    this.userService.isAdmin$.subscribe( res => {
+      this.isAdmin = res;
+    });
+    this.userService.user$.subscribe( res => {
+      this.currentUser = res;
+    })
 
-  checkUpdateAndDeletePermission(creatorId: number): boolean{
-    console.log(creatorId);
-    console.log(this.currentUser?.userId);
-    if (this.isAdmin) return true;
-    else if (this.currentUser?.userId == creatorId) return true;
-    return false;
-}
+    //current Value
+    this.loggedIn = this.userService.getLoggedIn();
+    this.isAdmin = this.userService.getIsAdmin();
+    this.currentUser = this.userService.getUser();
+  }
 
   // READ all created posts
   readPosts(): void {
@@ -90,23 +88,16 @@ export class FeedComponent implements OnInit {
     );
   }
 
-
   deletePost(post: Post): void {
-    if (this.checkUpdateAndDeletePermission(post.CreationUser)){
-      this.httpClient.post(environment.endpointURL + "post/delete", {
-        postId: post.postId
-      }).subscribe(() => {
-        this.currentFeed.posts.splice(this.currentFeed.posts.indexOf(post), 1);
-      });
-    }
-    else console.log("Permission denied");
+    this.httpClient.post(environment.endpointURL + "post/delete", {
+      postId: post.postId
+    }).subscribe(() => {
+      this.currentFeed.posts.splice(this.currentFeed.posts.indexOf(post), 1);
+    });
   }
 
   updatePost(post: Post): void {
-    if (this.checkUpdateAndDeletePermission(post.CreationUser)){
-      // TODO routing to updatepost
-    }
-    else console.log("Permission denied");
+    this.route.navigate(['/updatepost'], { queryParams: { postId : (post.postId)}});
   }
 
   buttonClicked() {
