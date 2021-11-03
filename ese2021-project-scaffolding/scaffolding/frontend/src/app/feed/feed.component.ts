@@ -56,10 +56,9 @@ export class FeedComponent implements OnInit {
       console.log(res);
       this.currentFeed = new Feed(0,'', []);
       res.forEach((post: any) => {
-          let newPost = new Post(post.postId, 0,post.title,post.text,post.image,post.upvote,post.downvote,0,post.category, post.createdAt,post.UserUserId);
-          this.currentFeed.posts.push(
-            newPost)
-          //new Post(post.postId, 0,post.title,post.text,post.image,post.upvote,post.downvote,0,post.category, post.createdAt,post.UserUserId))
+        post.score = post.upvote - post.downvote;
+        this.currentFeed.posts.push(
+          new Post(post.postId, 0,post.title,post.text,post.image,post.upvote,post.downvote,post.score,post.category, post.createdAt,post.UserUserId))
         },
         (error: any) => {
           console.log(error);
@@ -106,28 +105,20 @@ export class FeedComponent implements OnInit {
   }
 
   downvotePost(post: Post) {
-    console.log("Downvote button works")
     this.httpClient.post(environment.endpointURL + "post/downvote", {
       postId: post.postId
     }).subscribe((res: any) => {
       console.log(res);
-      //this.Score = res.post.upvote - res.post.downvote;
-      //this.postService.setPost(new Post(res.post.postId,this.postToDownvote.feedId,this.postToDownvote.title,
-      //this.postToDownvote.text,this.postToDownvote.image,this.postToDownvote.upvote,res.post.downvote,this.Score,
-      //this.postToDownvote.category,this.postToDownvote.CreationDate,this.postToDownvote.CreationUser));
+      post.score = res.upvote - res.downvote;
     });
   }
 
   upvotePost(post: Post) {
-    console.log("Upvote button works")
     this.httpClient.post(environment.endpointURL + "post/upvote", {
       postId: post.postId
     }).subscribe((res: any) => {
       console.log(res);
-      //this.Score = res.post.upvote - res.post.downvote;
-      //this.postService.setPost(new Post(res.post.postId,this.postToUpvote.feedId,this.postToUpvote.title,
-      //this.postToUpvote.text,this.postToUpvote.image,res.post.upvote,this.postToUpvote.downvote,this.Score,
-      //this.postToUpvote.category,this.postToUpvote.CreationDate,this.postToUpvote.CreationUser));
+      post.score = res.upvote - res.downvote;
     });
   }
 
