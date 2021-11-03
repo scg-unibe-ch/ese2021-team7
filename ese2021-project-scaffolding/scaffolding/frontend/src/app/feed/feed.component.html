@@ -1,26 +1,22 @@
 <div class="card-wrapper-center">
-  <mat-card>
-    <button mat-flat-button color="warn" (click)="buttonClicked()">
-      Reload List
+  <div class="feed-wrapper">
+    <button mat-flat-button (click)="buttonClicked()" class="group7-forms-button">
+      Reload Feed
     </button>
-  </mat-card>
-</div>
+    <div  *ngFor="let postToDisplay of currentFeed.posts" class="group7-grid-tile feed-item">
+      <app-post
+        [postToDisplay]="postToDisplay"
+        [loggedIn]="loggedIn"
+        [isAdmin]="isAdmin"
+        [currentUser]="currentUser"
+        (delete)="deletePost($event)"
+        (update)="updatePost($event)"
+        (upvote)="upvotePost($event)"
+        (downvote)="downvotePost($event)">
+      </app-post>
+    </div>
 
-<div class="feed-wrapper">
-
-  <div  *ngFor="let postToDisplay of currentFeed.posts" class="group7-grid-tile feed-item">
-    <app-post
-      [postToDisplay]="postToDisplay"
-      [loggedIn]="loggedIn"
-      [isAdmin]="isAdmin"
-      [currentUser]="currentUser"
-      (delete)="deletePost($event)"
-      (update)="updatePost($event)"
-      (upvote)="upvotePost($event)"
-      (downvote)="downvotePost($event)">
-    </app-post>
   </div>
-
 </div>
 
 
