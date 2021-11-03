@@ -11,6 +11,9 @@
   <div  *ngFor="let postToDisplay of currentFeed.posts" class="group7-grid-tile feed-item">
     <app-post
       [postToDisplay]="postToDisplay"
+      [loggedIn]="loggedIn"
+      [isAdmin]="isAdmin"
+      [currentUser]="currentUser"
       (delete)="deletePost($event)"
       (update)="updatePost($event)"
       (upvote)="upvotePost($event)"
