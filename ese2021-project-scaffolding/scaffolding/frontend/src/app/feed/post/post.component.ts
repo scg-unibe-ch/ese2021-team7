@@ -89,10 +89,16 @@ export class PostComponent implements OnInit{
   }
 
   upvotePost(): void {
-    this.upvote.emit(this.postToDisplay);
+    // Emits event to parent component that Post got upvoted
+    if (this.showVotingButtons){
+      this.upvote.emit(this.postToDisplay);
+    }
   }
 
   downvotePost(): void{
-    this.downvote.emit(this.postToDisplay);
+    // Emits event to parent component that Post got downvoted
+    if (this.showVotingButtons) {
+      this.downvote.emit(this.postToDisplay);
+    }
   }
 }
