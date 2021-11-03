@@ -40,6 +40,18 @@ export class UserService {
             });
     }
 
+    public getById(userId: string): Promise<any> {
+        return User.findByPk(userId)
+            .then(existingUser => {
+                if (existingUser) {
+                    existingUser.password = null;
+                    return Promise.resolve(existingUser);
+                } else {
+                    return Promise.reject();
+                }
+            });
+    }
+
     public register(user: UserAttributes): Promise<UserAttributes> {
         const saltRounds = 12;
         const credentials: LoginRequest = {userName: user.userName, email: user.email, password: user.password};
@@ -86,6 +98,7 @@ export class UserService {
                                 userId: user.userId,
                                 admin: user.admin
                             }, secret, {expiresIn: '2h'});
+                            user.password = null;
                             return Promise.resolve({user, token});
                         } else {
                             // user found in DB, but wrong password
