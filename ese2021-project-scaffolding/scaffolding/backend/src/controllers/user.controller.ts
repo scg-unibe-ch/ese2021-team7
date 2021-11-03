@@ -18,6 +18,12 @@ userController.post('/login',
     }
 );
 
+userController.get('/getById',
+    (req: Request, res: Response) => {
+        userService.getById('' + req.query.userId).then(result => res.send(result)).catch(err => res.status(500).send(err));
+    }
+);
+
 userController.post('/checkUserNameOrEmailInUse',
     (req: Request, res: Response) => {
         userService.checkUserNameOrEmailInUse(req.body).then(result => res.send(result)).catch(err => res.status(500).send(err));

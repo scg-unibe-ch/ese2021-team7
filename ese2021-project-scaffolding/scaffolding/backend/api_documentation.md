@@ -1,5 +1,33 @@
 # /user
 TODO: copy existing endpoints from readme.md
+## GET /user/getById
+### Request
+HTTP query param: userId: int
+```
+GET /user/getById?postId=1
+```
+### Response
+If no user is found: HTTP status code 500, and no meaningful body.
+If a user is found: HTTP status code 200 and the user's data in the response:
+```
+{
+    "userId": 1,
+    "userName": "Alice",
+    "password": null,
+    "admin": false,
+    "firstName": null,
+    "lastName": null,
+    "email": "alice@gmail.com",
+    "street": null,
+    "houseNumber": null,
+    "zipCode": null,
+    "city": null,
+    "birthday": null,
+    "phoneNumber": null,
+    "createdAt": "2021-09-19T18:52:40.401Z",
+    "updatedAt": "2021-09-19T18:52:40.401Z"
+}
+```
 ## POST /user/checkUserNameOrEmailInUse
 ### Request
 ```
