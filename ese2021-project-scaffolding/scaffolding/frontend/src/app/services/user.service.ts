@@ -58,11 +58,6 @@ export class UserService {
 
   setLoggedIn(loggedIn: boolean | undefined): void {
     this.loggedInSource.next(loggedIn);
-    this.httpClient.get(environment.endpointURL + "admin").subscribe(() => {
-      this.setIsAdmin(true);
-      }, () => {
-        this.setIsAdmin(false);
-      });
   }
 
   setUser(user: User | undefined): void {
@@ -78,7 +73,7 @@ export class UserService {
    * CONSTRUCTOR
    ******************************************************************************************************************/
 
-  constructor(public httpClient: HttpClient) {
+  constructor() {
     // Observer
     this.loggedIn$.subscribe(res => this.loggedIn = res);
     this.user$.subscribe(res => this.user = res);

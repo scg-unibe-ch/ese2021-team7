@@ -62,6 +62,11 @@ export class LoginComponent implements OnInit{
       this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.firstName,
         res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city,
         res.user.birthday,res.user.phoneNumber));
+      this.httpClient.get(environment.endpointURL + "admin").subscribe(() => {
+        this.userService.setIsAdmin(true);
+      }, () => {
+        this.userService.setIsAdmin(false);
+      });
 
       this.resetLoginForm();
       this.endpointLogin = '';
