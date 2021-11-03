@@ -18,7 +18,8 @@ export class CreatePostComponent {
   createPostForm = this.fb.group({
     postTitle: new FormControl('', Validators.required),
     postImage : new FormControl(''),
-    postText : new FormControl('')
+    postText : new FormControl(''),
+    postCategory : new FormControl('', Validators.required)
   }, {
     validator: (form: FormGroup) => {return this.checkPost(form);}
   });
@@ -42,6 +43,7 @@ export class CreatePostComponent {
         title: this.createPostForm.value.postTitle,
         text: this.createPostForm.value.postText,
         image: this.createPostForm.value.postImage,
+        category: this.createPostForm.value.postCategory
       }, ).subscribe((res: any) => {
           console.log(res);
           this.isSubmitted = false;

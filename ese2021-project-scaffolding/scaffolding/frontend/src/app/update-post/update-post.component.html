@@ -28,6 +28,14 @@
             <mat-label>Text</mat-label>
             <textarea matInput type="text" label="postText" id="postField" placeholder="Post text" [formControlName]="'postText'" id="text"></textarea>
           </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label >Category</mat-label>
+            <mat-select [formControlName]="'postCategory'" id="category"   required>
+              <mat-option value="Winterfell">Winterfell</mat-option>
+              <mat-option value="King's Landing">King's Landing</mat-option>
+              <mat-option value="The Wall">The Wall</mat-option>
+            </mat-select>
+          </mat-form-field>
           <br/>
           <div class="form-action-button">
             <button mat-flat-button type="submit" [disabled]="!updateFormPost.valid" class="group7-forms-button">Save Changes</button><br/>
