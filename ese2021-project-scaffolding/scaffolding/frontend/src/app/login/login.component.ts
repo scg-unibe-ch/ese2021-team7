@@ -132,12 +132,16 @@ export class LoginComponent implements OnInit{
   }
 
   logoutUser(): void {
+    this.router.navigate(['../feed']).then(r =>{});
+
     localStorage.removeItem('userName');
     localStorage.removeItem('email');
     localStorage.removeItem('userToken');
 
     this.userService.setLoggedIn(false);
     this.userService.setUser(undefined);
+
+
   }
 
 /*  accessUserEndpoint(): void {
