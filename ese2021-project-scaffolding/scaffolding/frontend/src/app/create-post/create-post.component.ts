@@ -56,6 +56,7 @@ export class CreatePostComponent {
     }
   }
 
+  /*
   onFileSelected(event: any){
     this.file = event.target.files[0];
     this.filename = this.file.name;
@@ -64,7 +65,7 @@ export class CreatePostComponent {
       console.log(this.createPostForm.value.postImage);
     }
   }
-
+*/
 
   //currently not set
   checkPost(form: FormGroup): {[s: string]: boolean}{
@@ -75,5 +76,6 @@ export class CreatePostComponent {
     console.log("correct");
     return null;
   };
+
 
 }
