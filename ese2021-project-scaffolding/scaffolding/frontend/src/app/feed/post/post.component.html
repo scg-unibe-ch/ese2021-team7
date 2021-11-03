@@ -1,37 +1,37 @@
 <mat-card class ="post">
-  <mat-card-header class="group7-post-header">
-    <p class="category">{{postToDisplay.category}}</p>
-    <mat-card-subtitle>  Score: {{postToDisplay.score}}</mat-card-subtitle>
+<mat-card-header class="group7-post-header">
+      <mat-card-subtitle>By: {{postToDisplay.CreationUser}}</mat-card-subtitle><br/>
 
-    <mat-icon>dots</mat-icon>
+  <div fxFlex></div>
 
 
-      <!-- Should only be usable for admins or the user who created the post -->
-    <mat-card-actions class="group7-post-actions" align="end">
-      <button mat-button [disabled]="!showDeleteAndUpdateButton"><mat-icon (click)="updatePost()" >edit</mat-icon></button>
-      <button mat-button [disabled]="!showDeleteAndUpdateButton" color="warn"><mat-icon (click)="deletePost()">delete</mat-icon></button>
-    </mat-card-actions>
 
-  </mat-card-header>
+</mat-card-header>
+
 
   <div class="post-image-wrapper">
     <img class="post-image" mat-card-image src="{{postToDisplay.image}}">
   </div>
 
 
-  <mat-card-content>
+  <mat-card-content class="group7-post-content">
+    <div class="post-category">Category: {{postToDisplay.category}}</div><br/>
     <mat-card-title>{{postToDisplay.title}} </mat-card-title>
     <p class="post-text">
       {{postToDisplay.text}}
-    </p>
+    </p><br/>
+    <span class="post-score"> Score: {{postToDisplay.score}}</span>
   </mat-card-content>
 
 
   <mat-card-actions class="group7-post-actions" align="end">
-    <!-- Should only be usable for logged in users -->
-    <button mat-button [disabled]="!showVotingButtons" ><mat-icon (click)="upvotePost()">thumb_up</mat-icon></button>
-    <button mat-button [disabled]="!showVotingButtons" color="primary"><mat-icon (click)="downvotePost()">thumb_down</mat-icon></button>
 
+    <!-- Should only be usable for logged in users -->
+    <button mat-button [disabled]="!showVotingButtons" class="group7-post-actions-button"><mat-icon (click)="upvotePost()" class="group7-post-actions">thumb_up</mat-icon></button>
+    <button mat-button [disabled]="!showVotingButtons"  class="group7-post-actions-button"><mat-icon (click)="downvotePost()" class="group7-post-actions">thumb_down</mat-icon></button>
+
+    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" class="group7-post-actions-button"><mat-icon (click)="updatePost()" class="group7-post-actions">edit</mat-icon></button>
+    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" color="warn" class="group7-post-actions-button"><mat-icon (click)="deletePost()" class="group7-post-actions">delete</mat-icon></button>
   </mat-card-actions>
 
 </mat-card>

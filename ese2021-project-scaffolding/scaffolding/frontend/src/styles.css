@@ -1,5 +1,7 @@
 body {
   margin: 30px;
+  background-image: url("assets/the_wall.jpg");
+  background-attachment: fixed;
 }
 
 html, body { height: 100%; }
@@ -11,6 +13,7 @@ button, input {
   margin-left: 15px !important;
   margin-right: 15px !important;
 }
+
 
 .mat-card {
   margin: 20px;
@@ -84,32 +87,40 @@ button, input {
 
 }
 
-.group7-grid-tile{
-}
-
-.post{
-  margin: 0px !important;
-}
 
 .feed-wrapper{
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 800px !important;
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 40px !important;
 }
 
 .feed-item{
   display: inline-block;
   margin: 20px;
+  text-align: left !important;
 
 }
 
+.post{
+  margin: 0px !important;
+  max-width: 400px;
+  background-color: #white !important;
+  border: 0px !important;
+
+}
 
 .group7-post-header{
 
-  width: 100%;
-  margin: 5px !important;
-  padding: 5px !important;
+
 }
+
+.group7-post-content{
+  color: #262626;
+  padding: 5px !important;
+  width: 100%;
+}
+
 
 .post-title{
   font-size: 1em;
@@ -118,16 +129,62 @@ button, input {
 
 .post-header-wrapper{
 
+
+}
+
+.post-profile{
+
+  float: left;
+  vertical-align: middle !important;
+  height: 100% !important;
+}
+
+.post-profile-name{
+  vertical-align: middle !important;
+  height: 100% !important;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.post-icon-wrapper{
+
+  float:right;
+  vertical-align: top !important;
+  width: 100% !important;
 }
 
 
 .group7-post-actions{
+  font-size: 20px;
+  padding: 0px;
+  height: 100%;
+}
+
+.group7-post-actions-button{
+
+  border: none;
+  margin: 0px !important;
+  padding: 0px !important;
 
 }
 
-
+.post-icon{
+  vertical-align: top !important;
+  float: right !important;
+}
 
 
 .post-image{
   max-height: 200px;
+}
+
+.post-category {
+
+}
+
+.post-score{
+  font-size: 1em !important;
+  color: #262626 !important;
+  vertical-align: bottom !important;
+  height: 100% !important
 }
