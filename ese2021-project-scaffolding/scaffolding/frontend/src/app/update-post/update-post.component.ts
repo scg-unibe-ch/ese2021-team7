@@ -86,6 +86,7 @@ export class UpdatePostComponent implements OnInit {
     }
   }
 
+  /*
   onFileSelected(event: any){
     this.file = event.target.files[0];
     this.filename = this.file.name;
@@ -94,7 +95,7 @@ export class UpdatePostComponent implements OnInit {
       console.log(this.updateFormPost.value.postImage);
     }
   }
-
+*/
 
   //currently not set
   checkPost(form: FormGroup): {[s: string]: boolean}{
