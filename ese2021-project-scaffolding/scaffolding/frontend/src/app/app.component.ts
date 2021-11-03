@@ -5,6 +5,7 @@ import { TodoItem } from './models/todo-item.model';
 import { environment } from '../environments/environment';
 import { UserService } from './services/user.service';
 import { User } from './models/user.model';
+import {ActivatedRoute, Router} from "@angular/router";
 
 
 @Component({
@@ -27,7 +28,9 @@ export class AppComponent implements OnInit {
 
   constructor(
     public httpClient: HttpClient,
-    public userService: UserService
+    public userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     // Listen for changes
     userService.loggedIn$.subscribe(res => this.loggedIn = res);
@@ -115,6 +118,8 @@ export class AppComponent implements OnInit {
 
     this.userService.setLoggedIn(false);
     this.userService.setUser(undefined);
+
+    this.router.navigate(['../feed']).then(r =>{});
   }
 
 
