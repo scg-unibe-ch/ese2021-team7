@@ -26,6 +26,7 @@ import {RouterModule} from "@angular/router";
 import {MatMenuModule} from '@angular/material/menu';
 import { UpdatePostComponent } from './update-post/update-post.component';
 import {MatGridListModule} from '@angular/material/grid-list';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatButtonModule,
     MatListModule,
     MatMenuModule,
+    MatSelectModule,
     MatGridListModule,
     FormsModule,
     MatCheckboxModule,

@@ -48,7 +48,8 @@ export class UpdatePostComponent implements OnInit {
         this.updateFormPost = this.fb.group({
           "postTitle": new FormControl(this.post.title, Validators.required),
           "postImage": new FormControl(this.post.image),
-          "postText": new FormControl(this.post.text)
+          "postText": new FormControl(this.post.text),
+          "postCategory": new FormControl(this.post.category, Validators.required)
         }, {
           validator: (form: FormGroup) => {
             return this.checkPost(form);
@@ -70,7 +71,7 @@ export class UpdatePostComponent implements OnInit {
         title: this.updateFormPost.value.postTitle,
         text: this.updateFormPost.value.postText,
         image: this.updateFormPost.value.postImage,
-        category: this.post.category,
+        category: this.updateFormPost.value.postCategory,
         upvote: this.post.upvote,
         downvote: this.post.downvote
       }, ).subscribe((res: any) => {
