@@ -104,17 +104,16 @@ export class FeedComponent implements OnInit {
     this.readPosts();
   }
 
-  downvotePost(post: Post) {
-    this.httpClient.post(environment.endpointURL + "post/downvote", {
+  upvotePost(post: Post) {
+    this.httpClient.post(environment.endpointURL + "post/upvote", {
       postId: post.postId
     }).subscribe((res: any) => {
       console.log(res);
       post.score = res.upvote - res.downvote;
     });
   }
-
-  upvotePost(post: Post) {
-    this.httpClient.post(environment.endpointURL + "post/upvote", {
+  downvotePost(post: Post) {
+    this.httpClient.post(environment.endpointURL + "post/downvote", {
       postId: post.postId
     }).subscribe((res: any) => {
       console.log(res);
