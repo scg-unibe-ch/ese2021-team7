@@ -21,8 +21,6 @@ export class LoginComponent implements OnInit{
 
   userToLogin: User = new User(0, '', '', '','','','','','','','','');
 
-  //endpointMsgUser: string = '';
-  //endpointMsgAdmin: string = '';
   endpointLogin: string = '';
 
   constructor(
@@ -45,29 +43,6 @@ export class LoginComponent implements OnInit{
     this.route.queryParams.subscribe( params =>{
       if(params['registered']== 'true'){
         this.fromRegistration = true;
-        /*
-        console.log(params);
-        this.httpClient.post(environment.endpointURL + "user/login", {
-          userName: params['userName'],
-          password: params['password'],
-        }).subscribe((res: any) => {
-          localStorage.setItem('userName', res.user.userName);
-          localStorage.setItem('email', res.user.email);
-          localStorage.setItem('userToken', res.token);
-
-          this.userService.setLoggedIn(true);
-          this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.firstName,
-            res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city,
-            res.user.birthday,res.user.phoneNumber));
-
-          this.resetLoginForm();
-          this.endpointLogin = '';
-          this.router.navigate(['/feed']);
-        }, (error) => {
-          this.handleLoginError(error);
-          this.resetLoginForm();
-
-        });*/
       }
     })
 
@@ -139,24 +114,7 @@ export class LoginComponent implements OnInit{
     localStorage.removeItem('userToken');
 
     this.userService.setLoggedIn(false);
+    this.userService.setIsAdmin(false);
     this.userService.setUser(undefined);
-
-
   }
-
-/*  accessUserEndpoint(): void {
-    this.httpClient.get(environment.endpointURL + "secured").subscribe(() => {
-      this.endpointMsgUser = "Access granted";
-    }, () => {
-      this.endpointMsgUser = "Unauthorized";
-    });
-  }
-
-  accessAdminEndpoint(): void {
-    this.httpClient.get(environment.endpointURL + "admin").subscribe(() => {
-      this.endpointMsgAdmin = "Access granted";
-    }, () => {
-      this.endpointMsgAdmin = "Unauthorized";
-    });
-  }*/
 }

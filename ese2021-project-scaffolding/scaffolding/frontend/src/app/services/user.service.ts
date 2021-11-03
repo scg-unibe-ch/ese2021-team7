@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
+import {HttpClient} from "@angular/common/http";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +58,11 @@ export class UserService {
 
   setLoggedIn(loggedIn: boolean | undefined): void {
     this.loggedInSource.next(loggedIn);
+    this.httpClient.get(environment.endpointURL + "admin").subscribe(() => {
+      this.setIsAdmin(true);
+      }, () => {
+        this.setIsAdmin(false);
+      });
   }
 
   setUser(user: User | undefined): void {
@@ -71,7 +78,7 @@ export class UserService {
    * CONSTRUCTOR
    ******************************************************************************************************************/
 
-  constructor() {
+  constructor(public httpClient: HttpClient) {
     // Observer
     this.loggedIn$.subscribe(res => this.loggedIn = res);
     this.user$.subscribe(res => this.user = res);
@@ -81,4 +88,5 @@ export class UserService {
     this.setLoggedIn(false);
     this.setIsAdmin(false);
   }
+
 }

@@ -35,69 +35,37 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.readLists();
-    this.userService.loggedIn$.subscribe(res => this.loggedIn = res);
+    // listen for changes in loggedIn
+    this.userService.loggedIn$.subscribe(res => {
+      this.loggedIn = res
+    }, error => {
+      this.enableCreatePost = false;
+    });
+    // listen for changes in current user
     this.userService.user$.subscribe(res => {
       this.enableCreatePost = true;
       this.user = res;
+    }, error => {
+      this.enableCreatePost = false;
     });
+    //listen for changes in admin
     this.userService.isAdmin$.subscribe(res => {
-        this.enableCreatePost = false;
+        this.enableCreatePost = this.checkPermissionConditions(res);
       },
       error => {
         this.checkPermissionConditions(false);
       })
 
     // Current value
-    this.loggedIn = this.userService.getLoggedIn();
     this.user = this.userService.getUser();
     this.enableCreatePost = this.checkPermissionConditions(this.userService.getIsAdmin());
   }
 
   checkPermissionConditions(isAdmin: boolean | undefined): boolean {
-    if(this.loggedIn && !isAdmin){
+    if(this.userService.getLoggedIn() && !isAdmin){
       return true;
     }
     return  false;
-  }
-
-  // CREATE - TodoList
-  createList(): void {
-    this.httpClient.post(environment.endpointURL + "todolist", {
-      name: this.newTodoListName
-    }).subscribe((list: any) => {
-      this.todoLists.push(new TodoList(list.todoListId, list.name, []));
-      this.newTodoListName = '';
-    })
-  }
-
-  // READ - TodoList, TodoItem
-  readLists(): void {
-    this.httpClient.get(environment.endpointURL + "todolist").subscribe((lists: any) => {
-      lists.forEach((list: any) => {
-        const todoItems: TodoItem[] = [];
-
-        list.todoItems.forEach((item: any) => {
-          todoItems.push(new TodoItem(item.todoItemId, item.todoListId, item.name, item.itemImage, item.done));
-        });
-
-        this.todoLists.push(new TodoList(list.todoListId, list.name, todoItems))
-      });
-    });
-  }
-
-  // UPDATE - TodoList
-  updateList(todoList: TodoList): void {
-    this.httpClient.put(environment.endpointURL + "todolist/" + todoList.listId, {
-      name: todoList.name
-    }).subscribe();
-  }
-
-  // DELETE - TodoList
-  deleteList(todoList: TodoList): void {
-    this.httpClient.delete(environment.endpointURL + "todolist/" + todoList.listId).subscribe(() => {
-      this.todoLists.splice(this.todoLists.indexOf(todoList), 1);
-    });
   }
 
   logoutUser(): void {
@@ -106,6 +74,7 @@ export class AppComponent implements OnInit {
     localStorage.removeItem('userToken');
 
     this.userService.setLoggedIn(false);
+    this.userService.setIsAdmin(false);
     this.userService.setUser(undefined);
     this.router.navigate(['../feed']).then(r =>{});
     this.enableCreatePost = this.checkPermissionConditions(this.userService.getIsAdmin());
