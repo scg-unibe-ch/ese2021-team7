@@ -4,7 +4,7 @@ TODO: copy existing endpoints from readme.md
 ### Request
 HTTP query param: userId: int
 ```
-GET /user/getById?postId=1
+GET /user/getById?userId=1
 ```
 ### Response
 If no user is found: HTTP status code 500, and no meaningful body.
