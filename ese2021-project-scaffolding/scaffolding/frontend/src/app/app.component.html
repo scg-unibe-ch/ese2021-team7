@@ -1,35 +1,29 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span>ESE-2021 Frontend Scaffolding</span>
-  </mat-toolbar-row>
-</mat-toolbar>
+<mat-toolbar>
+    <button mat-icon-button class="menu-icon" aria-label="Menu"  [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item  routerLink="/feed" routerLinkActive="active">Feed</button>
+      <button mat-menu-item  routerLink="/createpost" routerLinkActive="active" *ngIf="enableCreatePost" >Create Post</button>
+      <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
+      <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
 
-<mat-tab-group>
-  <mat-tab label="Todo List Example">
-    <mat-card>
-      <mat-form-field>
-        <input matInput placeholder="List Name" [(ngModel)]="newTodoListName" name="name">
-      </mat-form-field>
-      <button mat-flat-button color="primary" (click)="createList()" [disabled]="newTodoListName === ''">Create new list</button>
-    </mat-card>
+    </mat-menu>
+      <span><a routerLink="/home" class="logo"><img src="assets/got-logo.png"  width="150px"/></a></span>
+    <span class="spacer"></span>
+    <button mat-icon-button class="profile-icon" aria-label="Profile" [matMenuTriggerFor]="profile">
+      <mat-icon *ngIf="!loggedIn">help</mat-icon>
+      <span *ngIf="loggedIn" color="white">{{user?.username || "ERROR"}}</span>
+    </button>
+    <mat-menu #profile="matMenu">
+      <button mat-menu-item  routerLink="/profile" routerLinkActive="active" *ngIf="loggedIn">Profile</button>
+      <button mat-menu-item  (click)="logoutUser()" *ngIf="loggedIn"><mat-icon>logout</mat-icon>Logout</button>
+      <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
+      <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
+    </mat-menu>
+  </mat-toolbar>
 
-    <app-todo-list
-      *ngFor="let todoList of todoLists"
-      [todoList]="todoList"
-      (update)="updateList($event)"
-      (delete)="deleteList($event)"
-    ></app-todo-list>
-  </mat-tab>
 
-  <mat-tab label="Login">
-    <app-user></app-user>
-  </mat-tab>
 
-  <mat-tab label="Registration">
-    <app-registration></app-registration>
-  </mat-tab>
-
-  <mat-tab *ngIf="loggedIn" label="Profile Page">
-    Profile Page
-  </mat-tab>
-</mat-tab-group>
+<!-- The routed views render in the <router-outlet>-->
+<router-outlet></router-outlet>

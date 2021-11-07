@@ -54,11 +54,7 @@ export class Post extends Model<PostAttributes> implements PostAttributes {
     }
 
     public static createAssociations() {
-        Post.belongsTo(User, {
-            targetKey: 'userId',
-            as: 'user',
-            onDelete: 'cascade',
-            foreignKey: 'userId'
-        });
+        User.hasMany(Post);
+        Post.belongsTo(User);
     }
 }

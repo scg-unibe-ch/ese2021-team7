@@ -1,0 +1,37 @@
+<mat-card class ="post">
+<mat-card-header class="group7-post-header">
+      <mat-card-subtitle>By: {{postToDisplay.CreationUserName}}</mat-card-subtitle><br/>
+
+  <div fxFlex></div>
+
+
+
+</mat-card-header>
+
+
+  <div class="post-image-wrapper">
+    <img class="post-image" mat-card-image src="{{postToDisplay.image}}">
+  </div>
+
+
+  <mat-card-content class="group7-post-content">
+    <div class="post-category">Category: {{postToDisplay.category}}</div><br/>
+    <mat-card-title>{{postToDisplay.title}} </mat-card-title>
+    <p class="post-text">
+      {{postToDisplay.text}}
+    </p><br/>
+    <span class="post-score"> Score: {{postToDisplay.score}}</span>
+  </mat-card-content>
+
+
+  <mat-card-actions class="group7-post-actions" align="end">
+
+    <!-- Should only be usable for logged in users -->
+    <button mat-button [disabled]="!showVotingButtons" class="group7-post-actions-button"><mat-icon (click)="upvotePost()" class="group7-post-actions">thumb_up</mat-icon></button>
+    <button mat-button [disabled]="!showVotingButtons"  class="group7-post-actions-button"><mat-icon (click)="downvotePost()" class="group7-post-actions">thumb_down</mat-icon></button>
+
+    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" class="group7-post-actions-button"><mat-icon (click)="updatePost()" class="group7-post-actions">edit</mat-icon></button>
+    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" color="warn" class="group7-post-actions-button"><mat-icon (click)="deletePost()" class="group7-post-actions">delete</mat-icon></button>
+  </mat-card-actions>
+
+</mat-card>

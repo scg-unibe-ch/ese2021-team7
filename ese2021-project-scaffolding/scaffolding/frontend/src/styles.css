@@ -1,20 +1,190 @@
 body {
   margin: 30px;
+  background-image: url("assets/the_wall.jpg");
+  background-attachment: fixed;
 }
 
-.mat-card {
-  margin: 20px 0;
-  background-color: #EEE;
-}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
 
 button, input {
   margin-left: 15px !important;
   margin-right: 15px !important;
 }
 
-.mat-form-field-wrapper {
-  margin-right: 25px !important;
+
+.mat-card {
+  margin: 20px;
+  background-color: #EEE;
+  padding: 40px;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-form-field-wrapper {
+  margin-right: 0px;
+}
+
+
+.card-wrapper-center{
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 400px;
+}
+
+
+
+.form-wrapper{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+.form-wrapper > * {
+  width: 100%;
+}
+
+.form-action-button{
+  text-align: right;
+}
+
+.card-title{
+  font-family: 'Libre Baskerville', serif !important;
+}
+
+.group7-color-overlay{
+  color: #262626 !important;
+}
+
+.mat-toolbar{
+  background-color: #262626;
+  color: #fff;
+}
+
+.group7-card{
+  background-color:white !important;
+}
+
+.group7-forms-button{
+  background-color: #191919 !important;
+  color: #fff;
+  border-radius: 0px !important;
+}
+
+.group7-forms-button:disabled{
+  background-color: #d8d8d8 !important;
+  color: white !important;
+}
+
+.registration-form-form > *{
+  width:100% !important;
+}
+
+.mat-list-item{
+  display: inline-block;
+  margin: 40px;
+
+}
+
+
+.feed-wrapper{
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 40px !important;
+}
+
+.feed-item{
+  display: inline-block;
+  margin: 20px;
+  text-align: left !important;
+
+}
+
+.post{
+  margin: 0px !important;
+  max-width: 400px;
+  background-color: #white !important;
+  border: 0px !important;
+
+}
+
+.group7-post-header{
+
+
+}
+
+.group7-post-content{
+  color: #262626;
+  padding: 5px !important;
+  width: 100%;
+}
+
+
+.post-title{
+  font-size: 1em;
+  font-family: 'Libre Baskerville', serif !important;
+}
+
+.post-header-wrapper{
+
+
+}
+
+.post-profile{
+
+  float: left;
+  vertical-align: middle !important;
+  height: 100% !important;
+}
+
+.post-profile-name{
+  vertical-align: middle !important;
+  height: 100% !important;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.post-icon-wrapper{
+
+  float:right;
+  vertical-align: top !important;
+  width: 100% !important;
+}
+
+
+.group7-post-actions{
+  font-size: 20px;
+  padding: 0px;
+  height: 100%;
+}
+
+.group7-post-actions-button{
+
+  border: none;
+  margin: 0px !important;
+  padding: 0px !important;
+
+}
+
+.post-icon{
+  vertical-align: top !important;
+  float: right !important;
+}
+
+
+.post-image{
+  max-height: 200px;
+}
+
+.post-category {
+
+}
+
+.post-score{
+  font-size: 1em !important;
+  color: #262626 !important;
+  vertical-align: bottom !important;
+  height: 100% !important
+}

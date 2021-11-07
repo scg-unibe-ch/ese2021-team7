@@ -1,4 +1,4 @@
-import { UserAttributes, User } from '../models/user.model';
+import {UserAttributes, User} from '../models/user.model';
 import { LoginResponse, LoginRequest } from '../models/login.model';
 import { ErrorCodes } from '../errorCodes';
 import bcrypt from 'bcrypt';
@@ -27,6 +27,29 @@ export class UserService {
         }
 
         return User.findOne({where});
+    }
+
+    public checkUserNameOrEmailInUse(loginRequestee: LoginRequest): Promise<any> {
+        return UserService.findUserByNameOrMail(loginRequestee)
+            .then(existingUser => {
+                if (existingUser) {
+                    return Promise.resolve({inUse: true});
+                } else {
+                    return Promise.resolve({inUse: false});
+                }
+            });
+    }
+
+    public getById(userId: string): Promise<any> {
+        return User.findByPk(userId)
+            .then(existingUser => {
+                if (existingUser) {
+                    existingUser.password = null;
+                    return Promise.resolve(existingUser);
+                } else {
+                    return Promise.reject();
+                }
+            });
     }
 
     public register(user: UserAttributes): Promise<UserAttributes> {
@@ -75,6 +98,7 @@ export class UserService {
                                 userId: user.userId,
                                 admin: user.admin
                             }, secret, {expiresIn: '2h'});
+                            user.password = null;
                             return Promise.resolve({user, token});
                         } else {
                             // user found in DB, but wrong password

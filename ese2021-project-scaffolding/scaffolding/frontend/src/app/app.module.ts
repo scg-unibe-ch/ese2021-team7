@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -16,18 +15,33 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatListModule } from '@angular/material/list';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { UserComponent } from './user/user.component';
+import { LoginComponent } from './login/login.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { RegistrationComponent } from './registration/registration.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { FeedComponent } from './feed/feed.component';
+import { PostComponent } from './feed/post/post.component';
+import { CreatePostComponent } from './create-post/create-post.component';
+import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
+import {RouterModule} from "@angular/router";
+import {MatMenuModule} from '@angular/material/menu';
+import { UpdatePostComponent } from './update-post/update-post.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { MatSelectModule } from '@angular/material/select';
+import {Feed} from "./models/feed.model";
 
 @NgModule({
   declarations: [
     AppComponent,
     TodoListComponent,
     TodoItemComponent,
-    UserComponent,
+    LoginComponent,
     RegistrationComponent,
+    FeedComponent,
+    PostComponent,
+    CreatePostComponent,
+    PageNotFoundComponent,
+    UpdatePostComponent,
     UserProfileComponent
   ],
   imports: [
@@ -41,10 +55,23 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     MatInputModule,
     MatButtonModule,
     MatListModule,
+    MatMenuModule,
+    MatSelectModule,
+    MatGridListModule,
     FormsModule,
     MatCheckboxModule,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule.forRoot([
+      { path: 'feed', component: FeedComponent },
+      { path: 'createpost', component: CreatePostComponent },
+      { path: 'updatepost', component: UpdatePostComponent },
+      { path: 'profile', component: PageNotFoundComponent },
+      { path: 'registration', component: RegistrationComponent },
+      { path: 'login', component: LoginComponent },
+      { path: '**', component:  FeedComponent},
+      { path: 'home', component: FeedComponent}
+    ]),
   ],
   providers: [
     {

@@ -5,3 +5,14 @@
 .valid {
   color: green !important;
 }
+
+.registration-form{
+  max-width: 800px !important;
+}
+
+
+.registration-form-form > mat-form-field{
+  display: flex;
+  flex-direction: column;
+  width: 100% !important;
+}

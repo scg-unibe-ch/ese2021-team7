@@ -8,11 +8,13 @@ import { Sequelize } from 'sequelize';
 import { TodoList } from './models/todolist.model';
 import { TodoItem } from './models/todoitem.model';
 import { User } from './models/user.model';
+import { Post } from './models/post.model';
 
 
 import cors from 'cors';
 import {AdminController} from './controllers/admin.controller';
 import {ItemImage} from './models/itemImage.model';
+import {PostController} from './controllers/post.controller';
 
 
 export class Server {
@@ -28,10 +30,11 @@ export class Server {
         TodoList.initialize(this.sequelize);
         User.initialize(this.sequelize);
         ItemImage.initialize(this.sequelize);
+        Post.initialize(this.sequelize);
         TodoItem.createAssociations();
         TodoList.createAssociations();
         ItemImage.createAssociations();
-
+        Post.createAssociations();
 
 
 
@@ -65,6 +68,7 @@ export class Server {
             .use('/todoitem', TodoItemController)   // any request on this path is forwarded to the TodoItemController
             .use('/todolist', TodoListController)
             .use('/user', UserController)
+            .use('/post', PostController)
             .use('/secured', SecuredController)
             .use('/admin', AdminController)
             .options('*', cors(options))
