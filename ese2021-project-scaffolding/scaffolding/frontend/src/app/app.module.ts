@@ -66,7 +66,7 @@ import {Feed} from "./models/feed.model";
       { path: 'feed', component: FeedComponent },
       { path: 'createpost', component: CreatePostComponent },
       { path: 'updatepost', component: UpdatePostComponent },
-      { path: 'profile', component: PageNotFoundComponent },
+      { path: 'profile', component: UserProfileComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'login', component: LoginComponent },
       { path: '**', component:  FeedComponent},
