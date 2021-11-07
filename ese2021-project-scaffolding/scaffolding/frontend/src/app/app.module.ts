@@ -18,6 +18,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LoginComponent } from './login/login.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { RegistrationComponent } from './registration/registration.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 import { FeedComponent } from './feed/feed.component';
 import { PostComponent } from './feed/post/post.component';
 import { CreatePostComponent } from './create-post/create-post.component';
@@ -40,7 +41,8 @@ import {Feed} from "./models/feed.model";
     PostComponent,
     CreatePostComponent,
     PageNotFoundComponent,
-    UpdatePostComponent
+    UpdatePostComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +66,7 @@ import {Feed} from "./models/feed.model";
       { path: 'feed', component: FeedComponent },
       { path: 'createpost', component: CreatePostComponent },
       { path: 'updatepost', component: UpdatePostComponent },
-      { path: 'profile', component: PageNotFoundComponent },
+      { path: 'profile', component: UserProfileComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'login', component: LoginComponent },
       { path: '**', component:  FeedComponent},
