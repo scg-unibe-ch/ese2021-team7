@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, DoCheck, OnInit} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Post} from "../models/post.model";
@@ -14,7 +14,7 @@ import {Subscription} from "rxjs";
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.css']
 })
-export class FeedComponent implements OnInit {
+export class FeedComponent implements OnInit, DoCheck{
 
   currentFeed: Feed = new Feed(0,'', []);
 
@@ -43,6 +43,14 @@ export class FeedComponent implements OnInit {
     })
 
     //current Value
+    this.loggedIn = this.userService.getLoggedIn();
+    this.isAdmin = this.userService.getIsAdmin();
+    this.currentUser = this.userService.getUser();
+  }
+
+  ngDoCheck(): void{
+    //current Value
+    console.log("ngDoCheck is working.")
     this.loggedIn = this.userService.getLoggedIn();
     this.isAdmin = this.userService.getIsAdmin();
     this.currentUser = this.userService.getUser();
