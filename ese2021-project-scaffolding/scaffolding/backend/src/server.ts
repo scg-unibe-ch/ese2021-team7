@@ -11,6 +11,7 @@ import { User } from './models/user.model';
 import { Post } from './models/post.model';
 import { Product } from './models/product.model';
 import { Order } from './models/order.model';
+import { Vote } from './models/vote.model';
 
 
 import cors from 'cors';
@@ -35,11 +36,13 @@ export class Server {
         Post.initialize(this.sequelize);
         Product.initialize(this.sequelize);
         Order.initialize(this.sequelize);
+        Vote.initialize(this.sequelize);
         TodoItem.createAssociations();
         TodoList.createAssociations();
         ItemImage.createAssociations();
         Post.createAssociations();
         Order.createAssociations();
+        Vote.createAssociations();
 
 
 
