@@ -14,12 +14,13 @@ import { OnInit } from '@angular/core';
 export class LoginComponent implements OnInit{
 
   loggedIn: boolean | undefined;
+  isAdmin: boolean | undefined;
 
   user: User | undefined;
 
   fromRegistration: boolean | undefined;
 
-  userToLogin: User = new User(0, '', '', '','','','','','','','','');
+  userToLogin: User = new User(0, '', '', false,'','','','','','','','','');
 
   endpointLogin: string = '';
 
@@ -59,14 +60,16 @@ export class LoginComponent implements OnInit{
       localStorage.setItem('userToken', res.token);
 
       this.userService.setLoggedIn(true);
-      this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.firstName,
+      this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.admin,res.user.firstName,
         res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city,
         res.user.birthday,res.user.phoneNumber));
-      this.httpClient.get(environment.endpointURL + "admin").subscribe(() => {
+
+      if (res.user.admin){
         this.userService.setIsAdmin(true);
-      }, () => {
+      }
+      else {
         this.userService.setIsAdmin(false);
-      });
+      }
 
       this.resetLoginForm();
       this.endpointLogin = '';
