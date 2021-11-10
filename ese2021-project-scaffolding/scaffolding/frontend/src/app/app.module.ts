@@ -29,6 +29,12 @@ import { UpdatePostComponent } from './update-post/update-post.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
 import {Feed} from "./models/feed.model";
+import { OrderListComponent } from './order-list/order-list.component';
+import { OrderComponent } from './order-list/order/order.component';
+import { ProductListComponent } from './product-list/product-list.component';
+import { ProductComponent } from './product-list/product/product.component';
+import { PurchaseComponent } from './purchase/purchase.component';
+import { CreateProductComponent } from './create-product/create-product.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +48,13 @@ import {Feed} from "./models/feed.model";
     CreatePostComponent,
     PageNotFoundComponent,
     UpdatePostComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    OrderListComponent,
+    OrderComponent,
+    ProductListComponent,
+    ProductComponent,
+    PurchaseComponent,
+    CreateProductComponent
   ],
   imports: [
     BrowserModule,
