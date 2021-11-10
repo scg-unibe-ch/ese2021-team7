@@ -35,6 +35,7 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { ProductComponent } from './product-list/product/product.component';
 import { PurchaseComponent } from './purchase/purchase.component';
 import { CreateProductComponent } from './create-product/create-product.component';
+import { PostFormComponent } from './post-form/post-form.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { CreateProductComponent } from './create-product/create-product.componen
     ProductListComponent,
     ProductComponent,
     PurchaseComponent,
-    CreateProductComponent
+    CreateProductComponent,
+    PostFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,8 +83,8 @@ import { CreateProductComponent } from './create-product/create-product.componen
       { path: 'profile', component: UserProfileComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'login', component: LoginComponent },
-      { path: '**', component:  FeedComponent},
-      { path: 'home', component: FeedComponent}
+      { path: 'home', component: FeedComponent},
+      { path: 'post-form', component: PostFormComponent}
     ]),
   ],
   providers: [
