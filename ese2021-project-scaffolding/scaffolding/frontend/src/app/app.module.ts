@@ -88,7 +88,8 @@ import { ProductFormComponent } from './product-form/product-form.component';
       { path: 'home', component: FeedComponent},
       { path: 'post-form', component: PostFormComponent},
       { path: '', component: FeedComponent},
-      { path: 'product-form', component: ProductFormComponent}
+      { path: 'product-form', component: ProductFormComponent},
+      { path: 'purchase', component: PurchaseComponent}
     ]),
   ],
   providers: [
