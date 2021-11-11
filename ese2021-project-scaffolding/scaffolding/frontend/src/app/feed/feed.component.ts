@@ -109,7 +109,7 @@ export class FeedComponent implements OnInit {
   }
 
   updatePost(post: Post): void {
-    this.route.navigate(['/updatepost'], {queryParams: {postId: (post.postId)}}).then(r =>{});
+    this.route.navigate(['/post-form'], {queryParams: {update: 'true', postId: (post.postId)}}).then(r =>{});
    }
 
   buttonClicked() {
