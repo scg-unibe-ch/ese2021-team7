@@ -7,6 +7,7 @@
       <button mat-menu-item  [routerLink]="['/post-form']" [queryParams]="{create: 'true'}" >Create Post</button>
       <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
       <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
+      <button mat-menu-item  routerLink="/product-form" routerLinkActive="active">Product Form</button>
 
     </mat-menu>
       <span><a routerLink="/home" class="logo"><img src="assets/got-logo.png"  width="150px"/></a></span>
