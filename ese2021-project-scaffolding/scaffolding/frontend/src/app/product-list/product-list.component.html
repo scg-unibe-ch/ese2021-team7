@@ -1,1 +1,21 @@
-<p>product-list works!</p>
+<div class="card-wrapper-center">
+  <div class="shop-wrapper">
+    <!--  TODO: Button should be disabled if non-admins -->
+    <button mat-flat-button (click)="addProduct()" class="group7-forms-button">
+      Add new product
+    </button>
+    <div  *ngFor="let productToDisplay of currentShop.products" class="group7-grid-tile shop-item">
+      <app-product
+        [productToDisplay]="productToDisplay"
+        [loggedIn]="loggedIn"
+        [isAdmin]="isAdmin"
+        [currentUser]="currentUser"
+        (delete)="deleteProduct($event)"
+        (update)="updateProduct($event)"
+        (buy)="buyProduct($event)">
+      </app-product>
+    </div>
+  </div>
+</div>
+
+
