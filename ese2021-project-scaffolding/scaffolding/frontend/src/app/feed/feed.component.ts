@@ -126,6 +126,7 @@ export class FeedComponent implements OnInit, DoCheck{
       post.score = res.upvote - res.downvote;
     });
   }
+
   downvotePost(post: Post) {
     this.httpClient.post(environment.endpointURL + "post/downvote", {
       postId: post.postId

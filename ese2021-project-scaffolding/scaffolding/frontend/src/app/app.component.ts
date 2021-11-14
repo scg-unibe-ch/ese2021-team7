@@ -35,6 +35,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getCurrentUser();
+  }
+
+  getCurrentUser(): void {
     // listen for changes in loggedIn
     this.userService.loggedIn$.subscribe(res => {
       this.loggedIn = res

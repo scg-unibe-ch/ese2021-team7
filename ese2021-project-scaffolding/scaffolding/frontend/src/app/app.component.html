@@ -4,7 +4,7 @@
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item  routerLink="/feed" routerLinkActive="active">Feed</button>
-      <button mat-menu-item  [routerLink]="['/post-form']" [queryParams]="{create: 'true'}" >Create Post</button>
+      <button mat-menu-item  [routerLink]="['/post-form']" [queryParams]="{create: 'true'}" *ngIf="enableCreatePost" >Create Post</button>
       <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
       <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
       <button mat-menu-item  routerLink="/shop" routerLinkActive="active">Shop</button>

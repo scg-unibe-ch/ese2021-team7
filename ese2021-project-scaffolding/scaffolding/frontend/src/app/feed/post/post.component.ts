@@ -39,31 +39,31 @@ export class PostComponent implements OnInit{
 
   ngOnInit() {
     this.evaluateUpdateDeletePermission();
-    this.evaluateVotingButtons();
+    this.evaluateVotingButtonsPermission();
   }
 
   ngOnChanges(){
     this.evaluateUpdateDeletePermission();
-    this.evaluateVotingButtons();
+    this.evaluateVotingButtonsPermission();
   }
 
   evaluateUpdateDeletePermission(): void {
     // set true if user is admin or if user is creator of post
-    if (this.currentUser.isAdmin) this.showDeleteAndUpdateButton = true;
-    else if (typeof this.currentUser != 'undefined') {
-      if (this.loggedIn && this.currentUser.userId == this.postToDisplay.CreationUser) this.showDeleteAndUpdateButton = true;
+    if (typeof this.currentUser != 'undefined') {
+      if (this.currentUser.isAdmin) this.showDeleteAndUpdateButton = true;
+      else if (this.loggedIn && this.currentUser.userId == this.postToDisplay.CreationUser) this.showDeleteAndUpdateButton = true;
       else this.showDeleteAndUpdateButton = false;
     }
     else this.showDeleteAndUpdateButton = false;
   }
 
-  evaluateVotingButtons(){
+  evaluateVotingButtonsPermission(){
     // set true only if logged in and user is not creator
-    if (this.currentUser.isAdmin){
-      this.showVotingButtons = false;
-    }
-    else if (typeof this.currentUser != 'undefined') {
-      if (this.loggedIn && this.currentUser.userId != this.postToDisplay.CreationUser){
+    if (typeof this.currentUser != 'undefined') {
+      if (this.currentUser.isAdmin){
+        this.showVotingButtons = false;
+      }
+      else if (this.loggedIn && this.currentUser.userId != this.postToDisplay.CreationUser){
         this.showVotingButtons = true;
       }
       else this.showVotingButtons = false;
