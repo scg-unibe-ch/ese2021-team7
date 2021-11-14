@@ -1,42 +1,30 @@
-<mat-card *ngIf="showComponent" class ="post">
+<mat-card class ="post">
   <mat-card-header class="group7-post-header">
-    <mat-card-subtitle>By: {{currentOrder.orderId}}</mat-card-subtitle><br/>
-
+    <mat-card-subtitle>Order Component works: {{currentOrder.orderId}}</mat-card-subtitle><br/>
     <div fxFlex></div>
   </mat-card-header>
 
   <mat-card-content class="group7-post-content">
 
-    <h3>Sold product:</h3>
-    <!-- [productToDisplay]="currentProduct" -->
-    <app-product></app-product>
-
-    <h3>Ordered by: </h3>
-    <h3>{{currentUser.firstName}}, {{currentUser.lastName}}</h3>
-
-    <h3>Order address: </h3>
-    <h3>{{orderAddress}}</h3>
-
-    <h3>Order State: </h3>
-    <h3>{{currentOrder.state}}</h3>
-
-  </mat-card-content>
-
-
-  <mat-card-actions class="group7-post-actions" align="end">
+    <h3>User is Admin: {{currentUser.isAdmin}}</h3>
 
     <!-- Should only be usable for logged in users -->
-    <button mat-button fxLayoutAlign="right top" [disabled]="!userView"
-            color="warn" class="group7-post-actions-button">
-      <mat-icon (click)="cancelOrder()" class="group7-post-actions">Cancel</mat-icon>
-    </button>
+    <div *ngIf="!currentUser.isAdmin">
+      <button mat-button fxLayoutAlign="right top" [disabled]="!showChangeStateButton"
+              color="warn" class="group7-post-actions-button" (click)="cancelOrder()" class="group7-post-actions">Cancel</button>
+    </div>
 
-    <!-- Should only be usable for loggend in admins -->
-    <button mat-button fxLayoutAlign="right top" [disabled]="!adminView"
-            color="warn" class="group7-post-actions-button">
-      <mat-icon (click)="shipOrder()" class="group7-post-actions">Ship</mat-icon>
-    </button>
+    <div *ngIf="currentUser.isAdmin">
+      <!-- Should only be usable for loggend in admins -->
+      <button mat-button fxLayoutAlign="right top" [disabled]="!showChangeStateButton"
+              color="warn" class="group7-post-actions-button" (click)="shipOrder()" class="group7-post-actions">Ship</button>
+    </div>
 
-  </mat-card-actions>
 
+  </mat-card-content>
 </mat-card>
+
+
+
+
+

@@ -15,7 +15,7 @@ import {Product} from "../../models/product.model";
 })
 export class OrderComponent implements OnInit {
 
-  currentOrder: Order | undefined;
+  currentOrder: Order = new Order(0,0,0,0,'','','','','','','',OrderState.Pending);
 
   currentUser: User | undefined;
 
@@ -23,13 +23,10 @@ export class OrderComponent implements OnInit {
 
   orderId : number = 0;
 
-  adminView : boolean = false;
-
-  userView : boolean = false;
-
-  showComponent: boolean = false;
-
   orderAddress: String = '';
+
+  showChangeStateButton: boolean = true;
+
 
   constructor(
     public httpClient: HttpClient,
@@ -45,13 +42,11 @@ export class OrderComponent implements OnInit {
   }
 
   /* TODO
-  - Differ on who is using this component: Admin or User
   - Show all propertys of order
-  - get order by id from the backend
-  - get the current user / admin
   - state of order can be changed:  pending -> shipped by admin
                                     pending -> cancelled by user
    */
+
   getCurrentUser(){
     this.userService.user$.subscribe( (res: User) => {
       this.currentUser = res;
@@ -66,26 +61,15 @@ export class OrderComponent implements OnInit {
 
   evaluateViewComponent(): void {
     if (typeof this.currentUser != 'undefined' && typeof this.currentOrder != 'undefined') {
-      this.showComponent = true;
-      // show user view if customerId is same as userId
-      if(this.currentUser?.userId == this.currentOrder?.costumerId){
-        this.userView = true;
-        this.adminView = false;
-      }
-      // show admin view if user is admin
-      else if (this.currentUser.isAdmin){
-        this.adminView = true;
-        this.userView = false;
-      }
-      // redirect to product overview since missing permission
-      else {
-        console.log('redirected due to incompatible customer and user Id')
-        // TODO navigate to product list
-        this.router.navigate(['/productList']);
-        this.showComponent = false;
+      // check if customerId is same as userId
+      if(!this.currentUser.isAdmin){
+        if(this.currentUser?.userId != this.currentOrder?.costumerId){
+          console.log('redirected due to incompatible customer and user Id')
+          // TODO navigate to product list
+          // this.router.navigate(['/shop']);
+        }
       }
     }
-    else this.showComponent = this.adminView = this.userView = false;
   }
 
   getCurrentOrderById(): void{
@@ -117,13 +101,16 @@ export class OrderComponent implements OnInit {
         console.log(this.currentOrder);
         this.evaluateViewComponent();
         this.getOrderProduct(res.productId);
+        //TODO check how OrderState is sent from backend String?
+        if (res.state==OrderState.Pending) this.showChangeStateButton = true;
+        else this.showChangeStateButton = false;
       }, (error: any) => {
         console.log(error);
       });
     }
   }
 
-   getOrderProduct(productId: number): void {
+  getOrderProduct(productId: number): void {
     this.httpClient.get(environment.endpointURL + "product/byId", {
       params: {
         productId: productId
@@ -144,14 +131,46 @@ export class OrderComponent implements OnInit {
     });
   }
 
-
   cancelOrder() {
     // only enable if orderState is pending
-    // this.currentOrder.state = OrderState.Cancelled;
+    this.updateOrder(OrderState.Cancelled);
   }
 
   shipOrder() {
     // only enable if orderState is pending
-    // this.currentOrder.state = OrderState.Shipped;
+    this.updateOrder(OrderState.Shipped);
+  }
+
+  updateOrder(state: OrderState): void{
+    console.log('Update Button works.')
+    // TODO update order with right call
+    /*
+    this.httpClient.post(environment.endpointURL + "order/byId", {
+      params: {
+        orderId: this.orderId,
+        orderState: state
+      }
+    }).subscribe((res: any) => {
+      console.log(res);
+      this.currentOrder = new Order(
+        res.orderId,
+        res.orderListId, // to indicate that it belongs to a certain oder list
+        res.costumerId, // userId of the user which places the order
+        res.productId, // to indicate which product is sold
+        res.firstName,
+        res.lastName,
+        res.street,
+        res.houseNumber,
+        res.zipCode,
+        res.city,
+        res.paymentMethod,
+        res.state
+      );
+      this.showChangeStateButton = false;
+    }, (error: any) => {
+      console.log(error);
+    })
+     */
+
   }
 }
