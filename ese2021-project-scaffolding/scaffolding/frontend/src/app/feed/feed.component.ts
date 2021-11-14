@@ -6,17 +6,15 @@ import {Feed} from "../models/feed.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
-import {Subscription} from "rxjs";
-
 
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.css']
 })
-export class FeedComponent implements OnInit, DoCheck{
+export class FeedComponent implements OnInit, DoCheck {
 
-  currentFeed: Feed = new Feed(0,'', []);
+  currentFeed: Feed = new Feed(0, '', []);
 
   loggedIn: boolean | undefined;
   currentUser: User | undefined;
@@ -34,16 +32,15 @@ export class FeedComponent implements OnInit, DoCheck{
     this.userService.loggedIn$.subscribe(res => {
       this.loggedIn = res;
     });
-    this.userService.user$.subscribe( res => {
+    this.userService.user$.subscribe(res => {
       this.currentUser = res;
     })
-
     //current Value
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
   }
 
-  ngDoCheck(): void{
+  ngDoCheck(): void {
     //current Value
     console.log("ngDoCheck is working.")
     this.loggedIn = this.userService.getLoggedIn();
@@ -54,22 +51,22 @@ export class FeedComponent implements OnInit, DoCheck{
   readPosts(): void {
     this.httpClient.get(environment.endpointURL + "post/all").subscribe((res: any) => {
       console.log(res);
-      this.currentFeed = new Feed(0,'', []);
+      this.currentFeed = new Feed(0, '', []);
       res.forEach((post: any) => {
         post.score = post.upvote - post.downvote;
-        this.httpClient.get(environment.endpointURL + "user/getById" , {
+        this.httpClient.get(environment.endpointURL + "user/getById", {
           params: {
             userId: post.UserUserId
           }
         }).subscribe((res: any) => {
-          post.CreationUserName = res.userName;
-          this.currentFeed.posts.push(
-              new Post(post.postId, 0,post.title,post.text,post.image,post.upvote,post.downvote,post.score,post.category, post.createdAt,post.UserUserId,post.CreationUserName))
+            post.CreationUserName = res.userName;
+            this.currentFeed.posts.push(
+              new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, post.CreationUserName))
           },
           (error: any) => {
             console.log(error);
           });
-        });
+      });
     });
   }
 
@@ -79,7 +76,7 @@ export class FeedComponent implements OnInit, DoCheck{
   default = sorted by creation date
    */
   sortList(sortBy: Number): void {
-    this.httpClient.put(environment.endpointURL + "post/all" , {
+    this.httpClient.put(environment.endpointURL + "post/all", {
       sortBy: sortBy
     }).subscribe(
       (res: any) => {
@@ -111,8 +108,9 @@ export class FeedComponent implements OnInit, DoCheck{
   }
 
   updatePost(post: Post): void {
-    this.route.navigate(['/post-form'], {queryParams: {update: 'true', postId: (post.postId)}}).then(r =>{});
-   }
+    this.route.navigate(['/post-form'], {queryParams: {update: 'true', postId: (post.postId)}}).then(r => {
+    });
+  }
 
   buttonClicked() {
     this.readPosts();
@@ -135,4 +133,5 @@ export class FeedComponent implements OnInit, DoCheck{
       post.score = res.upvote - res.downvote;
     });
   }
+
 }
