@@ -43,8 +43,7 @@ export class OrderComponent implements OnInit {
 
   /* TODO
   - Show all propertys of order
-  - state of order can be changed:  pending -> shipped by admin
-                                    pending -> cancelled by user
+  - Check Backend calls getOrderById and update
    */
 
   getCurrentUser(){
