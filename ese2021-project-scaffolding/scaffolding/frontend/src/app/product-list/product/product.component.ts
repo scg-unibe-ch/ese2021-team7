@@ -20,9 +20,6 @@ export class ProductComponent implements OnInit {
   showBuyNowButton: boolean = false;
 
   @Input()
-  isAdmin : boolean = false;
-
-  @Input()
   loggedIn : boolean = false;
 
   @Input()
@@ -55,13 +52,13 @@ export class ProductComponent implements OnInit {
 
   evaluateUpdateDeletePermission(): void {
     // set true if user is admin
-    if (this.isAdmin) this.showDeleteAndUpdateButton = true;
+    if (this.currentUser.isAdmin) this.showDeleteAndUpdateButton = true;
     else this.showDeleteAndUpdateButton = false;
   }
 
   evaluateBuyNowPermission(): void {
     // set true if user is admin
-    if (this.isAdmin) this.showBuyNowButton = false;
+    if (this.currentUser.isAdmin) this.showBuyNowButton = false;
     else this.showBuyNowButton= true;
   }
 

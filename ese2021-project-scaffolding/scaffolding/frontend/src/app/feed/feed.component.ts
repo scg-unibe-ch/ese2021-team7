@@ -19,7 +19,6 @@ export class FeedComponent implements OnInit, DoCheck{
   currentFeed: Feed = new Feed(0,'', []);
 
   loggedIn: boolean | undefined;
-  isAdmin: boolean | undefined;
   currentUser: User | undefined;
 
   constructor(
@@ -35,16 +34,12 @@ export class FeedComponent implements OnInit, DoCheck{
     this.userService.loggedIn$.subscribe(res => {
       this.loggedIn = res;
     });
-    this.userService.isAdmin$.subscribe( res => {
-      this.isAdmin = res;
-    });
     this.userService.user$.subscribe( res => {
       this.currentUser = res;
     })
 
     //current Value
     this.loggedIn = this.userService.getLoggedIn();
-    this.isAdmin = this.userService.getIsAdmin();
     this.currentUser = this.userService.getUser();
   }
 
@@ -52,7 +47,6 @@ export class FeedComponent implements OnInit, DoCheck{
     //current Value
     console.log("ngDoCheck is working.")
     this.loggedIn = this.userService.getLoggedIn();
-    this.isAdmin = this.userService.getIsAdmin();
     this.currentUser = this.userService.getUser();
   }
 

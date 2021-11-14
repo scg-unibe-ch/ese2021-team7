@@ -19,7 +19,6 @@ export class ProductListComponent implements OnInit {
   currentShop: ProductList = new ProductList(0,'', []);
 
   loggedIn: boolean | undefined;
-  isAdmin: boolean | undefined;
   currentUser: User | undefined;
 
   constructor(
@@ -35,15 +34,10 @@ export class ProductListComponent implements OnInit {
     this.userService.loggedIn$.subscribe(res => {
       this.loggedIn = res;
     });
-    this.userService.isAdmin$.subscribe( res => {
-      this.isAdmin = res;
-    });
     this.userService.user$.subscribe( res => {
       this.currentUser = res;
     })
-
     this.loggedIn = this.userService.getLoggedIn();
-    this.isAdmin = this.userService.getIsAdmin();
     this.currentUser = this.userService.getUser();
   }
 

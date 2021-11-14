@@ -17,9 +17,6 @@ export class PostComponent implements OnInit{
   showVotingButtons : boolean = false;
 
   @Input()
-  isAdmin : boolean = false;
-
-  @Input()
   loggedIn : boolean = false;
 
   @Input()
@@ -52,7 +49,7 @@ export class PostComponent implements OnInit{
 
   evaluateUpdateDeletePermission(): void {
     // set true if user is admin or if user is creator of post
-    if (this.isAdmin) this.showDeleteAndUpdateButton = true;
+    if (this.currentUser.isAdmin) this.showDeleteAndUpdateButton = true;
     else if (typeof this.currentUser != 'undefined') {
       if (this.loggedIn && this.currentUser.userId == this.postToDisplay.CreationUser) this.showDeleteAndUpdateButton = true;
       else this.showDeleteAndUpdateButton = false;
@@ -62,7 +59,7 @@ export class PostComponent implements OnInit{
 
   evaluateVotingButtons(){
     // set true only if logged in and user is not creator
-    if (this.isAdmin){
+    if (this.currentUser.isAdmin){
       this.showVotingButtons = false;
     }
     else if (typeof this.currentUser != 'undefined') {

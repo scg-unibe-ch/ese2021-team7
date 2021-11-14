@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TodoList } from './models/todo-list.model';
-import { TodoItem } from './models/todo-item.model';
 import { environment } from '../environments/environment';
 import { UserService } from './services/user.service';
 import { User } from './models/user.model';
@@ -20,6 +19,7 @@ export class AppComponent implements OnInit {
 
   newTodoListName: string = '';
 
+  //TODO
   loggedIn: boolean | undefined;
 
   user: User | undefined;
@@ -45,20 +45,14 @@ export class AppComponent implements OnInit {
     this.userService.user$.subscribe(res => {
       this.enableCreatePost = true;
       this.user = res;
+      this.enableCreatePost = this.checkPermissionConditions(res.isAdmin);
     }, error => {
       this.enableCreatePost = false;
+      this.checkPermissionConditions(false)
     });
-    //listen for changes in admin
-    this.userService.isAdmin$.subscribe(res => {
-        this.enableCreatePost = this.checkPermissionConditions(res);
-      },
-      error => {
-        this.checkPermissionConditions(false);
-      })
-
     // Current value
     this.user = this.userService.getUser();
-    this.enableCreatePost = this.checkPermissionConditions(this.userService.getIsAdmin());
+    this.enableCreatePost = this.checkPermissionConditions(this.user?.isAdmin);
   }
 
   checkPermissionConditions(isAdmin: boolean | undefined): boolean {
@@ -74,12 +68,8 @@ export class AppComponent implements OnInit {
     localStorage.removeItem('userToken');
 
     this.userService.setLoggedIn(false);
-    this.userService.setIsAdmin(false);
     this.userService.setUser(undefined);
     this.router.navigate(['../feed']).then(r =>{});
-    this.enableCreatePost = this.checkPermissionConditions(this.userService.getIsAdmin());
   }
-
-
 
 }
