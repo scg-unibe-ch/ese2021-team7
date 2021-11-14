@@ -85,7 +85,8 @@ import { PostFormComponent } from './post-form/post-form.component';
       { path: 'login', component: LoginComponent },
       { path: 'home', component: FeedComponent},
       { path: 'post-form', component: PostFormComponent},
-      { path: 'shop', component: ProductListComponent}
+      { path: 'shop', component: ProductListComponent},
+      { path: 'order', component: OrderComponent}
     ]),
   ],
   providers: [
