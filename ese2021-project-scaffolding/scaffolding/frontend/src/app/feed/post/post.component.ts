@@ -23,7 +23,7 @@ export class PostComponent implements OnInit{
   loggedIn : boolean = false;
 
   @Input()
-  currentUser : User = new User(0, '', '', '','','','','','','','','');
+  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
 
   @Input()
   postToDisplay: Post = new Post(0,0,'','','',0,0,0,'','',0,'');

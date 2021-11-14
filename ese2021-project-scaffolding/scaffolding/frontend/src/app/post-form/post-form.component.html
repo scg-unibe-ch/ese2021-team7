@@ -1,0 +1,59 @@
+<div class="card-wrapper-center registration-form">
+  <mat-card class="group7-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h1 class="card-title" *ngIf="isUpdate">Edit your Post</h1>
+        <h1 class="card-title" *ngIf="isCreate">Create your Post</h1>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="form-wrapper">
+        <form *ngIf="isCreate || (isUpdate && post)" [formGroup]="postForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input matInput type="text" label="postTitle" placeholder="Title" id="postTitle" [formControlName]="'postTitle'" required>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Image URL</mat-label>
+            <input matInput type="url" label="postImage" id="postImage" [formControlName]="'postImage'" >
+          </mat-form-field>
+          <!--
+          <label for="postImage"  ><b>Image</b></label>
+          <input type="file" label="postImage" id="postImage" [formControlName]="'postImage'" class="file-upload" (change)="onFileSelected($event)" #fileUpload>
+          <div>
+            {{ filename || "No file uploaded yet."}}
+            <button mat-mini-fab color="primary" class="upload-btn" type="button" (click)="fileUpload.click()">
+              <mat-icon>attach_file</mat-icon>
+            </button>
+          </div>
+          <br/>
+-->
+          <mat-form-field appearance="outline" id="mat-text">
+            <mat-label>Text</mat-label>
+            <textarea matInput type="text" label="postText" id="postField" placeholder="Post text" [formControlName]="'postText'" id="text"></textarea>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label >Category</mat-label>
+            <mat-select [formControlName]="'postCategory'" id="category"   required>
+              <mat-option value="Winterfell">Winterfell</mat-option>
+              <mat-option value="King's Landing">King's Landing</mat-option>
+              <mat-option value="The Wall">The Wall</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <br/>
+          <div class="form-action-button">
+            <button mat-flat-button type="submit" [disabled]="!postForm.valid" class="group7-forms-button" *ngIf="isUpdate">Save Changes</button><br/>
+            <button mat-flat-button type="submit" [disabled]="!postForm.valid" class="group7-forms-button" *ngIf="isCreate">Create Post</button><br/>
+            <span *ngIf="!postForm.valid && isSubmitted" [ngClass]="!postForm.valid && isSubmitted ? 'is-invalid' : '' "><br/>Please add an image or post text</span><br/>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="isUpdate && !post">
+        <span>No post found</span>
+      </div>
+    </mat-card-content>
+
+
+  </mat-card>
+
+</div>

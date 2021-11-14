@@ -18,6 +18,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LoginComponent } from './login/login.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { RegistrationComponent } from './registration/registration.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 import { FeedComponent } from './feed/feed.component';
 import { PostComponent } from './feed/post/post.component';
 import { CreatePostComponent } from './create-post/create-post.component';
@@ -28,6 +29,13 @@ import { UpdatePostComponent } from './update-post/update-post.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
 import {Feed} from "./models/feed.model";
+import { OrderListComponent } from './order-list/order-list.component';
+import { OrderComponent } from './order-list/order/order.component';
+import { ProductListComponent } from './product-list/product-list.component';
+import { ProductComponent } from './product-list/product/product.component';
+import { PurchaseComponent } from './purchase/purchase.component';
+import { CreateProductComponent } from './create-product/create-product.component';
+import { PostFormComponent } from './post-form/post-form.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +48,15 @@ import {Feed} from "./models/feed.model";
     PostComponent,
     CreatePostComponent,
     PageNotFoundComponent,
-    UpdatePostComponent
+    UpdatePostComponent,
+    UserProfileComponent,
+    OrderListComponent,
+    OrderComponent,
+    ProductListComponent,
+    ProductComponent,
+    PurchaseComponent,
+    CreateProductComponent,
+    PostFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,11 +80,12 @@ import {Feed} from "./models/feed.model";
       { path: 'feed', component: FeedComponent },
       { path: 'createpost', component: CreatePostComponent },
       { path: 'updatepost', component: UpdatePostComponent },
-      { path: 'profile', component: PageNotFoundComponent },
+      { path: 'profile', component: UserProfileComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'login', component: LoginComponent },
-      { path: '**', component:  FeedComponent},
-      { path: 'home', component: FeedComponent}
+      { path: 'home', component: FeedComponent},
+      { path: 'post-form', component: PostFormComponent},
+      { path: 'shop', component: ProductListComponent}
     ]),
   ],
   providers: [
