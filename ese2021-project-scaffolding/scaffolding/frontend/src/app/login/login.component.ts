@@ -14,7 +14,6 @@ import { OnInit } from '@angular/core';
 export class LoginComponent implements OnInit{
 
   loggedIn: boolean | undefined;
-  isAdmin: boolean | undefined;
 
   user: User | undefined;
 
@@ -63,13 +62,6 @@ export class LoginComponent implements OnInit{
       this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.admin,res.user.firstName,
         res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city,
         res.user.birthday,res.user.phoneNumber));
-
-      if (res.user.admin){
-        this.userService.setIsAdmin(true);
-      }
-      else {
-        this.userService.setIsAdmin(false);
-      }
 
       this.resetLoginForm();
       this.endpointLogin = '';
@@ -122,7 +114,6 @@ export class LoginComponent implements OnInit{
     localStorage.removeItem('userToken');
 
     this.userService.setLoggedIn(false);
-    this.userService.setIsAdmin(false);
     this.userService.setUser(undefined);
   }
 }
