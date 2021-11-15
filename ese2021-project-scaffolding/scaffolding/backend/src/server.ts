@@ -18,6 +18,7 @@ import cors from 'cors';
 import {AdminController} from './controllers/admin.controller';
 import {ItemImage} from './models/itemImage.model';
 import {PostController} from './controllers/post.controller';
+import {ProductController} from './controllers/product.controller';
 
 
 export class Server {
@@ -77,6 +78,7 @@ export class Server {
             .use('/todolist', TodoListController)
             .use('/user', UserController)
             .use('/post', PostController)
+            .use('/product', ProductController)
             .use('/secured', SecuredController)
             .use('/admin', AdminController)
             .options('*', cors(options))
