@@ -88,7 +88,7 @@ export class ProductComponent implements OnInit {
       else {
         console.log("Login to buy this product")
         // redirect to login if user is not logged in
-        this.router.navigate(['/login']).then(r =>{});
+        this.router.navigate(['/login'],{queryParams: {fromShop: 'true'}}).then(r =>{});
       }
     }
   }
