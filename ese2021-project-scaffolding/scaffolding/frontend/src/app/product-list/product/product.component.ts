@@ -1,9 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Product} from "../../models/product.model";
 import {User} from "../../models/user.model";
-import {HttpClient} from "@angular/common/http";
-import {FormBuilder} from "@angular/forms";
-import {UserService} from "../../services/user.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
@@ -37,8 +34,8 @@ export class ProductComponent implements OnInit {
   @Output()
   buy = new EventEmitter<Product>();
 
-  //constructor(private route: ActivatedRoute, private router: Router) {
-  //}
+  constructor(private route: ActivatedRoute, private router: Router) {
+  }
 
   ngOnInit(): void {
     this.evaluateUpdateDeletePermission();
@@ -52,13 +49,19 @@ export class ProductComponent implements OnInit {
 
   evaluateUpdateDeletePermission(): void {
     // set true if user is admin
-    if (this.currentUser.isAdmin) this.showDeleteAndUpdateButton = true;
+    if (this.loggedIn){
+      if (this.currentUser.isAdmin) this.showDeleteAndUpdateButton = true;
+      else this.showDeleteAndUpdateButton = false;
+    }
     else this.showDeleteAndUpdateButton = false;
   }
 
   evaluateBuyNowPermission(): void {
     // set true if user is admin
-    if (this.currentUser.isAdmin) this.showBuyNowButton = false;
+    if (this.loggedIn){
+      if (this.currentUser.isAdmin) this.showBuyNowButton = false;
+      else this.showBuyNowButton= true;
+    }
     else this.showBuyNowButton= true;
   }
 
@@ -79,14 +82,13 @@ export class ProductComponent implements OnInit {
   buyProduct(): void {
     // Emits event to parent component that Product is purchased
     if (this.showBuyNowButton){
-      if (typeof this.currentUser != 'undefined' && this.loggedIn){
+      if (this.loggedIn){
         this.buy.emit(this.productToDisplay);
       }
       else {
-        // TODO: change this part
         console.log("Login to buy this product")
         // redirect to login if user is not logged in
-        //this.router.navigate(['/login']).then(r =>{});
+        this.router.navigate(['/login']).then(r =>{});
       }
     }
   }
