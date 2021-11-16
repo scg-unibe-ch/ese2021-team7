@@ -19,6 +19,8 @@ export class ProductListComponent implements OnInit {
   loggedIn: boolean | undefined;
   currentUser: User | undefined;
 
+  showAddProductButton: boolean = false;
+
   constructor(
     public httpClient: HttpClient,
     private route: Router,
@@ -37,6 +39,12 @@ export class ProductListComponent implements OnInit {
     })
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
+
+    this.evaluateAddProductPermission();
+  }
+
+  ngOnChange():void {
+    this.evaluateAddProductPermission();
   }
 
   ngDoCheck(): void {
@@ -44,6 +52,15 @@ export class ProductListComponent implements OnInit {
     console.log("ngDoCheck is working.")
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
+  }
+
+  evaluateAddProductPermission(): void {
+    // set true if user is admin
+    if (this.loggedIn){
+      if (this.currentUser?.isAdmin) this.showAddProductButton = true;
+      else this.showAddProductButton = false;
+    }
+    else this.showAddProductButton = false;
   }
 
   // READ all created products
@@ -71,8 +88,10 @@ export class ProductListComponent implements OnInit {
 
   // TODO: fix route according to create product component
   addProduct(): void{
-    //this.route.navigate(['/createproduct'],{queryParams: {create: 'true', productId: (product.productId)}}).then(r => {})
-    this.route.navigate(['/createproduct']).then(r => {})
+    if (this.currentUser?.isAdmin){
+      //this.route.navigate(['/createproduct'],{queryParams: {create: 'true', productId: (product.productId)}}).then(r => {})
+      this.route.navigate(['/createproduct']).then(r => {})
+    }
   }
 
   deleteProduct(product: Product): void{
