@@ -16,6 +16,8 @@ export class ProductComponent implements OnInit {
   showDeleteAndUpdateButton : boolean = false;
   showBuyNowButton: boolean = false;
 
+  showProductDetails: boolean = false;
+
   @Input()
   loggedIn : boolean = false;
 
@@ -77,6 +79,14 @@ export class ProductComponent implements OnInit {
     if (this.showDeleteAndUpdateButton){
       this.delete.emit(this.productToDisplay);
     }
+  }
+
+  showDetails(): void{
+    this.showProductDetails = true;
+  }
+
+  hideDetails(): void{
+    this.showProductDetails = false;
   }
 
   buyProduct(): void {
