@@ -18,7 +18,7 @@ export class PostService {
     public async getAll(sortBy: string): Promise<Post[]> {
         if (sortBy === '1') {
             // @ts-ignore
-            return Post.findAll({ order: [['upvote', Sequelize.literal('+'), 'downvote', 'DESC']]});
+            return Post.findAll({ order: [['upvote', Sequelize.literal('-'), 'downvote', 'DESC']]});
         }
         return Post.findAll({order: [['createdAt', 'DESC']]});
     }

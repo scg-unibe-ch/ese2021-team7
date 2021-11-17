@@ -10,7 +10,6 @@ import {UserService} from "../services/user.service";
 export class UserProfileComponent implements OnInit {
 
   loggedIn: boolean | undefined;
-  isAdmin: boolean | undefined;
   currentUser: User | undefined;
   address : String | undefined;
 
@@ -21,9 +20,6 @@ export class UserProfileComponent implements OnInit {
     this.userService.loggedIn$.subscribe(res => {
       this.loggedIn = res;
     });
-    this.userService.isAdmin$.subscribe( res => {
-      this.isAdmin = res;
-    });
     this.userService.user$.subscribe( res => {
       this.currentUser = res;
       this.address = this.currentUser.street + " " + this.currentUser.houseNumber + ", " + this.currentUser.zipCode + " " + this.currentUser.city;
@@ -31,11 +27,9 @@ export class UserProfileComponent implements OnInit {
 
     //current Value
     this.loggedIn = this.userService.getLoggedIn();
-    this.isAdmin = this.userService.getIsAdmin();
     this.currentUser = this.userService.getUser();
     if(typeof this.currentUser != 'undefined'){
       this.address = this.currentUser.street + " " + this.currentUser.houseNumber + ", " + this.currentUser.zipCode + " " + this.currentUser.city;
     }
   }
-
 }
