@@ -8,7 +8,7 @@
       <button mat-menu-item  routerLink="/order" routerLinkActive="active" *ngIf="loggedIn">Order</button>
       <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
       <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
-      <button mat-menu-item  routerLink="/product-form" routerLinkActive="active">Product Form</button>
+      <button mat-menu-item  routerLink="/product-form" [queryParams]="{create: true}" routerLinkActive="active">Product Form</button>
       <button mat-menu-item  routerLink="/shop" routerLinkActive="active">Shop</button>
 
 
