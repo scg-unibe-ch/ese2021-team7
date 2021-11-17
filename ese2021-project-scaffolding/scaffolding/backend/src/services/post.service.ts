@@ -1,9 +1,12 @@
 import { Post, PostAttributes } from '../models/post.model';
 import {User} from '../models/user.model';
 import {Sequelize} from 'sequelize';
+import { VoteService } from './vote.service';
+import { ErrorCodes } from '../errorCodes';
 
 export class PostService {
-    // Should this method be static?
+    private voteService: VoteService;
+
     public async getPostById(postId: string): Promise<Post> {
         return Post.findByPk(postId).then(dbPost => {
             if (dbPost) {
@@ -14,7 +17,6 @@ export class PostService {
         });
     }
 
-    // Should this method be static?
     public async getAll(sortBy: string): Promise<Post[]> {
         if (sortBy === '1') {
             // @ts-ignore
@@ -23,26 +25,32 @@ export class PostService {
         return Post.findAll({order: [['createdAt', 'DESC']]});
     }
 
-    public upvote(postId: number): Promise<Post> {
-        return Post.findByPk(postId).then(dbPost => {
-            if (dbPost) {
-                dbPost.upvote += 1;
-                return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
-            } else {
-                return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
-            }
-        });
+    public upvote(postId: number, userId: number): Promise<Post> {
+        if (!this.voteService.upvote(postId, userId)) {
+            return Post.findByPk(postId).then(dbPost => {
+                if (dbPost) {
+                    return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+                } else {
+                    return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
+                }
+            });
+        } else {
+            return Promise.reject({message: 'The user already voted on the post' + postId});
+        }
     }
 
-    public downvote(postId: number): Promise<Post> {
-        return Post.findByPk(postId).then(dbPost => {
-            if (dbPost) {
-                dbPost.downvote += 1;
-                return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
-            } else {
-                return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
-            }
-        });
+    public downvote(postId: number, userId: number): Promise<Post> {
+        if (!this.voteService.downvote(postId, userId)) {
+            return Post.findByPk(postId).then(dbPost => {
+                if (dbPost) {
+                    return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+                } else {
+                    return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
+                }
+            });
+        } else {
+            return Promise.reject({message: 'The user already voted on the post' + postId});
+        }
     }
 
     public async modifyPost(modifiedPost: Post, userId): Promise<Post> {
@@ -62,9 +70,6 @@ export class PostService {
                 dbPost.text = modifiedPost.text;
                 dbPost.category = modifiedPost.category;
                 dbPost.image = modifiedPost.image;
-                // allow modification of upvotes and downvotes initially
-                dbPost.upvote = modifiedPost.upvote;
-                dbPost.downvote = modifiedPost.downvote;
                 return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
             } else {
                 return Promise.reject({message: 'no post with ID ' + modifiedPost.postId + ' exists'});
@@ -92,11 +97,8 @@ export class PostService {
         });
     }
 
-    // This could also return void, maybe this would make more sense?
     public async createPost(post: Post, userId): Promise<Post> {
         const postToCreate = post;
-        postToCreate.upvote = 0;
-        postToCreate.downvote = 0;
         const user = await User.findByPk(userId);
         if (!user) {
             return Promise.reject({message: 'user does not exist'});
@@ -108,5 +110,9 @@ export class PostService {
         // @ts-ignore
         createdPost.setUser(user);
         return createdPost.save().then(updatedPost => Promise.resolve(updatedPost));
+    }
+
+    constructor() {
+        this.voteService = new VoteService();
     }
 }

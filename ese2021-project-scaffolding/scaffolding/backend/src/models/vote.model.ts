@@ -29,7 +29,9 @@ export class Vote extends Model<VoteAttributes> implements VoteAttributes {
     }
 
     public static createAssociations() {
+        Post.hasMany(Vote);
         Vote.belongsTo(Post);
+        User.hasMany(Vote);
         Vote.belongsTo(User);
     }
 }

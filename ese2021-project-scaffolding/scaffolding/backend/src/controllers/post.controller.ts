@@ -27,13 +27,15 @@ postController.post('/delete', verifyToken,
 
 postController.post('/upvote',
     (req: Request, res: Response) => {
-        postService.upvote(req.body.postId).then(modifiedPost => res.send(modifiedPost)).catch(err => res.status(500).send(err));
+        postService.upvote(req.body.postId, req.body.tokenPayload.userId)
+            .then(modifiedPost => res.send(modifiedPost)).catch(err => res.status(500).send(err));
     }
 );
 
 postController.post('/downvote',
     (req: Request, res: Response) => {
-        postService.downvote(req.body.postId).then(modifiedPost => res.send(modifiedPost)).catch(err => res.status(500).send(err));
+        postService.downvote(req.body.postId, req.body.tokenPayload.userId)
+            .then(modifiedPost => res.send(modifiedPost)).catch(err => res.status(500).send(err));
     }
 );
 
