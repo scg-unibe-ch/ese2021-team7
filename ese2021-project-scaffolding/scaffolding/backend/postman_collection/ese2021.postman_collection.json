@@ -6,6 +6,715 @@
 	},
 	"item": [
 		{
+			"name": "login",
+			"item": [
+				{
+					"name": "login as Alice",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@test.ch\",\r\n    \"password\": \"notSecure12\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user login by userName",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\": \"Alice\",\r\n    \"password\": \"123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login as not-Alice",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@test.ch\",\r\n    \"password\": \"notSecure12\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login as admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"Nora\",\r\n    \"password\":\"notSecure12\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "register",
+			"item": [
+				{
+					"name": "user registration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.variables.get(\"variable_key\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "posts",
+			"item": [
+				{
+					"name": "create post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.variables.get(\"variable_key\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "modify post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.variables.get(\"variable_key\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.variables.get(\"variable_key\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upvote post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.variables.get(\"variable_key\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IkFsaWNlIiwidXNlcklkIjoxLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTYzNDUwNDg2MywiZXhwIjoxNjM0NTEyMDYzfQ.y8MRkZ5MXF_CTLzVGAJcRwt2YFJIotQvPuwUVJYbxx8",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"postId\":\"19\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/post/upvote",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"post",
+								"upvote"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "downvote post",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.variables.get(\"variable_key\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all posts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.variables.get(\"variable_key\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/post/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"post",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get post by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.variables.get(\"variable_key\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/post/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"post",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "checkUserNameOrEmailInUse",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.variables.get(\"variable_key\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.variables.get(\"variable_key\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/post/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"post",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IkFsaWNlIiwidXNlcklkIjoxLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTYzMzM3MDIyNSwiZXhwIjoxNjMzMzc3NDI1fQ.hAXo0os4jRXUVq4C1XJwbCz2Sh-rC7lI5RgPxXcxCag",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/user/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user login nora",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userName\":\"Nora\",\r\n    \"password\":\"notSecure12\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				},
+				{
+					"name": "getByProductCategory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				},
+				{
+					"name": "getById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				},
+				{
+					"name": "modify",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/product/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/product/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "static resources",
 			"request": {
 				"method": "GET",
@@ -49,567 +758,6 @@
 					"port": "3000",
 					"path": [
 						"secured"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "user login by userName",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\": \"Alice\",\r\n    \"password\": \"123\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "login as Alice",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"test@test.ch\",\r\n    \"password\": \"notSecure12\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "login as not-Alice",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"test@test.ch\",\r\n    \"password\": \"notSecure12\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "login as admin",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"Nora\",\r\n    \"password\":\"notSecure12\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "user registration",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.variables.get(\"variable_key\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user/register",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "create post",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.variables.get(\"variable_key\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user/register",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "checkUserNameOrEmailInUse",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.variables.get(\"variable_key\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user/register",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "modify post",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.variables.get(\"variable_key\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user/register",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "delete post",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.variables.get(\"variable_key\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user/register",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "upvote post",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.variables.get(\"variable_key\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IkFsaWNlIiwidXNlcklkIjoxLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTYzNDUwNDg2MywiZXhwIjoxNjM0NTEyMDYzfQ.y8MRkZ5MXF_CTLzVGAJcRwt2YFJIotQvPuwUVJYbxx8",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"postId\":\"19\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/post/upvote",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"post",
-						"upvote"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "downvote post",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.variables.get(\"variable_key\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user/register",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get all posts",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.variables.get(\"variable_key\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/post/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"post",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get user by ID",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.variables.get(\"variable_key\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/post/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"post",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get post by ID",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.variables.get(\"variable_key\");"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/post/all",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"post",
-						"all"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "user list",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IkFsaWNlIiwidXNlcklkIjoxLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTYzMzM3MDIyNSwiZXhwIjoxNjMzMzc3NDI1fQ.hAXo0os4jRXUVq4C1XJwbCz2Sh-rC7lI5RgPxXcxCag",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/user/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						""
 					]
 				}
 			},
@@ -744,35 +892,6 @@
 					"port": "3000",
 					"path": [
 						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "user login nora",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"Nora\",\r\n    \"password\":\"notSecure12\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/user/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"user",
-						"login"
 					]
 				}
 			},

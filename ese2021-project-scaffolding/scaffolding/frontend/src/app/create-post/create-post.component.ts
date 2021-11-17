@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
-import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { UserService } from '../services/user.service';
 import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
@@ -24,14 +22,17 @@ export class CreatePostComponent {
     validator: (form: FormGroup) => {return this.checkPost(form);}
   });
 
-
   file: File | undefined;
 
   filename = '';
 
   isSubmitted: boolean;
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService, private router: Router) {
+  constructor(
+    public httpClient: HttpClient,
+    private fb: FormBuilder,
+    private router: Router)
+  {
     this.isSubmitted= false;
   }
 
