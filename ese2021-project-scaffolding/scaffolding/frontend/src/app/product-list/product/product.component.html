@@ -18,7 +18,7 @@
   </mat-card-content>
 
 
-  <mat-card-actions class="group7-product-actions" align="end">
+  <mat-card-actions *ngIf="!onlyShowProduct" class="group7-product-actions" align="end">
 
     <!-- Should only be usable for logged in users -->
     <button mat-button [disabled]="!showBuyNowButton" class="group7-product-actions-button"><mat-icon (click)="buyProduct()" class="group7-product-actions">shopping_cart</mat-icon></button>

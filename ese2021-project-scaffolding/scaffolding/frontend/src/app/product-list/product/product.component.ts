@@ -28,6 +28,9 @@ export class ProductComponent implements OnInit {
   @Input()
   productToDisplay: Product = new Product(0,0,'','','',0,'',false);
 
+  @Input()
+  onlyShowProduct: boolean = true;
+
   @Output()
   update = new EventEmitter<Product>();
 

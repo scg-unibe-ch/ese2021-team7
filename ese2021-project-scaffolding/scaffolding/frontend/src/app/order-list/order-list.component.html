@@ -1,1 +1,15 @@
-<p>order-list works!</p>
+<div class="card-wrapper-center">
+  <div class="feed-wrapper">
+    <button mat-flat-button (click)="buttonClicked()" class="group7-forms-button">
+      Reload Feed
+    </button>
+    <div *ngFor="let orderToDisplay of orderList" class="group7-grid-tile feed-item">
+      <app-order
+        [orderToDisplay]="orderToDisplay"
+        [currentUser]="currentUser">
+      </app-order>
+    </div>
+
+  </div>
+</div>
+

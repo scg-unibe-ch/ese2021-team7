@@ -1,22 +1,32 @@
 <mat-card class ="post">
   <mat-card-header class="group7-post-header">
-    <mat-card-subtitle>Order Component works: {{currentOrder.orderId}}</mat-card-subtitle><br/>
+    <mat-card-subtitle>Order Component works: {{orderToDisplay.orderId}}</mat-card-subtitle><br/>
     <div fxFlex></div>
   </mat-card-header>
 
   <mat-card-content class="group7-post-content">
 
-    <h3>User is Admin: {{currentUser.isAdmin}}</h3>
+    <h3>Order Address: {{this.orderAddress}}</h3>
+
+    <app-product
+      [productToDisplay]="currentProduct"
+      [loggedIn]="true"
+      [currentUser]="currentUser"
+      [onlyShowProduct] = "true"
+      (delete)="deleteProduct($event)"
+      (update)="updateProduct($event)"
+      (buy)="buyProduct($event)">
+    </app-product>
 
     <!-- Should only be usable for logged in users -->
     <div *ngIf="!currentUser.isAdmin">
-      <button mat-button fxLayoutAlign="right top" [disabled]="!showChangeStateButton"
+      <button mat-button fxLayoutAlign="right top"
               color="warn" class="group7-post-actions-button" (click)="cancelOrder()" class="group7-post-actions">Cancel</button>
     </div>
 
     <div *ngIf="currentUser.isAdmin">
       <!-- Should only be usable for loggend in admins -->
-      <button mat-button fxLayoutAlign="right top" [disabled]="!showChangeStateButton"
+      <button mat-button fxLayoutAlign="right top"
               color="warn" class="group7-post-actions-button" (click)="shipOrder()" class="group7-post-actions">Ship</button>
     </div>
 

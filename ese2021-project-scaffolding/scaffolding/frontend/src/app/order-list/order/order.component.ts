@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {UserService} from "../../services/user.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -13,11 +13,13 @@ import {Product} from "../../models/product.model";
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css']
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnChanges{
 
-  currentOrder: Order = new Order(0,0,0,0,'','','','','','','',OrderState.Pending);
+  @Input()
+  orderToDisplay: Order = new Order(0,0,0,0,'','','','','','','',OrderState.Pending);
 
-  currentUser: User | undefined;
+  @Input()
+  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
 
   currentProduct: Product | undefined;
 
@@ -25,44 +27,31 @@ export class OrderComponent implements OnInit {
 
   orderAddress: String = '';
 
-  showChangeStateButton: boolean = true;
-
-
   constructor(
     public httpClient: HttpClient,
     public userService: UserService,
     private route: ActivatedRoute,
     private router: Router) {
-
   }
 
   ngOnInit(): void {
-    this.getCurrentUser();
-    this.getCurrentOrderById();
+    this.getOrderProduct(this.orderToDisplay.productId);
   }
 
-  /* TODO
-  - Show all propertys of order
-  - Check Backend calls getOrderById and update
-   */
-
-  getCurrentUser(){
-    this.userService.user$.subscribe( (res: User) => {
-      this.currentUser = res;
-      // show component if user logged in (admin or user)
-      // show admin view for admins, userView if user and customer are the same
-      this.evaluateViewComponent();
-    })
-    //current Value
-    this.currentUser = this.userService.getUser();
+  ngOnChanges(): void {
     this.evaluateViewComponent();
+    this.getOrderProduct(this.orderToDisplay.productId);
+    this.orderAddress = this.orderToDisplay.street + " "
+      + this.orderToDisplay.houseNumber + " " + this.orderToDisplay.zipCode
+      + " " + this.orderToDisplay.city;
   }
 
   evaluateViewComponent(): void {
-    if (typeof this.currentUser != 'undefined' && typeof this.currentOrder != 'undefined') {
+    if (typeof this.currentUser != 'undefined' && typeof this.orderToDisplay != 'undefined') {
       // check if customerId is same as userId
       if(!this.currentUser.isAdmin){
-        if(this.currentUser?.userId != this.currentOrder?.costumerId){
+        // additional check if order belongs to user
+        if(this.currentUser?.userId != this.orderToDisplay.costumerId){
           console.log('redirected due to incompatible customer and user Id')
           // TODO navigate to product list
           // this.router.navigate(['/shop']);
@@ -71,45 +60,9 @@ export class OrderComponent implements OnInit {
     }
   }
 
-  getCurrentOrderById(): void{
-    this.route.queryParams.subscribe(params => {
-      this.orderId = params['orderId'];
-    });
-    if(this.orderId != 0 && typeof this.orderId != 'undefined') {
-      this.httpClient.get(environment.endpointURL + "order/byId", {
-        params: {
-          orderId: this.orderId
-        }
-      }).subscribe((res: any) => {
-        console.log(res);
-        this.currentOrder = new Order(
-          res.orderId,
-          res.orderListId, // to indicate that it belongs to a certain oder list
-          res.costumerId, // userId of the user which places the order
-          res.productId, // to indicate which product is sold
-          res.firstName,
-          res.lastName,
-          res.street,
-          res.houseNumber,
-          res.zipCode,
-          res.city,
-          res.paymentMethod,
-          res.state
-        )
-        this.orderAddress = res.street + " " + res.houseNumber + " " + res.zipCode + " " + res.city;
-        console.log(this.currentOrder);
-        this.evaluateViewComponent();
-        this.getOrderProduct(res.productId);
-        //TODO check how OrderState is sent from backend String?
-        if (res.state==OrderState.Pending) this.showChangeStateButton = true;
-        else this.showChangeStateButton = false;
-      }, (error: any) => {
-        console.log(error);
-      });
-    }
-  }
-
   getOrderProduct(productId: number): void {
+    this.currentProduct = new Product(1,0,"Books","These are all books","https://cdn.shopify.com/s/files/1/0064/5342/8271/products/RHGT5-game-thrones-blood-red-front-1200.jpg?v=1556677054",100,"Books",false);
+    /*
     this.httpClient.get(environment.endpointURL + "product/byId", {
       params: {
         productId: productId
@@ -128,6 +81,8 @@ export class OrderComponent implements OnInit {
     }, (error: any) => {
       console.log(error);
     });
+
+     */
   }
 
   cancelOrder() {
@@ -171,5 +126,17 @@ export class OrderComponent implements OnInit {
     })
      */
 
+  }
+
+  deleteProduct($event: Product) {
+    console.log("delete product should not be allowed here.")
+  }
+
+  updateProduct($event: Product) {
+    console.log("update product should not be allowed here.")
+  }
+
+  buyProduct($event: Product) {
+    console.log("buy product should not be allowed here.")
   }
 }
