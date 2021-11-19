@@ -6,8 +6,6 @@ import {ProductList} from "../models/product-list.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
-import {Feed} from "../models/feed.model";
-import {Post} from "../models/post.model";
 
 @Component({
   selector: 'app-product-list',
@@ -20,6 +18,8 @@ export class ProductListComponent implements OnInit {
 
   loggedIn: boolean | undefined;
   currentUser: User | undefined;
+
+  showAddProductButton: boolean = false;
 
   constructor(
     public httpClient: HttpClient,
@@ -39,14 +39,32 @@ export class ProductListComponent implements OnInit {
     })
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
+
+    this.evaluateAddProductPermission();
+  }
+
+  ngOnChange():void {
+    this.evaluateAddProductPermission();
+  }
+
+  ngDoCheck(): void {
+    //current Value
+    console.log("ngDoCheck is working.")
+    this.loggedIn = this.userService.getLoggedIn();
+    this.currentUser = this.userService.getUser();
+  }
+
+  evaluateAddProductPermission(): void {
+    // set true if user is admin
+    if (this.loggedIn){
+      if (this.currentUser?.isAdmin) this.showAddProductButton = true;
+      else this.showAddProductButton = false;
+    }
+    else this.showAddProductButton = false;
   }
 
   // READ all created products
   readProducts(): void {
-    this.currentShop.products.push(new Product(1,0,"Books","These are all books","https://cdn.shopify.com/s/files/1/0064/5342/8271/products/RHGT5-game-thrones-blood-red-front-1200.jpg?v=1556677054",100,"Books",false));
-    this.currentShop.products.push(new Product(2,0,"Poster","This is a poster","https://tse3.mm.bing.net/th?id=OIP.ATDrvdlwYQboxpBGEeh3ZQHaLS&pid=Api",15,"Posters",false));
-
-    /*
     this.httpClient.get(environment.endpointURL + "product/all").subscribe((res: any) => {
       console.log(res);
       this.currentShop = new ProductList(0,'', []);
@@ -60,29 +78,43 @@ export class ProductListComponent implements OnInit {
             console.log(error);
           });
       });
-     */
   }
 
-  // TODO: sortShop
+  refreshShop() {
+    this.readProducts();
+  }
 
-  // TODO: addProduct
+  // TODO: sortShop by Category
+
+  // TODO: fix route according to create product component
   addProduct(): void{
-    console.log("Add button works.")
+    if (this.currentUser?.isAdmin){
+      //this.route.navigate(['/createproduct'],{queryParams: {create: 'true', productId: (product.productId)}}).then(r => {})
+      this.route.navigate(['/createproduct']).then(r => {})
+    }
   }
 
-  // TODO: deleteProduct
   deleteProduct(product: Product): void{
     console.log("Delete button works.")
+    this.httpClient.post(environment.endpointURL + "product/delete", {
+      productId: product.productId
+    }).subscribe(() => {
+      this.currentShop.products.splice(this.currentShop.products.indexOf(product), 1);
+    });
   }
 
-  // TODO: updateProduct
+  // TODO: fix route according to create product component
   updateProduct(product: Product): void{
     console.log("Update button works.")
+    //this.route.navigate(['/createproduct'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
+    this.route.navigate(['/createproduct']).then(r => {})
   }
 
-  // TODO: buyProduct
+  // TODO: fix route according to create product component
   buyProduct(product: Product): void{
     console.log("Buy button works.")
+    //this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId), userId: this.currentUser?.userId}}).then(r => {})
+    this.route.navigate(['/purchase']).then(r => {})
   }
 
 

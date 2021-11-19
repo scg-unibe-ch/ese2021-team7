@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
     this.userService.user$.subscribe(res => {
       this.enableCreatePost = true;
       this.user = res;
-      this.enableCreatePost = this.checkPermissionConditions(res.isAdmin);
+      this.enableCreatePost = this.checkPermissionConditions(res?.isAdmin);
     }, error => {
       this.enableCreatePost = false;
       this.checkPermissionConditions(false)

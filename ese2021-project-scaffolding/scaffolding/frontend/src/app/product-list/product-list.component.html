@@ -1,8 +1,10 @@
 <div class="card-wrapper-center">
   <div class="shop-wrapper">
-    <!--  TODO: Button should be disabled if non-admins -->
-    <button mat-flat-button (click)="addProduct()" class="group7-forms-button">
+    <button mat-flat-button [disabled]="!showAddProductButton" (click)="addProduct()" class="group7-forms-button">
       Add new product
+    </button>
+    <button mat-flat-button (click) ="refreshShop()" class="group7-forms-button">
+      Reload shop
     </button>
     <div  *ngFor="let productToDisplay of currentShop.products" class="group7-grid-tile shop-item">
       <app-product
