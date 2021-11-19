@@ -202,3 +202,145 @@ Returns the upvoted/downvoted post. Returns HTTP status code 500 if no post with
     "UserUserId": 1
 }
 ```
+# /product
+## POST /product/create
+### Request
+```
+{
+    "title": string(optional),
+    "description": string(optional),
+    "image": string(optional),
+    "price": number(optional),
+    "productCategory": int(optional),
+}
+```
+### Response
+The created product is returned. Returns HTTP status code 200 on success, and status code 500 on failure.
+```
+{
+    "productId": 6,
+    "title": "input",
+    "productCategory": 3,
+    "updatedAt": "2021-11-15T20:16:34.394Z",
+    "createdAt": "2021-11-15T20:16:34.394Z"
+}
+```
+## GET /product/all
+Returns all products, ordered by ID (i.e. creation time).
+### Request
+```
+```
+### Response
+```
+[
+    {
+        "productId": 2,
+        "title": "Chair",
+        "image": null,
+        "description": null,
+        "price": null,
+        "productCategory": 55,
+        "createdAt": "2021-11-15T20:14:50.472Z",
+        "updatedAt": "2021-11-15T20:19:05.151Z"
+    },
+    {
+        "productId": 3,
+        "title": "navigating",
+        "image": null,
+        "description": null,
+        "price": null,
+        "productCategory": null,
+        "createdAt": "2021-11-15T20:14:51.056Z",
+        "updatedAt": "2021-11-15T20:14:51.056Z"
+    },
+    ...
+]
+```
+## GET /product/byCategory
+Returns all product with the specified productId.
+### Request
+HTTP query param: productCategory: int
+```
+GET /product/byId?productCategory=5
+```
+### Response
+```
+[
+    {
+        "productId": 2,
+        "title": "Chair",
+        "image": null,
+        "description": null,
+        "price": null,
+        "productCategory": 5,
+        "createdAt": "2021-11-15T20:14:50.472Z",
+        "updatedAt": "2021-11-15T20:19:05.151Z"
+    },
+    {
+        "productId": 3,
+        "title": "navigating",
+        "image": null,
+        "description": null,
+        "price": null,
+        "productCategory": 5,
+        "createdAt": "2021-11-15T20:14:51.056Z",
+        "updatedAt": "2021-11-15T20:14:51.056Z"
+    },
+    ...
+]
+```
+## GET /product/byId
+Returns a productId by ID. Returns HTTP status code 500 if no product with the specified productId exists.
+### Request
+HTTP query param: productId: int
+```
+GET /product/byId?productId=2
+```
+### Response
+```
+{
+    "productId": 2,
+    "title": "navigating",
+    "image": null,
+    "description": null,
+    "price": null,
+    "productCategory": 5,
+    "createdAt": "2021-11-15T20:14:51.056Z",
+    "updatedAt": "2021-11-15T20:14:51.056Z"
+}
+```
+
+## POST /product/modify
+### Request
+```
+{
+    "productId": int,
+    "title": string(optional),
+    "description": string(optional),
+    "image": string(optional),
+    "price": number(optional),
+    "productCategory": int(optional),
+}
+```
+### Response
+The modified product is returned. Returns HTTP status code 200 on success, and status code 500 on failure (e.g. productId does not exist).
+```
+{
+    "productId": 2,
+    "title": "Chair",
+    "productCategory": 55,
+    "createdAt": "2021-11-15T20:14:50.472Z",
+    "updatedAt": "2021-11-15T20:19:05.151Z"
+}
+```
+## POST /product/delete
+### Request
+```
+{
+    "productId": int
+}
+```
+### Response
+No meaningful response body. Returns HTTP status code 200 on success, and status code 500 on failure (e.g. productId does not exist).
+```
+```
