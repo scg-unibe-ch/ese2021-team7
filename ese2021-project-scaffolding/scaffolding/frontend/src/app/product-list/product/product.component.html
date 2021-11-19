@@ -11,9 +11,18 @@
   <mat-card-content class="group7-product-content">
     <div class="product-category">Category: {{productToDisplay.category}}</div><br/>
     <mat-card-title>{{productToDisplay.title}} </mat-card-title>
-    <p class="product-description">
-      {{productToDisplay.description}}
-    </p><br/>
+
+    <div *ngIf="!this.showProductDetails">
+      <button mat-button class="group7-product-actions-button" (click)="showDetails()">Show details</button>
+    </div>
+
+    <div *ngIf="this.showProductDetails">
+      <p class="product-description">
+        {{productToDisplay.description}}
+      </p><br/>
+      <button mat-button class="group7-product-actions-button" (click)="hideDetails()">Hide details</button>
+    </div>
+
     <span class="product-price"> Price: {{productToDisplay.price}} CHF</span>
   </mat-card-content>
 
@@ -27,9 +36,4 @@
     <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" class="group7-product-actions-button"><mat-icon (click)="updateProduct()" class="group7-product-actions">edit</mat-icon></button>
     <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" color="warn" class="group7-product-actions-button"><mat-icon (click)="deleteProduct()" class="group7-product-actions">delete</mat-icon></button>
   </mat-card-actions>
-
-  <!-- TODO: Details should only be displayed if the user clicks on it
-  Idea: "show description" button and then only the post with the description is showed
-   -->
-
 </mat-card>
