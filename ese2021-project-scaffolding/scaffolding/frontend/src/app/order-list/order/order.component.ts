@@ -27,6 +27,8 @@ export class OrderComponent implements OnInit, OnChanges{
 
   orderAddress: String = '';
 
+  showStateChangeButton: boolean = true;
+
   constructor(
     public httpClient: HttpClient,
     public userService: UserService,
@@ -36,20 +38,17 @@ export class OrderComponent implements OnInit, OnChanges{
 
   ngOnInit(): void {
     this.getOrderProduct(this.orderToDisplay.productId);
+    this.orderAddress = this.orderToDisplay.street + " "
+      + this.orderToDisplay.houseNumber + " " + this.orderToDisplay.zipCode
+      + " " + this.orderToDisplay.city;
+    if (this.orderAddress == '   ') {
+      this.orderAddress = 'no address';
+    }
   }
 
   ngOnChanges(): void {
     this.evaluateViewComponent();
     this.getOrderProduct(this.orderToDisplay.productId);
-    if (this.orderToDisplay.street != '' &&
-      this.orderToDisplay.houseNumber != '' &&
-      this.orderToDisplay.zipCode != '' &&
-      this.orderToDisplay.city != '') {
-      this.orderAddress = this.orderToDisplay.street + " "
-        + this.orderToDisplay.houseNumber + " " + this.orderToDisplay.zipCode
-        + " " + this.orderToDisplay.city;
-    }
-    else this.orderAddress = 'no address';
   }
 
   evaluateViewComponent(): void {
@@ -63,20 +62,22 @@ export class OrderComponent implements OnInit, OnChanges{
           // this.router.navigate(['/shop']);
         }
       }
+      if (this.orderToDisplay.state == OrderState.Pending) this.showStateChangeButton = true;
+      else this.showStateChangeButton = false;
     }
   }
 
   getOrderProduct(productId: number): void {
-    this.currentProduct = new Product(1,0,"Books","These are all books","https://cdn.shopify.com/s/files/1/0064/5342/8271/products/RHGT5-game-thrones-blood-red-front-1200.jpg?v=1556677054",100,"Books",false);
-    /*
     this.httpClient.get(environment.endpointURL + "product/byId", {
       params: {
-        productId: productId
+        // TODO use right productId
+        // productId: productId
+        productId: 1
       }
     }).subscribe((res: any) => {
       this.currentProduct = new Product(
         res.productId,
-        res.shopId,
+        0,
         res.title,
         res.description,
         res.image,
@@ -87,18 +88,20 @@ export class OrderComponent implements OnInit, OnChanges{
     }, (error: any) => {
       console.log(error);
     });
-
-     */
   }
 
   cancelOrder() {
     // only enable if orderState is pending
     this.updateOrder(OrderState.Cancelled);
+    this.orderToDisplay.state = OrderState.Cancelled;
+    this.showStateChangeButton = false;
   }
 
   shipOrder() {
     // only enable if orderState is pending
     this.updateOrder(OrderState.Shipped);
+    this.orderToDisplay.state = OrderState.Shipped;
+    this.showStateChangeButton = false;
   }
 
   updateOrder(state: OrderState): void{
