@@ -1,19 +1,14 @@
-<mat-card class ="product">
-  <mat-card-header class="group7-product-header">
-    <div fxFlex></div>
-  </mat-card-header>
-  <div class="card-wrapper-center">
-    <div class="order-list-wrapper">
+<div class="card-wrapper-center">
+  <div class="order-list-wrapper">
 
-      <div *ngFor="let orderToDisplay of orderList" class="group7-grid-tile feed-item">
-        <app-order
-          [orderToDisplay]="orderToDisplay"
-          [currentUser]="currentUser">
-        </app-order>
-      </div>
-
+    <div *ngFor="let orderToDisplay of orderList" class="group7-grid-tile order-item">
+      <app-order
+        [orderToDisplay]="orderToDisplay"
+        [currentUser]="currentUser">
+      </app-order>
     </div>
-  </div>
 
-</mat-card>
+  </div>
+</div>
+
 

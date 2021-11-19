@@ -52,14 +52,14 @@ export class OrderComponent implements OnInit, OnChanges{
   }
 
   evaluateViewComponent(): void {
+    // double check for correct user and order
     if (typeof this.currentUser != 'undefined' && typeof this.orderToDisplay != 'undefined') {
       // check if customerId is same as userId
       if(!this.currentUser.isAdmin){
         // additional check if order belongs to user
         if(this.currentUser?.userId != this.orderToDisplay.costumerId){
           console.log('redirected due to incompatible customer and user Id')
-          // TODO navigate to product list
-          // this.router.navigate(['/shop']);
+          this.router.navigate(['/shop']);
         }
       }
       if (this.orderToDisplay.state == OrderState.Pending) this.showStateChangeButton = true;

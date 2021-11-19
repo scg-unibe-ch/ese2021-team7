@@ -20,7 +20,7 @@ export class OrderListComponent implements OnInit {
 
   constructor(
     public httpClient: HttpClient,
-    private route: Router,
+    private router: Router,
     public userService: UserService
   ) {}
 
@@ -39,13 +39,16 @@ export class OrderListComponent implements OnInit {
     if (typeof this.currentUser != 'undefined') {
       this.orderList = [];
       if(this.currentUser.isAdmin){
-        this.getAllOrders;
+        this.getAllOrders();
       }
       else {
-        this.getOrdersByUserId()
+        this.getOrdersByUserId();
       }
     }
-    else console.log("No orders available for undefined user.")
+    else {
+      console.log("No orders available for undefined user.");
+      this.router.navigate(['/feed'], {queryParams : {loggedIn : 'false'}});
+    }
   }
 
   getOrdersByUserId(): void {
@@ -83,6 +86,9 @@ export class OrderListComponent implements OnInit {
   }
 
   getAllOrders(): void {
+    this.mockOrders();
+    // TODO connect backend
+    /*
     this.orderList = [];
     this.httpClient.get(environment.endpointURL + "order/all").subscribe((res: any) => {
       console.log(res);
@@ -105,10 +111,8 @@ export class OrderListComponent implements OnInit {
     }, (error: any) => {
       console.log(error);
     });
-  }
 
-  buttonClicked():void{
-    this.getListOfOrder();
+     */
   }
 
   mockOrders(): void {
