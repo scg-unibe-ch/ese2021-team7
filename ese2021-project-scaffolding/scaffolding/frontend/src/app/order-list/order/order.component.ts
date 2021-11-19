@@ -41,9 +41,15 @@ export class OrderComponent implements OnInit, OnChanges{
   ngOnChanges(): void {
     this.evaluateViewComponent();
     this.getOrderProduct(this.orderToDisplay.productId);
-    this.orderAddress = this.orderToDisplay.street + " "
-      + this.orderToDisplay.houseNumber + " " + this.orderToDisplay.zipCode
-      + " " + this.orderToDisplay.city;
+    if (this.orderToDisplay.street != '' &&
+      this.orderToDisplay.houseNumber != '' &&
+      this.orderToDisplay.zipCode != '' &&
+      this.orderToDisplay.city != '') {
+      this.orderAddress = this.orderToDisplay.street + " "
+        + this.orderToDisplay.houseNumber + " " + this.orderToDisplay.zipCode
+        + " " + this.orderToDisplay.city;
+    }
+    else this.orderAddress = 'no address';
   }
 
   evaluateViewComponent(): void {

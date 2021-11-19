@@ -1,12 +1,12 @@
-<mat-card class ="post">
+<mat-card class ="order">
   <mat-card-header class="group7-post-header">
-    <mat-card-subtitle>Order Component works: {{orderToDisplay.orderId}}</mat-card-subtitle><br/>
+    <mat-card-subtitle>Order Id: {{orderToDisplay.orderId}}</mat-card-subtitle><br/>
     <div fxFlex></div>
   </mat-card-header>
 
   <mat-card-content class="group7-post-content">
 
-    <h3>Order Address: {{this.orderAddress}}</h3>
+    <span class="order-address">Delivery Address: {{orderAddress}}</span><br/>
 
     <app-product
       [productToDisplay]="currentProduct"
