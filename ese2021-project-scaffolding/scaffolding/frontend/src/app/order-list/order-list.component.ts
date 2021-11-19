@@ -31,7 +31,6 @@ export class OrderListComponent implements OnInit {
     })
     //current Value
     this.currentUser = this.userService.getUser();
-    console.log('User Id is: ' + this.currentUser?.userId);
     this.getListOfOrder();
   }
 
