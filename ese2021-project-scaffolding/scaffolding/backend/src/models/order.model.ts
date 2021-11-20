@@ -1,12 +1,14 @@
 import { Model, Sequelize, DataTypes } from 'sequelize';
 import { User } from './user.model';
 import { Product } from './product.model';
+import {OrderController} from '../controllers/order.controller';
 
 export interface OrderAttributes {
     orderId: number;
     deliveryAdress: string;
     paymentOption: number;
     orderStatus: number;
+    user: number;
 }
 
 export class Order extends Model<OrderAttributes> implements OrderAttributes {
@@ -14,6 +16,7 @@ export class Order extends Model<OrderAttributes> implements OrderAttributes {
     deliveryAdress!: string;
     paymentOption!: number;
     orderStatus!: number;
+    user!: number;
 
     public static initialize(sequelize: Sequelize) {
         Order.init({
@@ -29,6 +32,9 @@ export class Order extends Model<OrderAttributes> implements OrderAttributes {
                 type: DataTypes.INTEGER
             },
             orderStatus: {
+                type: DataTypes.INTEGER
+            },
+            user: {
                 type: DataTypes.INTEGER
             }
         },
