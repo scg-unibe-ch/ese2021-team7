@@ -50,8 +50,16 @@ export class OrderService {
     public async cancelOrder(orderId: number): Promise<Order> {
         return Order.findByPk(orderId).then(async dbOrder => {
             if (dbOrder) {
-                dbOrder.orderStatus = OrderStatus.CANCELLED;
-                return dbOrder.save().then(updatedOrder => Promise.resolve(updatedOrder));
+                if (dbOrder.orderStatus === OrderStatus.PENDNIG) {
+                    dbOrder.orderStatus = OrderStatus.CANCELLED;
+                    return dbOrder.save().then(updatedOrder => Promise.resolve(updatedOrder));
+                } else if (dbOrder.orderStatus === OrderStatus.CANCELLED) {
+                    return Promise.reject({message: 'order already cancelled'});
+                } else if (dbOrder.orderStatus === OrderStatus.SHIPPED) {
+                    return Promise.reject({message: 'a shipped order cannot be cancelled'});
+                } else {
+                    return Promise.reject({message: 'illegal order status: ' + dbOrder.orderStatus});
+                }
             } else {
                 return Promise.reject({message: 'no order with ID ' + orderId + ' exists'});
             }
@@ -61,8 +69,16 @@ export class OrderService {
     public async shipOrder(orderId: number): Promise<Order> {
         return Order.findByPk(orderId).then(async dbOrder => {
             if (dbOrder) {
-                dbOrder.orderStatus = OrderStatus.SHIPPED;
-                return dbOrder.save().then(updatedOrder => Promise.resolve(updatedOrder));
+                if (dbOrder.orderStatus === OrderStatus.PENDNIG) {
+                    dbOrder.orderStatus = OrderStatus.SHIPPED;
+                    return dbOrder.save().then(updatedOrder => Promise.resolve(updatedOrder));
+                } else if (dbOrder.orderStatus === OrderStatus.CANCELLED) {
+                    return Promise.reject({message: 'order is cancelled'});
+                } else if (dbOrder.orderStatus === OrderStatus.SHIPPED) {
+                    return Promise.reject({message: 'order already shipped'});
+                } else {
+                    return Promise.reject({message: 'illegal order status: ' + dbOrder.orderStatus});
+                }
             } else {
                 return Promise.reject({message: 'no order with ID ' + orderId + ' exists'});
             }
