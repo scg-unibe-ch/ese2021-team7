@@ -119,7 +119,6 @@ export class ProductFormComponent implements OnInit {
     }, ).subscribe((res: any) => {
         console.log(res);
         this.isSubmitted = false;
-        //this.router.navigate(['/shop']);
       },
       (error: any) =>{
         console.log(error);
@@ -140,7 +139,6 @@ export class ProductFormComponent implements OnInit {
     }, ).subscribe((res: any) => {
         console.log(res);
         this.isSubmitted = false;
-        //this.router.navigate(['/shop']);
       },
       (error: any) =>{
         console.log(error);

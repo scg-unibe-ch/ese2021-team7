@@ -49,7 +49,6 @@ export class ProductListComponent implements OnInit {
 
   ngDoCheck(): void {
     //current Value
-    console.log("ngDoCheck is working.")
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
   }
@@ -66,7 +65,6 @@ export class ProductListComponent implements OnInit {
   // READ all created products
   readProducts(): void {
     this.httpClient.get(environment.endpointURL + "product/all").subscribe((res: any) => {
-      console.log(res);
       this.currentShop = new ProductList(0,'', []);
       res.forEach((product: any) => {
       if (!product.sold){
@@ -86,16 +84,13 @@ export class ProductListComponent implements OnInit {
 
   // TODO: sortShop by Category
 
-  // TODO: fix route according to create product component
   addProduct(): void{
     if (this.currentUser?.isAdmin){
       this.route.navigate(['/product-form'],{queryParams: {create: 'true'}}).then(r => {})
-      //this.route.navigate(['/product-form']).then(r => {})
     }
   }
 
   deleteProduct(product: Product): void{
-    console.log("Delete button works.")
     this.httpClient.post(environment.endpointURL + "product/delete", {
       productId: product.productId
     }).subscribe(() => {
@@ -103,29 +98,11 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  // TODO: fix route according to create product component
   updateProduct(product: Product): void{
-    console.log("Update button works.")
     this.route.navigate(['/product-form'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
-    //this.route.navigate(['/product-form']).then(r => {})
   }
 
   buyProduct(product: Product): void{
-    console.log("Buy button works.")
     this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
