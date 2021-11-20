@@ -350,6 +350,7 @@ PENDNIG: 0,
 SHIPPED: 1,
 CANCELLED: 2.
 ## POST /oder/create
+Order is in state pending after creation.
 ### Request
 ```
 {
@@ -480,6 +481,7 @@ The modified order is returned. Returns HTTP status code 200 on success, and sta
 }
 ```
 ## POST /oder/cancel
+Only pending orders can be cancelled.
 ### Request
 ```
 {
@@ -501,6 +503,7 @@ The cancelled order is returned. Returns HTTP status code 200 on success, and st
 }
 ```
 ## POST /oder/ship
+Only pending orders can be shipped.
 ### Request
 ```
 {
