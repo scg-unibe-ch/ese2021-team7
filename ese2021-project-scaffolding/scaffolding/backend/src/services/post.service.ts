@@ -25,31 +25,26 @@ export class PostService {
         return Post.findAll({order: [['createdAt', 'DESC']]});
     }
 
-    public upvote(postId: number, userId: number): Promise<Post> {
-        if (!this.voteService.upvote(postId, userId)) {
-            return Post.findByPk(postId).then(dbPost => {
-                if (dbPost) {
-                    return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
-                } else {
-                    return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
-                }
-            });
+    public async upvote(postId: number, userId: number): Promise<Post> {
+        const hasVoted = await this.voteService.alreadyVoted(postId, userId);
+        if (hasVoted) {
+            return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});
         } else {
-            return Promise.reject({message: 'The user already voted on the post' + postId});
+            this.voteService.upvote(postId, userId);
+            const post = await Post.findByPk(postId);
+            return Promise.resolve(post);
         }
     }
 
-    public downvote(postId: number, userId: number): Promise<Post> {
-        if (!this.voteService.downvote(postId, userId)) {
-            return Post.findByPk(postId).then(dbPost => {
-                if (dbPost) {
-                    return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
-                } else {
-                    return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
-                }
-            });
+    public async downvote(postId: number, userId: number): Promise<Post> {
+        const hasVoted = await this.voteService.alreadyVoted(postId, userId);
+
+        if (hasVoted) {
+            return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});
         } else {
-            return Promise.reject({message: 'The user already voted on the post' + postId});
+            this.voteService.downvote(postId, userId);
+            const post = await Post.findByPk(postId);
+            return Promise.resolve(post);
         }
     }
 
