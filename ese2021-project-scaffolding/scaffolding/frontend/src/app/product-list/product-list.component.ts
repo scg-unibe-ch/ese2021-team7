@@ -89,8 +89,8 @@ export class ProductListComponent implements OnInit {
   // TODO: fix route according to create product component
   addProduct(): void{
     if (this.currentUser?.isAdmin){
-      //this.route.navigate(['/createproduct'],{queryParams: {create: 'true', productId: (product.productId)}}).then(r => {})
-      this.route.navigate(['/createproduct']).then(r => {})
+      this.route.navigate(['/product-form'],{queryParams: {create: 'true'}}).then(r => {})
+      //this.route.navigate(['/product-form']).then(r => {})
     }
   }
 
@@ -106,8 +106,8 @@ export class ProductListComponent implements OnInit {
   // TODO: fix route according to create product component
   updateProduct(product: Product): void{
     console.log("Update button works.")
-    //this.route.navigate(['/createproduct'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
-    this.route.navigate(['/createproduct']).then(r => {})
+    this.route.navigate(['/product-form'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
+    //this.route.navigate(['/product-form']).then(r => {})
   }
 
   buyProduct(product: Product): void{

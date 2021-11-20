@@ -36,22 +36,21 @@ export class ProductFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      if(params['create'] == 'true'){
+      if (params['create'] == 'true') {
         this.isCreate = params['create'];
-      }
-      else if(params['update'] == 'true'){
+      } else if (params['update'] == 'true') {
         this.isUpdate = params['update']
         this.productId = params['productId'];
       }
+      console.log(this.productId);
     });
-    if(this.isCreate){
+    if (this.isCreate) {
       this.initializeFormCreate();
-    }
-    else if(this.isUpdate){
+    } else if (this.isUpdate) {
       this.initializeFormCreate();
       //currently not set because no backend yet
-      /*
-      if(this.productId != null) {
+
+      if (this.productId != null) {
         this.httpClient.get(environment.endpointURL + "product/byId", {
           params: {
             productId: this.productId
@@ -67,8 +66,8 @@ export class ProductFormComponent implements OnInit {
       }
     }
 
-       */
-    }
+
+
   }
 
 
@@ -80,7 +79,7 @@ export class ProductFormComponent implements OnInit {
       productCategory : new FormControl('', Validators.required),
       productPrice : new FormControl('', Validators.required)
     }, {
-      validator: (form: FormGroup) => {return this.checkPost(form);}
+      validator: (form: FormGroup) => {return this.checkProduct(form);}
     });
   }
 
@@ -94,7 +93,7 @@ export class ProductFormComponent implements OnInit {
       "productPrice": new FormControl(this.product.price, Validators.required)
     }, {
       validator: (form: FormGroup) => {
-        return this.checkPost(form);
+        return this.checkProduct(form);
       }
     });
   }
@@ -113,9 +112,6 @@ export class ProductFormComponent implements OnInit {
   }
 
   sendCreateForm(): void {
-    // does not work yet
-    console.log("Create Product");
-    /*
     this.httpClient.post(environment.endpointURL + "product/create", {
       title: this.productForm.value.productTitle,
       description: this.productForm.value.productDescription,
@@ -125,21 +121,18 @@ export class ProductFormComponent implements OnInit {
     }, ).subscribe((res: any) => {
         console.log(res);
         this.isSubmitted = false;
-        this.router.navigate(['/feed'], {queryParams : {loggedIn : 'true'}});
+        this.router.navigate(['/shop']);
       },
       (error: any) =>{
         console.log(error);
         this.isSubmitted = false;
       });
-
-
-     */
   }
 
   sendUpdateForm(): void {
     // does not work yet
     console.log("Create Product");
-    /*
+
     this.httpClient.post(environment.endpointURL + "product/modify", {
       postId: this.product.productId,
       shopId: this.product.shopId,
@@ -158,12 +151,10 @@ export class ProductFormComponent implements OnInit {
         console.log(error);
         this.isSubmitted = false;
       });
-
-     */
   }
 
 
-  checkPost(form: FormGroup): {[s: string]: boolean}{
+  checkProduct(form: FormGroup): {[s: string]: boolean}{
     if(form.value.productImage == "" && form.value.productDescription == ""){
       console.log("error");
       return {'missingProductContent': true};
