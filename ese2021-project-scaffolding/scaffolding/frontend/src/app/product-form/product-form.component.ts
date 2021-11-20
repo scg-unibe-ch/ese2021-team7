@@ -65,9 +65,6 @@ export class ProductFormComponent implements OnInit {
         });
       }
     }
-
-
-
   }
 
 
@@ -86,11 +83,11 @@ export class ProductFormComponent implements OnInit {
   //does not work currently
   initializeFormUpdate(): void {
     this.productForm = this.fb.group({
-      "productTitle": new FormControl(this.product.title, Validators.required),
-      "productImage": new FormControl(this.product.image),
-      "productDescription": new FormControl(this.product.description),
-      "productCategory": new FormControl(this.product.category, Validators.required),
-      "productPrice": new FormControl(this.product.price, Validators.required)
+      "productTitle": new FormControl(this.product?.title, Validators.required),
+      "productImage": new FormControl(this.product?.image),
+      "productDescription": new FormControl(this.product?.description),
+      "productCategory": new FormControl(this.product?.category, Validators.required),
+      "productPrice": new FormControl(this.product?.price, Validators.required)
     }, {
       validator: (form: FormGroup) => {
         return this.checkProduct(form);
@@ -101,7 +98,7 @@ export class ProductFormComponent implements OnInit {
   onSubmit(formDirective: FormGroupDirective): void{
     console.log(this.productForm)
     this.isSubmitted = true;
-    if(this.productForm.valid){
+    if(this.productForm?.valid){
       if(this.isCreate){
         this.sendCreateForm();
       }
@@ -109,19 +106,20 @@ export class ProductFormComponent implements OnInit {
         this.sendUpdateForm();
       }
     }
+    this.router.navigate(['/shop']);
   }
 
   sendCreateForm(): void {
     this.httpClient.post(environment.endpointURL + "product/create", {
-      title: this.productForm.value.productTitle,
-      description: this.productForm.value.productDescription,
-      image: this.productForm.value.productImage,
-      category: this.productForm.value.productCategory,
-      price : this.productForm.value.productPrice
+      title: this.productForm?.value.productTitle,
+      description: this.productForm?.value.productDescription,
+      image: this.productForm?.value.productImage,
+      category: this.productForm?.value.productCategory,
+      price : this.productForm?.value.productPrice
     }, ).subscribe((res: any) => {
         console.log(res);
         this.isSubmitted = false;
-        this.router.navigate(['/shop']);
+        //this.router.navigate(['/shop']);
       },
       (error: any) =>{
         console.log(error);
@@ -130,22 +128,19 @@ export class ProductFormComponent implements OnInit {
   }
 
   sendUpdateForm(): void {
-    // does not work yet
-    console.log("Create Product");
-
     this.httpClient.post(environment.endpointURL + "product/modify", {
-      postId: this.product.productId,
-      shopId: this.product.shopId,
-      title: this.productForm.value.productTitle,
-      text: this.productForm.value.productDescription,
-      image: this.productForm.value.productImage,
-      category: this.productForm.value.productCategory,
-      price: this.productForm.value.productPrice,
-      sold: this.productForm.value.productSold
+      productId: this.product?.productId,
+      shopId: this.product?.shopId,
+      title: this.productForm?.value.productTitle,
+      text: this.productForm?.value.productDescription,
+      image: this.productForm?.value.productImage,
+      category: this.productForm?.value.productCategory,
+      price: this.productForm?.value.productPrice,
+      sold: this.productForm?.value.productSold
     }, ).subscribe((res: any) => {
         console.log(res);
         this.isSubmitted = false;
-        this.router.navigate(['/feed'], {queryParams : {loggedIn : 'true'}});
+        //this.router.navigate(['/shop']);
       },
       (error: any) =>{
         console.log(error);
