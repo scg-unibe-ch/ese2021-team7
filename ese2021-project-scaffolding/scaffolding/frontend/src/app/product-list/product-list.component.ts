@@ -110,11 +110,9 @@ export class ProductListComponent implements OnInit {
     this.route.navigate(['/createproduct']).then(r => {})
   }
 
-  // TODO: fix route according to create product component
   buyProduct(product: Product): void{
     console.log("Buy button works.")
-    //this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId), userId: this.currentUser?.userId}}).then(r => {})
-    this.route.navigate(['/purchase']).then(r => {})
+    this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
 
 
