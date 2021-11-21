@@ -26,8 +26,9 @@ export class VoteService {
             return false;
         } else {
             const createdVote = await Vote.create({upvote: true} as VoteAttributes);
-            // FIXME: Solve problem that associations cannot be set
+            // @ts-ignore
             createdVote.setPost(post);
+            // @ts-ignore
             createdVote.setUser(user);
 
             return true;
