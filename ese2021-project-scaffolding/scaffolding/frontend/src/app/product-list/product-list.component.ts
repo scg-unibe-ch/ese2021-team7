@@ -6,6 +6,9 @@ import {ProductList} from "../models/product-list.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
+import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: 'app-product-list',
@@ -24,7 +27,8 @@ export class ProductListComponent implements OnInit {
   constructor(
     public httpClient: HttpClient,
     private route: Router,
-    public userService: UserService
+    public userService: UserService,
+    private dialog: MatDialog
   ) {
     this.readProducts();
   }
@@ -96,11 +100,13 @@ export class ProductListComponent implements OnInit {
 
   deleteProduct(product: Product): void{
     console.log("Delete button works.")
-    this.httpClient.post(environment.endpointURL + "product/delete", {
+    this.handleDelete(product);
+    /*this.httpClient.post(environment.endpointURL + "product/delete", {
       productId: product.productId
     }).subscribe(() => {
       this.currentShop.products.splice(this.currentShop.products.indexOf(product), 1);
     });
+     */
   }
 
   // TODO: fix route according to create product component
@@ -115,6 +121,25 @@ export class ProductListComponent implements OnInit {
     console.log("Buy button works.")
     //this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId), userId: this.currentUser?.userId}}).then(r => {})
     this.route.navigate(['/purchase']).then(r => {})
+  }
+
+  handleDelete(product: Product): void{
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    })
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.httpClient.post(environment.endpointURL + "product/delete", {
+          productId: product.productId
+        }).subscribe(() => {
+          this.currentShop.products.splice(this.currentShop.products.indexOf(product), 1);
+        });
+      }
+    });
   }
 
 
