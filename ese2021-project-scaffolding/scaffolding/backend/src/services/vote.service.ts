@@ -36,25 +36,15 @@ export class VoteService {
     }
 
     public async downvote(postId: number, userId: number): Promise<boolean> {
-        let hasVoted: boolean;
-        // tslint:disable-next-line:no-shadowed-variable
-        this.alreadyVoted(postId, userId).then(function (vote) {
-            hasVoted = vote;
-        });
+        const hasVoted = await this.alreadyVoted(postId, userId);
 
         const post = await Post.findByPk(postId.toString());
         const user = await User.findByPk(userId.toString());
 
-        // @ts-ignore
-        const vote: Vote = {upvote: false};
-        let createdVote: Vote;
-
         if (hasVoted) {
             return false;
         } else {
-            Vote.create(vote).then(function (newVote) {
-                createdVote = newVote;
-            });
+            const createdVote = await Vote.create({upvote: false} as VoteAttributes);
             // @ts-ignore
             createdVote.setPost(post);
             // @ts-ignore
