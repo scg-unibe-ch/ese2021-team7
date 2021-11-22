@@ -535,3 +535,92 @@ The shipped order is returned. Returns HTTP status code 200 on success, and stat
 No meaningful response body. Returns HTTP status code 200 on success, and status code 500 on failure (e.g. order do not exist).
 ```
 ```
+# /category
+Category types:
+POST_CATEGORY: 0,
+PRODUCT_CATEGORY: 1
+## POST /category/create
+### Request
+```
+{
+    "name": string",
+    "type": int(0 (POST_CATEGORY) or 1 (PRODUCT_CATEGORY))
+}
+```
+### Response
+The created category is returned. Returns HTTP status code 200 on success, and status code 500 on failure.
+```
+{
+    "categoryId": 3,
+    "name": "Books",
+    "type": 1
+}
+```
+## GET /category/all
+Returns all categories, ordered by ID (i.e. creation time).
+### Request
+```
+```
+### Response
+```
+[
+    {
+        "categoryId": 1,
+        "name": "Books",
+        "type": 0,
+        "createdAt": "2021-11-22T21:39:52.075Z",
+        "updatedAt": "2021-11-22T21:39:52.075Z"
+    },
+    {
+        "categoryId": 2,
+        "name": "Movies",
+        "type": 1,
+        "createdAt": "2021-11-22T21:40:11.114Z",
+        "updatedAt": "2021-11-22T21:41:37.672Z"
+    },
+    {
+        "categoryId": 3,
+        "name": "Magazines",
+        "type": 1,
+        "createdAt": "2021-11-22T21:56:44.575Z",
+        "updatedAt": "2021-11-22T21:56:44.575Z"
+    }
+]
+```
+## GET /category/byId
+Returns the specified category.
+### Request
+HTTP query param: userId: int
+```
+GET /category/byId?categoryId=2
+```
+### Response
+```
+{
+    "categoryId": 2,
+    "name": "Movies",
+    "type": 1,
+    "createdAt": "2021-11-22T21:40:11.114Z",
+    "updatedAt": "2021-11-22T21:41:37.672Z"
+}
+```
+## POST /category/modify
+### Request
+```
+{
+    "categoryId": int,
+    "name": string",
+    "type": int(0 (POST_CATEGORY) or 1 (PRODUCT_CATEGORY))
+}
+```
+### Response
+The modified category is returned. Returns HTTP status code 200 on success, and status code 500 on failure.
+```
+{
+    "categoryId": 2,
+    "name": "Movies",
+    "type": 1,
+    "createdAt": "2021-11-22T21:40:11.114Z",
+    "updatedAt": "2021-11-22T21:41:37.672Z"
+}
+```

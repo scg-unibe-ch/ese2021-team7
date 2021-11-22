@@ -1,9 +1,12 @@
-import { Post, PostAttributes } from '../models/post.model';
+import { Post } from '../models/post.model';
 import {User} from '../models/user.model';
 import {Sequelize} from 'sequelize';
+import {CategoryService, CategoryType} from './category.service';
 
 export class PostService {
-    // Should this method be static?
+
+    private categoryService = new CategoryService();
+
     public async getPostById(postId: string): Promise<Post> {
         return Post.findByPk(postId).then(dbPost => {
             if (dbPost) {
@@ -49,6 +52,10 @@ export class PostService {
         const user = await User.findByPk(userId);
         if (!user) {
             return Promise.reject({message: 'user does not exist'});
+        }
+        const categoryIsValid = await this.categoryService.categoryIsValid(modifiedPost.category, CategoryType.POST_CATEGORY);
+        if (!categoryIsValid) {
+            return Promise.reject({message: 'Invalid category: category does not exist, or is of wrong type'});
         }
         return Post.findByPk(modifiedPost.postId).then(async dbPost => {
             if (dbPost) {
@@ -103,6 +110,10 @@ export class PostService {
         }
         if (user.admin) {
             return Promise.reject({message: 'admins are not permitted to create posts'});
+        }
+        const categoryIsValid = await this.categoryService.categoryIsValid(post.category, CategoryType.POST_CATEGORY);
+        if (!categoryIsValid) {
+            return Promise.reject({message: 'Invalid category: category does not exist, or is of wrong type'});
         }
         const createdPost = await Post.create(postToCreate);
         // @ts-ignore
