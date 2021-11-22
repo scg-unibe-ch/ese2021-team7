@@ -6,6 +6,9 @@ import {ProductList} from "../models/product-list.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
+import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: 'app-product-list',
@@ -24,7 +27,8 @@ export class ProductListComponent implements OnInit {
   constructor(
     public httpClient: HttpClient,
     private route: Router,
-    public userService: UserService
+    public userService: UserService,
+    private dialog: MatDialog
   ) {
     this.readProducts();
   }
@@ -49,7 +53,6 @@ export class ProductListComponent implements OnInit {
 
   ngDoCheck(): void {
     //current Value
-    console.log("ngDoCheck is working.")
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
   }
@@ -66,7 +69,6 @@ export class ProductListComponent implements OnInit {
   // READ all created products
   readProducts(): void {
     this.httpClient.get(environment.endpointURL + "product/all").subscribe((res: any) => {
-      console.log(res);
       this.currentShop = new ProductList(0,'', []);
       res.forEach((product: any) => {
       if (!product.sold){
@@ -86,48 +88,47 @@ export class ProductListComponent implements OnInit {
 
   // TODO: sortShop by Category
 
-  // TODO: fix route according to create product component
   addProduct(): void{
     if (this.currentUser?.isAdmin){
-      //this.route.navigate(['/createproduct'],{queryParams: {create: 'true', productId: (product.productId)}}).then(r => {})
-      this.route.navigate(['/createproduct']).then(r => {})
+      this.route.navigate(['/product-form'],{queryParams: {create: 'true'}}).then(r => {})
     }
   }
 
   deleteProduct(product: Product): void{
     console.log("Delete button works.")
-    this.httpClient.post(environment.endpointURL + "product/delete", {
+    this.handleDelete(product);
+    /*this.httpClient.post(environment.endpointURL + "product/delete", {
       productId: product.productId
     }).subscribe(() => {
       this.currentShop.products.splice(this.currentShop.products.indexOf(product), 1);
     });
+     */
   }
 
-  // TODO: fix route according to create product component
   updateProduct(product: Product): void{
-    console.log("Update button works.")
-    //this.route.navigate(['/createproduct'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
-    this.route.navigate(['/createproduct']).then(r => {})
+    this.route.navigate(['/product-form'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
   }
 
-  // TODO: fix route according to create product component
   buyProduct(product: Product): void{
-    console.log("Buy button works.")
-    //this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId), userId: this.currentUser?.userId}}).then(r => {})
-    this.route.navigate(['/purchase']).then(r => {})
+    this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
 
+  handleDelete(product: Product): void{
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    })
 
-
-
-
-
-
-
-
-
-
-
-
-
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.httpClient.post(environment.endpointURL + "product/delete", {
+          productId: product.productId
+        }).subscribe(() => {
+          this.currentShop.products.splice(this.currentShop.products.indexOf(product), 1);
+        });
+      }
+    });
+  }
 }
