@@ -96,7 +96,6 @@ import { ConfirmationDialogComponent } from './ui/confirmation-dialog/confirmati
       { path: 'purchase', component: PurchaseComponent},
       { path: 'shop', component: ProductListComponent},
       { path: 'order', component: OrderComponent},
-      { path: 'createproduct', component: CreateProductComponent}
     ]),
   ],
   providers: [
