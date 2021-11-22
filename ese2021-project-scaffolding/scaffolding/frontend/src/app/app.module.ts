@@ -37,6 +37,8 @@ import { PurchaseComponent } from './purchase/purchase.component';
 import { CreateProductComponent } from './create-product/create-product.component';
 import { PostFormComponent } from './post-form/post-form.component';
 import { ProductFormComponent } from './product-form/product-form.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from './ui/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,7 @@ import { ProductFormComponent } from './product-form/product-form.component';
     CreateProductComponent,
     PostFormComponent,
     ProductFormComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,6 +81,7 @@ import { ProductFormComponent } from './product-form/product-form.component';
     MatCheckboxModule,
     ReactiveFormsModule,
     MatIconModule,
+    MatDialogModule,
     RouterModule.forRoot([
       { path: 'feed', component: FeedComponent },
       { path: 'createpost', component: CreatePostComponent },
