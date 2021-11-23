@@ -183,10 +183,65 @@ button, input {
 .post-category {
 
 }
-
 .post-score{
   font-size: 1em !important;
   color: #262626 !important;
   vertical-align: bottom !important;
   height: 100% !important
 }
+
+.purchase-form{
+  max-width: 800px !important;
+}
+
+.product-display{
+  width: 100%;
+  display: block;
+  padding: 0px;
+}
+
+.product-display-image{
+  height: 100%;
+  width: 60px;
+  display: inline-block;
+  margin: 0px;
+  vertical-align: top;
+
+}
+
+.product-display-info{
+  height: 100%;
+  width: 550px;
+  display: inline-block;
+  margin: 0px;
+  vertical-align: top;
+  overflow:hidden;
+}
+
+.product-thumbnail{
+  height: 40px;
+  width: 40px;
+}
+
+.product-display-title{
+  padding: 0px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.product-display-price{
+  vertical-align: top;
+  height: 100%;
+  width:100px;
+  display: inline-block;
+  margin: 0px;
+  font-size: 0.8em;
+}
+
+.product-price{
+  font-weight: bold;
+  font-size: 1.5em !important;
+  overflow:hidden;
+}
+
+

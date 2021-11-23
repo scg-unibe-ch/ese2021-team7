@@ -1,4 +1,4 @@
-<div class="card-wrapper-center registration-form">
+<div class="card-wrapper-center registration-form purchase-form">
   <mat-card class="group7-card">
     <mat-card-header>
       <mat-card-title>
@@ -8,16 +8,27 @@
     <mat-card-content>
       <div class="form-wrapper">
         <form [formGroup]="purchaseForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
-          <div>
-            <p>{{productId}}</p>
-            <p>{{product.title}}</p>
-            <p>{{product.price}}</p>
+          <div class="product-display">
+            <div class="product-display-image">
+              <img class="product-thumbnail" src="{{product.image}}" />
+            </div>
+            <div class="product-display-info">
+              <span class="product-display-title">{{product.title}}</span><br>
+              <span class="product-display-description">{{product.description}}</span>
           </div>
+          <div class="product-display-price">
+            Total (incl. taxes)<br/>
+            <span class="product-price">{{product.price}} </span>
+            CHF
+          </div>
+          </div>
+          <br>
+          <br>
           <mat-form-field appearance="outline">
-            <mat-label >Category</mat-label>
+            <mat-label >Payment Method</mat-label>
             <mat-select [formControlName]="'paymentMethod'" id="paymentMethod"  required>
-              <mat-option value="Invoice">Invoice</mat-option>
-              <mat-option value="Credit Card">Credit Card</mat-option>
+              <mat-option value="1">Invoice</mat-option>
+              <mat-option value="2">Credit Card</mat-option>
             </mat-select>
           </mat-form-field>
 
