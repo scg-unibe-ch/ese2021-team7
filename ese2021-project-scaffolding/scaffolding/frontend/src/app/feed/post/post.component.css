@@ -1,4 +1,17 @@
 .post {
   max-width: 400px;
+  width: 330px;
+}
 
+.limitTextHeight{
+  height: 120px;
+  overflow: hidden;
+}
+
+.read-more-button{
+  border: 0px;
+  background-color: none;
+  padding: 0px;
+  margin: 0px;
+  color: blue;
 }
