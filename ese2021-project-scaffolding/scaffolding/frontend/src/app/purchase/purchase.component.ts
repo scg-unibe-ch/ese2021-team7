@@ -82,23 +82,24 @@ export class PurchaseComponent implements OnInit {
   }
 
   sendPurchaseForm(): void {
+    console.log("purchase");
     console.log(this.purchaseForm);
-    /*
     this.httpClient.post(environment.endpointURL + "order/create", {
-      title: this.postForm.value.postTitle,
-      text: this.postForm.value.postText,
-      image: this.postForm.value.postImage,
-      category: this.postForm.value.postCategory
+      deliveryAdress: this.purchaseForm?.value.firstName + " " + this.purchaseForm?.value.lastName + " " + this.purchaseForm?.value.street + " " + this.purchaseForm?.value.houseNumber + " " +
+        this.purchaseForm?.value.zipCode + " " + this.purchaseForm?.value.city,
+      paymentOption: this.purchaseForm?.value.paymentMethod,
+      user: this.user.userId,
+      productId: this.product.productId
     }, ).subscribe((res: any) => {
         console.log(res);
         this.isSubmitted = false;
-        this.router.navigate(['/feed'], {queryParams : {loggedIn : 'true'}});
+        this.router.navigate(['/shop']);
       },
       (error: any) =>{
         console.log(error);
         this.isSubmitted = false;
       });
-      */
+
 
   }
 
