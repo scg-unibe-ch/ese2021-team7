@@ -57,6 +57,7 @@ export class OrderComponent implements OnInit, OnChanges{
       // check if customerId is same as userId
       if(!this.currentUser.isAdmin){
         // additional check if order belongs to user
+        console.log('user hat id: ' + this.currentUser.userId + ' order wurde erstellt von user: ' + this.orderToDisplay.costumerId)
         if(this.currentUser?.userId != this.orderToDisplay.costumerId){
           console.log('redirected due to incompatible customer and user Id')
           this.router.navigate(['/shop']);
@@ -68,11 +69,10 @@ export class OrderComponent implements OnInit, OnChanges{
   }
 
   getOrderProduct(productId: number): void {
+    // TODO check if productId is sent from backend to order
     this.httpClient.get(environment.endpointURL + "product/byId", {
       params: {
-        // TODO use right productId
-        // productId: productId
-        productId: 1
+        productId: productId
       }
     }).subscribe((res: any) => {
       this.currentProduct = new Product(
@@ -91,50 +91,25 @@ export class OrderComponent implements OnInit, OnChanges{
   }
 
   cancelOrder() {
+    this.httpClient.get(environment.endpointURL + "order/cancel").subscribe((res: any) => {
+      console.log(res);
+    }, (error: any) => {
+      console.log(error);
+    });
     // only enable if orderState is pending
-    this.updateOrder(OrderState.Cancelled);
     this.orderToDisplay.state = OrderState.Cancelled;
     this.showStateChangeButton = false;
   }
 
   shipOrder() {
     // only enable if orderState is pending
-    this.updateOrder(OrderState.Shipped);
-    this.orderToDisplay.state = OrderState.Shipped;
-    this.showStateChangeButton = false;
-  }
-
-  updateOrder(state: OrderState): void{
-    console.log('Update Button works.')
-    // TODO update order with right call
-    /*
-    this.httpClient.post(environment.endpointURL + "order/byId", {
-      params: {
-        orderId: this.orderId,
-        orderState: state
-      }
-    }).subscribe((res: any) => {
+    this.httpClient.get(environment.endpointURL + "order/ship").subscribe((res: any) => {
       console.log(res);
-      this.currentOrder = new Order(
-        res.orderId,
-        res.orderListId, // to indicate that it belongs to a certain oder list
-        res.costumerId, // userId of the user which places the order
-        res.productId, // to indicate which product is sold
-        res.firstName,
-        res.lastName,
-        res.street,
-        res.houseNumber,
-        res.zipCode,
-        res.city,
-        res.paymentMethod,
-        res.state
-      );
-      this.showChangeStateButton = false;
     }, (error: any) => {
       console.log(error);
-    })
-     */
-
+    });
+    this.orderToDisplay.state = OrderState.Shipped;
+    this.showStateChangeButton = false;
   }
 
   deleteProduct($event: Product) {

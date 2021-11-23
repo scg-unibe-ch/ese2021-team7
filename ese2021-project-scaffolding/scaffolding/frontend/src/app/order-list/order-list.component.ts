@@ -51,47 +51,68 @@ export class OrderListComponent implements OnInit {
   }
 
   getOrdersByUserId(): void {
-    this.mockOrders();
-    //TODO connect backend
-    /*
     this.orderList = [];
-    this.httpClient.get(environment.endpointURL + "order/getById", {
-      params: {
-        userId: this.currentUser?.userId
-      }
-    }).subscribe((res: any) => {
-        res.forEach((order: any) => {
-          this.orderList.push(
-            new Order(
-              order.orderId,
-              order.orderListId, // to indicate that it belongs to a certain oder list
-              order.costumerId, // userId of the user which places the order
-              order.productId, // to indicate which product is sold
-              order.firstName,
-              order.lastName,
-              order.street,
-              order.houseNumber,
-              order.zipCode,
-              order.city,
-              order.paymentMethod,
-              order.state)
-        )})
-      },
-      (error: any) => {
-        console.log(error);
-      });
-
-     */
+    let id = this.currentUser?.userId;
+    if(typeof id != 'undefined'){
+      this.httpClient.get(environment.endpointURL + "order/byUser", {
+        params: {
+          userId: id
+        }
+      }).subscribe((res: any) => {
+          console.log(res);
+          res.forEach((order: any) => {
+            let array = order.deliveryAdress.split(' ');
+            while (array.length<4){
+              array.push("");
+            }
+            //TODO check if hard coding is correct
+            let orderState;
+            switch (order.orderStatus){
+              case 1: {
+                orderState = OrderState.Shipped;
+                break;
+              }
+              case 2: {
+                orderState = OrderState.Cancelled;
+                break;
+              }
+              default: {
+                orderState = OrderState.Pending;
+                break;
+              }
+            }
+            this.orderList.push(
+              new Order(
+                order.orderId,
+                order.orderListId, // to indicate that it belongs to a certain oder list
+                order.user, // userId of the user which places the order
+                order.productId, // to indicate which product is sold
+                order.firstName,
+                order.lastName,
+                array[0],
+                array[1],
+                array[2],
+                array[3],
+                order.paymentMethod,
+                orderState)
+            )})
+        },
+        (error: any) => {
+          console.log(error);
+        });
+    }
+    else console.log('Id was undefined')
   }
 
   getAllOrders(): void {
-    this.mockOrders();
-    // TODO connect backend
-    /*
     this.orderList = [];
     this.httpClient.get(environment.endpointURL + "order/all").subscribe((res: any) => {
       console.log(res);
       res.forEach((order: any) => {
+        let array = order.deliveryAdress.split(' ');
+        while (array.length<4){
+          array.push("");
+        }
           this.orderList.push(
             new Order(
               order.orderId,
@@ -100,47 +121,16 @@ export class OrderListComponent implements OnInit {
               order.productId, // to indicate which product is sold
               order.firstName,
               order.lastName,
-              order.street,
-              order.houseNumber,
-              order.zipCode,
-              order.city,
+              array[0],
+              array[1],
+              array[2],
+              array[3],
               order.paymentMethod,
-              order.state)
-          )})
+              order.state));
+      })
     }, (error: any) => {
       console.log(error);
     });
-
-     */
-  }
-
-  mockOrders(): void {
-    this.orderList.push(new Order(
-      1,
-      2, // to indicate that it belongs to a certain oder list
-      8, // userId of the user which places the order
-      2, // to indicate which product is sold
-      'MaxV',
-      'MaxN',
-      'MaxStreet',
-      '4',
-      '2',
-      'MaxCity',
-      'Cash',
-      OrderState.Pending));
-    this.orderList.push(new Order(
-      1,
-      2, // to indicate that it belongs to a certain oder list
-      8, // userId of the user which places the order
-      2, // to indicate which product is sold
-      'MaxV',
-      'MaxN',
-      'MaxStreet',
-      '4',
-      '2',
-      'MaxCity',
-      'Cash',
-      OrderState.Pending));
   }
 
 }
