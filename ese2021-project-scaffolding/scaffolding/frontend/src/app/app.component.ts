@@ -51,7 +51,7 @@ export class AppComponent implements OnInit {
     });
     // listen for changes in current user
     this.userService.user$.subscribe(res => {
-      this.enableCreatePost = true;
+      //this.enableCreatePost = true;
       this.user = res;
       this.enableCreatePost = this.checkPermissionConditions(res?.isAdmin);
     }, error => {
