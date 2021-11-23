@@ -16,6 +16,13 @@ export class PostComponent implements OnInit{
   showDeleteAndUpdateButton : boolean = false;
   showVotingButtons : boolean = false;
 
+  isReadMore = false;
+
+  //used for handling "Read More" functionality
+  fullText:  string | undefined;
+  shortText:  string | undefined;
+  postTooLong = false;
+
   @Input()
   loggedIn : boolean = false;
 
@@ -40,6 +47,7 @@ export class PostComponent implements OnInit{
   ngOnInit() {
     this.evaluateUpdateDeletePermission();
     this.evaluateVotingButtonsPermission();
+    this.createFullTextAndShortText();
   }
 
   ngOnChanges(){
@@ -96,6 +104,29 @@ export class PostComponent implements OnInit{
     // Emits event to parent component that Post got downvoted
     if (this.showVotingButtons) {
       this.downvote.emit(this.postToDisplay);
+    }
+  }
+
+  /**
+   * Changes value of isReadMore.
+   *
+   * Exectued when user clicks on 'More'/'Less' button.
+   *
+   */
+  showText(): void{
+    this.isReadMore = !this.isReadMore;
+  }
+
+  /**
+   * Checks if post text is longer than 150 characters. If so, sets readMore to true and creates short Version.
+   *
+   */
+  createFullTextAndShortText(): void{
+    this.fullText = this.postToDisplay.text;
+    if(this.fullText.length > 150){
+      this.postTooLong = true;
+      this.isReadMore = true;
+      this.shortText = this.fullText.substring(0,150) + "... ";
     }
   }
 }
