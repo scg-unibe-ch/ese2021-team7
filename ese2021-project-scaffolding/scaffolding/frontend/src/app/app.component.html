@@ -1,5 +1,23 @@
 <mat-toolbar>
-    <button mat-icon-button class="menu-icon" aria-label="Menu"  [matMenuTriggerFor]="menu">
+    <button mat-icon-button class="menu-icon" aria-label="Menu"  (click)="drawer.toggle()" >
+      <mat-icon>menu</mat-icon>
+    </button>
+  <span><a routerLink="/home" class="logo"><img src="assets/got-logo.png"  width="150px"/></a></span>
+  <span class="spacer"></span>
+  <button mat-icon-button class="profile-icon" aria-label="Profile" [matMenuTriggerFor]="profile">
+    <mat-icon *ngIf="!loggedIn">help</mat-icon>
+    <span *ngIf="loggedIn" color="white">{{user?.username || "ERROR"}}</span>
+  </button>
+  <mat-menu #profile="matMenu">
+    <button mat-menu-item  routerLink="/profile" routerLinkActive="active" *ngIf="loggedIn">Profile</button>
+    <button mat-menu-item  (click)="logoutUser()" *ngIf="loggedIn"><mat-icon>logout</mat-icon>Logout</button>
+    <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
+    <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
+  </mat-menu>
+</mat-toolbar>
+  <!--
+  <mat-toolbar>
+    <button mat-icon-button class="menu-icon" aria-label="Menu"   [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
@@ -26,6 +44,12 @@
       <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
     </mat-menu>
   </mat-toolbar>
+  -->
+
+<mat-sidenav-container >
+  <mat-sidenav #drawer mode="side"></mat-sidenav>
+
+</mat-sidenav-container>
 
 
 
