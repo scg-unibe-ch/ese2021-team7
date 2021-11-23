@@ -30,7 +30,7 @@
 -->
           <mat-form-field appearance="outline" id="mat-text">
             <mat-label>Description</mat-label>
-            <textarea matInput type="text" label="productDescription" id="productDescription" placeholder="Product Description" [formControlName]="'productDescription'" id="text"></textarea>
+            <textarea matInput type="text" label="productDescription" id="productDescription" placeholder="Product Description" [formControlName]="'productDescription'" id="text" required></textarea>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label >Category</mat-label>
@@ -40,9 +40,10 @@
               <mat-option value="The Wall">The Wall</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" >
             <mat-label>Price</mat-label>
-            <input matInput type="text" label="productPrice" id="productPrice" [formControlName]="'productPrice'" >
+            <input matInput type="text" label="productPrice" id="productPrice" [formControlName]="'productPrice'" required>
+            <mat-error *ngIf="productForm.controls['productPrice'].touched && productForm.controls['productPrice'].value != '' && productForm.controls['productPrice']?.errors?.notValidPrice" class="is-invalid">Please enter a valid price</mat-error>
           </mat-form-field>
           <br/>
           <div class="form-action-button">
