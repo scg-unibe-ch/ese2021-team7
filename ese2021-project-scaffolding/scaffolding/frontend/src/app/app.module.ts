@@ -39,6 +39,8 @@ import { PostFormComponent } from './post-form/post-form.component';
 import { ProductFormComponent } from './product-form/product-form.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from './ui/confirmation-dialog/confirmation-dialog.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+
 
 @NgModule({
   declarations: [
@@ -81,6 +83,7 @@ import { ConfirmationDialogComponent } from './ui/confirmation-dialog/confirmati
     MatCheckboxModule,
     ReactiveFormsModule,
     MatIconModule,
+    MatSidenavModule,
     MatDialogModule,
     RouterModule.forRoot([
       { path: 'feed', component: FeedComponent },
