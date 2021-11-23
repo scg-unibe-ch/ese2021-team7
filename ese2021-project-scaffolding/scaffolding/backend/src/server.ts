@@ -20,6 +20,7 @@ import {ItemImage} from './models/itemImage.model';
 import {PostController} from './controllers/post.controller';
 import {ProductController} from './controllers/product.controller';
 import {OrderController} from './controllers/order.controller';
+import * as fs from 'fs';
 
 
 export class Server {
@@ -47,10 +48,11 @@ export class Server {
         Vote.createAssociations();
 
 
-
         this.sequelize.sync().then(() => {                           // create connection to the database
-            this.server.listen(this.port, () => {                                   // start server on specified port
-                console.log(`server listening at http://localhost:${this.port}`);   // indicate that the server has started
+            this.makeTestData().then(() => {
+                this.server.listen(this.port, () => {                            // start server on specified port
+                    console.log(`server listening at http://localhost:${this.port}`);   // indicate that the server has started
+                });
             });
         });
     }
@@ -95,6 +97,30 @@ export class Server {
             storage: 'db.sqlite',
             logging: false // can be set to true for debugging
         });
+    }
+
+    private makeTestData(createsData: boolean = true): Promise<void> {
+        this.sequelize.query('DELETE FROM product');
+        this.sequelize.query('DELETE FROM vote');
+        this.sequelize.query('DELETE FROM "order"');
+        this.sequelize.query('DELETE FROM users');
+        this.sequelize.query('DELETE FROM post');
+
+        if (createsData) {
+            // Password for every user is: notSecure12+
+            const product = fs.readFileSync('sql_testdata/product.sql', 'utf8');
+            const vote = fs.readFileSync('sql_testdata/vote.sql', 'utf8');
+            const order = fs.readFileSync('sql_testdata/order.sql', 'utf8');
+            const users = fs.readFileSync('sql_testdata/users.sql', 'utf8');
+            const post = fs.readFileSync('sql_testdata/post.sql', 'utf8');
+
+            this.sequelize.query(users);
+            this.sequelize.query(post);
+            this.sequelize.query(vote);
+            this.sequelize.query(product);
+            this.sequelize.query(order);
+        }
+        return Promise.resolve();
     }
 }
 
