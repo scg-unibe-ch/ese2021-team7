@@ -21,11 +21,9 @@ import { RegistrationComponent } from './registration/registration.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { FeedComponent } from './feed/feed.component';
 import { PostComponent } from './feed/post/post.component';
-import { CreatePostComponent } from './create-post/create-post.component';
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {RouterModule} from "@angular/router";
 import {MatMenuModule} from '@angular/material/menu';
-import { UpdatePostComponent } from './update-post/update-post.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
 import {Feed} from "./models/feed.model";
@@ -34,7 +32,6 @@ import { OrderComponent } from './order-list/order/order.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductComponent } from './product-list/product/product.component';
 import { PurchaseComponent } from './purchase/purchase.component';
-import { CreateProductComponent } from './create-product/create-product.component';
 import { PostFormComponent } from './post-form/post-form.component';
 import { ProductFormComponent } from './product-form/product-form.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -51,16 +48,13 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     RegistrationComponent,
     FeedComponent,
     PostComponent,
-    CreatePostComponent,
     PageNotFoundComponent,
-    UpdatePostComponent,
     UserProfileComponent,
     OrderListComponent,
     OrderComponent,
     ProductListComponent,
     ProductComponent,
     PurchaseComponent,
-    CreateProductComponent,
     PostFormComponent,
     ProductFormComponent,
     ConfirmationDialogComponent,
@@ -87,8 +81,6 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     MatDialogModule,
     RouterModule.forRoot([
       { path: 'feed', component: FeedComponent },
-      { path: 'createpost', component: CreatePostComponent },
-      { path: 'updatepost', component: UpdatePostComponent },
       { path: 'profile', component: UserProfileComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'login', component: LoginComponent },
@@ -98,7 +90,8 @@ import {MatSidenavModule} from '@angular/material/sidenav';
       { path: 'product-form', component: ProductFormComponent},
       { path: 'purchase', component: PurchaseComponent},
       { path: 'shop', component: ProductListComponent},
-      { path: 'order', component: OrderComponent},
+      { path: 'order', component: OrderListComponent},
+      { path: 'createproduct', component: CreateProductComponent}
     ]),
   ],
   providers: [

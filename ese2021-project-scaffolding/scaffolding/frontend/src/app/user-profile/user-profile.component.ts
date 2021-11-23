@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {User} from "../models/user.model";
 import {UserService} from "../services/user.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-profile',
@@ -13,7 +14,8 @@ export class UserProfileComponent implements OnInit {
   currentUser: User | undefined;
   address : String | undefined;
 
-  constructor(public userService: UserService) { }
+  constructor(public userService: UserService,
+              public router: Router) { }
 
   ngOnInit(): void {
     // Listen for changes
@@ -31,5 +33,9 @@ export class UserProfileComponent implements OnInit {
     if(typeof this.currentUser != 'undefined'){
       this.address = this.currentUser.street + " " + this.currentUser.houseNumber + ", " + this.currentUser.zipCode + " " + this.currentUser.city;
     }
+  }
+
+  viewOrders() {
+    this.router.navigate(['/order'], {queryParams : {userId : this.currentUser?.userId}})
   }
 }
