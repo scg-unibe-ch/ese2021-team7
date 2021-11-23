@@ -29,6 +29,8 @@ export class OrderComponent implements OnInit, OnChanges{
 
   showStateChangeButton: boolean = true;
 
+  productDefined: boolean = false;
+
   constructor(
     public httpClient: HttpClient,
     public userService: UserService,
@@ -69,12 +71,14 @@ export class OrderComponent implements OnInit, OnChanges{
   }
 
   getOrderProduct(productId: number): void {
-    // TODO check if productId is sent from backend to order
+    // TODO check if productId is sent from backend to order, use right productId
     this.httpClient.get(environment.endpointURL + "product/byId", {
       params: {
-        productId: productId
+        productId: 1
+        //productId: productId
       }
     }).subscribe((res: any) => {
+      this.productDefined = true;
       this.currentProduct = new Product(
         res.productId,
         0,

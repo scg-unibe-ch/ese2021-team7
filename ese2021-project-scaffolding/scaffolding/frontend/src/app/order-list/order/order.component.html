@@ -24,15 +24,18 @@
 
     <p>Ordered Product:</p><br/>
 
-    <app-product
-      [productToDisplay]="currentProduct"
-      [loggedIn]="true"
-      [currentUser]="currentUser"
-      [onlyShowProduct] = "true"
-      (delete)="deleteProduct($event)"
-      (update)="updateProduct($event)"
-      (buy)="buyProduct($event)">
-    </app-product>
+    <div *ngIf="productDefined">
+      <app-product
+        [productToDisplay]="currentProduct"
+        [loggedIn]="true"
+        [currentUser]="currentUser"
+        [onlyShowProduct] = "true"
+        (delete)="deleteProduct($event)"
+        (update)="updateProduct($event)"
+        (buy)="buyProduct($event)">
+      </app-product>
+    </div>
+
   </mat-card-content>
 </mat-card>
 
