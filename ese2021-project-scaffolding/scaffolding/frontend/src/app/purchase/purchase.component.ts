@@ -19,7 +19,7 @@ export class PurchaseComponent implements OnInit {
 
   productId: number | undefined;
 
-  product: Product | undefined;
+  product = new Product(0, 0, "", "", "", 0, "", false);
 
   user: User | undefined;
 
@@ -44,24 +44,18 @@ export class PurchaseComponent implements OnInit {
           this.productId = params['productId'];
       });
       if(this.productId != null){
-        // temporary until backend in place
-        this.product = new Product(this.productId, 1, "testprodukt", "hier kommt die produktbeschreibung", "link zum bild", 205, "Category", false);
-        this.initializePurchaseForm();
-        /*
-          this.httpClient.get(environment.endpointURL + "product/byId", {
-            params: {
-              productId: this.productId
-            }
-          }).subscribe((res: any) => {
-            console.log(res);
-            this.product = new Product(res.postId, 0, res.title, res.text, res.image, res.upvote, res.downvote, 0, res.category, res.createdAt, res.UserUserId,'');
-            console.log(this.product);
-            this.initializeForm();
-          }, (error: any) => {
-            console.log(error);
-          });
-
-         */
+        this.httpClient.get(environment.endpointURL + "product/byId", {
+          params: {
+            productId: this.productId
+          }
+        }).subscribe((res: any) => {
+          console.log(res);
+          this.product = new Product(res.productId, 1, res.title,  res.description, res.image,  res.price, res.productCategory, false);
+          console.log(this.product);
+          this.initializePurchaseForm();
+        }, (error: any) => {
+          console.log(error);
+        });
       }
     }
   }
