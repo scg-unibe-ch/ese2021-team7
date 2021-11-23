@@ -40,7 +40,6 @@ import { ProductFormComponent } from './product-form/product-form.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from './ui/confirmation-dialog/confirmation-dialog.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
-import { SidenavComponent } from './sidenav/sidenav.component';
 
 
 @NgModule({
@@ -65,7 +64,6 @@ import { SidenavComponent } from './sidenav/sidenav.component';
     PostFormComponent,
     ProductFormComponent,
     ConfirmationDialogComponent,
-    SidenavComponent,
   ],
   imports: [
     BrowserModule,
