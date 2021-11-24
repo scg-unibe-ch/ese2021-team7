@@ -2,6 +2,7 @@ import { Post, PostAttributes } from '../models/post.model';
 import {User} from '../models/user.model';
 import {Sequelize} from 'sequelize';
 import { VoteService } from './vote.service';
+import { Vote } from '../models/vote.model';
 import { ErrorCodes } from '../errorCodes';
 
 export class PostService {
@@ -18,11 +19,21 @@ export class PostService {
     }
 
     public async getAll(sortBy: string): Promise<Post[]> {
-        if (sortBy === '1') {
-            // @ts-ignore
-            return Post.findAll({ order: [['upvote', Sequelize.literal('-'), 'downvote', 'DESC']]});
-        }
-        return Post.findAll({order: [['createdAt', 'DESC']]});
+        // TODO: Fix query
+        const unorderdPosts = await Post.findAll({
+            attributes: ['postId', 'title', 'image', 'text', 'category'],
+            include: [{model: Vote, attributes: [[sequelize.fn('sum', sequelize.col('upvote')), 'total_votes']]}],
+            group: ['postId', 'title', 'image', 'text', 'category']
+        });
+        const orderedPosts: Post[] = [];
+
+        // TODO: Write logic
+        // if (sortBy == '1') {
+        //     orderByUpvotes
+        // } else {
+        //      orderByCreateDate
+        // }
+        return orderedPosts;
     }
 
     public async upvote(postId: number, userId: number): Promise<Post> {

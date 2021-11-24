@@ -25,7 +25,7 @@ export class VoteService {
         if (hasVoted) {
             return false;
         } else {
-            const createdVote = await Vote.create({upvote: true} as VoteAttributes);
+            const createdVote = await Vote.create({upvote: 1} as VoteAttributes);
             // @ts-ignore
             createdVote.setPost(post);
             // @ts-ignore
@@ -44,7 +44,7 @@ export class VoteService {
         if (hasVoted) {
             return false;
         } else {
-            const createdVote = await Vote.create({upvote: false} as VoteAttributes);
+            const createdVote = await Vote.create({upvote: -1} as VoteAttributes);
             // @ts-ignore
             createdVote.setPost(post);
             // @ts-ignore

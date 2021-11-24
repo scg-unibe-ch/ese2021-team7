@@ -91,7 +91,7 @@ export class Server {
         return new Sequelize({
             dialect: 'sqlite',
             storage: 'db.sqlite',
-            logging: false // can be set to true for debugging
+            logging: true // can be set to true for debugging
         });
     }
 }

@@ -4,12 +4,12 @@ import { User } from './user.model';
 
 export interface VoteAttributes {
     voteId: number;
-    upvote: boolean;
+    upvote: number;
 }
 
 export class Vote extends Model<VoteAttributes> implements VoteAttributes {
     voteId!: number;
-    upvote!: boolean;
+    upvote!: number;
 
     public static initialize(sequelize: Sequelize) {
         Vote.init({
