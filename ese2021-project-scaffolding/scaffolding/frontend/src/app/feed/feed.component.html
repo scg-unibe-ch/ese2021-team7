@@ -1,8 +1,19 @@
 <div class="card-wrapper-center">
   <div class="feed-wrapper">
-    <button mat-flat-button (click)="buttonClicked()" class="group7-forms-button">
+    <button mat-flat-button (click)="reloadFeed()" class="group7-forms-button">
       Reload Feed
     </button>
+
+    <mat-form-field>
+      <mat-select [(value)]="sortBy" placeholder="sort list by:" (selectionChange)="sortFeed($event)" class="group7-select">
+        <mat-option>None</mat-option>
+        <mat-option value="0">creation date</mat-option>
+        <mat-option value="1">score</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+
     <div  *ngFor="let postToDisplay of currentFeed.posts" class="group7-grid-tile feed-item">
       <app-post
         [postToDisplay]="postToDisplay"

@@ -23,13 +23,17 @@ export class FeedComponent implements OnInit, DoCheck {
   loggedIn: boolean | undefined;
   currentUser: User | undefined;
 
+  sortBy: string = '0';
+
+  sortByValues : any[][] = [['creation date', 0],['score', 1]];
+
   constructor(
     public httpClient: HttpClient,
     private route: Router,
     public userService: UserService,
     private dialog: MatDialog
   ) {
-    this.readPosts();
+    this.sortList(this.sortBy);
   }
 
   ngOnInit(): void {
@@ -45,46 +49,34 @@ export class FeedComponent implements OnInit, DoCheck {
     this.currentUser = this.userService.getUser();
   }
 
+
   ngDoCheck(): void {
     //current Value
+    /*
     console.log("ngDoCheck is working.")
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
+
+     */
   }
 
-  // READ all created posts
-  readPosts(): void {
-    this.httpClient.get(environment.endpointURL + "post/all").subscribe((res: any) => {
-      console.log(res);
-      this.currentFeed = new Feed(0, '', []);
-      res.forEach((post: any) => {
-        post.score = post.upvote - post.downvote;
-        this.httpClient.get(environment.endpointURL + "user/getById", {
-          params: {
-            userId: post.UserUserId
-          }
-        }).subscribe((res: any) => {
-            post.CreationUserName = res.userName;
-            this.currentFeed.posts.push(
-              new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, post.CreationUserName))
-          },
-          (error: any) => {
-            console.log(error);
-          });
-      });
-    });
-  }
+
 
   // ORDER - Feed
   /*
+  0 = sorted by creation date
   1 = sorted by score
   default = sorted by creation date
    */
-  sortList(sortBy: Number): void {
-    this.httpClient.put(environment.endpointURL + "post/all", {
-      sortBy: sortBy
+  sortList(sortBy: string): void {
+    console.log('list sorted by: '+sortBy);
+    this.httpClient.get(environment.endpointURL + "post/all", {
+      params: {
+        sortBy: sortBy
+      }
     }).subscribe(
       (res: any) => {
+        console.log(res);
         this.currentFeed = new Feed(0, '', []);
         res.forEach((post: any) => {
           post.score = post.upvote - post.downvote;
@@ -107,25 +99,14 @@ export class FeedComponent implements OnInit, DoCheck {
   deletePost(post: Post): void {
     this.handleDelete(post);
   }
-    /*this.httpClient.post(environment.endpointURL + "post/delete", {
-      postId: post.postId
-    }).subscribe(() => {
-      this.currentFeed.posts.splice(this.currentFeed.posts.indexOf(post), 1);
-    });
-    }
-     */
-
-
-
-
 
   updatePost(post: Post): void {
     this.route.navigate(['/post-form'], {queryParams: {update: 'true', postId: (post.postId)}}).then(r => {
     });
   }
 
-  buttonClicked() {
-    this.readPosts();
+  reloadFeed() {
+    this.sortList(this.sortBy);
   }
 
   upvotePost(post: Post) {
@@ -161,7 +142,11 @@ export class FeedComponent implements OnInit, DoCheck {
       }).subscribe(() => {
         this.currentFeed.posts.splice(this.currentFeed.posts.indexOf(post), 1);
       });
-    }
-  });
-}
+    }});
+  }
+
+  sortFeed(event: any) {
+    this.sortList(this.sortBy);
+  }
+
 }
