@@ -29,7 +29,6 @@ export class PostService {
         }).then(dbPosts => {
             const postsWithScore: Post[] = [];
             for (const dbPost of dbPosts) {
-                dbPost.text = 'xxx' + dbPost.text;
                 let score = 0;
                 // @ts-ignore
                 for (const vote of dbPost.Votes) {
