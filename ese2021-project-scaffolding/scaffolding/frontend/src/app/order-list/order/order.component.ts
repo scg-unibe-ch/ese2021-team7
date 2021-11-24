@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {UserService} from "../../services/user.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -13,11 +13,13 @@ import {Product} from "../../models/product.model";
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.css']
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnChanges{
 
-  currentOrder: Order = new Order(0,0,0,0,'','','','','','','',OrderState.Pending);
+  @Input()
+  orderToDisplay: Order = new Order(0,0,0,0,'','','','','','','',OrderState.Pending);
 
-  currentUser: User | undefined;
+  @Input()
+  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
 
   currentProduct: Product | undefined;
 
@@ -25,99 +27,61 @@ export class OrderComponent implements OnInit {
 
   orderAddress: String = '';
 
-  showChangeStateButton: boolean = true;
+  showStateChangeButton: boolean = true;
 
+  productDefined: boolean = false;
 
   constructor(
     public httpClient: HttpClient,
     public userService: UserService,
     private route: ActivatedRoute,
     private router: Router) {
-
   }
 
   ngOnInit(): void {
-    this.getCurrentUser();
-    this.getCurrentOrderById();
-  }
-
-  /* TODO
-  - Show all propertys of order
-  - Check Backend calls getOrderById and update
-   */
-
-  getCurrentUser(){
-    this.userService.user$.subscribe( (res: User) => {
-      this.currentUser = res;
-      // show component if user logged in (admin or user)
-      // show admin view for admins, userView if user and customer are the same
-      this.evaluateViewComponent();
-    })
-    //current Value
-    this.currentUser = this.userService.getUser();
-    this.evaluateViewComponent();
-  }
-
-  evaluateViewComponent(): void {
-    if (typeof this.currentUser != 'undefined' && typeof this.currentOrder != 'undefined') {
-      // check if customerId is same as userId
-      if(!this.currentUser.isAdmin){
-        if(this.currentUser?.userId != this.currentOrder?.costumerId){
-          console.log('redirected due to incompatible customer and user Id')
-          // TODO navigate to product list
-          // this.router.navigate(['/shop']);
-        }
-      }
+    this.getOrderProduct(this.orderToDisplay.productId);
+    this.orderAddress = this.orderToDisplay.street + " "
+      + this.orderToDisplay.houseNumber + " " + this.orderToDisplay.zipCode
+      + " " + this.orderToDisplay.city;
+    if (this.orderAddress == '   ') {
+      this.orderAddress = 'no address';
     }
   }
 
-  getCurrentOrderById(): void{
-    this.route.queryParams.subscribe(params => {
-      this.orderId = params['orderId'];
-    });
-    if(this.orderId != 0 && typeof this.orderId != 'undefined') {
-      this.httpClient.get(environment.endpointURL + "order/byId", {
-        params: {
-          orderId: this.orderId
+  ngOnChanges(): void {
+    this.evaluateViewComponent();
+    this.getOrderProduct(this.orderToDisplay.productId);
+  }
+
+  evaluateViewComponent(): void {
+    // double check for correct user and order
+    if (typeof this.currentUser != 'undefined' && typeof this.orderToDisplay != 'undefined') {
+      // check if customerId is same as userId
+      if(!this.currentUser.isAdmin){
+        // additional check if order belongs to user
+        console.log('user hat id: ' + this.currentUser.userId + ' order wurde erstellt von user: ' + this.orderToDisplay.costumerId)
+        if(this.currentUser?.userId != this.orderToDisplay.costumerId){
+          console.log('redirected due to incompatible customer and user Id')
+          this.router.navigate(['/shop']);
         }
-      }).subscribe((res: any) => {
-        console.log(res);
-        this.currentOrder = new Order(
-          res.orderId,
-          res.orderListId, // to indicate that it belongs to a certain oder list
-          res.costumerId, // userId of the user which places the order
-          res.productId, // to indicate which product is sold
-          res.firstName,
-          res.lastName,
-          res.street,
-          res.houseNumber,
-          res.zipCode,
-          res.city,
-          res.paymentMethod,
-          res.state
-        )
-        this.orderAddress = res.street + " " + res.houseNumber + " " + res.zipCode + " " + res.city;
-        console.log(this.currentOrder);
-        this.evaluateViewComponent();
-        this.getOrderProduct(res.productId);
-        //TODO check how OrderState is sent from backend String?
-        if (res.state==OrderState.Pending) this.showChangeStateButton = true;
-        else this.showChangeStateButton = false;
-      }, (error: any) => {
-        console.log(error);
-      });
+      }
+      if (this.orderToDisplay.state == OrderState.Pending) this.showStateChangeButton = true;
+      else this.showStateChangeButton = false;
     }
   }
 
   getOrderProduct(productId: number): void {
+    // TODO check if productId is sent from backend to order, use right productId
     this.httpClient.get(environment.endpointURL + "product/byId", {
       params: {
-        productId: productId
+        productId: 1
+        //productId: productId
       }
     }).subscribe((res: any) => {
+      this.productDefined = true;
       this.currentProduct = new Product(
         res.productId,
-        res.shopId,
+        0,
         res.title,
         res.description,
         res.image,
@@ -131,45 +95,36 @@ export class OrderComponent implements OnInit {
   }
 
   cancelOrder() {
+    this.httpClient.get(environment.endpointURL + "order/cancel").subscribe((res: any) => {
+      console.log(res);
+    }, (error: any) => {
+      console.log(error);
+    });
     // only enable if orderState is pending
-    this.updateOrder(OrderState.Cancelled);
+    this.orderToDisplay.state = OrderState.Cancelled;
+    this.showStateChangeButton = false;
   }
 
   shipOrder() {
     // only enable if orderState is pending
-    this.updateOrder(OrderState.Shipped);
-  }
-
-  updateOrder(state: OrderState): void{
-    console.log('Update Button works.')
-    // TODO update order with right call
-    /*
-    this.httpClient.post(environment.endpointURL + "order/byId", {
-      params: {
-        orderId: this.orderId,
-        orderState: state
-      }
-    }).subscribe((res: any) => {
+    this.httpClient.get(environment.endpointURL + "order/ship").subscribe((res: any) => {
       console.log(res);
-      this.currentOrder = new Order(
-        res.orderId,
-        res.orderListId, // to indicate that it belongs to a certain oder list
-        res.costumerId, // userId of the user which places the order
-        res.productId, // to indicate which product is sold
-        res.firstName,
-        res.lastName,
-        res.street,
-        res.houseNumber,
-        res.zipCode,
-        res.city,
-        res.paymentMethod,
-        res.state
-      );
-      this.showChangeStateButton = false;
     }, (error: any) => {
       console.log(error);
-    })
-     */
+    });
+    this.orderToDisplay.state = OrderState.Shipped;
+    this.showStateChangeButton = false;
+  }
 
+  deleteProduct($event: Product) {
+    console.log("delete product should not be allowed here.")
+  }
+
+  updateProduct($event: Product) {
+    console.log("update product should not be allowed here.")
+  }
+
+  buyProduct($event: Product) {
+    console.log("buy product should not be allowed here.")
   }
 }

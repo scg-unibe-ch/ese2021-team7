@@ -1,25 +1,40 @@
-<mat-card class ="post">
+<mat-card class ="order">
   <mat-card-header class="group7-post-header">
-    <mat-card-subtitle>Order Component works: {{currentOrder.orderId}}</mat-card-subtitle><br/>
     <div fxFlex></div>
   </mat-card-header>
 
   <mat-card-content class="group7-post-content">
+    <p>Order Id: {{orderToDisplay.orderId}}</p><br/>
+    <p>Delivery Address: {{orderAddress}}</p><br/>
+    <p>Order State: {{orderToDisplay.state}}</p><br/>
 
-    <h3>User is Admin: {{currentUser.isAdmin}}</h3>
-
+    <mat-card-actions *ngIf="showStateChangeButton" class="group7-product-actions" align="end">
     <!-- Should only be usable for logged in users -->
     <div *ngIf="!currentUser.isAdmin">
-      <button mat-button fxLayoutAlign="right top" [disabled]="!showChangeStateButton"
-              color="warn" class="group7-post-actions-button" (click)="cancelOrder()" class="group7-post-actions">Cancel</button>
+      <button mat-button fxLayoutAlign="right top" [disabled]="!showStateChangeButton"
+              color="warn" class="group7-post-actions-button" (click)="cancelOrder()" class="group7-post-actions">Cancel Order</button>
     </div>
 
     <div *ngIf="currentUser.isAdmin">
       <!-- Should only be usable for loggend in admins -->
-      <button mat-button fxLayoutAlign="right top" [disabled]="!showChangeStateButton"
-              color="warn" class="group7-post-actions-button" (click)="shipOrder()" class="group7-post-actions">Ship</button>
+      <button mat-button fxLayoutAlign="right top" [disabled]="!showStateChangeButton"
+              color="warn" class="group7-post-actions-button" (click)="shipOrder()" class="group7-post-actions">Ship Order</button>
     </div>
+    </mat-card-actions>
 
+    <p>Ordered Product:</p><br/>
+
+    <div *ngIf="productDefined">
+      <app-product
+        [productToDisplay]="currentProduct"
+        [loggedIn]="true"
+        [currentUser]="currentUser"
+        [onlyShowProduct] = "true"
+        (delete)="deleteProduct($event)"
+        (update)="updateProduct($event)"
+        (buy)="buyProduct($event)">
+      </app-product>
+    </div>
 
   </mat-card-content>
 </mat-card>
