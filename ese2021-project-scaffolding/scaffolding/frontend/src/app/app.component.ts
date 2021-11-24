@@ -13,7 +13,7 @@ import {ActivatedRoute, Router} from "@angular/router";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'frontend';
+  title = 'Game of Thrones';
 
   todoLists: TodoList[] = [];
 
@@ -25,6 +25,13 @@ export class AppComponent implements OnInit {
   user: User | undefined;
 
   enableCreatePost: boolean = false;
+
+  //used for sidenav
+  events: string[] = [];
+  opened: boolean;
+
+  //used for Admin Dashboard
+  isAdmin = false;
 
   constructor(
     public httpClient: HttpClient,
@@ -47,9 +54,10 @@ export class AppComponent implements OnInit {
     });
     // listen for changes in current user
     this.userService.user$.subscribe(res => {
-      this.enableCreatePost = true;
+      //this.enableCreatePost = true;
       this.user = res;
-      this.enableCreatePost = this.checkPermissionConditions(res.isAdmin);
+      this.enableCreatePost = this.checkPermissionConditions(res?.isAdmin);
+      this.isAdmin = res?.isAdmin;
     }, error => {
       this.enableCreatePost = false;
       this.checkPermissionConditions(false)

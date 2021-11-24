@@ -6,6 +6,10 @@ import {Feed} from "../models/feed.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
+import {Product} from "../models/product.model";
+import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
+import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-feed',
@@ -22,7 +26,8 @@ export class FeedComponent implements OnInit, DoCheck {
   constructor(
     public httpClient: HttpClient,
     private route: Router,
-    public userService: UserService
+    public userService: UserService,
+    private dialog: MatDialog
   ) {
     this.readPosts();
   }
@@ -100,12 +105,19 @@ export class FeedComponent implements OnInit, DoCheck {
   }
 
   deletePost(post: Post): void {
-    this.httpClient.post(environment.endpointURL + "post/delete", {
+    this.handleDelete(post);
+  }
+    /*this.httpClient.post(environment.endpointURL + "post/delete", {
       postId: post.postId
     }).subscribe(() => {
       this.currentFeed.posts.splice(this.currentFeed.posts.indexOf(post), 1);
     });
-  }
+    }
+     */
+
+
+
+
 
   updatePost(post: Post): void {
     this.route.navigate(['/post-form'], {queryParams: {update: 'true', postId: (post.postId)}}).then(r => {
@@ -134,4 +146,22 @@ export class FeedComponent implements OnInit, DoCheck {
     });
   }
 
+  handleDelete(post: Post): void {
+  const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this post?');
+  const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    maxWidth: '400px',
+    closeOnNavigation: true,
+    data: dialogData
+  })
+
+  dialogRef.afterClosed().subscribe(dialogResult => {
+    if (dialogResult) {
+      this.httpClient.post(environment.endpointURL + "post/delete", {
+        postId: post.postId
+      }).subscribe(() => {
+        this.currentFeed.posts.splice(this.currentFeed.posts.indexOf(post), 1);
+      });
+    }
+  });
+}
 }

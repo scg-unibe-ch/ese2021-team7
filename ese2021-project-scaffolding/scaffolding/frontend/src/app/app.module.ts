@@ -21,11 +21,9 @@ import { RegistrationComponent } from './registration/registration.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { FeedComponent } from './feed/feed.component';
 import { PostComponent } from './feed/post/post.component';
-import { CreatePostComponent } from './create-post/create-post.component';
 import {PageNotFoundComponent} from "./page-not-found/page-not-found.component";
 import {RouterModule} from "@angular/router";
 import {MatMenuModule} from '@angular/material/menu';
-import { UpdatePostComponent } from './update-post/update-post.component';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
 import {Feed} from "./models/feed.model";
@@ -34,8 +32,13 @@ import { OrderComponent } from './order-list/order/order.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductComponent } from './product-list/product/product.component';
 import { PurchaseComponent } from './purchase/purchase.component';
-import { CreateProductComponent } from './create-product/create-product.component';
 import { PostFormComponent } from './post-form/post-form.component';
+import { ProductFormComponent } from './product-form/product-form.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from './ui/confirmation-dialog/confirmation-dialog.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+
 
 @NgModule({
   declarations: [
@@ -46,17 +49,17 @@ import { PostFormComponent } from './post-form/post-form.component';
     RegistrationComponent,
     FeedComponent,
     PostComponent,
-    CreatePostComponent,
     PageNotFoundComponent,
-    UpdatePostComponent,
     UserProfileComponent,
     OrderListComponent,
     OrderComponent,
     ProductListComponent,
     ProductComponent,
     PurchaseComponent,
-    CreateProductComponent,
     PostFormComponent,
+    ProductFormComponent,
+    ConfirmationDialogComponent,
+    AdminDashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -76,17 +79,21 @@ import { PostFormComponent } from './post-form/post-form.component';
     MatCheckboxModule,
     ReactiveFormsModule,
     MatIconModule,
+    MatSidenavModule,
+    MatDialogModule,
     RouterModule.forRoot([
       { path: 'feed', component: FeedComponent },
-      { path: 'createpost', component: CreatePostComponent },
-      { path: 'updatepost', component: UpdatePostComponent },
       { path: 'profile', component: UserProfileComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'login', component: LoginComponent },
       { path: 'home', component: FeedComponent},
       { path: 'post-form', component: PostFormComponent},
+      { path: '', component: FeedComponent},
+      { path: 'product-form', component: ProductFormComponent},
+      { path: 'purchase', component: PurchaseComponent},
       { path: 'shop', component: ProductListComponent},
-      { path: 'order', component: OrderComponent}
+      { path: 'order', component: OrderListComponent},
+      { path: 'admin-dashboard', component: AdminDashboardComponent}
     ]),
   ],
   providers: [

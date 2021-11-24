@@ -23,6 +23,8 @@ export class LoginComponent implements OnInit{
 
   endpointLogin: string = '';
 
+  fromShop: boolean = false;
+
   constructor(
     public httpClient: HttpClient,
     public userService: UserService,
@@ -41,12 +43,15 @@ export class LoginComponent implements OnInit{
 
   ngOnInit(): void {
     this.route.queryParams.subscribe( params =>{
+      console.log(params);
       if(params['registered']== 'true'){
         this.fromRegistration = true;
       }
+      else if(params['fromShop'] == 'true'){
+        this.fromShop = params['fromShop'];
+      }
     })
-
-}
+  }
 
   loginUser(): void {
     this.httpClient.post(environment.endpointURL + "user/login", {
@@ -65,7 +70,17 @@ export class LoginComponent implements OnInit{
 
       this.resetLoginForm();
       this.endpointLogin = '';
-      this.router.navigate(['/feed'], {queryParams: {loggedIn: 'true'}}).then(r =>{});
+      if (this.fromShop){
+        this.router.navigate(['/shop']).then(r =>{});
+      }
+      else{
+        if(this.userService.getUser().isAdmin){
+          this.router.navigate(['/admin-dashboard']).then(r =>{});
+        }
+        else {
+          this.router.navigate(['/feed']).then(r => {});
+        }
+      }
     }, (error) => {
       this.handleLoginError(error);
       this.resetLoginForm();

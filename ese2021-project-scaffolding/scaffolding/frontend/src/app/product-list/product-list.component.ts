@@ -6,8 +6,9 @@ import {ProductList} from "../models/product-list.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
-import {Feed} from "../models/feed.model";
-import {Post} from "../models/post.model";
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
+import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 
 @Component({
   selector: 'app-product-list',
@@ -21,10 +22,13 @@ export class ProductListComponent implements OnInit {
   loggedIn: boolean | undefined;
   currentUser: User | undefined;
 
+  showAddProductButton: boolean = false;
+
   constructor(
     public httpClient: HttpClient,
     private route: Router,
-    public userService: UserService
+    public userService: UserService,
+    private dialog: MatDialog
   ) {
     this.readProducts();
   }
@@ -39,16 +43,32 @@ export class ProductListComponent implements OnInit {
     })
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
+
+    this.evaluateAddProductPermission();
+  }
+
+  ngOnChange():void {
+    this.evaluateAddProductPermission();
+  }
+
+  ngDoCheck(): void {
+    //current Value
+    this.loggedIn = this.userService.getLoggedIn();
+    this.currentUser = this.userService.getUser();
+  }
+
+  evaluateAddProductPermission(): void {
+    // set true if user is admin
+    if (this.loggedIn){
+      if (this.currentUser?.isAdmin) this.showAddProductButton = true;
+      else this.showAddProductButton = false;
+    }
+    else this.showAddProductButton = false;
   }
 
   // READ all created products
   readProducts(): void {
-    this.currentShop.products.push(new Product(1,0,"Books","These are all books","https://cdn.shopify.com/s/files/1/0064/5342/8271/products/RHGT5-game-thrones-blood-red-front-1200.jpg?v=1556677054",100,"Books",false));
-    this.currentShop.products.push(new Product(2,0,"Poster","This is a poster","https://tse3.mm.bing.net/th?id=OIP.ATDrvdlwYQboxpBGEeh3ZQHaLS&pid=Api",15,"Posters",false));
-
-    /*
     this.httpClient.get(environment.endpointURL + "product/all").subscribe((res: any) => {
-      console.log(res);
       this.currentShop = new ProductList(0,'', []);
       res.forEach((product: any) => {
       if (!product.sold){
@@ -60,42 +80,55 @@ export class ProductListComponent implements OnInit {
             console.log(error);
           });
       });
+  }
+
+  refreshShop() {
+    this.readProducts();
+  }
+
+  // TODO: sortShop by Category
+
+  addProduct(): void{
+    if (this.currentUser?.isAdmin){
+      this.route.navigate(['/product-form'],{queryParams: {create: 'true'}}).then(r => {})
+    }
+  }
+
+  deleteProduct(product: Product): void{
+    console.log("Delete button works.")
+    this.handleDelete(product);
+    /*this.httpClient.post(environment.endpointURL + "product/delete", {
+      productId: product.productId
+    }).subscribe(() => {
+      this.currentShop.products.splice(this.currentShop.products.indexOf(product), 1);
+    });
      */
   }
 
-  // TODO: sortShop
-
-  // TODO: addProduct
-  addProduct(): void{
-    console.log("Add button works.")
-  }
-
-  // TODO: deleteProduct
-  deleteProduct(product: Product): void{
-    console.log("Delete button works.")
-  }
-
-  // TODO: updateProduct
   updateProduct(product: Product): void{
-    console.log("Update button works.")
+    this.route.navigate(['/product-form'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
   }
 
-  // TODO: buyProduct
   buyProduct(product: Product): void{
-    console.log("Buy button works.")
+    this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
 
+  handleDelete(product: Product): void{
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    })
 
-
-
-
-
-
-
-
-
-
-
-
-
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.httpClient.post(environment.endpointURL + "product/delete", {
+          productId: product.productId
+        }).subscribe(() => {
+          this.currentShop.products.splice(this.currentShop.products.indexOf(product), 1);
+        });
+      }
+    });
+  }
 }

@@ -344,3 +344,283 @@ The modified product is returned. Returns HTTP status code 200 on success, and s
 No meaningful response body. Returns HTTP status code 200 on success, and status code 500 on failure (e.g. productId does not exist).
 ```
 ```
+# /oder
+Order statuses:
+PENDNIG: 0,
+SHIPPED: 1,
+CANCELLED: 2.
+## POST /oder/create
+Order is in state pending after creation.
+### Request
+```
+{
+    "deliveryAdress": string(optional)",
+    "paymentOption": int(optional),
+    "user": int,
+    "productId": int
+}
+```
+### Response
+The created product is returned. Returns HTTP status code 200 on success, and status code 500 on failure. (e.g. user or product does not exist).
+```
+{
+    "orderId": 3,
+    "deliveryAdress": "Teststrasse\n3012 Bern",
+    "paymentOption": 1,
+    "user": 1,
+    "orderStatus": 0,
+    "updatedAt": "2021-11-19T22:30:51.510Z",
+    "createdAt": "2021-11-19T22:30:51.502Z",
+    "ProductProductId": 1
+}
+```
+## GET /oder/all
+Returns all orders, ordered by ID (i.e. creation time).
+### Request
+```
+```
+### Response
+```
+[
+    {
+        "orderId": 2,
+        "deliveryAdress": "Testrasse\n3012 Bern",
+        "paymentOption": 1,
+        "orderStatus": 1,
+        "user": 1,
+        "createdAt": "2021-11-19T22:29:29.714Z",
+        "updatedAt": "2021-11-19T22:29:29.727Z",
+        "ProductProductId": 1
+    },
+    {
+        "orderId": 3,
+        "deliveryAdress": "Teststrasse\n3012 Bern",
+        "paymentOption": 1,
+        "orderStatus": 1,
+        "user": 1,
+        "createdAt": "2021-11-19T22:30:51.502Z",
+        "updatedAt": "2021-11-19T22:30:51.510Z",
+        "ProductProductId": 1
+    }
+]
+```
+## GET /oder/byUser
+Returns all orders of the specified user.
+### Request
+HTTP query param: userId: int
+```
+GET /oder/byUser?userId=5
+```
+### Response
+```
+[
+    {
+        "orderId": 2,
+        "deliveryAdress": "Testrasse\n3012 Bern",
+        "paymentOption": 1,
+        "orderStatus": 1,
+        "user": 1,
+        "createdAt": "2021-11-19T22:29:29.714Z",
+        "updatedAt": "2021-11-19T22:29:29.727Z",
+        "ProductProductId": 1
+    },
+    {
+        "orderId": 3,
+        "deliveryAdress": "Teststrasse\n3012 Bern",
+        "paymentOption": 1,
+        "orderStatus": 1,
+        "user": 1,
+        "createdAt": "2021-11-19T22:30:51.502Z",
+        "updatedAt": "2021-11-19T22:30:51.510Z",
+        "ProductProductId": 1
+    }
+]
+```
+## GET /oder/byId
+Returns an order ID. Returns HTTP status code 500 if no oder with the specified oderId exists.
+### Request
+HTTP query param: oderId: int
+```
+GET /oder/byId?oderId=2
+```
+### Response
+```
+{
+    "orderId": 2,
+    "deliveryAdress": "Testrasse\n3012 Bern",
+    "paymentOption": 1,
+    "orderStatus": 1,
+    "user": 1,
+    "createdAt": "2021-11-19T22:29:29.714Z",
+    "updatedAt": "2021-11-19T22:29:29.727Z",
+    "ProductProductId": 1
+}
+```
+## POST /oder/modify
+### Request
+```
+{
+    "orderId": int,
+    "deliveryAdress": string(optional)",
+    "paymentOption": int(optional),
+    "user": int,
+    "productId": int
+}
+```
+### Response
+The modified order is returned. Returns HTTP status code 200 on success, and status code 500 on failure (e.g. user/product do not exist).
+```
+{
+    "orderId": 2,
+    "deliveryAdress": "Teststrasse\n3012 Bern\nSchweiz",
+    "paymentOption": 2,
+    "user": 1,
+    "createdAt": "2021-11-19T22:29:29.714Z",
+    "updatedAt": "2021-11-19T22:51:22.120Z",
+    "ProductProductId": 2
+}
+```
+## POST /oder/cancel
+Only pending orders can be cancelled.
+### Request
+```
+{
+    "orderId": int
+}
+```
+### Response
+The cancelled order is returned. Returns HTTP status code 200 on success, and status code 500 on failure (e.g. user/product do not exist).
+```
+{
+    "orderId": 2,
+    "deliveryAdress": "Teststrasse\n3012 Bern\nSchweiz",
+    "paymentOption": 2,
+    "orderStatus": 2,
+    "user": 1,
+    "createdAt": "2021-11-19T22:29:29.714Z",
+    "updatedAt": "2021-11-19T22:52:05.066Z",
+    "ProductProductId": 2
+}
+```
+## POST /oder/ship
+Only pending orders can be shipped.
+### Request
+```
+{
+    "orderId": int
+}
+```
+### Response
+The shipped order is returned. Returns HTTP status code 200 on success, and status code 500 on failure (e.g. user/product do not exist).
+```
+{
+    "orderId": 2,
+    "deliveryAdress": "Teststrasse\n3012 Bern\nSchweiz",
+    "paymentOption": 2,
+    "orderStatus": 1,
+    "user": 1,
+    "createdAt": "2021-11-19T22:29:29.714Z",
+    "updatedAt": "2021-11-19T22:52:53.517Z",
+    "ProductProductId": 2
+}
+```
+## POST /oder/delete
+### Request
+```
+{
+    "orderId": int
+}
+```
+### Response
+No meaningful response body. Returns HTTP status code 200 on success, and status code 500 on failure (e.g. order do not exist).
+```
+```
+# /category
+Category types:
+POST_CATEGORY: 0,
+PRODUCT_CATEGORY: 1
+## POST /category/create
+### Request
+```
+{
+    "name": string",
+    "type": int(0 (POST_CATEGORY) or 1 (PRODUCT_CATEGORY))
+}
+```
+### Response
+The created category is returned. Returns HTTP status code 200 on success, and status code 500 on failure.
+```
+{
+    "categoryId": 3,
+    "name": "Books",
+    "type": 1
+}
+```
+## GET /category/all
+Returns all categories, ordered by ID (i.e. creation time).
+### Request
+```
+```
+### Response
+```
+[
+    {
+        "categoryId": 1,
+        "name": "Books",
+        "type": 0,
+        "createdAt": "2021-11-22T21:39:52.075Z",
+        "updatedAt": "2021-11-22T21:39:52.075Z"
+    },
+    {
+        "categoryId": 2,
+        "name": "Movies",
+        "type": 1,
+        "createdAt": "2021-11-22T21:40:11.114Z",
+        "updatedAt": "2021-11-22T21:41:37.672Z"
+    },
+    {
+        "categoryId": 3,
+        "name": "Magazines",
+        "type": 1,
+        "createdAt": "2021-11-22T21:56:44.575Z",
+        "updatedAt": "2021-11-22T21:56:44.575Z"
+    }
+]
+```
+## GET /category/byId
+Returns the specified category.
+### Request
+HTTP query param: userId: int
+```
+GET /category/byId?categoryId=2
+```
+### Response
+```
+{
+    "categoryId": 2,
+    "name": "Movies",
+    "type": 1,
+    "createdAt": "2021-11-22T21:40:11.114Z",
+    "updatedAt": "2021-11-22T21:41:37.672Z"
+}
+```
+## POST /category/modify
+Only the category name can be changed.
+### Request
+```
+{
+    "categoryId": int,
+    "name": string",
+}
+```
+### Response
+The modified category is returned. Returns HTTP status code 200 on success, and status code 500 on failure.
+```
+{
+    "categoryId": 2,
+    "name": "Movies",
+    "type": 1,
+    "createdAt": "2021-11-22T21:40:11.114Z",
+    "updatedAt": "2021-11-22T21:41:37.672Z"
+}
+```

@@ -1,1 +1,74 @@
-<p>purchase works!</p>
+<div class="card-wrapper-center registration-form purchase-form">
+  <mat-card class="group7-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h1 class="card-title" >Order now </h1>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="form-wrapper">
+        <form [formGroup]="purchaseForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
+          <div class="product-display">
+            <div class="product-display-image">
+              <img class="product-thumbnail" src="{{product.image}}" />
+            </div>
+            <div class="product-display-info">
+              <span class="product-display-title">{{product.title}}</span><br>
+              <span class="product-display-description">{{product.description}}</span>
+          </div>
+          <div class="product-display-price">
+            Total (incl. taxes)<br/>
+            <span class="product-price">{{product.price}} </span>
+            CHF
+          </div>
+          </div>
+          <br>
+          <br>
+          <mat-form-field appearance="outline">
+            <mat-label >Payment Method</mat-label>
+            <mat-select [formControlName]="'paymentMethod'" id="paymentMethod"  required>
+              <mat-option value="1">Invoice</mat-option>
+              <mat-option value="2">Credit Card</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+            <p>Shipping address:</p>
+
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input matInput type="text" placeholder="First Name" id="firstName" [formControlName]="'firstName'">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input matInput type="text" placeholder="Last Name" id="lastName" [formControlName]="'lastName'">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Street</mat-label>
+            <input matInput type="text" placeholder="Street"  id="street" [formControlName]="'street'">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Nr.</mat-label>
+            <input matInput type="text"  placeholder="Nr." id="houseNumber" [formControlName]="'houseNumber'">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Zip Code</mat-label>
+            <input matInput type="text" placeholder="Zip Code"  id="zipCode" [formControlName]="'zipCode'">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>City</mat-label>
+            <input matInput type="text" placeholder="City"  id="city" [formControlName]="'city'">
+          </mat-form-field>
+
+          <br/>
+          <div class="form-action-button">
+            <button mat-flat-button type="submit" [disabled]="!purchaseForm.valid" class="group7-forms-button" >Order now</button><br/>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
+
+
+  </mat-card>
+
+</div>
+

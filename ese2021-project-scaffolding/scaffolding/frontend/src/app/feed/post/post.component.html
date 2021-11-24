@@ -17,9 +17,19 @@
   <mat-card-content class="group7-post-content">
     <div class="post-category">Category: {{postToDisplay.category}}</div><br/>
     <mat-card-title>{{postToDisplay.title}} </mat-card-title>
-    <p class="post-text">
+    <!--
+       <p class="post-text">
       {{postToDisplay.text}}
     </p><br/>
+    -->
+      <div class="post-text">
+      {{isReadMore ? shortText : fullText }}
+        <button type="button" class="read-more-button" (click)="showText()" *ngIf="postTooLong">
+          {{ isReadMore ? 'More': 'Less' }}
+        </button>
+      </div>
+
+    <br/>
     <span class="post-score"> Score: {{postToDisplay.score}}</span>
   </mat-card-content>
 
