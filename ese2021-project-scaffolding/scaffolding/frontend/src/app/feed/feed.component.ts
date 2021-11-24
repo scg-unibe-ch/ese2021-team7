@@ -10,6 +10,7 @@ import {Product} from "../models/product.model";
 import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
 import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {OrderState} from "../order-list/order/order-state";
 
 @Component({
   selector: 'app-feed',
@@ -25,7 +26,7 @@ export class FeedComponent implements OnInit, DoCheck {
 
   sortBy: string = '0';
 
-  sortByValues : any[][] = [['creation date', 0],['score', 1]];
+  filterBy: string = '';
 
   constructor(
     public httpClient: HttpClient,
@@ -49,7 +50,6 @@ export class FeedComponent implements OnInit, DoCheck {
     this.currentUser = this.userService.getUser();
   }
 
-
   ngDoCheck(): void {
     //current Value
     /*
@@ -60,8 +60,6 @@ export class FeedComponent implements OnInit, DoCheck {
      */
   }
 
-
-
   // ORDER - Feed
   /*
   0 = sorted by creation date
@@ -69,7 +67,6 @@ export class FeedComponent implements OnInit, DoCheck {
   default = sorted by creation date
    */
   sortList(sortBy: string): void {
-    console.log('list sorted by: '+sortBy);
     this.httpClient.get(environment.endpointURL + "post/all", {
       params: {
         sortBy: sortBy
@@ -134,7 +131,6 @@ export class FeedComponent implements OnInit, DoCheck {
     closeOnNavigation: true,
     data: dialogData
   })
-
   dialogRef.afterClosed().subscribe(dialogResult => {
     if (dialogResult) {
       this.httpClient.post(environment.endpointURL + "post/delete", {
@@ -147,6 +143,44 @@ export class FeedComponent implements OnInit, DoCheck {
 
   sortFeed(event: any) {
     this.sortList(this.sortBy);
+  }
+
+  filterList(event: any): void {
+    this.httpClient.get(environment.endpointURL + "post/all"
+    ).subscribe(
+      (res: any) => {
+        console.log(res);
+        this.currentFeed = new Feed(0, '', []);
+        res.forEach((post: any) => {
+          if (this.checkIfPostIsAcceptedByFilter(post.category)){
+            post.score = post.upvote - post.downvote;
+            this.httpClient.get(environment.endpointURL + "user/getById", {
+              params: {
+                userId: post.UserUserId
+              }
+            }).subscribe((res: any) => {
+                post.CreationUserName = res.userName;
+                this.currentFeed.posts.push(
+                  new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, post.creationUserUsername))
+              },
+              (error: any) => {
+                console.log(error);
+              });
+          }
+        });
+      });
+  }
+
+  checkIfPostIsAcceptedByFilter(category: string):boolean {
+    if (this.filterBy == ''){
+      return true;
+    }
+    else{
+      if (this.filterBy == category){
+        return true;
+      }
+      else return false;
+    }
   }
 
 }
