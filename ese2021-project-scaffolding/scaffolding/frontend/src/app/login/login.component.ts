@@ -74,7 +74,12 @@ export class LoginComponent implements OnInit{
         this.router.navigate(['/shop']).then(r =>{});
       }
       else{
-        this.router.navigate(['/feed']).then(r =>{});
+        if(this.userService.getUser().isAdmin){
+          this.router.navigate(['/admin-dashboard']).then(r =>{});
+        }
+        else {
+          this.router.navigate(['/feed']).then(r => {});
+        }
       }
     }, (error) => {
       this.handleLoginError(error);
