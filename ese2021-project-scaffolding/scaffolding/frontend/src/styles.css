@@ -255,4 +255,16 @@ button, input {
   overflow:hidden;
 }
 
+.admin-dashboard-title{
+  text-align: center;
+}
+.admin-dashboard-content{
+  width: 100% !important;
+  text-align: center;
+  padding: 0px;
+}
+.admin-dashboard-icons{
+  font-size: 5em;
+  color: #262626;
+}
 
