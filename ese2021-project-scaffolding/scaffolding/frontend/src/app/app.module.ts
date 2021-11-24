@@ -93,7 +93,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
       { path: 'purchase', component: PurchaseComponent},
       { path: 'shop', component: ProductListComponent},
       { path: 'order', component: OrderListComponent},
-      { path: 'admin-dashbaord', component: AdminDashboardComponent}
+      { path: 'admin-dashboard', component: AdminDashboardComponent}
     ]),
   ],
   providers: [
