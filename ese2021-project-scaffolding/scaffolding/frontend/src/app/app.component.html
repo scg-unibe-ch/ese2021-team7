@@ -1,5 +1,5 @@
 <mat-sidenav-container class="group7-sidenav-container" >
-  <mat-sidenav #sidenav mode="over" [(opened)]="opened" (opened)="events.push('open!')"
+  <mat-sidenav #sidenav  mode="push" [(opened)]="opened" (opened)="events.push('open!')"
                (closed)="events.push('close!')" class="group7-sidenav">
     <div class="group7-sidenav-close">
       <button class="group7-sidenav-closebutton" mat-icon-button (click)="sidenav.close()"> <mat-icon>close</mat-icon></button>
@@ -37,7 +37,7 @@
         <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
       </mat-menu>
     </mat-toolbar>
-    <div class="gropu7-main-content">
+    <div class="group7-main-content" [ngClass]="isAdmin? 'group7-admin-main-content' : ''">
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
