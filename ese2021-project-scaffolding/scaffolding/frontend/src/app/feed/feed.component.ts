@@ -28,13 +28,15 @@ export class FeedComponent implements OnInit, DoCheck {
 
   filterBy: string = '';
 
+  postCategories: string[] = ['The Wall', 'King\'s Landing', 'Winterfell'];
+
   constructor(
     public httpClient: HttpClient,
     private route: Router,
     public userService: UserService,
     private dialog: MatDialog
   ) {
-    this.sortList(this.sortBy);
+    this.readFeed();
   }
 
   ngOnInit(): void {
@@ -66,29 +68,31 @@ export class FeedComponent implements OnInit, DoCheck {
   1 = sorted by score
   default = sorted by creation date
    */
-  sortList(sortBy: string): void {
+  readFeed(): void {
     this.httpClient.get(environment.endpointURL + "post/all", {
       params: {
-        sortBy: sortBy
+        sortBy: this.sortBy
       }
     }).subscribe(
       (res: any) => {
         console.log(res);
         this.currentFeed = new Feed(0, '', []);
         res.forEach((post: any) => {
-          post.score = post.upvote - post.downvote;
-          this.httpClient.get(environment.endpointURL + "user/getById", {
-            params: {
-              userId: post.UserUserId
-            }
-          }).subscribe((res: any) => {
-              post.CreationUserName = res.userName;
-              this.currentFeed.posts.push(
-                new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, post.creationUserUsername))
-            },
-            (error: any) => {
-              console.log(error);
-            });
+          if (this.checkIfPostIsAcceptedByFilter(post.category)){
+            post.score = post.upvote - post.downvote;
+            this.httpClient.get(environment.endpointURL + "user/getById", {
+              params: {
+                userId: post.UserUserId
+              }
+            }).subscribe((res: any) => {
+                post.CreationUserName = res.userName;
+                this.currentFeed.posts.push(
+                  new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, post.creationUserUsername))
+              },
+              (error: any) => {
+                console.log(error);
+              });
+          }
         });
       });
   }
@@ -103,7 +107,7 @@ export class FeedComponent implements OnInit, DoCheck {
   }
 
   reloadFeed() {
-    this.sortList(this.sortBy);
+    this.readFeed();
   }
 
   upvotePost(post: Post) {
@@ -142,10 +146,14 @@ export class FeedComponent implements OnInit, DoCheck {
   }
 
   sortFeed(event: any) {
-    this.sortList(this.sortBy);
+    this.readFeed();
   }
 
-  filterList(event: any): void {
+  filterFeed(event:any) {
+    this.readFeed();
+  }
+
+  /*filterList(event: any): void {
     this.httpClient.get(environment.endpointURL + "post/all"
     ).subscribe(
       (res: any) => {
@@ -170,6 +178,8 @@ export class FeedComponent implements OnInit, DoCheck {
         });
       });
   }
+
+   */
 
   checkIfPostIsAcceptedByFilter(category: string):boolean {
     if (this.filterBy == ''){
