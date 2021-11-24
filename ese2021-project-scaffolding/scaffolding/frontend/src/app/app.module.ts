@@ -90,6 +90,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
       { path: 'product-form', component: ProductFormComponent},
       { path: 'purchase', component: PurchaseComponent},
       { path: 'shop', component: ProductListComponent},
+      { path: 'product', component: ProductComponent},
       { path: 'order', component: OrderListComponent},
     ]),
   ],
