@@ -23,21 +23,35 @@ export class PostService {
     }
 
     public async getAll(sortBy: string): Promise<Post[]> {
-        // TODO: Fix query
-        const unorderdPosts = await Post.findAll({
+        return  Post.findAll({
             attributes: ['postId', 'title', 'image', 'text', 'category'],
-            include: [{model: Vote, attributes: [[sequelize.fn('sum', sequelize.col('upvote')), 'total_votes']]}],
-            group: ['postId', 'title', 'image', 'text', 'category']
+            include: Vote
+        }).then(dbPosts => {
+            const postsWithScore: Post[] = [];
+            for (const dbPost of dbPosts) {
+                dbPost.text = 'xxx' + dbPost.text;
+                let score = 0;
+                // @ts-ignore
+                for (const vote of dbPost.Votes) {
+                    if (vote.upvote) {
+                        score += 1;
+                    } else {
+                        score -= 1;
+                    }
+                }
+                // @ts-ignore
+                dbPost.setDataValue('score', score);
+                postsWithScore.push(dbPost);
+            }
+            return postsWithScore.sort( (postA, postB) => {
+                if (sortBy === '1') {
+                    // @ts-ignore
+                    return postA.getDataValue('score') - postB.getDataValue('score');
+                } else {
+                    return postA.postId - postB.postId;
+                }
+            });
         });
-        const orderedPosts: Post[] = [];
-
-        // TODO: Write logic
-        // if (sortBy == '1') {
-        //     orderByUpvotes
-        // } else {
-        //      orderByCreateDate
-        // }
-        return orderedPosts;
     }
 
     public async upvote(postId: number, userId: number): Promise<Post> {
