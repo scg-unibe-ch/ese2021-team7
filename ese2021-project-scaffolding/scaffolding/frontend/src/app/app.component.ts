@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
 
   //used for sidenav
   events: string[] = [];
-  opened: boolean;
+  opened: boolean | undefined;
 
   //used for Admin Dashboard
   isAdmin = false;
