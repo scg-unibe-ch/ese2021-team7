@@ -605,12 +605,12 @@ GET /category/byId?categoryId=2
 }
 ```
 ## POST /category/modify
+Only the category name can be changed.
 ### Request
 ```
 {
     "categoryId": int,
     "name": string",
-    "type": int(0 (POST_CATEGORY) or 1 (PRODUCT_CATEGORY))
 }
 ```
 ### Response

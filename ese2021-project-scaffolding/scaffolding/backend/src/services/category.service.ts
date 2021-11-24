@@ -45,7 +45,6 @@ export class CategoryService {
         return Category.findByPk(modifiedCategory.categoryId).then(async dbCategory => {
             if (dbCategory) {
                 dbCategory.name = modifiedCategory.name;
-                dbCategory.type = modifiedCategory.type;
                 return dbCategory.save().then(updatedCategory => Promise.resolve(updatedCategory));
             } else {
                 return Promise.reject({message: 'no category with ID ' + modifiedCategory.categoryId + ' exists'});

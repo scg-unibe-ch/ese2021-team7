@@ -109,15 +109,18 @@ export class Server {
         this.sequelize.query('DELETE FROM "order"');
         this.sequelize.query('DELETE FROM users');
         this.sequelize.query('DELETE FROM post');
+        this.sequelize.query('DELETE FROM category');
 
         if (createsData) {
             // Password for every user is: notSecure12+
+            const category = fs.readFileSync('sql_testdata/category.sql', 'utf8');
             const product = fs.readFileSync('sql_testdata/product.sql', 'utf8');
             const vote = fs.readFileSync('sql_testdata/vote.sql', 'utf8');
             const order = fs.readFileSync('sql_testdata/order.sql', 'utf8');
             const users = fs.readFileSync('sql_testdata/users.sql', 'utf8');
             const post = fs.readFileSync('sql_testdata/post.sql', 'utf8');
 
+            this.sequelize.query(category);
             this.sequelize.query(users);
             this.sequelize.query(post);
             this.sequelize.query(vote);
