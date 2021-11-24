@@ -2,7 +2,6 @@ import {Component, DoCheck, OnInit} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Post} from "../models/post.model";
-import {Feed} from "../models/feed.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
@@ -19,7 +18,7 @@ import {OrderState} from "../order-list/order/order-state";
 })
 export class FeedComponent implements OnInit, DoCheck {
 
-  currentFeed: Feed = new Feed(0, '', []);
+  postList: Post[] = [];
 
   loggedIn: boolean | undefined;
   currentUser: User | undefined;
@@ -75,7 +74,7 @@ export class FeedComponent implements OnInit, DoCheck {
     }).subscribe(
       (res: any) => {
         console.log(res);
-        this.currentFeed = new Feed(0, '', []);
+        this.postList = [];
         res.forEach((post: any) => {
           if (this.checkIfPostIsAcceptedByFilter(post.category)){
             post.score = post.upvote - post.downvote;
@@ -84,7 +83,7 @@ export class FeedComponent implements OnInit, DoCheck {
                 userId: post.UserUserId
               }
             }).subscribe((res: any) => {
-                this.currentFeed.posts.push(
+                this.postList.push(
                   new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, res.userName))
               },
               (error: any) => {
@@ -138,7 +137,7 @@ export class FeedComponent implements OnInit, DoCheck {
       this.httpClient.post(environment.endpointURL + "post/delete", {
         postId: post.postId
       }).subscribe(() => {
-        this.currentFeed.posts.splice(this.currentFeed.posts.indexOf(post), 1);
+        this.postList.splice(this.postList.indexOf(post), 1);
       });
     }});
   }
@@ -150,34 +149,6 @@ export class FeedComponent implements OnInit, DoCheck {
   filterFeed(event:any) {
     this.readFeed();
   }
-
-  /*filterList(event: any): void {
-    this.httpClient.get(environment.endpointURL + "post/all"
-    ).subscribe(
-      (res: any) => {
-        console.log(res);
-        this.currentFeed = new Feed(0, '', []);
-        res.forEach((post: any) => {
-          if (this.checkIfPostIsAcceptedByFilter(post.category)){
-            post.score = post.upvote - post.downvote;
-            this.httpClient.get(environment.endpointURL + "user/getById", {
-              params: {
-                userId: post.UserUserId
-              }
-            }).subscribe((res: any) => {
-                post.CreationUserName = res.userName;
-                this.currentFeed.posts.push(
-                  new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, post.creationUserUsername))
-              },
-              (error: any) => {
-                console.log(error);
-              });
-          }
-        });
-      });
-  }
-
-   */
 
   checkIfPostIsAcceptedByFilter(category: string):boolean {
     if (this.filterBy == ''){

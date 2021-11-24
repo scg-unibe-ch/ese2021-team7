@@ -19,7 +19,7 @@
       </mat-select>
     </mat-form-field>
 
-    <div  *ngFor="let postToDisplay of currentFeed.posts" class="group7-grid-tile feed-item">
+    <div  *ngFor="let postToDisplay of postList" class="group7-grid-tile feed-item">
       <app-post
         [postToDisplay]="postToDisplay"
         [loggedIn]="loggedIn"

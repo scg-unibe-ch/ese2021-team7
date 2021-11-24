@@ -26,7 +26,6 @@ import {RouterModule} from "@angular/router";
 import {MatMenuModule} from '@angular/material/menu';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
-import {Feed} from "./models/feed.model";
 import { OrderListComponent } from './order-list/order-list.component';
 import { OrderComponent } from './order-list/order/order.component';
 import { ProductListComponent } from './product-list/product-list.component';
