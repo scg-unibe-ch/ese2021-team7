@@ -1,12 +1,23 @@
 body {
   margin: 30px;
-  background-image: url("assets/the_wall.jpg");
   background-attachment: fixed;
   height: 100%;
+  background-image: url("assets/the_wall.jpg");
 }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.group7-main-content{
+  height: 100%;
+  width: 100%;
+}
+
+.group7-admin-main-content{
+  background-color: #eeeeee !important;
+  background-image: none !important;
+}
 
 
 
@@ -244,4 +255,16 @@ button, input {
   overflow:hidden;
 }
 
+.admin-dashboard-title{
+  text-align: center;
+}
+.admin-dashboard-content{
+  width: 100% !important;
+  text-align: center;
+  padding: 0px;
+}
+.admin-dashboard-icons{
+  font-size: 5em;
+  color: #262626;
+}
 
