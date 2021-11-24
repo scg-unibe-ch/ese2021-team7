@@ -73,7 +73,7 @@ export class ProductListComponent implements OnInit {
       res.forEach((product: any) => {
       if (!product.sold){
         this.currentShop.products.push(
-              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.category,product.sold))
+              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.productCategory,product.sold))
               }
           },
           (error: any) => {
@@ -95,14 +95,7 @@ export class ProductListComponent implements OnInit {
   }
 
   deleteProduct(product: Product): void{
-    console.log("Delete button works.")
     this.handleDelete(product);
-    /*this.httpClient.post(environment.endpointURL + "product/delete", {
-      productId: product.productId
-    }).subscribe(() => {
-      this.currentShop.products.splice(this.currentShop.products.indexOf(product), 1);
-    });
-     */
   }
 
   updateProduct(product: Product): void{
