@@ -54,12 +54,10 @@ export class FeedComponent implements OnInit, DoCheck {
 
   ngDoCheck(): void {
     //current Value
-    /*
+
     console.log("ngDoCheck is working.")
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
-
-     */
   }
 
   // ORDER - Feed
@@ -69,6 +67,7 @@ export class FeedComponent implements OnInit, DoCheck {
   default = sorted by creation date
    */
   readFeed(): void {
+    console.log("sort by is: "+this.sortBy+" and filter is: "+this.filterBy);
     this.httpClient.get(environment.endpointURL + "post/all", {
       params: {
         sortBy: this.sortBy
@@ -82,12 +81,11 @@ export class FeedComponent implements OnInit, DoCheck {
             post.score = post.upvote - post.downvote;
             this.httpClient.get(environment.endpointURL + "user/getById", {
               params: {
-                userId: post.UserUserId
+                userId: post.CreationUser
               }
             }).subscribe((res: any) => {
-                post.CreationUserName = res.userName;
                 this.currentFeed.posts.push(
-                  new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, post.creationUserUsername))
+                  new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, res.userName))
               },
               (error: any) => {
                 console.log(error);
