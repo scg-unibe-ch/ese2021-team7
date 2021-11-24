@@ -1,33 +1,53 @@
-<mat-toolbar>
-    <button mat-icon-button class="menu-icon" aria-label="Menu"  [matMenuTriggerFor]="menu">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item  routerLink="/feed" routerLinkActive="active">Feed</button>
-      <button mat-menu-item  [routerLink]="['/post-form']" [queryParams]="{create: 'true'}" *ngIf="enableCreatePost" >Create Post</button>
-      <button mat-menu-item  routerLink="/order" routerLinkActive="active" *ngIf="loggedIn">Order</button>
-      <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
-      <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
-      <button mat-menu-item  routerLink="/product-form"  [queryParams]="{create: true}" routerLinkActive="active">Product Form</button>
-      <button mat-menu-item  [routerLink]="['/purchase']" [queryParams]="{productId: 1}" routerLinkActive="active">Purchase</button>
-      <button mat-menu-item  routerLink="/shop" routerLinkActive="active">Shop</button>
+<mat-sidenav-container class="group7-sidenav-container" >
+  <mat-sidenav #sidenav mode="over" [(opened)]="opened" (opened)="events.push('open!')"
+               (closed)="events.push('close!')" class="group7-sidenav">
+    <div class="group7-sidenav-close">
+      <button class="group7-sidenav-closebutton" mat-icon-button (click)="sidenav.close()"> <mat-icon>close</mat-icon></button>
+    </div>
+    <mat-action-list class="group7-sidenav-list">
+    <button mat-list-item class="group7-sidenav-button"  routerLink="/feed" routerLinkActive="active">Feed</button>
+    <button mat-list-item class="group7-sidenav-button" [routerLink]="['/post-form']" [queryParams]="{create: 'true'}" *ngIf="enableCreatePost" >Create Post</button>
+    <button mat-list-item class="group7-sidenav-button" routerLink="/order" routerLinkActive="active" *ngIf="loggedIn">Order</button>
+    <button mat-list-item class="group7-sidenav-button" routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
+    <button mat-list-item class="group7-sidenav-button"  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
+    <button mat-list-item class="group7-sidenav-button" routerLink="/product-form"  [queryParams]="{create: true}" routerLinkActive="active">Product Form</button>
+    <button mat-list-item class="group7-sidenav-button" [routerLink]="['/purchase']" [queryParams]="{productId: 1}" routerLinkActive="active">Purchase</button>
+      <button mat-list-item class="group7-sidenav-button" routerLink="/shop" routerLinkActive="active">Shop</button>
 
-    </mat-menu>
+    </mat-action-list>
+
+  </mat-sidenav>
+  <mat-sidenav-content class="group7-sidenav-content">
+
+    <mat-toolbar>
+      <button mat-icon-button class="menu-icon" aria-label="Menu" (click)="sidenav.toggle()"  >
+        <mat-icon>menu</mat-icon>
+      </button>
+
       <span><a routerLink="/home" class="logo"><img src="assets/got-logo.png"  width="150px"/></a></span>
-    <span class="spacer"></span>
-    <button mat-icon-button class="profile-icon" aria-label="Profile" [matMenuTriggerFor]="profile">
-      <mat-icon *ngIf="!loggedIn">help</mat-icon>
-      <span *ngIf="loggedIn" color="white">{{user?.username || "ERROR"}}</span>
-    </button>
-    <mat-menu #profile="matMenu">
-      <button mat-menu-item  routerLink="/profile" routerLinkActive="active" *ngIf="loggedIn">Profile</button>
-      <button mat-menu-item  (click)="logoutUser()" *ngIf="loggedIn"><mat-icon>logout</mat-icon>Logout</button>
-      <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
-      <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
-    </mat-menu>
-  </mat-toolbar>
+      <span class="spacer"></span>
+      <button mat-icon-button class="profile-icon" aria-label="Profile" [matMenuTriggerFor]="profile">
+        <mat-icon *ngIf="!loggedIn">help</mat-icon>
+        <span *ngIf="loggedIn" color="white">{{user?.username || "ERROR"}}</span>
+      </button>
+      <mat-menu #profile="matMenu">
+        <button mat-menu-item  routerLink="/profile" routerLinkActive="active" *ngIf="loggedIn">Profile</button>
+        <button mat-menu-item  (click)="logoutUser()" *ngIf="loggedIn"><mat-icon>logout</mat-icon>Logout</button>
+        <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
+        <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
+      </mat-menu>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+
 
 
 
 <!-- The routed views render in the <router-outlet>-->
+<!--
 <router-outlet></router-outlet>
+-->
