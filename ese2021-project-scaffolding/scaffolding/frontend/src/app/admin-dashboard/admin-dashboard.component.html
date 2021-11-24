@@ -1,0 +1,71 @@
+<h1>Welcome to the Admin Dashboard, {{user.username}}!</h1>
+<mat-grid-list cols="3" rowHeight="2:1">
+  <mat-grid-tile>
+    <mat-card>
+      <mat-card-title class="admin-dashboard-title">
+        Users
+      </mat-card-title>
+      <mat-card-content class="admin-dashboard-content">
+            <mat-icon class="material-icons-outlined admin-dashboard-icons">
+          account_circle
+          </mat-icon>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button class="group7-forms-button">
+          Manage Users
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-card>
+      <mat-card-title>
+        Orders
+      </mat-card-title>
+      <mat-card-content class="admin-dashboard-content">
+        <mat-icon class="material-icons-outlined admin-dashboard-icons">
+          local_shipping
+        </mat-icon>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button class="group7-forms-button">
+          Manage Orders
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-card>
+      <mat-card-title>
+        Categories
+      </mat-card-title>
+      <mat-card-content class="admin-dashboard-content">
+        <mat-icon class="material-icons-outlined admin-dashboard-icons">
+          topic
+        </mat-icon>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button class="group7-forms-button">
+          Manage Categories
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <mat-card>
+      <mat-card-title>
+        Products
+      </mat-card-title>
+      <mat-card-content class="admin-dashboard-content">
+        <mat-icon class="material-icons-outlined admin-dashboard-icons">
+          inventory_2
+        </mat-icon>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button class="group7-forms-button">
+          Manage Products
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>
