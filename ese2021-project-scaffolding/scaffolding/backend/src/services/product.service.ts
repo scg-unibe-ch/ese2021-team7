@@ -1,6 +1,9 @@
 import {Product} from '../models/product.model';
+import {CategoryService, CategoryType} from './category.service';
 
 export class ProductService {
+
+    private categoryService = new CategoryService();
 
     public async getProductById(productId: string): Promise<Product> {
         return Product.findByPk(productId).then(dbProduct => {
@@ -25,6 +28,10 @@ export class ProductService {
     }
 
     public async modifyProduct(modifiedProduct: Product): Promise<Product> {
+        const categoryIsValid = await this.categoryService.categoryIsValid(modifiedProduct.productCategory, CategoryType.PRODUCT_CATEGORY);
+        if (!categoryIsValid) {
+            return Promise.reject({message: 'Invalid category: category does not exist, or is of wrong type'});
+        }
         return Product.findByPk(modifiedProduct.productId).then(async dbProduct => {
             if (dbProduct) {
                 dbProduct.title = modifiedProduct.title;
@@ -50,6 +57,10 @@ export class ProductService {
     }
 
     public async createProduct(product: Product): Promise<Product> {
+        const categoryIsValid = await this.categoryService.categoryIsValid(product.productCategory, CategoryType.PRODUCT_CATEGORY);
+        if (!categoryIsValid) {
+            return Promise.reject({message: 'Invalid category: category does not exist, or is of wrong type'});
+        }
         return Product.create(product);
     }
 }

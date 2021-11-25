@@ -188,11 +188,21 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IkJyZXR0IiwidXNlcklkIjoxLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTYzNzUwNjQ3NSwiZXhwIjoxNjM3NTEzNjc1fQ.m90lr8b4YfJn9GxXLdfgRqG9E2aIRlFcK3LwEkBas0M",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"raw": "{\r\n    \"title\":\"{{$randomFirstName}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -200,15 +210,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/user/register",
+							"raw": "http://localhost:3000/post/create",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"user",
-								"register"
+								"post",
+								"create"
 							]
 						}
 					},
@@ -232,7 +242,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"raw": "{\r\n    \"postId\":4,\r\n    \"title\": \"1\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -240,15 +250,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/user/register",
+							"raw": "http://localhost:3000/post/modify",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"user",
-								"register"
+								"post",
+								"modify"
 							]
 						}
 					},
@@ -280,15 +290,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/user/register",
+							"raw": "http://localhost:3000/post/delete",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"user",
-								"register"
+								"post",
+								"delete"
 							]
 						}
 					},
@@ -308,6 +318,16 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IkJyZXR0IiwidXNlcklkIjoxLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTYzNzUwNjQ3NSwiZXhwIjoxNjM3NTEzNjc1fQ.m90lr8b4YfJn9GxXLdfgRqG9E2aIRlFcK3LwEkBas0M",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -318,7 +338,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"postId\":\"19\"\r\n}",
+							"raw": "{\r\n    \"postId\":3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -354,11 +374,21 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IkJyZXR0IiwidXNlcklkIjoxLCJhZG1pbiI6ZmFsc2UsImlhdCI6MTYzNzUwNjQ3NSwiZXhwIjoxNjM3NTEzNjc1fQ.m90lr8b4YfJn9GxXLdfgRqG9E2aIRlFcK3LwEkBas0M",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"raw": "{\r\n    \"postId\":1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -366,15 +396,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/user/register",
+							"raw": "http://localhost:3000/post/downvote",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"user",
-								"register"
+								"post",
+								"downvote"
 							]
 						}
 					},
@@ -444,7 +474,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -452,7 +482,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/post/all",
+							"raw": "http://localhost:3000/post/byId?postId=1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -460,7 +490,13 @@
 							"port": "3000",
 							"path": [
 								"post",
-								"all"
+								"byId"
+							],
+							"query": [
+								{
+									"key": "postId",
+									"value": "1"
+								}
 							]
 						}
 					},
@@ -484,12 +520,15 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userName\":\"{{$randomFirstName}}\",\r\n    \"password\":\"notSecure12\",\r\n    \"firstName\":\"Abc\",\r\n    \"lastName\":\"Def\",\r\n    \"email\":\"test@test.ch\",\r\n    \"street\":\"Abc\",\r\n    \"houseNumber\":\"1\",\r\n    \"zipCode\":\"3012\",\r\n    \"city\":\"Bern\",\r\n    \"phoneNumber\":\"123\",\r\n    \"birthday\": \"2001-09-19 18:52:45.550 +00:00\"\r\n}",
+							"raw": "{\r\n    \"userName\":\"Alice\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -497,15 +536,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/user/register",
+							"raw": "http://localhost:3000/checkUserNameOrEmailInUse",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"user",
-								"register"
+								"checkUserNameOrEmailInUse"
 							]
 						}
 					},
@@ -540,15 +578,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/post/all",
+							"raw": "http://localhost:3000/user",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"post",
-								"all"
+								"user"
 							]
 						}
 					},
@@ -621,9 +658,29 @@
 				{
 					"name": "create",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
-						"url": null
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"test\",\r\n    \"productCategory\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/product/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product",
+								"create"
+							]
+						}
 					},
 					"response": []
 				},
@@ -632,7 +689,18 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": null
+						"url": {
+							"raw": "http://localhost:3000/product/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product",
+								"all"
+							]
+						}
 					},
 					"response": []
 				},
@@ -650,7 +718,24 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"url": null
+						"url": {
+							"raw": "http://localhost:3000/product/byId?productId=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"product",
+								"byId"
+							],
+							"query": [
+								{
+									"key": "productId",
+									"value": "2"
+								}
+							]
+						}
 					},
 					"response": []
 				},
@@ -690,7 +775,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\r\n    \"productId\": 2,\r\n    \"title\": \"Chair\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -698,7 +783,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/product/delete",
+							"raw": "http://localhost:3000/product/modify",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -706,7 +791,7 @@
 							"port": "3000",
 							"path": [
 								"product",
-								"delete"
+								"modify"
 							]
 						}
 					},
@@ -965,6 +1050,115 @@
 							"path": [
 								"order",
 								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Magazines\",\r\n    \"type\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/category/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"category",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "modify",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoryId\": 2,\r\n    \"name\": \"Movies\",\r\n    \"type\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/category/modify",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"category",
+								"modify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/category/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"category",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/category/byId?categoryId=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"category",
+								"byId"
+							],
+							"query": [
+								{
+									"key": "categoryId",
+									"value": "2"
+								}
 							]
 						}
 					},

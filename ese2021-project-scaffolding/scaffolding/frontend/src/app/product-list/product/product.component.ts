@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Product} from "../../models/product.model";
 import {User} from "../../models/user.model";
 import {ActivatedRoute, Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-product',
@@ -16,7 +18,7 @@ export class ProductComponent implements OnInit {
   showDeleteAndUpdateButton : boolean = false;
   showBuyNowButton: boolean = false;
 
-  showProductDetails: boolean = false;
+  showDetailedView: boolean | undefined;
 
   @Input()
   loggedIn : boolean = false;
@@ -27,9 +29,6 @@ export class ProductComponent implements OnInit {
   @Input()
   productToDisplay: Product = new Product(0,0,'','','',0,'',false);
 
-  @Input()
-  onlyShowProduct: boolean = true;
-
   @Output()
   update = new EventEmitter<Product>();
 
@@ -39,12 +38,31 @@ export class ProductComponent implements OnInit {
   @Output()
   buy = new EventEmitter<Product>();
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+  constructor(public httpClient: HttpClient,private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
     this.evaluateUpdateDeletePermission();
     this.evaluateBuyNowPermission();
+
+    this.route.queryParams.subscribe(params => {
+      if(params['showDetailedView'] == 'true'){
+        // get Product
+        this.httpClient.get(environment.endpointURL + "product/byId", {
+          params: {
+            productId: params['productId']
+          }
+        }).subscribe((res: any) => {
+          this.productToDisplay = new Product(res.productId, 1, res.title,  res.description, res.image,  res.price, res.productCategory, false);
+          this.showDetailedView = true;
+        }, (error: any) => {
+          console.log(error);
+        });
+      }
+      else{
+        this.showDetailedView = false;
+      }
+    });
   }
 
   ngOnChange(): void {
@@ -85,11 +103,11 @@ export class ProductComponent implements OnInit {
   }
 
   showDetails(): void{
-    this.showProductDetails = true;
+    this.router.navigate(['/product'],{queryParams: {productId: this.productToDisplay.productId, showDetailedView: 'true'}}).then(r =>{});
   }
 
-  hideDetails(): void{
-    this.showProductDetails = false;
+  closeDetailedView(): void{
+    this.router.navigate(['/shop']).then(r =>{});
   }
 
   buyProduct(): void {
