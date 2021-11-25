@@ -7,6 +7,9 @@ import {environment} from "../../../environments/environment";
 import {OrderState} from "./order-state";
 import {User} from "../../models/user.model";
 import {Product} from "../../models/product.model";
+import {ConfirmationDialogModel} from "../../ui/confirmation-dialog/confirmation-dialog";
+import {ConfirmationDialogComponent} from "../../ui/confirmation-dialog/confirmation-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-order',
@@ -35,7 +38,8 @@ export class OrderComponent implements OnInit, OnChanges{
     public httpClient: HttpClient,
     public userService: UserService,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -95,25 +99,70 @@ export class OrderComponent implements OnInit, OnChanges{
   }
 
   cancelOrder() {
-    this.httpClient.get(environment.endpointURL + "order/cancel").subscribe((res: any) => {
+    this.handleCancel();
+    /*this.httpClient.get(environment.endpointURL + "order/cancel").subscribe((res: any) => {
       console.log(res);
     }, (error: any) => {
       console.log(error);
     });
     // only enable if orderState is pending
     this.orderToDisplay.state = OrderState.Cancelled;
-    this.showStateChangeButton = false;
+    this.showStateChangeButton = false;*/
+  }
+
+  handleCancel(): void {
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to cancel this order?');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    })
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.httpClient.get(environment.endpointURL + "order/cancel").subscribe((res: any) => {
+          console.log(res);
+        }, (error: any) => {
+          console.log(error);
+        });
+        // only enable if orderState is pending
+        this.orderToDisplay.state = OrderState.Cancelled;
+        this.showStateChangeButton = false;
+      }
+    });
   }
 
   shipOrder() {
     // only enable if orderState is pending
-    this.httpClient.get(environment.endpointURL + "order/ship").subscribe((res: any) => {
-      console.log(res);
-    }, (error: any) => {
-      console.log(error);
+    this.handleShip();
+      /*this.httpClient.get(environment.endpointURL + "order/ship").subscribe((res: any) => {
+        console.log(res);
+      }, (error: any) => {
+        console.log(error);
+      });
+      this.orderToDisplay.state = OrderState.Shipped;
+      this.showStateChangeButton = false;*/
+  }
+
+  handleShip(): void {
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to ship this order?');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    })
+
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.httpClient.get(environment.endpointURL + "order/ship").subscribe((res: any) => {
+          console.log(res);
+        }, (error: any) => {
+          console.log(error);
+        });
+        this.orderToDisplay.state = OrderState.Shipped;
+        this.showStateChangeButton = false;
+      }
     });
-    this.orderToDisplay.state = OrderState.Shipped;
-    this.showStateChangeButton = false;
   }
 
   deleteProduct($event: Product) {
