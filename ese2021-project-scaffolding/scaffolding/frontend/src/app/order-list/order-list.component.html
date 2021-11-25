@@ -1,14 +1,39 @@
 <div class="card-wrapper-center">
-  <div class="order-list-wrapper">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-    <div *ngFor="let orderToDisplay of orderList" class="group7-grid-tile order-item">
-      <app-order
-        [orderToDisplay]="orderToDisplay"
-        [currentUser]="currentUser">
-      </app-order>
-    </div>
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
 
-  </div>
+    <!-- Position Column -->
+    <ng-container matColumnDef="orderId">
+      <th mat-header-cell *matHeaderCellDef> orderId </th>
+      <td mat-cell *matCellDef="let element"> {{element.orderId}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="userId">
+      <th mat-header-cell *matHeaderCellDef> userId </th>
+      <td mat-cell *matCellDef="let element"> {{element.userId}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="productId">
+      <th mat-header-cell *matHeaderCellDef> productId </th>
+      <td mat-cell *matCellDef="let element"> {{element.productId}} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="state">
+      <th mat-header-cell *matHeaderCellDef> state </th>
+      <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+
+
 </div>
 
 

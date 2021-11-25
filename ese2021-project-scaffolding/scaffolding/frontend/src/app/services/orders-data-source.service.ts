@@ -4,8 +4,9 @@ import { Order } from '../models/order.model';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable } from 'rxjs';
 import { OrderListServiceService } from './order-list-service.service';
-import { finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'

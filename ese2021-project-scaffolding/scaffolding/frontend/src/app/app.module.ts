@@ -38,6 +38,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from './ui/confirmation-dialog/confirmation-dialog.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import {MatTableModule} from '@angular/material/table';
 
 
 @NgModule({
@@ -81,6 +82,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
     MatIconModule,
     MatSidenavModule,
     MatDialogModule,
+    MatTableModule,
     RouterModule.forRoot([
       { path: 'feed', component: FeedComponent },
       { path: 'profile', component: UserProfileComponent },
