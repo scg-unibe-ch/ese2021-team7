@@ -104,6 +104,7 @@ export class Server {
     }
 
     private makeTestData(createsData: boolean = true): Promise<void> {
+        this.sequelize.sync({force: true});
         this.sequelize.query('DELETE FROM product');
         this.sequelize.query('DELETE FROM vote');
         this.sequelize.query('DELETE FROM "order"');
