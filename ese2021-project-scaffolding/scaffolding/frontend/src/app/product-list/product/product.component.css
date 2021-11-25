@@ -1,4 +1,13 @@
 .product {
   max-width: 400px;
-
 }
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.product-close-button {
+  flex: 1 1 auto;
+}
+
