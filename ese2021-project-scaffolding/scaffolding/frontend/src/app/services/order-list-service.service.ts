@@ -18,34 +18,40 @@ export class OrderListServiceService {
   }
 
 
+  /**
+   * Gets all orders.
+   *
+   * return: Observable<Order[]>
+   */
   getAllOrders(): Observable<Order[]> {
     this.httpClient.get(environment.endpointURL + "order/all").subscribe((res: any) => {
       console.log(res);
       res.forEach((order: any) => {
-        let array = order.deliveryAdress.split(' ');
-        while (array.length<4){
-          array.push("");
+        let address = order.deliveryAdress.split(' ');
+        while (address.length<4){
+          address.push("");
         }
         this.orderList.push(
           new Order(
             order.orderId,
-            0, // to indicate that it belongs to a certain oder list
+            0,
             order.user, // userId of the user which places the order
             order.ProductProductId, // to indicate which product is sold
             order.firstName,
             order.lastName,
-            array[0],
-            array[1],
-            array[2],
-            array[3],
+            address[0],
+            address[1],
+            address[2],
+            address[3],
             order.paymentOption,
-            order.orderStatus));
+            order.orderStatus
+          ));
       })
     }, (error: any) => {
       console.log(error);
     });
     console.log(this.orderList);
-    return of(this.orderList);
+    return of(this.orderList); //returns Observable of orderList
 
   }
 

@@ -23,7 +23,7 @@ export class OrderListComponent implements OnInit {
 
 
   //user for table design
-  displayedColumns: string[] = ['orderId', 'productId', 'userId', 'state'];
+  displayedColumns: string[] = ['orderId', 'productId', 'userId', 'firstName', 'lastName', 'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod', 'state'];
   dataSource: OrdersDataSourceService;
 
 
