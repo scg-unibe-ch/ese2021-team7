@@ -5,6 +5,7 @@ import {environment} from "../../environments/environment";
 import { Observable } from 'rxjs';
 import { from } from 'rxjs';
 import { of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class OrderListServiceService {
    *
    * return: Observable<Order[]>
    */
+  /*
   getAllOrders(): Observable<Order[]> {
     this.httpClient.get(environment.endpointURL + "order/all").subscribe((res: any) => {
       console.log(res);
@@ -54,17 +56,42 @@ export class OrderListServiceService {
     return of(this.orderList); //returns Observable of orderList
 
   }
+*/
 
 
-
-  /*
-
-  getAllOrders() {
-    return this.httpClient.get(environment.endpointURL + "order/all");
+  /**
+   * Gets all orders.
+   *
+   * return: Observable<Order[]>
+   */
+  getAllOrders(): Observable<Order[]> {
+    return this.httpClient.get(environment.endpointURL + "order/all")
+      .pipe(
+      map((dbOrders:any) => dbOrders.map(
+        (dbOrder: any) => {
+          let address = dbOrder.deliveryAdress.split(' ');
+          while (address.length<4){
+            address.push("");
+          }
+            return new Order(
+              dbOrder.orderId,
+              0,
+              dbOrder.user, // userId of the user which places the order
+              dbOrder.ProductProductId, // to indicate which product is sold
+              dbOrder.firstName,
+              dbOrder.lastName,
+              address[0],
+              address[1],
+              address[2],
+              address[3],
+              dbOrder.paymentOption,
+              dbOrder.orderStatus
+            );
+          })))
 
   }
 
-   */
+
 
 
 
