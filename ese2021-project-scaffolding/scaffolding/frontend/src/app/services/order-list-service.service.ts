@@ -12,11 +12,7 @@ import { map } from 'rxjs/operators';
 })
 export class OrderListServiceService {
 
-  private orderList: Order[];
-
-  constructor(public httpClient: HttpClient) {
-    this.orderList = [];
-  }
+  constructor(public httpClient: HttpClient) {}
 
 
   /**
