@@ -41,7 +41,8 @@ postController.post('/downvote', verifyToken,
 
 postController.get('/all',
     (req: Request, res: Response) => {
-        postService.getAll('' + req.query.sortBy).then(posts => res.send(posts)).catch(err => res.status(500).send(err));
+        postService.getAll('' + req.query.sortBy, '' + req.query.userId)
+            .then(posts => res.send(posts)).catch(err => res.status(500).send(err));
     }
 );
 

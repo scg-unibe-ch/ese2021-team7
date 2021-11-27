@@ -11,10 +11,12 @@ export class PostService {
     private categoryService = new CategoryService();
     private voteService: VoteService;
 
-    // Should this method be static?
-    public async getPostById(postId: string): Promise<Post> {
+    public async getPostById(postId: string, userId = 'undefined'): Promise<Post> {
         return Post.findByPk(postId).then(dbPost => {
             if (dbPost) {
+                if (userId !== 'undefined') {
+                    dbPost = this.addVotingStatus(dbPost, userId);
+                }
                 return Promise.resolve(dbPost);
             } else {
                 return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
@@ -22,13 +24,13 @@ export class PostService {
         });
     }
 
-    public async getAll(sortBy: string): Promise<Post[]> {
+    public async getAll(sortBy: string, userId: string | undefined): Promise<Post[]> {
         return  Post.findAll({
             attributes: ['postId', 'title', 'image', 'text', 'category'],
             include: Vote
         }).then(dbPosts => {
             const postsWithScore: Post[] = [];
-            for (const dbPost of dbPosts) {
+            for (let dbPost of dbPosts) {
                 let score = 0;
                 // @ts-ignore
                 for (const vote of dbPost.Votes) {
@@ -40,6 +42,8 @@ export class PostService {
                 }
                 // @ts-ignore
                 dbPost.setDataValue('score', score);
+                // @ts-ignore
+                dbPost = this.addVotingStatus(dbPost, userId);
                 postsWithScore.push(dbPost);
             }
             return postsWithScore.sort( (postA, postB) => {
@@ -141,6 +145,30 @@ export class PostService {
         // @ts-ignore
         createdPost.setUser(user);
         return createdPost.save().then(updatedPost => Promise.resolve(updatedPost));
+    }
+
+    private addVotingStatus(post: Post, userId: string | undefined) {
+        // @ts-ignore
+        post.setDataValue('votingStatus', 'not voted');
+        if (userId === 'undefined') { return post; }
+        const userIdAsInt = parseInt(userId, 10);
+        let i = 0;
+
+        // @ts-ignore
+        while (!post.getDataValue('votingStatus') && i < post.Votes.length) {
+            // @ts-ignore
+            if (post.Votes[i].upvote && post.Votes[i].UserUserId === userIdAsInt) {
+                // @ts-ignore
+                post.setDataValue('votingStatus', 'upvoted');
+                // @ts-ignore
+            } else if (!post.Votes[i].upvote && post.Votes[i].UserUserId === userIdAsInt) {
+                // @ts-ignore
+                post.setDataValue('votingStatus', 'downvoted');
+            }
+            i++;
+        }
+
+        return post;
     }
 
     constructor() {
