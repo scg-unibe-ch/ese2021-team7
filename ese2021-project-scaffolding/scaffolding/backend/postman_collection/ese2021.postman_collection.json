@@ -501,6 +501,59 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get post by ID with user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.variables.get(\"variable_key\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/post/byId?postId=1&userId=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"post",
+								"byId"
+							],
+							"query": [
+								{
+									"key": "postId",
+									"value": "1"
+								},
+								{
+									"key": "userId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -592,7 +645,7 @@
 					"response": []
 				},
 				{
-					"name": "user list",
+					"name": "get all",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -607,7 +660,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/user/",
+							"raw": "http://localhost:3000/user/all",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -615,7 +668,7 @@
 							"port": "3000",
 							"path": [
 								"user",
-								""
+								"all"
 							]
 						}
 					},

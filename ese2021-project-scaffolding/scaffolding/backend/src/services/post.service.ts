@@ -75,8 +75,7 @@ export class PostService {
             return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});
         } else {
             this.voteService.downvote(postId, userId);
-            const post = await Post.findByPk(postId);
-            return Promise.resolve(post);
+            return this.getPostById('' + postId, '' + userId);
         }
     }
 
@@ -101,7 +100,7 @@ export class PostService {
                 dbPost.text = modifiedPost.text;
                 dbPost.category = modifiedPost.category;
                 dbPost.image = modifiedPost.image;
-                return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+                return dbPost.save().then(() => this.getPostById('' + modifiedPost.postId, '' + userId));
             } else {
                 return Promise.reject({message: 'no post with ID ' + modifiedPost.postId + ' exists'});
             }
@@ -144,7 +143,7 @@ export class PostService {
         const createdPost = await Post.create(postToCreate);
         // @ts-ignore
         createdPost.setUser(user);
-        return createdPost.save().then(updatedPost => Promise.resolve(updatedPost));
+        return createdPost.save().then(() => this.getPostById('' + createdPost.postId, '' + userId));
     }
 
     private addVotingStatus(post: Post, userId: string | undefined) {
