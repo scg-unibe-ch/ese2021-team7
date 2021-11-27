@@ -344,12 +344,12 @@ The modified product is returned. Returns HTTP status code 200 on success, and s
 No meaningful response body. Returns HTTP status code 200 on success, and status code 500 on failure (e.g. productId does not exist).
 ```
 ```
-# /oder
+# /order
 Order statuses:
 PENDNIG: 0,
 SHIPPED: 1,
 CANCELLED: 2.
-## POST /oder/create
+## POST /order/create
 Order is in state pending after creation.
 ### Request
 ```
@@ -374,7 +374,7 @@ The created product is returned. Returns HTTP status code 200 on success, and st
     "ProductProductId": 1
 }
 ```
-## GET /oder/all
+## GET /order/all
 Returns all orders, ordered by ID (i.e. creation time).
 ### Request
 ```
@@ -404,12 +404,12 @@ Returns all orders, ordered by ID (i.e. creation time).
     }
 ]
 ```
-## GET /oder/byUser
+## GET /order/byUser
 Returns all orders of the specified user.
 ### Request
 HTTP query param: userId: int
 ```
-GET /oder/byUser?userId=5
+GET /order/byUser?userId=5
 ```
 ### Response
 ```
@@ -436,12 +436,12 @@ GET /oder/byUser?userId=5
     }
 ]
 ```
-## GET /oder/byId
-Returns an order ID. Returns HTTP status code 500 if no oder with the specified oderId exists.
+## GET /order/byId
+Returns an order ID. Returns HTTP status code 500 if no order with the specified orderId exists.
 ### Request
-HTTP query param: oderId: int
+HTTP query param: orderId: int
 ```
-GET /oder/byId?oderId=2
+GET /order/byId?orderId=2
 ```
 ### Response
 ```
@@ -456,7 +456,7 @@ GET /oder/byId?oderId=2
     "ProductProductId": 1
 }
 ```
-## POST /oder/modify
+## POST /order/modify
 ### Request
 ```
 {
@@ -480,7 +480,7 @@ The modified order is returned. Returns HTTP status code 200 on success, and sta
     "ProductProductId": 2
 }
 ```
-## POST /oder/cancel
+## POST /order/cancel
 Only pending orders can be cancelled.
 ### Request
 ```
@@ -502,7 +502,7 @@ The cancelled order is returned. Returns HTTP status code 200 on success, and st
     "ProductProductId": 2
 }
 ```
-## POST /oder/ship
+## POST /order/ship
 Only pending orders can be shipped.
 ### Request
 ```
@@ -524,7 +524,7 @@ The shipped order is returned. Returns HTTP status code 200 on success, and stat
     "ProductProductId": 2
 }
 ```
-## POST /oder/delete
+## POST /order/delete
 ### Request
 ```
 {
