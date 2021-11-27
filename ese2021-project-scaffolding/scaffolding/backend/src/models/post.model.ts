@@ -7,8 +7,6 @@ export interface PostAttributes {
     title: string;
     image: string;
     text: string;
-    upvote: number;
-    downvote: number;
     category: number;
 }
 
@@ -17,8 +15,6 @@ export class Post extends Model<PostAttributes> implements PostAttributes {
     title!: string;
     image: string;
     text: string;
-    upvote: number;
-    downvote: number;
     category: number;
 
     public static initialize(sequelize: Sequelize) {
@@ -36,12 +32,6 @@ export class Post extends Model<PostAttributes> implements PostAttributes {
             },
             text: {
                 type: DataTypes.STRING
-            },
-            upvote: {
-                type: DataTypes.INTEGER
-            },
-            downvote: {
-                type: DataTypes.INTEGER
             },
             category: {
                 type: DataTypes.INTEGER

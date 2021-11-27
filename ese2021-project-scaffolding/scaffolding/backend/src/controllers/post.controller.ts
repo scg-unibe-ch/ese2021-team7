@@ -25,21 +25,24 @@ postController.post('/delete', verifyToken,
     }
 );
 
-postController.post('/upvote',
+postController.post('/upvote', verifyToken,
     (req: Request, res: Response) => {
-        postService.upvote(req.body.postId).then(modifiedPost => res.send(modifiedPost)).catch(err => res.status(500).send(err));
+        postService.upvote(req.body.postId, req.body.tokenPayload.userId)
+            .then(modifiedPost => res.send(modifiedPost)).catch(err => res.status(500).send(err));
     }
 );
 
-postController.post('/downvote',
+postController.post('/downvote', verifyToken,
     (req: Request, res: Response) => {
-        postService.downvote(req.body.postId).then(modifiedPost => res.send(modifiedPost)).catch(err => res.status(500).send(err));
+        postService.downvote(req.body.postId, req.body.tokenPayload.userId)
+            .then(modifiedPost => res.send(modifiedPost)).catch(err => res.status(500).send(err));
     }
 );
 
 postController.get('/all',
     (req: Request, res: Response) => {
-        postService.getAll('' + req.query.sortBy).then(posts => res.send(posts)).catch(err => res.status(500).send(err));
+        postService.getAll('' + req.query.sortBy, '' + req.query.userId)
+            .then(posts => res.send(posts)).catch(err => res.status(500).send(err));
     }
 );
 
