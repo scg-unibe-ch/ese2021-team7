@@ -107,7 +107,7 @@ export class ProductFormComponent implements OnInit {
         this.sendUpdateForm();
       }
     }
-    this.router.navigate(['/shop']);
+    this.router.navigate(['/shop']).then(r => {});
   }
 
   sendCreateForm(): void {
@@ -173,6 +173,9 @@ export class ProductFormComponent implements OnInit {
     };
   }
 
-
+  discardChanges(): void {
+    this.isSubmitted = false;
+    this.router.navigate(['/shop'], {queryParams: {loggedIn: 'true'}}).then(r =>{});
+  }
 
 }
