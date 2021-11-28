@@ -5,14 +5,16 @@ import {environment} from "../../environments/environment";
 import { Observable } from 'rxjs';
 import { from } from 'rxjs';
 import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {concatMap, map } from 'rxjs/operators';
+import { ProductService } from './product.service';
+import { OrderToDisplay } from '../models/order-to-display';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderListServiceService {
 
-  constructor(public httpClient: HttpClient) {}
+  constructor(public httpClient: HttpClient, public productService: ProductService) {}
 
 
   /**
@@ -60,6 +62,7 @@ export class OrderListServiceService {
    *
    * return: Observable<Order[]>
    */
+
   getAllOrders(): Observable<Order[]> {
     return this.httpClient.get(environment.endpointURL + "order/all")
       .pipe(
@@ -87,6 +90,50 @@ export class OrderListServiceService {
 
   }
 
+
+/*
+  getAllOrders(): Observable<OrderToDisplay[]> {
+    let orders: OrderToDisplay[] = [];
+    return this.httpClient.get(environment.endpointURL + "order/all")
+      .pipe(
+        concatMap((dbOrders:any) =>
+            dbOrders.map(
+              (dbOrder: any) => {
+                const ordersToDisplay: OrderToDisplay[] = [];
+                let address = dbOrder.deliveryAdress.split(' ');
+                while (address.length < 4) {
+                  address.push("");
+                }
+                this.productService.getProductById(dbOrder.prodcutId).pipe(
+                  map((product: any) => {
+                     ordersToDisplay.push(new OrderToDisplay(
+                      dbOrder.orderId,
+                      dbOrder.user,
+                      dbOrder.ProductProductId,
+                      "Product Title",
+                      "Product Image",
+                      "Product Description",
+                      "price",
+                      "first Name",
+                      "Las tName",
+                      address[0],
+                      address[1],
+                      address[2],
+                      address[3],
+                      dbOrder.paymentOption,
+                      dbOrder.orderStatus
+                     ));
+                  })
+                );
+                return ordersToDisplay;
+              }
+            )
+
+
+        )
+        );
+  }
+*/
 
 
 

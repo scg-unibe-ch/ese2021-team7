@@ -9,6 +9,7 @@ import {OrderState} from "./order/order-state";
 import { OrderListServiceService } from '../services/order-list-service.service';
 import { OrdersDataSourceService } from '../services/orders-data-source.service';
 import {MatTableModule} from '@angular/material/table';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-order-list',
@@ -23,7 +24,7 @@ export class OrderListComponent implements OnInit {
 
 
   //user for table design
-  displayedColumns: string[] = ['orderId', 'productId', 'userId', 'firstName', 'lastName', 'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod', 'state'];
+  displayedColumns: string[] = ['orderId', 'costumerId', 'productId', 'productName','firstName', 'lastName', 'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod', 'state'];
   dataSource: OrdersDataSourceService;
 
 
@@ -32,7 +33,8 @@ export class OrderListComponent implements OnInit {
     private router: Router,
     public userService: UserService,
     private orderListService: OrderListServiceService,
-    private ordersDataSource: OrdersDataSourceService
+    private ordersDataSource: OrdersDataSourceService,
+    public productService: ProductService
   ) {}
 
   ngOnInit(): void {
@@ -43,7 +45,7 @@ export class OrderListComponent implements OnInit {
     //current Value
     this.currentUser = this.userService.getUser();
     this.getListOfOrder();
-    this.dataSource = new OrdersDataSourceService(this.orderListService);
+    this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService);
     this.dataSource.loadAllOrders();
   }
 
