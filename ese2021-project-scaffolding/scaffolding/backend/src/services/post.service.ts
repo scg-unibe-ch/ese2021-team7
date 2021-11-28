@@ -1,9 +1,7 @@
 import { Post } from '../models/post.model';
 import {User} from '../models/user.model';
-import {Sequelize} from 'sequelize';
 import { VoteService } from './vote.service';
 import { Vote } from '../models/vote.model';
-import { ErrorCodes } from '../errorCodes';
 import {CategoryService, CategoryType} from './category.service';
 
 export class PostService {
@@ -11,17 +9,30 @@ export class PostService {
     private categoryService = new CategoryService();
     private voteService: VoteService;
 
-    public async getPostById(postId: string, userId = 'undefined'): Promise<Post> {
-        return Post.findByPk(postId).then(dbPost => {
+    public async getPostById(postId: string, userId: string | undefined): Promise<Post> {
+        return Post.findByPk(postId, {include: Vote}).then(dbPost => {
             if (dbPost) {
-                if (userId !== 'undefined') {
-                    dbPost = this.addVotingStatus(dbPost, userId);
-                }
+                this.setScore(dbPost);
+                dbPost = this.addVotingStatus(dbPost, userId);
                 return Promise.resolve(dbPost);
             } else {
                 return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
             }
         });
+    }
+
+    private setScore(post: Post) {
+        let score = 0;
+        // @ts-ignore
+        for (const vote of post.Votes) {
+            if (vote.upvote) {
+                score += 1;
+            } else {
+                score -= 1;
+            }
+        }
+        // @ts-ignore
+        post.setDataValue('score', score);
     }
 
     public async getAll(sortBy: string, userId: string | undefined): Promise<Post[]> {
@@ -31,18 +42,7 @@ export class PostService {
         }).then(dbPosts => {
             const postsWithScore: Post[] = [];
             for (let dbPost of dbPosts) {
-                let score = 0;
-                // @ts-ignore
-                for (const vote of dbPost.Votes) {
-                    if (vote.upvote) {
-                        score += 1;
-                    } else {
-                        score -= 1;
-                    }
-                }
-                // @ts-ignore
-                dbPost.setDataValue('score', score);
-                // @ts-ignore
+                this.setScore(dbPost);
                 dbPost = this.addVotingStatus(dbPost, userId);
                 postsWithScore.push(dbPost);
             }
@@ -75,8 +75,7 @@ export class PostService {
             return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});
         } else {
             this.voteService.downvote(postId, userId);
-            const post = await Post.findByPk(postId);
-            return Promise.resolve(post);
+            return this.getPostById('' + postId, '' + userId);
         }
     }
 
@@ -101,7 +100,7 @@ export class PostService {
                 dbPost.text = modifiedPost.text;
                 dbPost.category = modifiedPost.category;
                 dbPost.image = modifiedPost.image;
-                return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+                return dbPost.save().then(() => this.getPostById('' + modifiedPost.postId, '' + userId));
             } else {
                 return Promise.reject({message: 'no post with ID ' + modifiedPost.postId + ' exists'});
             }
@@ -144,7 +143,7 @@ export class PostService {
         const createdPost = await Post.create(postToCreate);
         // @ts-ignore
         createdPost.setUser(user);
-        return createdPost.save().then(updatedPost => Promise.resolve(updatedPost));
+        return createdPost.save().then(() => this.getPostById('' + createdPost.postId, '' + userId));
     }
 
     private addVotingStatus(post: Post, userId: string | undefined) {
@@ -155,7 +154,7 @@ export class PostService {
         let i = 0;
 
         // @ts-ignore
-        while (!post.getDataValue('votingStatus') && i < post.Votes.length) {
+        while (!(post.getDataValue('votingStatus') !== 'not voted')  && i < post.Votes.length) {
             // @ts-ignore
             if (post.Votes[i].upvote && post.Votes[i].UserUserId === userIdAsInt) {
                 // @ts-ignore

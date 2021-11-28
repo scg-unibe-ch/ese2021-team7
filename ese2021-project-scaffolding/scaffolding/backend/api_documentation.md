@@ -45,12 +45,14 @@ If a user is found: HTTP status code 200 and the user's data in the response:
 ```
 # /post
 ## GET /post/all
-Returns all posts. If sortBy is 1, posts are ordered by their score. Otherwise, posts are ordered by creation time. 
+Returns all posts. If sortBy is 1, posts are ordered by their score. Otherwise, posts are ordered by creation time.
+If a userId is specified that user's voting status is returned in every post.
 ### Request
-HTTP query param: sortBy: int (optional)
+HTTP query param: sortBy: int (optional), userId: int (optional)
 ```
 e.g. GET /post/all
 e.g. GET /post/all?sortBy=1
+e.g. GET /post/all?sortBy=1&userId=3
 ```
 ### Response
 ```
@@ -60,24 +62,23 @@ e.g. GET /post/all?sortBy=1
         "title": "Table",
         "image": null,
         "text": "Congo",
-        "upvote": 0,
-        "downvote": 0,
         "category": null,
         "createdAt": "2021-10-22T19:42:01.988Z",
         "updatedAt": "2021-10-22T19:42:01.994Z",
-        "UserUserId": 9
+        "UserUserId": 9,
+        "score": 1,
+        "votingStatus": "not voted|upvoted|downvoted"
     },
     {
         "postId": 15,
         "title": "SCSI",
         "image": null,
         "text": "Kenya",
-        "upvote": 0,
-        "downvote": 0,
         "category": null,
         "createdAt": "2021-10-22T19:42:01.443Z",
         "updatedAt": "2021-10-22T19:42:01.454Z",
-        "UserUserId": 9
+        "score": -1,
+        "votingStatus": "not voted|upvoted|downvoted"
     },
     ...
 ]
@@ -85,9 +86,11 @@ e.g. GET /post/all?sortBy=1
 ## GET /post/byId
 Returns a post by ID. Returns HTTP status code 500 if no post with the specified postId exists.
 ### Request
-HTTP query param: postId: int
+HTTP query param: postId: int, userId: int (optional)
+If a userId is specified that user's voting status is returned in every post.
 ```
 GET /post/byId?postId=1
+GET /post/byId?postId=1&userId=3
 ```
 ### Response
 ```
@@ -96,12 +99,12 @@ GET /post/byId?postId=1
     "title": "Fantastic",
     "image": null,
     "text": "Keyboard",
-    "upvote": 0,
-    "downvote": 0,
     "category": null,
     "createdAt": "2021-10-22T17:25:20.258Z",
     "updatedAt": "2021-10-22T17:25:20.264Z",
     "UserUserId": 1
+    "score": -1,
+    "votingStatus": "not voted|upvoted|downvoted"
 }
 ```
 ## POST /post/create
@@ -114,8 +117,6 @@ The request must contain a header `Authorization` with value `Bearer: <token>` w
     "text": string(optional),
     "image": string(optional),
     "category": int(optional),
-    "upvote": int(optional),
-    "downvote": int(optional),
 }
 ```
 ### Response
@@ -127,16 +128,15 @@ The created post is returned. Returns HTTP status code 200 on success, 403 if de
     "text": "Division",
     "category": 6,
     "image": "link to image",
-    "upvote": 0,
-    "downvote": 0,
     "updatedAt": "2021-10-22T20:08:07.406Z",
     "createdAt": "2021-10-22T20:08:07.399Z",
     "UserUserId": 9
+    "score": 0,
+    "votingStatus": "not voted"
 }
 ```
 ## POST /post/modify
 A post can only be modified by its creator or by an admin.
-
 ### Request
 The request must contain a header `Authorization` with value `Bearer: <token>` where `<token>` is the token from a login response.
 ```
@@ -159,11 +159,11 @@ The modified post is returned. Returns HTTP status code 200 on success, 403 if d
     "text": "Division",
     "category": 6,
     "image": "link to image",
-    "upvote": 0,
-    "downvote": 0,
     "updatedAt": "2021-10-22T20:08:07.406Z",
     "createdAt": "2021-10-22T20:08:07.399Z",
     "UserUserId": 9
+    "score": 0,
+    "votingStatus": "not voted"
 }
 ```
 ## POST /post/delete
@@ -188,21 +188,24 @@ No meaningful response body. Returns HTTP status code 200 on success, 403 if del
 ```
 ### Response
 Returns the upvoted/downvoted post. Returns HTTP status code 500 if no post with the specified postId exists.
+The votingStatus in the response is the voter's votingStatus.
 ```
 {
     "postId": 1,
     "title": "Legacy",
     "image": null,
     "text": "Sudan",
-    "upvote": 2,
-    "downvote": 0,
     "category": null,
     "createdAt": "2021-10-22T17:25:18.490Z",
     "updatedAt": "2021-10-22T19:55:44.100Z",
     "UserUserId": 1
+    "score": 0,
+    "votingStatus": "upvoted|downvoted"
 }
 ```
 # /product
+isAvailable in the response is false if there's an order for the product in status SHIPPED or PENDING, otherwise
+it's true.
 ## POST /product/create
 ### Request
 ```
@@ -222,7 +225,8 @@ The created product is returned. Returns HTTP status code 200 on success, and st
     "title": "input",
     "productCategory": 3,
     "updatedAt": "2021-11-15T20:16:34.394Z",
-    "createdAt": "2021-11-15T20:16:34.394Z"
+    "createdAt": "2021-11-15T20:16:34.394Z",
+    "isAvailable": true|false
 }
 ```
 ## GET /product/all
@@ -241,7 +245,8 @@ Returns all products, ordered by ID (i.e. creation time).
         "price": null,
         "productCategory": 55,
         "createdAt": "2021-11-15T20:14:50.472Z",
-        "updatedAt": "2021-11-15T20:19:05.151Z"
+        "updatedAt": "2021-11-15T20:19:05.151Z",
+        "isAvailable": true|false
     },
     {
         "productId": 3,
@@ -251,7 +256,8 @@ Returns all products, ordered by ID (i.e. creation time).
         "price": null,
         "productCategory": null,
         "createdAt": "2021-11-15T20:14:51.056Z",
-        "updatedAt": "2021-11-15T20:14:51.056Z"
+        "updatedAt": "2021-11-15T20:14:51.056Z",
+        "isAvailable": true|false
     },
     ...
 ]
@@ -274,7 +280,8 @@ GET /product/byId?productCategory=5
         "price": null,
         "productCategory": 5,
         "createdAt": "2021-11-15T20:14:50.472Z",
-        "updatedAt": "2021-11-15T20:19:05.151Z"
+        "updatedAt": "2021-11-15T20:19:05.151Z",
+        "isAvailable": true|false
     },
     {
         "productId": 3,
@@ -284,7 +291,8 @@ GET /product/byId?productCategory=5
         "price": null,
         "productCategory": 5,
         "createdAt": "2021-11-15T20:14:51.056Z",
-        "updatedAt": "2021-11-15T20:14:51.056Z"
+        "updatedAt": "2021-11-15T20:14:51.056Z",
+        "isAvailable": true|false
     },
     ...
 ]
@@ -306,7 +314,8 @@ GET /product/byId?productId=2
     "price": null,
     "productCategory": 5,
     "createdAt": "2021-11-15T20:14:51.056Z",
-    "updatedAt": "2021-11-15T20:14:51.056Z"
+    "updatedAt": "2021-11-15T20:14:51.056Z",
+    "isAvailable": true|false
 }
 ```
 
@@ -330,7 +339,8 @@ The modified product is returned. Returns HTTP status code 200 on success, and s
     "title": "Chair",
     "productCategory": 55,
     "createdAt": "2021-11-15T20:14:50.472Z",
-    "updatedAt": "2021-11-15T20:19:05.151Z"
+    "updatedAt": "2021-11-15T20:19:05.151Z",
+    "isAvailable": true|false
 }
 ```
 ## POST /product/delete
