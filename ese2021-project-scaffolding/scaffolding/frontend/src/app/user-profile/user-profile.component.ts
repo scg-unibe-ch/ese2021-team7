@@ -13,6 +13,7 @@ export class UserProfileComponent implements OnInit {
   loggedIn: boolean | undefined;
   currentUser: User | undefined;
   address : String | undefined;
+  birthday: String | undefined;
 
   constructor(public userService: UserService,
               public router: Router) { }
@@ -24,14 +25,14 @@ export class UserProfileComponent implements OnInit {
     });
     this.userService.user$.subscribe( res => {
       this.currentUser = res;
-      this.address = this.currentUser.street + " " + this.currentUser.houseNumber + ", " + this.currentUser.zipCode + " " + this.currentUser.city;
-    })
+    });
 
     //current Value
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
     if(typeof this.currentUser != 'undefined'){
       this.address = this.currentUser.street + " " + this.currentUser.houseNumber + ", " + this.currentUser.zipCode + " " + this.currentUser.city;
+      this.birthday = this.currentUser.birthday.substring(8,10) + "." + this.currentUser.birthday.substring(5,7) + "." + this.currentUser.birthday.substring(0,4);
     }
   }
 
