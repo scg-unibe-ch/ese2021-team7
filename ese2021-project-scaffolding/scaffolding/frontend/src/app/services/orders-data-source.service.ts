@@ -16,7 +16,7 @@ import { OrderToDisplay } from '../models/order-to-display';
 })
 export class OrdersDataSourceService implements DataSource<Order>{
 
-  private ordersSubject = new BehaviorSubject<any[]>([]);
+  private ordersSubject = new BehaviorSubject<OrderToDisplay[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
   public loading$ = this.loadingSubject.asObservable();
@@ -84,7 +84,7 @@ export class OrdersDataSourceService implements DataSource<Order>{
   });
   }
 */
-
+/*
   loadAllOrders() {
 
     this.loadingSubject.next(true);
@@ -132,19 +132,19 @@ export class OrdersDataSourceService implements DataSource<Order>{
     });
   }
 
+*/
 
-
-/*    loadAllOrders() {
+    loadAllOrders():void  {
 
       this.loadingSubject.next(true);
 
       this.orderListService.getAllOrders().pipe(
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false)),
-        tap((data:any) => console.log("Tap call:" + data))
-      ).subscribe(orders => {
+        tap((data:OrderToDisplay[]) => console.log("Tap call:" + data))
+      ).subscribe((orders: OrderToDisplay[]) => {
             console.log(orders);
             this.ordersSubject.next(orders)});
-        }*/
+        }
 
 }

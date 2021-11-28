@@ -5,7 +5,7 @@ import {environment} from "../../environments/environment";
 import { Observable } from 'rxjs';
 import { from } from 'rxjs';
 import { of } from 'rxjs';
-import {concatMap, map } from 'rxjs/operators';
+import {catchError, concatMap, map, tap } from 'rxjs/operators';
 import { ProductService } from './product.service';
 import { OrderToDisplay } from '../models/order-to-display';
 
@@ -63,6 +63,7 @@ export class OrderListServiceService {
    * return: Observable<Order[]>
    */
 
+  /*
   getAllOrders(): Observable<Order[]> {
     return this.httpClient.get(environment.endpointURL + "order/all")
       .pipe(
@@ -89,24 +90,23 @@ export class OrderListServiceService {
           })))
 
   }
-
+*/
 
 /*
   getAllOrders(): Observable<OrderToDisplay[]> {
-    let orders: OrderToDisplay[] = [];
     return this.httpClient.get(environment.endpointURL + "order/all")
       .pipe(
         concatMap((dbOrders:any) =>
             dbOrders.map(
               (dbOrder: any) => {
-                const ordersToDisplay: OrderToDisplay[] = [];
+                let orderToDisplay: OrderToDisplay;
                 let address = dbOrder.deliveryAdress.split(' ');
                 while (address.length < 4) {
                   address.push("");
                 }
                 this.productService.getProductById(dbOrder.prodcutId).pipe(
                   map((product: any) => {
-                     ordersToDisplay.push(new OrderToDisplay(
+                     orderToDisplay = new OrderToDisplay(
                       dbOrder.orderId,
                       dbOrder.user,
                       dbOrder.ProductProductId,
@@ -122,10 +122,11 @@ export class OrderListServiceService {
                       address[3],
                       dbOrder.paymentOption,
                       dbOrder.orderStatus
-                     ));
-                  })
+                     );
+                  }
+                  )
                 );
-                return ordersToDisplay;
+                return orderToDisplay;
               }
             )
 
@@ -136,6 +137,80 @@ export class OrderListServiceService {
 */
 
 
+
+  getAllOrders(): Observable<OrderToDisplay[]> {
+    return this.httpClient.get(environment.endpointURL + "order/all")
+      .pipe(
+        map((dbOrders:any) =>
+          dbOrders.map(
+            (dbOrder: any) => {
+              let address = dbOrder.deliveryAdress.split(' ');
+              while (address.length < 4) {
+                address.push("");
+              }
+                 return new OrderToDisplay(
+                    dbOrder.orderId,
+                    dbOrder.user,
+                    dbOrder.ProductProductId,
+                    "Product Title",
+                    "Product Image",
+                    "Product Description",
+                    "price",
+                    "first Name",
+                    "Las tName",
+                    address[0],
+                    address[1],
+                    address[2],
+                    address[3],
+                    dbOrder.paymentOption,
+                    dbOrder.orderStatus
+                  );
+            }
+          )
+        )
+      );
+  }
+  
+
+
+/*
+  getAllOrders(): Observable<OrderToDisplay[]> {
+    return this.httpClient.get(environment.endpointURL + "order/all")
+      .pipe(
+        tap((dbOrders: any) => console.log("Tap in Order List Service: " + JSON.stringify(dbOrders))),
+        concatMap((dbOrders:any) =>
+
+           dbOrders.forEach(
+             (dbOrder: any) => {
+                let address = dbOrder.deliveryAdress.split(' ');
+                while (address.length < 4) {
+                  address.push("");
+                }
+                return new OrderToDisplay(
+                  dbOrder.orderId,
+                  dbOrder.user,
+                  dbOrder.ProductProductId,
+                  "Product Title",
+                  "Product Image",
+                  "Product Description",
+                  "price",
+                  "first Name",
+                  "Las tName",
+                  address[0],
+                  address[1],
+                  address[2],
+                  address[3],
+                  dbOrder.paymentOption,
+                  dbOrder.orderStatus
+                );
+              }
+            ))
+
+
+        );
+
+  }
+*/
 
 
 }
