@@ -6,6 +6,7 @@ export class ErrorCodes {
     static wrongPassword = 23;
     static illegalRequestFormat = 24;
     static postNotFound = 30;
+    static userHasAlreadyVoted = 40;
 
     public static getUserNameOrMailAlreadyInUse() {
         return ErrorCodes.userNameOrMailAlreadyInUse;
@@ -32,5 +33,9 @@ export class ErrorCodes {
 
     public static getIllegalPassword() {
         return ErrorCodes.illegalPassword;
+    }
+
+    public static getUserHasAlreadyVoted() {
+        return ErrorCodes.userHasAlreadyVoted;
     }
 }
