@@ -30,7 +30,8 @@
   <mat-card-actions *ngIf="!onlyShowProduct" class="group7-product-actions" align="end">
 
     <!-- Should only be usable for logged in users -->
-    <button mat-button [disabled]="!showBuyNowButton" class="group7-product-actions-button"><mat-icon (click)="buyProduct()" class="group7-product-actions">shopping_cart</mat-icon></button>
+    <button mat-button *ngIf="!productToDisplay.sold" [disabled]="!showBuyNowButton" class="group7-product-actions-button"><mat-icon (click)="buyProduct()" class="group7-product-actions">shopping_cart</mat-icon></button>
+    <button mat-button *ngIf="productToDisplay.sold" class="group7-product-actions-button">SOLD OUT</button>
 
     <!-- Should only be usable for admins -->
     <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" class="group7-product-actions-button"><mat-icon (click)="updateProduct()" class="group7-product-actions">edit</mat-icon></button>
