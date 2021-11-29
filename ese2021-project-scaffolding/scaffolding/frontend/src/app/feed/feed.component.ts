@@ -85,7 +85,7 @@ export class FeedComponent implements OnInit, DoCheck {
               this.votesByCurrentUser.push(new Vote(post.postId, vote.upvote))
             }
           })
-          if (this.checkIfPostIsAcceptedByFilter(post.category)){
+          if (this.checkIfPostIsAcceptedByFilter(this.getRightCategory(post.category))){
             this.httpClient.get(environment.endpointURL + "user/getById", {
               params: {
                 //TODO change
@@ -93,8 +93,9 @@ export class FeedComponent implements OnInit, DoCheck {
                 userId: 1
               }
             }).subscribe((res: any) => {
+                const i = this.getRightCategory(post.category);
                 this.postList.push(
-                  new Post(post.postId, post.title, post.text, post.image, post.score, post.category, post.UserUserId, res.userName));
+                  new Post(post.postId, post.title, post.text, post.image, post.score, i, post.UserUserId, res.userName));
                 console.log(this.votesByCurrentUser);
                 },
               (error: any) => {
@@ -103,6 +104,23 @@ export class FeedComponent implements OnInit, DoCheck {
           }
         });
       });
+  }
+
+  getRightCategory(categoryNumber: number): string {
+    switch (categoryNumber){
+      case 1: {
+        return 'The Wall';
+      }
+      case 2: {
+        return 'King\'s Landing';
+      }
+      case 3: {
+        return 'Winterfell';
+      }
+      default: {
+        return '';
+      }
+    }
   }
 
   deletePost(post: Post): void {
