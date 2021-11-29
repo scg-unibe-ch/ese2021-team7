@@ -53,7 +53,9 @@ export class PostFormComponent implements OnInit {
           }
         }).subscribe((res: any) => {
           console.log(res);
-          this.post = new Post(res.postId, 0, res.title, res.text, res.image, res.upvote, res.downvote, 0, res.category, res.createdAt, res.UserUserId,'');
+          //TODO create
+          this.post = new Post(res.postId, res.title, res.text, res.image, res.score, res.category,  res.UserUserId,'');
+          //this.post = new Post(res.postId, 0, res.title, res.text, res.image, res.upvote, res.downvote, 0, res.category, res.createdAt, res.UserUserId,'');
           console.log(this.post);
           this.initializeFormUpdate();
         }, (error: any) => {
@@ -124,8 +126,8 @@ export class PostFormComponent implements OnInit {
       text: this.postForm?.value.postText,
       image: this.postForm?.value.postImage,
       category: this.postForm?.value.postCategory,
-      upvote: this.post?.upvote,
-      downvote: this.post?.downvote
+      //upvote: this.post?.upvote,
+      //downvote: this.post?.downvote
     }, ).subscribe((res: any) => {
         console.log(res);
         this.isSubmitted = false;

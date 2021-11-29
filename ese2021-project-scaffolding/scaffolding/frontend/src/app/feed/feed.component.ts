@@ -2,7 +2,6 @@ import {Component, DoCheck, OnInit} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Post} from "../models/post.model";
-import {Feed} from "../models/feed.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
@@ -10,6 +9,8 @@ import {Product} from "../models/product.model";
 import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
 import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {OrderState} from "../order-list/order/order-state";
+import {Vote} from "../models/vote.model";
 
 @Component({
   selector: 'app-feed',
@@ -18,10 +19,18 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class FeedComponent implements OnInit, DoCheck {
 
-  currentFeed: Feed = new Feed(0, '', []);
+  postList: Post[] = [];
+
+  votesByCurrentUser: Vote[] = [];
 
   loggedIn: boolean | undefined;
   currentUser: User | undefined;
+
+  sortBy: string = '0';
+
+  filterBy: string = '';
+
+  postCategories: string[] = ['The Wall', 'King\'s Landing', 'Winterfell'];
 
   constructor(
     public httpClient: HttpClient,
@@ -29,7 +38,7 @@ export class FeedComponent implements OnInit, DoCheck {
     public userService: UserService,
     private dialog: MatDialog
   ) {
-    this.readPosts();
+    this.readFeed();
   }
 
   ngOnInit(): void {
@@ -47,85 +56,84 @@ export class FeedComponent implements OnInit, DoCheck {
 
   ngDoCheck(): void {
     //current Value
+
     console.log("ngDoCheck is working.")
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
   }
 
-  // READ all created posts
-  readPosts(): void {
-    this.httpClient.get(environment.endpointURL + "post/all").subscribe((res: any) => {
-      console.log(res);
-      this.currentFeed = new Feed(0, '', []);
-      res.forEach((post: any) => {
-        post.score = post.upvote - post.downvote;
-        this.httpClient.get(environment.endpointURL + "user/getById", {
-          params: {
-            userId: post.UserUserId
-          }
-        }).subscribe((res: any) => {
-            post.CreationUserName = res.userName;
-            this.currentFeed.posts.push(
-              new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, post.CreationUserName))
-          },
-          (error: any) => {
-            console.log(error);
-          });
-      });
-    });
-  }
-
   // ORDER - Feed
   /*
+  0 = sorted by creation date
   1 = sorted by score
   default = sorted by creation date
    */
-  sortList(sortBy: Number): void {
-    this.httpClient.put(environment.endpointURL + "post/all", {
-      sortBy: sortBy
+  readFeed(): void {
+    //TODO create own method for user who is not logged in
+    this.httpClient.get(environment.endpointURL + "post/all", {
+      params: {
+        sortBy: this.sortBy
+      }
     }).subscribe(
       (res: any) => {
-        this.currentFeed = new Feed(0, '', []);
+        console.log(res);
+        this.postList = [];
+        this.votesByCurrentUser = [];
         res.forEach((post: any) => {
-          post.score = post.upvote - post.downvote;
-          this.httpClient.get(environment.endpointURL + "user/getById", {
-            params: {
-              userId: post.UserUserId
+          post.Votes.forEach((vote: any) => {
+            if (this.currentUser?.userId == vote.UserUserId){
+              this.votesByCurrentUser.push(new Vote(post.postId, vote.upvote))
             }
-          }).subscribe((res: any) => {
-              post.CreationUserName = res.userName;
-              this.currentFeed.posts.push(
-                new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, post.creationUserUsername))
-            },
-            (error: any) => {
-              console.log(error);
-            });
+          })
+          if (this.checkIfPostIsAcceptedByFilter(this.getRightCategory(post.category))){
+            this.httpClient.get(environment.endpointURL + "user/getById", {
+              params: {
+                //TODO change
+                //userId: post.UserUserId
+                userId: 1
+              }
+            }).subscribe((res: any) => {
+                const i = this.getRightCategory(post.category);
+                this.postList.push(
+                  new Post(post.postId, post.title, post.text, post.image, post.score, i, post.UserUserId, res.userName));
+                console.log(this.votesByCurrentUser);
+                },
+              (error: any) => {
+                console.log(error);
+              });
+          }
         });
       });
+  }
+
+  getRightCategory(categoryNumber: number): string {
+    switch (categoryNumber){
+      case 1: {
+        return 'The Wall';
+      }
+      case 2: {
+        return 'King\'s Landing';
+      }
+      case 3: {
+        return 'Winterfell';
+      }
+      default: {
+        return '';
+      }
+    }
   }
 
   deletePost(post: Post): void {
     this.handleDelete(post);
   }
-    /*this.httpClient.post(environment.endpointURL + "post/delete", {
-      postId: post.postId
-    }).subscribe(() => {
-      this.currentFeed.posts.splice(this.currentFeed.posts.indexOf(post), 1);
-    });
-    }
-     */
-
-
-
-
 
   updatePost(post: Post): void {
     this.route.navigate(['/post-form'], {queryParams: {update: 'true', postId: (post.postId)}}).then(r => {
     });
   }
 
-  buttonClicked() {
-    this.readPosts();
+  reloadFeed() {
+    this.readFeed();
   }
 
   upvotePost(post: Post) {
@@ -153,15 +161,34 @@ export class FeedComponent implements OnInit, DoCheck {
     closeOnNavigation: true,
     data: dialogData
   })
-
   dialogRef.afterClosed().subscribe(dialogResult => {
     if (dialogResult) {
       this.httpClient.post(environment.endpointURL + "post/delete", {
         postId: post.postId
       }).subscribe(() => {
-        this.currentFeed.posts.splice(this.currentFeed.posts.indexOf(post), 1);
+        this.postList.splice(this.postList.indexOf(post), 1);
       });
+    }});
+  }
+
+  sortFeed(event: any) {
+    this.readFeed();
+  }
+
+  filterFeed(event:any) {
+    this.readFeed();
+  }
+
+  checkIfPostIsAcceptedByFilter(category: string):boolean {
+    if (this.filterBy == ''){
+      return true;
     }
-  });
-}
+    else{
+      if (this.filterBy == category){
+        return true;
+      }
+      else return false;
+    }
+  }
+
 }

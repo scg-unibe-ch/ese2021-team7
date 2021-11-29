@@ -48,7 +48,8 @@ postController.get('/all',
 
 postController.get('/byId',
     (req: Request, res: Response) => {
-        postService.getPostById('' + req.query.postId).then(posts => res.send(posts)).catch(err => res.status(500).send(err));
+        postService.getPostById('' + req.query.postId, '' + req.query.userId)
+            .then(posts => res.send(posts)).catch(err => res.status(500).send(err));
     }
 );
 
