@@ -58,7 +58,7 @@ export class PostService {
     }
 
     public async upvote(postId: number, userId: number): Promise<Post> {
-        const hasVoted = await this.voteService.alreadyVoted(postId, userId);
+        const hasVoted = await this.voteService.alreadyVoted(postId, userId, true);
         if (hasVoted) {
             return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});
         } else {
@@ -69,7 +69,7 @@ export class PostService {
     }
 
     public async downvote(postId: number, userId: number): Promise<Post> {
-        const hasVoted = await this.voteService.alreadyVoted(postId, userId);
+        const hasVoted = await this.voteService.alreadyVoted(postId, userId, false);
 
         if (hasVoted) {
             return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});
