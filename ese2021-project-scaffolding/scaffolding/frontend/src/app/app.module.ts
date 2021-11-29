@@ -36,6 +36,7 @@ import { ProductFormComponent } from './product-form/product-form.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from './ui/confirmation-dialog/confirmation-dialog.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 
 
 @NgModule({
@@ -57,6 +58,7 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     PostFormComponent,
     ProductFormComponent,
     ConfirmationDialogComponent,
+    AdminDashboardComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,7 +91,9 @@ import {MatSidenavModule} from '@angular/material/sidenav';
       { path: 'product-form', component: ProductFormComponent},
       { path: 'purchase', component: PurchaseComponent},
       { path: 'shop', component: ProductListComponent},
+      { path: 'product', component: ProductComponent},
       { path: 'order', component: OrderListComponent},
+      { path: 'admin-dashboard', component: AdminDashboardComponent}
     ]),
   ],
   providers: [

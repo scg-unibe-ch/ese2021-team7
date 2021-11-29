@@ -1,6 +1,6 @@
-INSERT INTO vote
-VALUES	(1, true, DATE(), DATE(), 1, 3)
-	,	(2, true, DATE(), DATE(), 1, 4)
-	,	(3, false, DATE(), DATE(), 1, 5)
-	,	(4, true, DATE(), DATE(), 2, 2)
-	,	(5, true, DATE(), DATE(), 2, 4);
+INSERT INTO vote(voteId, upvote, createdAt, updatedAt, PostPostId, UserUserId)
+VALUES	(/* voteId: */ 1, /* upvote: */ true, /* createdAt: */ DATE(), /* updatedAt: */ DATE(), /* PostPostId: */ 1, /* UserUserId: */ 3),
+    (/* voteId: */ 2, /* upvote: */ true, /* createdAt: */ DATE(), /* updatedAt: */ DATE(), /* PostPostId: */ 1, /* UserUserId: */ 4),
+    (/* voteId: */ 3, /* upvote: */ false, /* createdAt: */ DATE(), /* updatedAt: */ DATE(), /* PostPostId: */ 1, /* UserUserId: */ 5),
+    (/* voteId: */ 4, /* upvote: */ true, /* createdAt: */ DATE(), /* updatedAt: */ DATE(), /* PostPostId: */ 2, /* UserUserId: */ 2),
+    (/* voteId: */ 5, /* upvote: */ true, /* createdAt: */ DATE(), /* updatedAt: */ DATE(), /* PostPostId: */ 2, /* UserUserId: */ 4);

@@ -73,7 +73,7 @@ export class ProductListComponent implements OnInit {
       res.forEach((product: any) => {
       if (!product.sold){
         this.currentShop.products.push(
-              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.category,product.sold))
+              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.productCategory,product.sold))
               }
           },
           (error: any) => {
@@ -87,6 +87,24 @@ export class ProductListComponent implements OnInit {
   }
 
   // TODO: sortShop by Category
+  filterShopByCategory(category: number): void {
+    this.httpClient.get(environment.endpointURL + "product/byCategory",{
+      params: {
+        productCategory: category
+      }
+    }).subscribe((res: any) => {
+      this.currentShop = new ProductList(0,'', []);
+      res.forEach((product: any) => {
+          if (!product.sold){
+            this.currentShop.products.push(
+              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.productCategory,product.sold))
+          }
+        },
+        (error: any) => {
+          console.log(error);
+        });
+    });
+  }
 
   addProduct(): void{
     if (this.currentUser?.isAdmin){
@@ -95,14 +113,7 @@ export class ProductListComponent implements OnInit {
   }
 
   deleteProduct(product: Product): void{
-    console.log("Delete button works.")
     this.handleDelete(product);
-    /*this.httpClient.post(environment.endpointURL + "product/delete", {
-      productId: product.productId
-    }).subscribe(() => {
-      this.currentShop.products.splice(this.currentShop.products.indexOf(product), 1);
-    });
-     */
   }
 
   updateProduct(product: Product): void{
@@ -131,4 +142,6 @@ export class ProductListComponent implements OnInit {
       }
     });
   }
+
+
 }

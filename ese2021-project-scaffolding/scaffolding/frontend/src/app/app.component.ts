@@ -28,7 +28,10 @@ export class AppComponent implements OnInit {
 
   //used for sidenav
   events: string[] = [];
-  opened: boolean;
+  opened: boolean | undefined;
+
+  //used for Admin Dashboard
+  isAdmin = false;
 
   constructor(
     public httpClient: HttpClient,
@@ -54,6 +57,7 @@ export class AppComponent implements OnInit {
       //this.enableCreatePost = true;
       this.user = res;
       this.enableCreatePost = this.checkPermissionConditions(res?.isAdmin);
+      this.isAdmin = res?.isAdmin;
     }, error => {
       this.enableCreatePost = false;
       this.checkPermissionConditions(false)

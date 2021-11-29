@@ -61,7 +61,6 @@ export class PostFormComponent implements OnInit {
         });
       }
     }
-
   }
 
   initializeFormCreate(): void {
@@ -77,10 +76,10 @@ export class PostFormComponent implements OnInit {
 
   initializeFormUpdate(): void {
     this.postForm = this.fb.group({
-      "postTitle": new FormControl(this.post.title, Validators.required),
-      "postImage": new FormControl(this.post.image),
-      "postText": new FormControl(this.post.text),
-      "postCategory": new FormControl(this.post.category, Validators.required)
+      "postTitle": new FormControl(this.post?.title, Validators.required),
+      "postImage": new FormControl(this.post?.image),
+      "postText": new FormControl(this.post?.text),
+      "postCategory": new FormControl(this.post?.category, Validators.required)
     }, {
       validator: (form: FormGroup) => {
         return this.checkPost(form);
@@ -91,28 +90,26 @@ export class PostFormComponent implements OnInit {
   onSubmit(formDirective: FormGroupDirective): void{
     console.log(this.postForm)
     this.isSubmitted = true;
-    if(this.postForm.valid){
+    if(this.postForm?.valid){
       if(this.isCreate){
         this.sendCreateForm();
       }
       else if (this.isUpdate) {
         this.sendUpdateForm();
       }
-
     }
-
   }
 
   sendCreateForm(): void {
     this.httpClient.post(environment.endpointURL + "post/create", {
-      title: this.postForm.value.postTitle,
-      text: this.postForm.value.postText,
-      image: this.postForm.value.postImage,
-      category: this.postForm.value.postCategory
+      title: this.postForm?.value.postTitle,
+      text: this.postForm?.value.postText,
+      image: this.postForm?.value.postImage,
+      category: this.postForm?.value.postCategory
     }, ).subscribe((res: any) => {
         console.log(res);
         this.isSubmitted = false;
-        this.router.navigate(['/feed'], {queryParams : {loggedIn : 'true'}});
+        this.router.navigate(['/feed'], {queryParams: {loggedIn: 'true'}}).then(r =>{});
       },
       (error: any) =>{
         console.log(error);
@@ -122,17 +119,17 @@ export class PostFormComponent implements OnInit {
 
   sendUpdateForm(): void {
     this.httpClient.post(environment.endpointURL + "post/modify", {
-      postId: this.post.postId,
-      title: this.postForm.value.postTitle,
-      text: this.postForm.value.postText,
-      image: this.postForm.value.postImage,
-      category: this.postForm.value.postCategory,
-      upvote: this.post.upvote,
-      downvote: this.post.downvote
+      postId: this.post?.postId,
+      title: this.postForm?.value.postTitle,
+      text: this.postForm?.value.postText,
+      image: this.postForm?.value.postImage,
+      category: this.postForm?.value.postCategory,
+      upvote: this.post?.upvote,
+      downvote: this.post?.downvote
     }, ).subscribe((res: any) => {
         console.log(res);
         this.isSubmitted = false;
-        this.router.navigate(['/feed'], {queryParams : {loggedIn : 'true'}});
+        this.router.navigate(['/feed'], {queryParams: {loggedIn: 'true'}}).then(r =>{});
       },
       (error: any) =>{
         console.log(error);
@@ -150,5 +147,8 @@ export class PostFormComponent implements OnInit {
     return null;
   };
 
-
+  discardChanges(): void {
+    this.isSubmitted = false;
+    this.router.navigate(['/feed'], {queryParams: {loggedIn: 'true'}}).then(r =>{});
+  }
 }
