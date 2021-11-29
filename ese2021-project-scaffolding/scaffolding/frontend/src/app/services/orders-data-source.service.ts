@@ -5,10 +5,13 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { Observable } from 'rxjs';
 import { OrderListServiceService } from './order-list-service.service';
 import { of } from 'rxjs';
-import { catchError, concatMap, finalize, map, mergeMap, tap } from 'rxjs/operators';
+import { catchError, concatAll, concatMap, finalize, map, mergeMap, tap } from 'rxjs/operators';
 import { ProductService } from './product.service';
 import { Product } from '../models/product.model';
 import { OrderToDisplay } from '../models/order-to-display';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
 
 
 @Injectable({
@@ -21,7 +24,7 @@ export class OrdersDataSourceService implements DataSource<Order>{
 
   public loading$ = this.loadingSubject.asObservable();
 
-  constructor(private orderListService: OrderListServiceService, public productService: ProductService) {}
+  constructor(private orderListService: OrderListServiceService, public productService: ProductService, private httpClient: HttpClient) {}
 
   connect(collectionViewer: CollectionViewer): Observable<any[]> {
     return this.ordersSubject.asObservable();
@@ -84,55 +87,40 @@ export class OrdersDataSourceService implements DataSource<Order>{
   });
   }
 */
-/*
-  loadAllOrders() {
+
+  /*loadAllOrders() {
 
     this.loadingSubject.next(true);
 
     this.orderListService.getAllOrders().pipe(
       catchError(error => of([error])),
       finalize(() => this.loadingSubject.next(false)),
-      tap((data:any) => console.log("Tap call:" + JSON.stringify(data)))
-    )
-      .subscribe((orders: Order[]) => {
-        const ordersToDisplay: any[] = [];
-        orders.map(
-          (order: Order) => {
-            console.log(order.productId);
-            this.productService.getProductById(order.productId)
-              .pipe(tap((tapProduct:any) => {console.log("Tap Product: " +JSON.stringify(tapProduct))}))
-              .subscribe(
-                (product: any) => {
-                  console.log("Product answer recieved");
-                  console.log(JSON.stringify(product));
-                  ordersToDisplay.push(new OrderToDisplay(
-                    order.orderId,
-                    order.costumerId, // userId of the user which places the order
-                    order.productId, // to indicate which product is sold
-                    product.title,
-                    product.image,
-                    product.Description,
-                    product.price,
-                    order.firstName,
-                    order.lastName,
-                    order.street,
-                    order.houseNumber,
-                    order.zipCode,
-                    order.city,
-                    order.paymentMethod,
-                    3
-                  ));
-                },
-                (error: any) => console.log(error));
-            console.log("Array orders: " + JSON.stringify(ordersToDisplay));
+      tap((data:any) => console.log("Tap call:" + JSON.stringify(data))),
+      map((data: any) =>
+        of(data).pipe(
+          concatMap(
+          order => {
+            this.httpClient.get<any>(environment.endpointURL + "product/byId", {
+              params: {
+                productId: order.productId
+              }
+            }).pipe(
+              tap((tapProduct: any) => console.log((JSON.stringify(tapProduct)))),
+              map((product: any) => product)
+            )
           }
-        );
-        console.log("WHAT SHOULD BE: " + JSON.stringify(orders));
-        this.ordersSubject.next(ordersToDisplay);
-    });
-  }
+        )
+      )),
+      concatAll(),
+      tap((res:any) =>console.log("Tap call 2: " + JSON.stringify(res)))
+    )
+      .subscribe((orders: any) => {
+        console.log(JSON.stringify(orders));
+        this.ordersSubject.next(orders);
+      });
 
-*/
+  }*/
+
 
     loadAllOrders():void  {
 

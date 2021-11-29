@@ -7,7 +7,7 @@ export class OrderToDisplay {
     public productName: string,
     public productImage: string,
     public productDescription: string,
-    public productPrice: string,
+    public productPrice: number,
     public firstName: string,
     public lastName: string,
     public street: string,

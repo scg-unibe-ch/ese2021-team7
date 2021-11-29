@@ -5,9 +5,10 @@ import {environment} from "../../environments/environment";
 import { Observable } from 'rxjs';
 import { from } from 'rxjs';
 import { of } from 'rxjs';
-import {catchError, concatMap, map, tap } from 'rxjs/operators';
+import {catchError, concatAll, concatMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { ProductService } from './product.service';
 import { OrderToDisplay } from '../models/order-to-display';
+import { forkJoin } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -135,8 +136,7 @@ export class OrderListServiceService {
         );
   }
 */
-
-
+/*
 
   getAllOrders(): Observable<OrderToDisplay[]> {
     return this.httpClient.get(environment.endpointURL + "order/all")
@@ -155,7 +155,7 @@ export class OrderListServiceService {
                     "Product Title",
                     "Product Image",
                     "Product Description",
-                    "price",
+                    546,
                     "first Name",
                     "Las tName",
                     address[0],
@@ -170,46 +170,144 @@ export class OrderListServiceService {
         )
       );
   }
-  
+*/
+
 
 
 /*
-  getAllOrders(): Observable<OrderToDisplay[]> {
+getAllOrders(): Observable<OrderToDisplay[]> {
     return this.httpClient.get(environment.endpointURL + "order/all")
       .pipe(
-        tap((dbOrders: any) => console.log("Tap in Order List Service: " + JSON.stringify(dbOrders))),
-        concatMap((dbOrders:any) =>
+        tap((tapOrders: any) => console.log("Tab dbOrders: " + JSON.stringify(tapOrders))),
+        map((dbOrders:any) =>
+          dbOrders.map(
+            (dbOrder: any) => {
+              this.productService.getProductById(dbOrder.prodcutId).pipe(
+                tap((tapProduct: any) => console.log("Tap Product: " + JSON.stringify(tapProduct))),
+                map(
+                  (product: any) => {
+                    let address = dbOrder.deliveryAdress.split(' ');
+                    while (address.length < 4) {
+                      address.push("");
+                    }
+                    return new OrderToDisplay(
+                      dbOrder.orderId,
+                      dbOrder.user,
+                      dbOrder.ProductProductId,
+                      "Product Title",
+                      "Product Image",
+                      "Product Description",
+                      234,
+                      "first Name",
+                      "Las tName",
+                      address[0],
+                      address[1],
+                      address[2],
+                      address[3],
+                      dbOrder.paymentOption,
+                      dbOrder.orderStatus
+                    );
+                  }
 
-           dbOrders.forEach(
-             (dbOrder: any) => {
-                let address = dbOrder.deliveryAdress.split(' ');
-                while (address.length < 4) {
-                  address.push("");
-                }
-                return new OrderToDisplay(
-                  dbOrder.orderId,
-                  dbOrder.user,
-                  dbOrder.ProductProductId,
-                  "Product Title",
-                  "Product Image",
-                  "Product Description",
-                  "price",
-                  "first Name",
-                  "Las tName",
-                  address[0],
-                  address[1],
-                  address[2],
-                  address[3],
-                  dbOrder.paymentOption,
-                  dbOrder.orderStatus
-                );
+
+
+              ));
+
+            }
+          )
+        ),
+        tap((tapAfter: any) => console.log("Tap after: "+ JSON.stringify(tapAfter)))
+      );
+  }*/
+
+
+
+  getAllOrders(): Observable<any[]> {
+    return this.httpClient.get(environment.endpointURL + "order/all")
+      .pipe(
+        tap((tapOrders: any) => console.log("Tab dbOrders: " + JSON.stringify(tapOrders))),
+        mergeMap((dbOrders:any[]) => {
+          let forkJoinArray: any[] = [];
+          dbOrders.forEach(
+            (order: any) => forkJoinArray.push(this.httpClient.get(environment.endpointURL + "product/byId", {
+              params: {
+                productId: order.ProductProductId
               }
-            ))
+            }).pipe(
+              tap((tapProduct: any) => console.log(JSON.stringify("Tap Product: " + tapProduct))),
+              map(
+                (product: any) => {
+                  let address = order.deliveryAdress.split(' ');
+                  while (address.length < 4) {
+                    address.push("");
+                  }
+                  return new OrderToDisplay(
+                    order.orderId,
+                    order.user,
+                    order.ProductProductId,
+                    product.title,
+                    product.image,
+                    product.description,
+                    product.price,
+                    "first Name",
+                    "Las tName",
+                    address[0],
+                    address[1],
+                    address[2],
+                    address[3],
+                    order.paymentOption,
+                    order.orderStatus
+                  );
+                }
+              )
+            )))
+          return forkJoin(forkJoinArray);
+          }
+        ),
+        //forkJoin(),
+        tap((res: any) => console.log(JSON.stringify(res)))
+        )
+
+}
 
 
-        );
 
-  }
+/*
+dbOrders.map(
+  (dbOrder: any) => {
+    console.log(dbOrder.ProductProductId);
+    let address = dbOrder.deliveryAdress.split(' ');
+    while (address.length < 4) {
+      address.push("");
+    }
+    this.httpClient.get(environment.endpointURL + "product/byId", {
+      params: {
+        productId: dbOrder.ProductProductId
+      }
+    }).pipe(
+      tap((tapProduct: any) => console.log(JSON.stringify("Tap Product: " + tapProduct))),
+      map(
+        (product: any) => {
+          return new OrderToDisplay(
+            dbOrder.orderId,
+            dbOrder.user,
+            dbOrder.ProductProductId,
+            product.title,
+            product.image,
+            product.description,
+            product.price,
+            "first Name",
+            "Las tName",
+            address[0],
+            address[1],
+            address[2],
+            address[3],
+            dbOrder.paymentOption,
+            dbOrder.orderStatus
+          );
+        }
+      )
+    );
 */
 
 
