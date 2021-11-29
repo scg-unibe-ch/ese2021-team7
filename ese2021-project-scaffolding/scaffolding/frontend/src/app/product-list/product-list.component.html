@@ -5,7 +5,22 @@
     </button>
     <button mat-flat-button (click) ="refreshShop()" class="group7-forms-button">
       Reload shop
-    </button><br/>
+    </button>
+
+    <mat-form-field>
+      <mat-select [(value)]="filterBy" placeholder="filter list by:" (selectionChange)="filterShop($event)" class="group7-select">
+        <mat-option value="">No Filter</mat-option>
+        <mat-option *ngFor="let category of productCategories" [value]="category">{{category}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+
+
+
+
+
+    <!--<br/>
     <button mat-flat-button (click) ="filterShopByCategory(1)" class="group7-forms-button">
       Filter Category 1
     </button>
@@ -14,7 +29,7 @@
     </button>
     <button mat-flat-button (click) ="filterShopByCategory(3)" class="group7-forms-button">
       Filter Category 3
-    </button>
+    </button>-->
     <div  *ngFor="let productToDisplay of currentShop.products" class="group7-grid-tile shop-item">
       <app-product
         [productToDisplay]="productToDisplay"
