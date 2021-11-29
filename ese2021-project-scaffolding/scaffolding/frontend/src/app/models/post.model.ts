@@ -12,7 +12,7 @@ export class Post {
     public category: string,
     // public CreationDate: string,
     public CreationUser: number, // id of the user who created the post
-    public CreationUserName: string
+    public CreationUserName: string,
     // public lastUpdate: string,
     // public updateBy: number,
   ) {}

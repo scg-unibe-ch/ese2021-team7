@@ -10,6 +10,7 @@ import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-di
 import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {OrderState} from "../order-list/order/order-state";
+import {Vote} from "../models/vote.model";
 
 @Component({
   selector: 'app-feed',
@@ -19,6 +20,8 @@ import {OrderState} from "../order-list/order/order-state";
 export class FeedComponent implements OnInit, DoCheck {
 
   postList: Post[] = [];
+
+  votesByCurrentUser: Vote[] = [];
 
   loggedIn: boolean | undefined;
   currentUser: User | undefined;
@@ -66,7 +69,7 @@ export class FeedComponent implements OnInit, DoCheck {
   default = sorted by creation date
    */
   readFeed(): void {
-    console.log("sort by is: "+this.sortBy+" and filter is: "+this.filterBy);
+    //TODO create own method for user who is not logged in
     this.httpClient.get(environment.endpointURL + "post/all", {
       params: {
         sortBy: this.sortBy
@@ -75,9 +78,14 @@ export class FeedComponent implements OnInit, DoCheck {
       (res: any) => {
         console.log(res);
         this.postList = [];
+        this.votesByCurrentUser = [];
         res.forEach((post: any) => {
+          post.Votes.forEach((vote: any) => {
+            if (this.currentUser?.userId == vote.UserUserId){
+              this.votesByCurrentUser.push(new Vote(post.postId, vote.upvote))
+            }
+          })
           if (this.checkIfPostIsAcceptedByFilter(post.category)){
-            post.score = post.upvote - post.downvote;
             this.httpClient.get(environment.endpointURL + "user/getById", {
               params: {
                 //TODO change
@@ -86,8 +94,9 @@ export class FeedComponent implements OnInit, DoCheck {
               }
             }).subscribe((res: any) => {
                 this.postList.push(
-                  new Post(post.postId, post.title, post.text, post.image, post.score, post.category, post.UserUserId, res.userName))
-              },
+                  new Post(post.postId, post.title, post.text, post.image, post.score, post.category, post.UserUserId, res.userName));
+                console.log(this.votesByCurrentUser);
+                },
               (error: any) => {
                 console.log(error);
               });
