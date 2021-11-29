@@ -13,7 +13,7 @@ export class VoteService {
             include: [Post, User]
         });
 
-        return count.length === 1;
+        return count === 1;
     }
 
     public async upvote(postId: number, userId: number): Promise<boolean> {
