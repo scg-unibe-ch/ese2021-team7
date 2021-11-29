@@ -72,13 +72,13 @@ export class ProductListComponent implements OnInit {
       this.currentShop = new ProductList(0,'', []);
       res.forEach((product: any) => {
         this.currentShop.products.push(
-              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.productCategory,product.sold))
-              }
+              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.productCategory,!product.isAvailable))
           },
           (error: any) => {
             console.log(error);
           });
       });
+    console.log(this.currentShop);
   }
 
   refreshShop() {
