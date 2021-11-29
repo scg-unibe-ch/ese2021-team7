@@ -3,12 +3,13 @@ import { Post } from '../models/post.model';
 import { User } from '../models/user.model';
 
 export class VoteService {
-    public async alreadyVoted(postId: number, userId: number): Promise<boolean> {
+    public async alreadyVoted(postId: number, userId: number, upvote: boolean): Promise<boolean> {
         const {count, rows} = await Vote.findAndCountAll({
             where: {
                 // @ts-ignore
                 'postpostId': postId,
-                'useruserId': userId
+                'useruserId': userId,
+                'upvote': upvote
             },
             include: [Post, User]
         });
@@ -17,7 +18,7 @@ export class VoteService {
     }
 
     public async upvote(postId: number, userId: number): Promise<boolean> {
-        const hasVoted = await this.alreadyVoted(postId, userId);
+        const hasVoted = await this.alreadyVoted(postId, userId, true);
 
         const post = await Post.findByPk(postId.toString());
         const user = await User.findByPk(userId.toString());
@@ -36,7 +37,7 @@ export class VoteService {
     }
 
     public async downvote(postId: number, userId: number): Promise<boolean> {
-        const hasVoted = await this.alreadyVoted(postId, userId);
+        const hasVoted = await this.alreadyVoted(postId, userId, true);
 
         const post = await Post.findByPk(postId.toString());
         const user = await User.findByPk(userId.toString());
