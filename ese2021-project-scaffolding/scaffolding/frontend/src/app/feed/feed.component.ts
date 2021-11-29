@@ -80,11 +80,13 @@ export class FeedComponent implements OnInit, DoCheck {
             post.score = post.upvote - post.downvote;
             this.httpClient.get(environment.endpointURL + "user/getById", {
               params: {
-                userId: post.UserUserId
+                //TODO change
+                //userId: post.UserUserId
+                userId: 1
               }
             }).subscribe((res: any) => {
                 this.postList.push(
-                  new Post(post.postId, 0, post.title, post.text, post.image, post.upvote, post.downvote, post.score, post.category, post.createdAt, post.UserUserId, res.userName))
+                  new Post(post.postId, post.title, post.text, post.image, post.score, post.category, post.UserUserId, res.userName))
               },
               (error: any) => {
                 console.log(error);
