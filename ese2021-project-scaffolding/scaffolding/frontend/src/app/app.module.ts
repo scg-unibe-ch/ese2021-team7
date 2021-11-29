@@ -38,6 +38,8 @@ import { ConfirmationDialogComponent } from './ui/confirmation-dialog/confirmati
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import {MatTableModule} from '@angular/material/table';
+import { UserListComponent } from './user-list/user-list.component';
+import { CategoryListComponent } from './category-list/category-list.component';
 
 
 @NgModule({
@@ -60,6 +62,8 @@ import {MatTableModule} from '@angular/material/table';
     ProductFormComponent,
     ConfirmationDialogComponent,
     AdminDashboardComponent,
+    UserListComponent,
+    CategoryListComponent,
   ],
   imports: [
     BrowserModule,
@@ -95,7 +99,9 @@ import {MatTableModule} from '@angular/material/table';
       { path: 'shop', component: ProductListComponent},
       { path: 'product', component: ProductComponent},
       { path: 'order', component: OrderListComponent},
-      { path: 'admin-dashboard', component: AdminDashboardComponent}
+      { path: 'admin-dashboard', component: AdminDashboardComponent},
+      { path: 'user-list', component:UserListComponent},
+      { path: 'category-list', component: CategoryListComponent}
     ]),
   ],
   providers: [
