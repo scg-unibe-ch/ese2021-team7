@@ -1,12 +1,19 @@
-import { Post, PostAttributes } from '../models/post.model';
+import { Post } from '../models/post.model';
 import {User} from '../models/user.model';
-import {Sequelize} from 'sequelize';
+import { VoteService } from './vote.service';
+import { Vote } from '../models/vote.model';
+import {CategoryService, CategoryType} from './category.service';
 
 export class PostService {
-    // Should this method be static?
-    public async getPostById(postId: string): Promise<Post> {
-        return Post.findByPk(postId).then(dbPost => {
+
+    private categoryService = new CategoryService();
+    private voteService: VoteService;
+
+    public async getPostById(postId: string, userId: string | undefined): Promise<Post> {
+        return Post.findByPk(postId, {include: Vote}).then(dbPost => {
             if (dbPost) {
+                this.setScore(dbPost);
+                dbPost = this.addVotingStatus(dbPost, userId);
                 return Promise.resolve(dbPost);
             } else {
                 return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
@@ -14,41 +21,72 @@ export class PostService {
         });
     }
 
-    // Should this method be static?
-    public async getAll(sortBy: string): Promise<Post[]> {
-        if (sortBy === '1') {
-            // @ts-ignore
-            return Post.findAll({ order: [['upvote', Sequelize.literal('-'), 'downvote', 'DESC']]});
+    private setScore(post: Post) {
+        let score = 0;
+        // @ts-ignore
+        for (const vote of post.Votes) {
+            if (vote.upvote) {
+                score += 1;
+            } else {
+                score -= 1;
+            }
         }
-        return Post.findAll({order: [['createdAt', 'DESC']]});
+        // @ts-ignore
+        post.setDataValue('score', score);
     }
 
-    public upvote(postId: number): Promise<Post> {
-        return Post.findByPk(postId).then(dbPost => {
-            if (dbPost) {
-                dbPost.upvote += 1;
-                return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
-            } else {
-                return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
+    public async getAll(sortBy: string, userId: string | undefined): Promise<Post[]> {
+        return  Post.findAll({
+            attributes: ['postId', 'title', 'image', 'text', 'category'],
+            include: Vote
+        }).then(dbPosts => {
+            const postsWithScore: Post[] = [];
+            for (let dbPost of dbPosts) {
+                this.setScore(dbPost);
+                dbPost = this.addVotingStatus(dbPost, userId);
+                postsWithScore.push(dbPost);
             }
+            return postsWithScore.sort( (postA, postB) => {
+                if (sortBy === '1') {
+                    // @ts-ignore
+                    return postA.getDataValue('score') - postB.getDataValue('score');
+                } else {
+                    return postA.postId - postB.postId;
+                }
+            });
         });
     }
 
-    public downvote(postId: number): Promise<Post> {
-        return Post.findByPk(postId).then(dbPost => {
-            if (dbPost) {
-                dbPost.downvote += 1;
-                return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
-            } else {
-                return Promise.reject({message: 'no post with ID ' + postId + ' exists'});
-            }
-        });
+    public async upvote(postId: number, userId: number): Promise<Post> {
+        const hasVoted = await this.voteService.alreadyVoted(postId, userId, true);
+        if (hasVoted) {
+            return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});
+        } else {
+            this.voteService.upvote(postId, userId);
+            const post = await Post.findByPk(postId);
+            return Promise.resolve(post);
+        }
+    }
+
+    public async downvote(postId: number, userId: number): Promise<Post> {
+        const hasVoted = await this.voteService.alreadyVoted(postId, userId, false);
+
+        if (hasVoted) {
+            return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});
+        } else {
+            this.voteService.downvote(postId, userId);
+            return this.getPostById('' + postId, '' + userId);
+        }
     }
 
     public async modifyPost(modifiedPost: Post, userId): Promise<Post> {
         const user = await User.findByPk(userId);
         if (!user) {
             return Promise.reject({message: 'user does not exist'});
+        }
+        const categoryIsValid = await this.categoryService.categoryIsValid(modifiedPost.category, CategoryType.POST_CATEGORY);
+        if (!categoryIsValid) {
+            return Promise.reject({message: 'Invalid category: category does not exist, or is of wrong type'});
         }
         return Post.findByPk(modifiedPost.postId).then(async dbPost => {
             if (dbPost) {
@@ -62,10 +100,7 @@ export class PostService {
                 dbPost.text = modifiedPost.text;
                 dbPost.category = modifiedPost.category;
                 dbPost.image = modifiedPost.image;
-                // allow modification of upvotes and downvotes initially
-                dbPost.upvote = modifiedPost.upvote;
-                dbPost.downvote = modifiedPost.downvote;
-                return dbPost.save().then(updatedPost => Promise.resolve(updatedPost));
+                return dbPost.save().then(() => this.getPostById('' + modifiedPost.postId, '' + userId));
             } else {
                 return Promise.reject({message: 'no post with ID ' + modifiedPost.postId + ' exists'});
             }
@@ -92,11 +127,8 @@ export class PostService {
         });
     }
 
-    // This could also return void, maybe this would make more sense?
     public async createPost(post: Post, userId): Promise<Post> {
         const postToCreate = post;
-        postToCreate.upvote = 0;
-        postToCreate.downvote = 0;
         const user = await User.findByPk(userId);
         if (!user) {
             return Promise.reject({message: 'user does not exist'});
@@ -104,9 +136,41 @@ export class PostService {
         if (user.admin) {
             return Promise.reject({message: 'admins are not permitted to create posts'});
         }
+        const categoryIsValid = await this.categoryService.categoryIsValid(post.category, CategoryType.POST_CATEGORY);
+        if (!categoryIsValid) {
+            return Promise.reject({message: 'Invalid category: category does not exist, or is of wrong type'});
+        }
         const createdPost = await Post.create(postToCreate);
         // @ts-ignore
         createdPost.setUser(user);
-        return createdPost.save().then(updatedPost => Promise.resolve(updatedPost));
+        return createdPost.save().then(() => this.getPostById('' + createdPost.postId, '' + userId));
+    }
+
+    private addVotingStatus(post: Post, userId: string | undefined) {
+        // @ts-ignore
+        post.setDataValue('votingStatus', 'not voted');
+        if (userId === 'undefined') { return post; }
+        const userIdAsInt = parseInt(userId, 10);
+        let i = 0;
+
+        // @ts-ignore
+        while (!(post.getDataValue('votingStatus') !== 'not voted')  && i < post.Votes.length) {
+            // @ts-ignore
+            if (post.Votes[i].upvote && post.Votes[i].UserUserId === userIdAsInt) {
+                // @ts-ignore
+                post.setDataValue('votingStatus', 'upvoted');
+                // @ts-ignore
+            } else if (!post.Votes[i].upvote && post.Votes[i].UserUserId === userIdAsInt) {
+                // @ts-ignore
+                post.setDataValue('votingStatus', 'downvoted');
+            }
+            i++;
+        }
+
+        return post;
+    }
+
+    constructor() {
+        this.voteService = new VoteService();
     }
 }

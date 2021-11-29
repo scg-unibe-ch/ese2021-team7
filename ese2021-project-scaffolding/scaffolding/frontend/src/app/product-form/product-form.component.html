@@ -47,6 +47,8 @@
           </mat-form-field>
           <br/>
           <div class="form-action-button">
+            <button mat-flat-button (click)="discardChanges()" class="group7-forms-button" *ngIf="isUpdate">Discard Changes</button>
+
             <button mat-flat-button type="submit" [disabled]="!productForm.valid" class="group7-forms-button" *ngIf="isUpdate">Save Changes</button><br/>
             <button mat-flat-button type="submit" [disabled]="!productForm.valid" class="group7-forms-button" *ngIf="isCreate">Create Product</button><br/>
             <span *ngIf="!productForm.valid && isSubmitted" [ngClass]="!productForm.valid && isSubmitted ? 'is-invalid' : '' "><br/>Please add an image or description</span><br/>

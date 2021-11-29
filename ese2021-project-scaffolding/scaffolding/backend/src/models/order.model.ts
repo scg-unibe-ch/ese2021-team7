@@ -46,5 +46,6 @@ export class Order extends Model<OrderAttributes> implements OrderAttributes {
 
     public static createAssociations() {
         Order.belongsTo(Product);
+        Product.hasMany(Order);
     }
 }

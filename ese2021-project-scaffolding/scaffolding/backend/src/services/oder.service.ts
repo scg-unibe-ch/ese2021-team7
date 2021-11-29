@@ -3,7 +3,7 @@ import {User} from '../models/user.model';
 import {Product} from '../models/product.model';
 import {Post} from '../models/post.model';
 
-enum OrderStatus {
+export enum OrderStatus {
     PENDNIG,
     SHIPPED,
     CANCELLED

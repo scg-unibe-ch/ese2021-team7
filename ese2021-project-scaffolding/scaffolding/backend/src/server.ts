@@ -12,12 +12,14 @@ import { Post } from './models/post.model';
 import { Product } from './models/product.model';
 import { Order } from './models/order.model';
 import { Vote } from './models/vote.model';
+import {Category} from './models/category.model';
 
 
 import cors from 'cors';
 import {AdminController} from './controllers/admin.controller';
 import {ItemImage} from './models/itemImage.model';
 import {PostController} from './controllers/post.controller';
+import {CategoryController} from './controllers/category.controller';
 import {ProductController} from './controllers/product.controller';
 import {OrderController} from './controllers/order.controller';
 import * as fs from 'fs';
@@ -40,6 +42,7 @@ export class Server {
         Product.initialize(this.sequelize);
         Order.initialize(this.sequelize);
         Vote.initialize(this.sequelize);
+        Category.initialize(this.sequelize);
         TodoItem.createAssociations();
         TodoList.createAssociations();
         ItemImage.createAssociations();
@@ -48,7 +51,7 @@ export class Server {
         Vote.createAssociations();
 
 
-        this.sequelize.sync().then(() => {                           // create connection to the database
+        this.sequelize.sync({force: true}).then(() => {                           // create connection to the database
             this.makeTestData().then(() => {
                 this.server.listen(this.port, () => {                            // start server on specified port
                     console.log(`server listening at http://localhost:${this.port}`);   // indicate that the server has started
@@ -82,6 +85,7 @@ export class Server {
             .use('/user', UserController)
             .use('/post', PostController)
             .use('/order', OrderController)
+            .use('/category', CategoryController)
             .use('/product', ProductController)
             .use('/secured', SecuredController)
             .use('/admin', AdminController)
@@ -105,15 +109,18 @@ export class Server {
         this.sequelize.query('DELETE FROM "order"');
         this.sequelize.query('DELETE FROM users');
         this.sequelize.query('DELETE FROM post');
+        this.sequelize.query('DELETE FROM category');
 
         if (createsData) {
             // Password for every user is: notSecure12+
+            const category = fs.readFileSync('sql_testdata/category.sql', 'utf8');
             const product = fs.readFileSync('sql_testdata/product.sql', 'utf8');
             const vote = fs.readFileSync('sql_testdata/vote.sql', 'utf8');
             const order = fs.readFileSync('sql_testdata/order.sql', 'utf8');
             const users = fs.readFileSync('sql_testdata/users.sql', 'utf8');
             const post = fs.readFileSync('sql_testdata/post.sql', 'utf8');
 
+            this.sequelize.query(category);
             this.sequelize.query(users);
             this.sequelize.query(post);
             this.sequelize.query(vote);
