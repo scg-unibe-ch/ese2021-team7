@@ -37,7 +37,7 @@ export class PostService {
 
     public async getAll(sortBy: string, userId: string | undefined): Promise<Post[]> {
         return  Post.findAll({
-            attributes: ['postId', 'title', 'image', 'text', 'category'],
+            attributes: ['postId', 'title', 'image', 'text', 'category', 'UserUserId'],
             include: Vote
         }).then(dbPosts => {
             const postsWithScore: Post[] = [];
