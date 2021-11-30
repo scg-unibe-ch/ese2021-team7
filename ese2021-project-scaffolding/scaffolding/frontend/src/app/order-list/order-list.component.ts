@@ -76,10 +76,10 @@ export class OrderListComponent implements OnInit {
       }).subscribe((res: any) => {
           console.log(res);
           res.forEach((order: any) => {
-            let array = order.deliveryAdress.split(' ');
-            while (array.length<4){
-              array.push("");
-            }
+            //let array = order.deliveryAdress.split(' ');
+            //while (array.length<4){
+              //array.push("");
+            //}
             //TODO check if hard coding is correct
             let orderState;
             switch (order.orderStatus){
@@ -104,13 +104,14 @@ export class OrderListComponent implements OnInit {
                 order.productId, // to indicate which product is sold
                 order.firstName,
                 order.lastName,
-                array[0],
-                array[1],
-                array[2],
-                array[3],
+                order.street,
+                order.houseNr,
+                order.zip,
+                order.city,
                 order.paymentMethod,
                 orderState)
-            )})
+            )});
+          console.log(this.orderList);
         },
         (error: any) => {
           console.log(error);
@@ -124,10 +125,10 @@ export class OrderListComponent implements OnInit {
     this.httpClient.get(environment.endpointURL + "order/all").subscribe((res: any) => {
       console.log(res);
       res.forEach((order: any) => {
-        let array = order.deliveryAdress.split(' ');
-        while (array.length<4){
-          array.push("");
-        }
+        //let array = order.deliveryAdress.split(' ');
+        //while (array.length<4){
+          //array.push("");
+        //}
           this.orderList.push(
             new Order(
               order.orderId,
@@ -136,13 +137,14 @@ export class OrderListComponent implements OnInit {
               order.productId, // to indicate which product is sold
               order.firstName,
               order.lastName,
-              array[0],
-              array[1],
-              array[2],
-              array[3],
+              order.street,
+              order.houseNr,
+              order.zip,
+              order.city,
               order.paymentMethod,
               order.state));
-      })
+      });
+      console.log(this.orderList);
     }, (error: any) => {
       console.log(error);
     });
