@@ -83,15 +83,17 @@ export class ProductListComponent implements OnInit {
             categoryId: product.productCategory
           }
         }).subscribe((res:any) => {
-          if (this.checkIfProductIsAcceptedByFilter(res.name)) {
-            this.currentShop.products.push(
-              new Product(product.productId, 0, product.title, product.description, product.image, product.price, res.name, !product.isAvailable))
-          }
-        });
+            if (this.checkIfProductIsAcceptedByFilter(res.name)) {
+              this.currentShop.products.push(
+                new Product(product.productId, 0, product.title, product.description, product.image, product.price, product.productCategory, !product.isAvailable));
+            }
+          },
+          (error: any) => {
+            console.log(error);
+          });
       });
     });
   }
-
   refreshShop(): void {
     this.filterBy = '';
     this.readProducts();
@@ -112,7 +114,7 @@ export class ProductListComponent implements OnInit {
     this.route.navigate(['/product-form'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
   }
 
-  buyProduct(product: Product): void {
+  buyProduct(product: Product): void{
     this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
 

@@ -53,7 +53,7 @@ export class ProductComponent implements OnInit {
             productId: params['productId']
           }
         }).subscribe((res: any) => {
-          this.productToDisplay = new Product(res.productId, 1, res.title,  res.description, res.image,  res.price, res.productCategory, false);
+          this.productToDisplay = new Product(res.productId, 1, res.title,  res.description, res.image,  res.price, res.productCategory, !res.isAvailable);
           this.showDetailedView = true;
         }, (error: any) => {
           console.log(error);
