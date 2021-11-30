@@ -5,12 +5,11 @@ import {Post} from "../models/post.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
-import {Product} from "../models/product.model";
 import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
 import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {OrderState} from "../order-list/order/order-state";
 import {Vote} from "../models/vote.model";
+import {VotingState} from "../models/voting-state";
 
 @Component({
   selector: 'app-feed',
@@ -20,8 +19,6 @@ import {Vote} from "../models/vote.model";
 export class FeedComponent implements OnInit, DoCheck {
 
   postList: Post[] = [];
-
-  votesByCurrentUser: Vote[] = [];
 
   loggedIn: boolean | undefined;
   currentUser: User | undefined;
@@ -38,7 +35,6 @@ export class FeedComponent implements OnInit, DoCheck {
     public userService: UserService,
     private dialog: MatDialog
   ) {
-    this.readFeed();
   }
 
   ngOnInit(): void {
@@ -52,14 +48,12 @@ export class FeedComponent implements OnInit, DoCheck {
     //current Value
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
-
     this.getPostCategories();
+    this.evaluateAccessForCurrentUser();
   }
 
   ngDoCheck(): void {
     //current Value
-
-    //console.log("ngDoCheck is working.")
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
   }
@@ -70,22 +64,17 @@ export class FeedComponent implements OnInit, DoCheck {
   1 = sorted by score
   default = sorted by creation date
    */
-  readFeed(): void {
-    //TODO create own method for user who is not logged in
+  getFeedForUser(): void {
+    let userId = this.currentUser?.userId || 0;
     this.httpClient.get(environment.endpointURL + "post/all", {
       params: {
-        sortBy: this.sortBy
+        sortBy: this.sortBy,
+        userId: userId
       }
     }).subscribe(
       (res: any) => {
         this.postList = [];
-        this.votesByCurrentUser = [];
         res.forEach((post: any) => {
-          post.Votes.forEach((vote: any) => {
-            if (this.currentUser?.userId == vote.UserUserId){
-              this.votesByCurrentUser.push(new Vote(post.postId, vote.upvote))
-            }
-          })
           this.httpClient.get(environment.endpointURL + "category/byId",{
             params: {
               categoryId: post.category
@@ -97,10 +86,8 @@ export class FeedComponent implements OnInit, DoCheck {
                   userId: post.UserUserId
                 }
               }).subscribe((res: any) => {
-                  //const i = this.getRightCategory(post.category);
                   this.postList.push(
-                    new Post(post.postId, post.title, post.text, post.image, post.score, category.name, post.UserUserId, res.userName));
-                  console.log(this.votesByCurrentUser);
+                    new Post(post.postId, post.title, post.text, post.image, post.score, category.name, post.UserUserId, res.userName, this.evaluateVotingState(post.votingStatus)));
                 },
                 (error: any) => {
                   console.log(error);
@@ -109,6 +96,71 @@ export class FeedComponent implements OnInit, DoCheck {
           });
         });
       });
+  }
+
+  evaluateVotingState(votingStatus: string): VotingState {
+    console.log('given votstat: ' + votingStatus);
+    switch (votingStatus){
+      case 'not voted': {
+        return VotingState.NotVoted;
+      }
+      case 'upvoted': {
+        return VotingState.Upvoted;
+      }
+      case 'downvoted': {
+        return VotingState.Downvoted;
+      }
+      default: {
+        return VotingState.NotAllowed;
+      }
+    }
+  }
+
+  getFeedForAdminsAndGuests(): void {
+    this.httpClient.get(environment.endpointURL + "post/all", {
+      params: {
+        sortBy: this.sortBy
+      }
+    }).subscribe(
+      (res: any) => {
+        console.log(res);
+        this.postList = [];
+        res.forEach((post: any) => {
+          this.httpClient.get(environment.endpointURL + "category/byId",{
+            params: {
+              categoryId: post.category
+            }
+          }).subscribe((category: any) => {
+            if (this.checkIfPostIsAcceptedByFilter(category.name)){
+              this.httpClient.get(environment.endpointURL + "user/getById", {
+                params: {
+                  userId: post.UserUserId
+                }
+              }).subscribe((res: any) => {
+                  this.postList.push(
+                    new Post(post.postId, post.title, post.text, post.image, post.score, category.name, post.UserUserId, res.userName, VotingState.NotAllowed));
+                },
+                (error: any) => {
+                  console.log(error);
+                });
+            }
+          });
+        });
+      });
+  }
+
+  evaluateAccessForCurrentUser(): void {
+    if (this.loggedIn){
+      if (!this.currentUser?.isAdmin){
+        this.getFeedForUser();
+      }
+      else {
+        this.getFeedForAdminsAndGuests();
+      }
+    }
+    else {
+      this.getFeedForAdminsAndGuests();
+    }
   }
 
   deletePost(post: Post): void {
@@ -123,7 +175,7 @@ export class FeedComponent implements OnInit, DoCheck {
   reloadFeed() {
     this.filterBy = '';
     this.getPostCategories();
-    this.readFeed();
+    this.evaluateAccessForCurrentUser();
   }
 
   upvotePost(post: Post) {
@@ -162,11 +214,11 @@ export class FeedComponent implements OnInit, DoCheck {
   }
 
   sortFeed(event: any) {
-    this.readFeed();
+    this.evaluateAccessForCurrentUser();
   }
 
   filterFeed(event:any) {
-    this.readFeed();
+    this.evaluateAccessForCurrentUser();
   }
 
   checkIfPostIsAcceptedByFilter(category: string):boolean {

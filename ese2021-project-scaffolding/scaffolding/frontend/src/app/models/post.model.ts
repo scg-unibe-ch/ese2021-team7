@@ -1,3 +1,5 @@
+import {VotingState} from "./voting-state";
+
 export class Post {
 
   constructor(
@@ -15,5 +17,6 @@ export class Post {
     public CreationUserName: string,
     // public lastUpdate: string,
     // public updateBy: number,
+    public votingState: VotingState
   ) {}
 }

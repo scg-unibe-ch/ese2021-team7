@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Post} from "../../models/post.model";
 import {User} from "../../models/user.model";
+import {VotingState} from "../../models/voting-state";
 
 @Component({
   selector: 'app-post',
@@ -30,7 +31,7 @@ export class PostComponent implements OnInit{
   currentUser : User = new User(0, '', '', false,'','','','','','','','','');
 
   @Input()
-  postToDisplay: Post = new Post(0,'','','',0,'',0,'');
+  postToDisplay: Post = new Post(0,'','','',0,'',0,'', VotingState.NotAllowed);
 
   @Output()
   update = new EventEmitter<Post>();
