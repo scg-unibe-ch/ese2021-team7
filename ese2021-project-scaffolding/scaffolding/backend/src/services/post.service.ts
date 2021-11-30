@@ -60,11 +60,10 @@ export class PostService {
     public async upvote(postId: number, userId: number): Promise<Post> {
         const hasVoted = await this.voteService.alreadyVoted(postId, userId, true);
         if (hasVoted) {
-            return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});
+            return Promise.reject({message: 'user ' + userId + ' has already upvoted on post ' + postId});
         } else {
-            this.voteService.upvote(postId, userId);
-            const post = await Post.findByPk(postId);
-            return Promise.resolve(post);
+            await this.voteService.upvote(postId, userId);
+            return this.getPostById('' + postId, '' + userId);
         }
     }
 
@@ -72,9 +71,9 @@ export class PostService {
         const hasVoted = await this.voteService.alreadyVoted(postId, userId, false);
 
         if (hasVoted) {
-            return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});
+            return Promise.reject({message: 'user ' + userId + ' has already downvoted on post ' + postId});
         } else {
-            this.voteService.downvote(postId, userId);
+            await this.voteService.downvote(postId, userId);
             return this.getPostById('' + postId, '' + userId);
         }
     }
@@ -156,11 +155,11 @@ export class PostService {
         // @ts-ignore
         while (!(post.getDataValue('votingStatus') !== 'not voted')  && i < post.Votes.length) {
             // @ts-ignore
-            if (post.Votes[i].upvote && post.Votes[i].UserUserId === userIdAsInt) {
+            if (post.Votes[i].upvote === 1 && post.Votes[i].UserUserId === userIdAsInt) {
                 // @ts-ignore
                 post.setDataValue('votingStatus', 'upvoted');
                 // @ts-ignore
-            } else if (!post.Votes[i].upvote && post.Votes[i].UserUserId === userIdAsInt) {
+            } else if (post.Votes[i].upvote === -1 && post.Votes[i].UserUserId === userIdAsInt) {
                 // @ts-ignore
                 post.setDataValue('votingStatus', 'downvoted');
             }
