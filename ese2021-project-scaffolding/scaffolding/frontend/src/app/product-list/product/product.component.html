@@ -30,7 +30,7 @@
     <button mat-button *ngIf="!showDetailedView" class="group7-product-actions-button" (click)="showDetails()">Details</button>
 
     <!-- Should only be usable for logged in users -->
-    <button mat-button *ngIf="!productToDisplay.sold" [disabled]="!showBuyNowButton" [disabled]="productToDisplay.sold" class="group7-product-actions-button"><mat-icon (click)="buyProduct()" class="group7-product-actions">shopping_cart</mat-icon></button>
+    <button mat-button *ngIf="!productToDisplay.sold" [disabled]="productToDisplay.sold || !showBuyNowButton" class="group7-product-actions-button"><mat-icon (click)="buyProduct()" class="group7-product-actions">shopping_cart</mat-icon></button>
     <button mat-button *ngIf="productToDisplay.sold" class="group7-product-actions-button" [style.color]=" 'red' ">SOLD OUT</button>
 
     <!-- Should only be usable for admins -->
