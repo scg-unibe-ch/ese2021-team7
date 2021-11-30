@@ -102,6 +102,7 @@ export class ProductComponent implements OnInit {
       else this.showBuyNowButton= true;
     }
     else this.showBuyNowButton= true;
+    console.log(this.showBuyNowButton);
   }
 
   updateProduct(): void {

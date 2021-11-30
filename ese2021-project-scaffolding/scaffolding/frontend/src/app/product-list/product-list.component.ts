@@ -122,7 +122,7 @@ export class ProductListComponent implements OnInit {
   }
 
   handleDelete(product: Product): void {
-    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?');
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?','Cancel','Delete product');
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       maxWidth: '400px',
       closeOnNavigation: true,

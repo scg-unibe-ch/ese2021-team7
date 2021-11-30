@@ -94,7 +94,12 @@ export class OrderService {
         }
         return Order.findByPk(modifiedOrder.orderId).then(async dbOrder => {
             if (dbOrder) {
-                dbOrder.deliveryAdress = modifiedOrder.deliveryAdress;
+                dbOrder.firstName = modifiedOrder.firstName;
+                dbOrder.lastName = modifiedOrder.lastName;
+                dbOrder.street = modifiedOrder.street;
+                dbOrder.houseNr = modifiedOrder.houseNr;
+                dbOrder.zip = modifiedOrder.zip;
+                dbOrder.city = modifiedOrder.city;
                 dbOrder.paymentOption = modifiedOrder.paymentOption;
                 dbOrder.orderStatus = modifiedOrder.orderStatus;
                 dbOrder.user = modifiedOrder.user;
