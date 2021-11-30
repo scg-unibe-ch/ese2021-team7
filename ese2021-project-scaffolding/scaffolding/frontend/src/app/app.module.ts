@@ -37,6 +37,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from './ui/confirmation-dialog/confirmation-dialog.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import {MatTableModule} from '@angular/material/table';
+import { UserListComponent } from './user-list/user-list.component';
+import { CategoryListComponent } from './category-list/category-list.component';
 
 
 @NgModule({
@@ -59,6 +62,8 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
     ProductFormComponent,
     ConfirmationDialogComponent,
     AdminDashboardComponent,
+    UserListComponent,
+    CategoryListComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,6 +85,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
     MatIconModule,
     MatSidenavModule,
     MatDialogModule,
+    MatTableModule,
     RouterModule.forRoot([
       { path: 'feed', component: FeedComponent },
       { path: 'profile', component: UserProfileComponent },
@@ -93,7 +99,9 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
       { path: 'shop', component: ProductListComponent},
       { path: 'product', component: ProductComponent},
       { path: 'order', component: OrderListComponent},
-      { path: 'admin-dashboard', component: AdminDashboardComponent}
+      { path: 'admin-dashboard', component: AdminDashboardComponent},
+      { path: 'user-list', component:UserListComponent},
+      { path: 'category-list', component: CategoryListComponent}
     ]),
   ],
   providers: [
