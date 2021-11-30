@@ -77,11 +77,12 @@ export class PostFormComponent implements OnInit {
   }
 
   initializeFormUpdate(): void {
+    let categoryId = this.post?.category;
     this.postForm = this.fb.group({
       "postTitle": new FormControl(this.post?.title, Validators.required),
       "postImage": new FormControl(this.post?.image),
       "postText": new FormControl(this.post?.text),
-      "postCategory": new FormControl(this.post?.category, Validators.required)
+      "postCategory": new FormControl(categoryId.toString(), Validators.required)
     }, {
       validator: (form: FormGroup) => {
         return this.checkPost(form);
