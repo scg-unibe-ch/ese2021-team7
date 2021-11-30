@@ -6,6 +6,10 @@ import {UserService} from "../services/user.service";
 import {Order} from "../models/order.model";
 import {environment} from "../../environments/environment";
 import {OrderState} from "./order/order-state";
+import { OrderListServiceService } from '../services/order-list-service.service';
+import { OrdersDataSourceService } from '../services/orders-data-source.service';
+import {MatTableModule} from '@angular/material/table';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-order-list',
@@ -18,10 +22,19 @@ export class OrderListComponent implements OnInit {
 
   orderList : Order [] = [];
 
+
+  //user for table design
+  displayedColumns: string[] = ['orderId', 'costumerId', 'productId', 'productName','firstName', 'lastName', 'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod', 'state'];
+  dataSource: OrdersDataSourceService;
+
+
   constructor(
     public httpClient: HttpClient,
     private router: Router,
-    public userService: UserService
+    public userService: UserService,
+    private orderListService: OrderListServiceService,
+    private ordersDataSource: OrdersDataSourceService,
+    public productService: ProductService
   ) {}
 
   ngOnInit(): void {
@@ -32,6 +45,8 @@ export class OrderListComponent implements OnInit {
     //current Value
     this.currentUser = this.userService.getUser();
     this.getListOfOrder();
+    this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService, this.httpClient);
+    this.dataSource.loadAllOrders();
   }
 
   getListOfOrder(): void {

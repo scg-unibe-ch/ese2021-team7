@@ -37,7 +37,7 @@ export class PostService {
 
     public async getAll(sortBy: string, userId: string | undefined): Promise<Post[]> {
         return  Post.findAll({
-            attributes: ['postId', 'title', 'image', 'text', 'category'],
+            attributes: ['postId', 'title', 'image', 'text', 'category', 'UserUserId'],
             include: Vote
         }).then(dbPosts => {
             const postsWithScore: Post[] = [];
@@ -58,7 +58,7 @@ export class PostService {
     }
 
     public async upvote(postId: number, userId: number): Promise<Post> {
-        const hasVoted = await this.voteService.alreadyVoted(postId, userId);
+        const hasVoted = await this.voteService.alreadyVoted(postId, userId, true);
         if (hasVoted) {
             return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});
         } else {
@@ -69,7 +69,7 @@ export class PostService {
     }
 
     public async downvote(postId: number, userId: number): Promise<Post> {
-        const hasVoted = await this.voteService.alreadyVoted(postId, userId);
+        const hasVoted = await this.voteService.alreadyVoted(postId, userId, false);
 
         if (hasVoted) {
             return Promise.reject({message: 'user ' + userId + ' has already voted on post ' + postId});

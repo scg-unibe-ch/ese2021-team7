@@ -62,7 +62,7 @@ export class PurchaseComponent implements OnInit {
 
   initializePurchaseForm(): void {
     this.purchaseForm = this.fb.group({
-      paymentMethod: new FormControl('Invoice', Validators.required),
+      paymentMethod: new FormControl("1",Validators.required),
       firstName: new FormControl(this.user.firstName, Validators.required),
       lastName: new FormControl(this.user.lastName, Validators.required),
       street : new FormControl(this.user.street, Validators.required),
@@ -70,6 +70,7 @@ export class PurchaseComponent implements OnInit {
       zipCode : new FormControl(this.user.zipCode),
       city : new FormControl(this.user.city),
     });
+
   }
 
 
@@ -103,8 +104,13 @@ export class PurchaseComponent implements OnInit {
 
   }
 
-
-
+  //keep not sure if need when getting categories dynamically
+  //used to pre select default value in select
+  /*
+  compareFn(c1: any, c2: any): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
+  }
+*/
 
 
 }

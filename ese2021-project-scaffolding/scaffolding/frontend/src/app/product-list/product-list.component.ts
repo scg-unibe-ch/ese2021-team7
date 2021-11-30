@@ -9,6 +9,7 @@ import {User} from "../models/user.model";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
 import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
+import {Post} from "../models/post.model";
 
 @Component({
   selector: 'app-product-list',
@@ -24,13 +25,17 @@ export class ProductListComponent implements OnInit {
 
   showAddProductButton: boolean = false;
 
+  filterBy: string = '';
+
+  productCategories: string[] = [];
+
   constructor(
     public httpClient: HttpClient,
     private route: Router,
     public userService: UserService,
     private dialog: MatDialog
   ) {
-    this.readProducts();
+    //this.readProducts();
   }
 
   ngOnInit(): void {
@@ -45,10 +50,16 @@ export class ProductListComponent implements OnInit {
     this.currentUser = this.userService.getUser();
 
     this.evaluateAddProductPermission();
+
+    // refresh shop
+    this.filterBy = '';
+    this.readProducts();
+    this.getProductCategories();
   }
 
   ngOnChange():void {
     this.evaluateAddProductPermission();
+    this.getProductCategories();
   }
 
   ngDoCheck(): void {
@@ -69,54 +80,41 @@ export class ProductListComponent implements OnInit {
   // READ all created products
   readProducts(): void {
     this.httpClient.get(environment.endpointURL + "product/all").subscribe((res: any) => {
-      this.currentShop = new ProductList(0,'', []);
+      this.currentShop = new ProductList(0, '', []);
       res.forEach((product: any) => {
-      if (!product.sold){
-        this.currentShop.products.push(
-              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.productCategory,product.sold))
-              }
-          },
+        this.httpClient.get(environment.endpointURL + "category/byId",{
+          params: {
+            categoryId: product.productCategory
+          }
+        }).subscribe((category: any) => {
+          if (this.checkIfProductIsAcceptedByFilter(category.name)) {
+            this.currentShop.products.push(
+              new Product(product.productId, 0, product.title, product.description, product.image, product.price, category.name, !product.isAvailable))
+          }
+        },
           (error: any) => {
-            console.log(error);
+          console.log(error);
           });
       });
+    });
   }
-
-  refreshShop() {
+  refreshShop(): void {
+    this.filterBy = '';
+    this.getProductCategories();
     this.readProducts();
   }
 
-  // TODO: sortShop by Category
-  filterShopByCategory(category: number): void {
-    this.httpClient.get(environment.endpointURL + "product/byCategory",{
-      params: {
-        productCategory: category
-      }
-    }).subscribe((res: any) => {
-      this.currentShop = new ProductList(0,'', []);
-      res.forEach((product: any) => {
-          if (!product.sold){
-            this.currentShop.products.push(
-              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.productCategory,product.sold))
-          }
-        },
-        (error: any) => {
-          console.log(error);
-        });
-    });
-  }
-
-  addProduct(): void{
+  addProduct(): void {
     if (this.currentUser?.isAdmin){
       this.route.navigate(['/product-form'],{queryParams: {create: 'true'}}).then(r => {})
     }
   }
 
-  deleteProduct(product: Product): void{
+  deleteProduct(product: Product): void {
     this.handleDelete(product);
   }
 
-  updateProduct(product: Product): void{
+  updateProduct(product: Product): void {
     this.route.navigate(['/product-form'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
   }
 
@@ -124,7 +122,7 @@ export class ProductListComponent implements OnInit {
     this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
 
-  handleDelete(product: Product): void{
+  handleDelete(product: Product): void {
     const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?');
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       maxWidth: '400px',
@@ -143,5 +141,30 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+  filterShop(event:any): void {
+    this.readProducts();
+  }
 
+  checkIfProductIsAcceptedByFilter(category: string): boolean {
+    if (this.filterBy == ''){
+      return true;
+    }
+    else{
+      if (this.filterBy == category){
+        return true;
+      }
+      else return false;
+    }
+  }
+
+  getProductCategories(): void {
+    this.productCategories = [];
+    this.httpClient.get(environment.endpointURL + "category/all").subscribe((res:any) => {
+      res.forEach((category: any) => {
+        if (category.type == 1){
+          this.productCategories.push(category.name)
+        }
+      });
+    });
+  }
 }
