@@ -25,7 +25,10 @@ export class OrderListComponent implements OnInit {
 
 
   //user for table design
-  displayedColumns: string[] = ['orderId',  'productId', 'productName', 'productPrice', 'customerId', 'firstName', 'lastName', 'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod', 'orderStatus'];
+  displayedColumns: string[] = ['orderId',  'productId', 'productName',
+    'productPrice', 'customerId', 'firstName', 'lastName',
+    'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod',
+    'orderStatus', 'actions'];
   dataSource: OrdersDataSourceService;
 
 
@@ -148,5 +151,19 @@ export class OrderListComponent implements OnInit {
       console.log(error);
     });
   }
+
+  shipOrder(row: any): void {
+    console.log("shipping: " + JSON.stringify(row.orderId));
+    this.orderListService.shipOrder(row.orderId);
+    this.refreshTable();
+  }
+
+  refreshTable(): void {
+    this.dataSource.loadAllOrders();
+  }
+
+
+
+
 
 }

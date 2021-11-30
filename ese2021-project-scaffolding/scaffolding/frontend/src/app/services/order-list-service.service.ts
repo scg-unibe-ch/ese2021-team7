@@ -18,9 +18,6 @@ export class OrderListServiceService {
   constructor(public httpClient: HttpClient, public productService: ProductService) {}
 
 
-
-
-
   /**
    * Gets all orders.
    *
@@ -71,7 +68,17 @@ export class OrderListServiceService {
         tap((res: any) => console.log(JSON.stringify(res)))
         )
 
-}
+  }
+
+  shipOrder(orderId: number): void {
+      this.httpClient.post(environment.endpointURL + "order/ship", {
+        orderId: orderId
+      }).subscribe(
+        (res:any) => console.log(res),
+        (error: any) => console.log(error)
+      );
+  }
+
 
 
 }
