@@ -27,7 +27,7 @@ export class ProductListComponent implements OnInit {
 
   filterBy: string = '';
 
-  productCategories: string[] = []; //['Memorabilia', 'Fanart', 'Posters'];
+  productCategories: string[] = [];
 
   constructor(
     public httpClient: HttpClient,
@@ -35,7 +35,7 @@ export class ProductListComponent implements OnInit {
     public userService: UserService,
     private dialog: MatDialog
   ) {
-    this.readProducts();
+    //this.readProducts();
   }
 
   ngOnInit(): void {
@@ -50,6 +50,10 @@ export class ProductListComponent implements OnInit {
     this.currentUser = this.userService.getUser();
 
     this.evaluateAddProductPermission();
+
+    // refresh shop
+    this.filterBy = '';
+    this.readProducts();
     this.getProductCategories();
   }
 
@@ -82,22 +86,22 @@ export class ProductListComponent implements OnInit {
           params: {
             categoryId: product.productCategory
           }
-        }).subscribe((res:any) => {
-            if (this.checkIfProductIsAcceptedByFilter(res.name)) {
-              this.currentShop.products.push(
-                new Product(product.productId, 0, product.title, product.description, product.image, product.price, product.productCategory, !product.isAvailable));
-            }
-          },
+        }).subscribe((category: any) => {
+          if (this.checkIfProductIsAcceptedByFilter(category.name)) {
+            this.currentShop.products.push(
+              new Product(product.productId, 0, product.title, product.description, product.image, product.price, category.name, !product.isAvailable))
+          }
+        },
           (error: any) => {
-            console.log(error);
+          console.log(error);
           });
       });
     });
   }
   refreshShop(): void {
     this.filterBy = '';
-    this.readProducts();
     this.getProductCategories();
+    this.readProducts();
   }
 
   addProduct(): void {

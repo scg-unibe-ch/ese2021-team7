@@ -13,6 +13,7 @@
         <mat-option *ngFor="let category of productCategories" [value]="category">{{category}}</mat-option>
       </mat-select>
     </mat-form-field>
+
     <div  *ngFor="let productToDisplay of currentShop.products" class="group7-grid-tile shop-item">
       <app-product
         [productToDisplay]="productToDisplay"
