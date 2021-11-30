@@ -62,9 +62,15 @@ export class ProductComponent implements OnInit {
           params: {
             productId: params['productId']
           }
-        }).subscribe((res: any) => {
-          this.productToDisplay = new Product(res.productId, 0, res.title,  res.description, res.image,  res.price, res.productCategory, !res.isAvailable);
-          this.showDetailedView = true;
+        }).subscribe((product: any) => {
+          this.httpClient.get(environment.endpointURL + "category/byId",{
+            params: {
+              categoryId: product.productCategory
+            }
+          }).subscribe((category: any) => {
+            this.productToDisplay = new Product(product.productId, 0, product.title, product.description, product.image, product.price, category.name, !product.isAvailable);
+            this.showDetailedView = true;
+          });
         }, (error: any) => {
           console.log(error);
         });
