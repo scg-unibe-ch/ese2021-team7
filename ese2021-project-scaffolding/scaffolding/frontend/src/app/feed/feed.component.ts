@@ -30,7 +30,7 @@ export class FeedComponent implements OnInit, DoCheck {
 
   filterBy: string = '';
 
-  postCategories: string[] = ['The Wall', 'King\'s Landing', 'Winterfell'];
+  postCategories: string[] = [];
 
   constructor(
     public httpClient: HttpClient,
@@ -52,12 +52,14 @@ export class FeedComponent implements OnInit, DoCheck {
     //current Value
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
+
+    this.getPostCategories();
   }
 
   ngDoCheck(): void {
     //current Value
 
-    console.log("ngDoCheck is working.")
+    //console.log("ngDoCheck is working.")
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
   }
@@ -76,7 +78,6 @@ export class FeedComponent implements OnInit, DoCheck {
       }
     }).subscribe(
       (res: any) => {
-        console.log(res);
         this.postList = [];
         this.votesByCurrentUser = [];
         res.forEach((post: any) => {
@@ -85,42 +86,29 @@ export class FeedComponent implements OnInit, DoCheck {
               this.votesByCurrentUser.push(new Vote(post.postId, vote.upvote))
             }
           })
-          if (this.checkIfPostIsAcceptedByFilter(this.getRightCategory(post.category))){
-            this.httpClient.get(environment.endpointURL + "user/getById", {
-              params: {
-                //TODO change
-                //userId: post.UserUserId
-                userId: 1
-              }
-            }).subscribe((res: any) => {
-                const i = this.getRightCategory(post.category);
-                this.postList.push(
-                  new Post(post.postId, post.title, post.text, post.image, post.score, i, post.UserUserId, res.userName));
-                console.log(this.votesByCurrentUser);
+          this.httpClient.get(environment.endpointURL + "category/byId",{
+            params: {
+              categoryId: post.category
+            }
+          }).subscribe((category: any) => {
+            if (this.checkIfPostIsAcceptedByFilter(category.name)){
+              this.httpClient.get(environment.endpointURL + "user/getById", {
+                params: {
+                  userId: post.UserUserId
+                }
+              }).subscribe((res: any) => {
+                  //const i = this.getRightCategory(post.category);
+                  this.postList.push(
+                    new Post(post.postId, post.title, post.text, post.image, post.score, category.name, post.UserUserId, res.userName));
+                  console.log(this.votesByCurrentUser);
                 },
-              (error: any) => {
-                console.log(error);
-              });
-          }
+                (error: any) => {
+                  console.log(error);
+                });
+            }
+          });
         });
       });
-  }
-
-  getRightCategory(categoryNumber: number): string {
-    switch (categoryNumber){
-      case 1: {
-        return 'The Wall';
-      }
-      case 2: {
-        return 'King\'s Landing';
-      }
-      case 3: {
-        return 'Winterfell';
-      }
-      default: {
-        return '';
-      }
-    }
   }
 
   deletePost(post: Post): void {
@@ -133,6 +121,8 @@ export class FeedComponent implements OnInit, DoCheck {
   }
 
   reloadFeed() {
+    this.filterBy = '';
+    this.getPostCategories();
     this.readFeed();
   }
 
@@ -190,5 +180,17 @@ export class FeedComponent implements OnInit, DoCheck {
       else return false;
     }
   }
+
+  getPostCategories(): void {
+    this.postCategories = [];
+    this.httpClient.get(environment.endpointURL + "category/all").subscribe((res:any) => {
+      res.forEach((category: any) => {
+        if (category.type == 0){
+          this.postCategories.push(category.name)
+        }
+      });
+    });
+  }
+
 
 }

@@ -27,7 +27,7 @@ export class ProductListComponent implements OnInit {
 
   filterBy: string = '';
 
-  productCategories: string[] = []; //['Memorabilia', 'Fanart', 'Posters'];
+  productCategories: string[] = [];
 
   constructor(
     public httpClient: HttpClient,
@@ -82,20 +82,23 @@ export class ProductListComponent implements OnInit {
           params: {
             categoryId: product.productCategory
           }
-        }).subscribe((res:any) => {
-          if (this.checkIfProductIsAcceptedByFilter(res.name)) {
+        }).subscribe((category: any) => {
+          if (this.checkIfProductIsAcceptedByFilter(category.name)) {
             this.currentShop.products.push(
-              new Product(product.productId, 0, product.title, product.description, product.image, product.price, res.name, !product.isAvailable))
+              new Product(product.productId, 0, product.title, product.description, product.image, product.price, category.name, !product.isAvailable))
           }
-        });
+        },
+          (error: any) => {
+          console.log(error);
+          });
       });
     });
   }
 
   refreshShop(): void {
     this.filterBy = '';
-    this.readProducts();
     this.getProductCategories();
+    this.readProducts();
   }
 
   addProduct(): void {
