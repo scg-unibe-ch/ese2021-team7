@@ -27,7 +27,7 @@ export class ProductListComponent implements OnInit {
 
   filterBy: string = '';
 
-  productCategories: string[] = ['Memorabilia', 'Fanart'];
+  productCategories: string[] = []; //['Memorabilia', 'Fanart', 'Posters'];
 
   constructor(
     public httpClient: HttpClient,
@@ -50,10 +50,12 @@ export class ProductListComponent implements OnInit {
     this.currentUser = this.userService.getUser();
 
     this.evaluateAddProductPermission();
+    this.getProductCategories();
   }
 
   ngOnChange():void {
     this.evaluateAddProductPermission();
+    this.getProductCategories();
   }
 
   ngDoCheck(): void {
@@ -76,95 +78,45 @@ export class ProductListComponent implements OnInit {
     this.httpClient.get(environment.endpointURL + "product/all").subscribe((res: any) => {
       this.currentShop = new ProductList(0, '', []);
       res.forEach((product: any) => {
-        if (this.checkIfProductIsAcceptedByFilter(this.getRightCategory(product.productCategory))) {
-          //const i = this.getRightCategory(product.productCategory);
-          this.currentShop.products.push(
-            new Product(product.productId, 0, product.title, product.description, product.image, product.price, product.productCategory, !product.isAvailable))
-
-        }
+        this.httpClient.get(environment.endpointURL + "category/byId",{
+          params: {
+            categoryId: product.productCategory
+          }
+        }).subscribe((res:any) => {
+          if (this.checkIfProductIsAcceptedByFilter(res.name)) {
+            this.currentShop.products.push(
+              new Product(product.productId, 0, product.title, product.description, product.image, product.price, res.name, !product.isAvailable))
+          }
+        });
       });
     });
   }
 
-
-  // TODO --> Abfrage direkt in obigem Ding machen und dann verschachtelt
-  getRightCategory(categoryNumber: number): string {
-    /*let categoryName = '';
-    this.httpClient.get(environment.endpointURL + "category/getById", {
-      params: {
-        categoryId: categoryNumber
-      }
-    }).subscribe((res:any) => {
-        categoryName = res.name;
-        console.log(res);
-        console.log(categoryName);
-      },
-      (error: any) => {
-      console.log(error);
-      }
-    );
-    console.log(categoryName);
-    return categoryName;*/
-
-    switch (categoryNumber){
-      case 1: {
-        return 'Memorabilia';
-      }
-      case 4: {
-        return 'Fanart';
-      }
-      case 3: {
-        return 'Winterfell';
-      }
-      default: {
-        return '';
-      }
-    }
-  }
-
-  refreshShop() {
+  refreshShop(): void {
+    this.filterBy = '';
     this.readProducts();
+    this.getProductCategories();
   }
 
-  // TODO: sortShop by Category
-  filterShopByCategory(category: number): void {
-    this.httpClient.get(environment.endpointURL + "product/byCategory",{
-      params: {
-        productCategory: category
-      }
-    }).subscribe((res: any) => {
-      this.currentShop = new ProductList(0,'', []);
-      res.forEach((product: any) => {
-          if (!product.sold){
-            this.currentShop.products.push(
-              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.productCategory,product.sold))
-          }
-        },
-        (error: any) => {
-          console.log(error);
-        });
-    });
-  }
-
-  addProduct(): void{
+  addProduct(): void {
     if (this.currentUser?.isAdmin){
       this.route.navigate(['/product-form'],{queryParams: {create: 'true'}}).then(r => {})
     }
   }
 
-  deleteProduct(product: Product): void{
+  deleteProduct(product: Product): void {
     this.handleDelete(product);
   }
 
-  updateProduct(product: Product): void{
+  updateProduct(product: Product): void {
     this.route.navigate(['/product-form'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
   }
 
-  buyProduct(product: Product): void{
+  buyProduct(product: Product): void {
     this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
 
-  handleDelete(product: Product): void{
+  handleDelete(product: Product): void {
     const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?');
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       maxWidth: '400px',
@@ -183,7 +135,7 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  filterShop(event:any) {
+  filterShop(event:any): void {
     this.readProducts();
   }
 
@@ -197,5 +149,16 @@ export class ProductListComponent implements OnInit {
       }
       else return false;
     }
+  }
+
+  getProductCategories(): void {
+    this.productCategories = [];
+    this.httpClient.get(environment.endpointURL + "category/all").subscribe((res:any) => {
+      res.forEach((category: any) => {
+        if (category.type == 1){
+          this.productCategories.push(category.name)
+        }
+      });
+    });
   }
 }
