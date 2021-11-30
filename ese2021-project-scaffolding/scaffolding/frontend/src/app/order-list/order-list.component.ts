@@ -25,7 +25,7 @@ export class OrderListComponent implements OnInit {
 
   //user for table design
   displayedColumns: string[] = ['orderId', 'costumerId', 'productId', 'productName','firstName', 'lastName', 'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod', 'state'];
-  dataSource: OrdersDataSourceService;
+  dataSource: OrdersDataSourceService | undefined;
 
 
   constructor(

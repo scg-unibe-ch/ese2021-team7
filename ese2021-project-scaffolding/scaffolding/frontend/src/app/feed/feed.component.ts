@@ -144,7 +144,7 @@ export class FeedComponent implements OnInit, DoCheck {
   }
 
   handleDelete(post: Post): void {
-  const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this post?');
+  const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this post?','Cancel','Delete post');
   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
     maxWidth: '400px',
     closeOnNavigation: true,
