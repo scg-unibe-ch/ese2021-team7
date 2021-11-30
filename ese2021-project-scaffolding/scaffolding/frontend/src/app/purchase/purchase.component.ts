@@ -86,8 +86,14 @@ export class PurchaseComponent implements OnInit {
     console.log("purchase");
     console.log(this.purchaseForm);
     this.httpClient.post(environment.endpointURL + "order/create", {
-      deliveryAdress: this.purchaseForm?.value.firstName + " " + this.purchaseForm?.value.lastName + " " + this.purchaseForm?.value.street + " " + this.purchaseForm?.value.houseNumber + " " +
-        this.purchaseForm?.value.zipCode + " " + this.purchaseForm?.value.city,
+      firstName: this.purchaseForm?.value.firstName,
+      lastName: this.purchaseForm?.value.lastName,
+      street:this.purchaseForm?.value.street,
+      houseNr: this.purchaseForm?.value.houseNumber,
+      zip: this.purchaseForm?.value.zipCode,
+      city: this.purchaseForm?.value.city,
+      //deliveryAdress: this.purchaseForm?.value.firstName + " " + this.purchaseForm?.value.lastName + " " + this.purchaseForm?.value.street + " " + this.purchaseForm?.value.houseNumber + " " +
+        //this.purchaseForm?.value.zipCode + " " + this.purchaseForm?.value.city,
       paymentOption: this.purchaseForm?.value.paymentMethod,
       user: this.user.userId,
       productId: this.product.productId
