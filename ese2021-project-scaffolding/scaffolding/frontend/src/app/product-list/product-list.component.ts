@@ -35,7 +35,7 @@ export class ProductListComponent implements OnInit {
     public userService: UserService,
     private dialog: MatDialog
   ) {
-    this.readProducts();
+    //this.readProducts();
   }
 
   ngOnInit(): void {
@@ -50,6 +50,10 @@ export class ProductListComponent implements OnInit {
     this.currentUser = this.userService.getUser();
 
     this.evaluateAddProductPermission();
+
+    // refresh shop
+    this.filterBy = '';
+    this.readProducts();
     this.getProductCategories();
   }
 
