@@ -94,7 +94,6 @@ export class ProductListComponent implements OnInit {
       });
     });
   }
-
   refreshShop(): void {
     this.filterBy = '';
     this.getProductCategories();
@@ -115,7 +114,7 @@ export class ProductListComponent implements OnInit {
     this.route.navigate(['/product-form'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
   }
 
-  buyProduct(product: Product): void {
+  buyProduct(product: Product): void{
     this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
 
