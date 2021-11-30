@@ -11,6 +11,8 @@ export class ConfirmationDialogComponent {
 
   title: string;
   message: string;
+  dismissButton: string;
+  confirmButton: string;
 
   constructor(
     public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
@@ -18,6 +20,8 @@ export class ConfirmationDialogComponent {
   ) {
     this.title = data.title;
     this.message = data.message;
+    this.dismissButton = data.dismissButton;
+    this.confirmButton = data.confirmButton;
   }
 
   onConfirm(): void {

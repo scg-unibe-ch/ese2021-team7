@@ -4,12 +4,13 @@ import { User } from '../models/user.model';
 
 export class VoteService {
     public async alreadyVoted(postId: number, userId: number, upvote: boolean): Promise<boolean> {
+        const upvoteValue = (upvote) ? 1 : -1;
         const {count, rows} = await Vote.findAndCountAll({
             where: {
                 // @ts-ignore
                 'postpostId': postId,
                 'useruserId': userId,
-                'upvote': upvote
+                'upvote': upvoteValue
             },
             include: [Post, User]
         });
@@ -19,6 +20,18 @@ export class VoteService {
 
     public async upvote(postId: number, userId: number): Promise<boolean> {
         const hasVoted = await this.alreadyVoted(postId, userId, true);
+        // If a user has downvoted on said post, this downvote is to be deleted
+        if (await this.alreadyVoted(postId, userId, false)) {
+            await Vote.destroy({
+                where: {
+                    // @ts-ignore
+                    'postpostId': postId,
+                    'useruserId': userId,
+                    'upvote': -1
+                },
+                force: true
+            });
+        }
 
         const post = await Post.findByPk(postId.toString());
         const user = await User.findByPk(userId.toString());
@@ -37,7 +50,19 @@ export class VoteService {
     }
 
     public async downvote(postId: number, userId: number): Promise<boolean> {
-        const hasVoted = await this.alreadyVoted(postId, userId, true);
+        const hasVoted = await this.alreadyVoted(postId, userId, false);
+        // If a user has downvoted on said post, this downvote is to be deleted
+        if (await this.alreadyVoted(postId, userId, true)) {
+            await Vote.destroy({
+                where: {
+                    // @ts-ignore
+                    'postpostId': postId,
+                    'useruserId': userId,
+                    'upvote': 1
+                },
+                force: true
+            });
+        }
 
         const post = await Post.findByPk(postId.toString());
         const user = await User.findByPk(userId.toString());

@@ -5,7 +5,12 @@ import {OrderController} from '../controllers/order.controller';
 
 export interface OrderAttributes {
     orderId: number;
-    deliveryAdress: string;
+    firstName: string;
+    lastName: string;
+    street: string;
+    houseNr: string;
+    zip: string;
+    city: string;
     paymentOption: number;
     orderStatus: number;
     user: number;
@@ -13,7 +18,12 @@ export interface OrderAttributes {
 
 export class Order extends Model<OrderAttributes> implements OrderAttributes {
     orderId!: number;
-    deliveryAdress!: string;
+    firstName: string;
+    lastName: string;
+    street: string;
+    houseNr: string;
+    zip: string;
+    city: string;
     paymentOption!: number;
     orderStatus!: number;
     user!: number;
@@ -25,7 +35,22 @@ export class Order extends Model<OrderAttributes> implements OrderAttributes {
                 autoIncrement: true,
                 primaryKey: true
             },
-            deliveryAdress: {
+            firstName: {
+                type: DataTypes.STRING
+            },
+            lastName: {
+                type: DataTypes.STRING
+            },
+            street: {
+                type: DataTypes.STRING
+            },
+            houseNr: {
+                type: DataTypes.STRING
+            },
+            zip: {
+                type: DataTypes.STRING
+            },
+            city: {
                 type: DataTypes.STRING
             },
             paymentOption: {

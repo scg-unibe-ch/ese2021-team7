@@ -5,9 +5,11 @@ import {Post} from "../models/post.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
+import {Product} from "../models/product.model";
 import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
 import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {OrderState} from "../order-list/order/order-state";
 import {Vote} from "../models/vote.model";
 import {VotingState} from "../models/voting-state";
 
@@ -123,7 +125,6 @@ export class FeedComponent implements OnInit, DoCheck {
       }
     }).subscribe(
       (res: any) => {
-        console.log(res);
         this.postList = [];
         res.forEach((post: any) => {
           this.httpClient.get(environment.endpointURL + "category/byId",{
@@ -182,8 +183,7 @@ export class FeedComponent implements OnInit, DoCheck {
     this.httpClient.post(environment.endpointURL + "post/upvote", {
       postId: post.postId
     }).subscribe((res: any) => {
-      console.log(res);
-      post.score = res.upvote - res.downvote;
+      post.score = res.score;
     });
   }
 
@@ -191,13 +191,12 @@ export class FeedComponent implements OnInit, DoCheck {
     this.httpClient.post(environment.endpointURL + "post/downvote", {
       postId: post.postId
     }).subscribe((res: any) => {
-      console.log(res);
-      post.score = res.upvote - res.downvote;
+      post.score = res.score;
     });
   }
 
   handleDelete(post: Post): void {
-  const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this post?');
+  const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this post?','Cancel','Delete post');
   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
     maxWidth: '400px',
     closeOnNavigation: true,
