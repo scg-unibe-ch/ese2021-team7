@@ -71,15 +71,14 @@ export class ProductListComponent implements OnInit {
     this.httpClient.get(environment.endpointURL + "product/all").subscribe((res: any) => {
       this.currentShop = new ProductList(0,'', []);
       res.forEach((product: any) => {
-      if (!product.sold){
         this.currentShop.products.push(
-              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.productCategory,product.sold))
-              }
+              new Product(product.productId,0,product.title,product.description,product.image,product.price,product.productCategory,!product.isAvailable))
           },
           (error: any) => {
             console.log(error);
           });
       });
+    console.log(this.currentShop);
   }
 
   refreshShop() {
@@ -121,6 +120,7 @@ export class ProductListComponent implements OnInit {
   }
 
   buyProduct(product: Product): void{
+    product.sold = true;
     this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
 
