@@ -10,6 +10,7 @@ import { OrderListServiceService } from '../services/order-list-service.service'
 import { OrdersDataSourceService } from '../services/orders-data-source.service';
 import {MatTableModule} from '@angular/material/table';
 import { ProductService } from '../services/product.service';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-order-list',
