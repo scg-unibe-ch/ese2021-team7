@@ -100,6 +100,7 @@ export class FeedComponent implements OnInit, DoCheck {
                   //const i = this.getRightCategory(post.category);
                   this.postList.push(
                     new Post(post.postId, post.title, post.text, post.image, post.score, category.name, post.UserUserId, res.userName));
+                  console.log(post.score)
                   console.log(this.votesByCurrentUser);
                 },
                 (error: any) => {
@@ -130,8 +131,7 @@ export class FeedComponent implements OnInit, DoCheck {
     this.httpClient.post(environment.endpointURL + "post/upvote", {
       postId: post.postId
     }).subscribe((res: any) => {
-      console.log(res);
-      post.score = res.upvote - res.downvote;
+      post.score = res.score;
     });
   }
 
@@ -139,8 +139,7 @@ export class FeedComponent implements OnInit, DoCheck {
     this.httpClient.post(environment.endpointURL + "post/downvote", {
       postId: post.postId
     }).subscribe((res: any) => {
-      console.log(res);
-      post.score = res.upvote - res.downvote;
+      post.score = res.score;
     });
   }
 
