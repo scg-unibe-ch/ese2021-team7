@@ -115,7 +115,7 @@ export class ProductFormComponent implements OnInit {
       title: this.productForm?.value.productTitle,
       description: this.productForm?.value.productDescription,
       image: this.productForm?.value.productImage,
-      category: this.productForm?.value.productCategory,
+      productCategory: this.productForm?.value.productCategory,
       price : this.productForm?.value.productPrice
     }, ).subscribe((res: any) => {
         console.log(res);
@@ -134,7 +134,7 @@ export class ProductFormComponent implements OnInit {
       title: this.productForm?.value.productTitle,
       text: this.productForm?.value.productDescription,
       image: this.productForm?.value.productImage,
-      category: this.productForm?.value.productCategory,
+      productCategory: this.productForm?.value.productCategory,
       price: this.productForm?.value.productPrice,
       sold: this.productForm?.value.productSold
     }, ).subscribe((res: any) => {
