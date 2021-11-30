@@ -2,7 +2,7 @@ export class OrderToDisplay {
 
   constructor(
     public orderId: number,
-    public customer: number, // userId of the user which places the order
+    public customerId: number, // userId of the user which places the order
     public productId: number, // to indicate which product is sold
     public productName: string,
     public productImage: string,
