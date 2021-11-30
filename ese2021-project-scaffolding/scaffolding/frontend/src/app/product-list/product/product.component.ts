@@ -4,6 +4,7 @@ import {User} from "../../models/user.model";
 import {ActivatedRoute, Router} from "@angular/router";
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-product',
@@ -18,10 +19,10 @@ export class ProductComponent implements OnInit {
   showDeleteAndUpdateButton : boolean = false;
   showBuyNowButton: boolean = false;
 
-  showDetailedView: boolean | undefined;
+  showDetailedView: boolean = false;
 
   @Input()
-  loggedIn : boolean = false;
+  loggedIn : boolean | undefined;
 
   @Input()
   currentUser : User = new User(0, '', '', false,'','','','','','','','','');
@@ -38,7 +39,16 @@ export class ProductComponent implements OnInit {
   @Output()
   buy = new EventEmitter<Product>();
 
-  constructor(public httpClient: HttpClient,private route: ActivatedRoute, private router: Router) {
+  constructor(
+    public httpClient: HttpClient,
+    public userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router) {
+    // Listen for changes
+    userService.loggedIn$.subscribe(res => this.loggedIn = res);
+
+    // Current value
+    this.loggedIn = userService.getLoggedIn();
   }
 
   ngOnInit(): void {
@@ -53,7 +63,7 @@ export class ProductComponent implements OnInit {
             productId: params['productId']
           }
         }).subscribe((res: any) => {
-          this.productToDisplay = new Product(res.productId, 1, res.title,  res.description, res.image,  res.price, res.productCategory, !res.isAvailable);
+          this.productToDisplay = new Product(res.productId, 0, res.title,  res.description, res.image,  res.price, res.productCategory, !res.isAvailable);
           this.showDetailedView = true;
         }, (error: any) => {
           console.log(error);
@@ -102,17 +112,18 @@ export class ProductComponent implements OnInit {
     }
   }
 
-  showDetails(): void{
+  showProductDetails(): void{
     this.router.navigate(['/product'],{queryParams: {productId: this.productToDisplay.productId, showDetailedView: 'true'}}).then(r =>{});
   }
 
   closeDetailedView(): void{
+    this.showDetailedView = false;
     this.router.navigate(['/shop']).then(r =>{});
   }
 
   buyProduct(): void {
     // Emits event to parent component that Product is purchased
-    if (this.showBuyNowButton){
+    if (this.showBuyNowButton && !this.showDetailedView){
       if (this.loggedIn){
         this.buy.emit(this.productToDisplay);
       }

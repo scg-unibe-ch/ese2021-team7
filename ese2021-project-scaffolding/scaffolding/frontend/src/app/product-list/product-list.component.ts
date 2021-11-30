@@ -34,9 +34,7 @@ export class ProductListComponent implements OnInit {
     private route: Router,
     public userService: UserService,
     private dialog: MatDialog
-  ) {
-    //this.readProducts();
-  }
+  ) {  }
 
   ngOnInit(): void {
     // Listen for changes
@@ -53,8 +51,8 @@ export class ProductListComponent implements OnInit {
 
     // refresh shop
     this.filterBy = '';
-    this.readProducts();
     this.getProductCategories();
+    this.readProducts();
   }
 
   ngOnChange():void {
@@ -98,6 +96,7 @@ export class ProductListComponent implements OnInit {
       });
     });
   }
+
   refreshShop(): void {
     this.filterBy = '';
     this.getProductCategories();

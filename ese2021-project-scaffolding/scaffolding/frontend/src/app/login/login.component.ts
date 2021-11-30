@@ -43,7 +43,6 @@ export class LoginComponent implements OnInit{
 
   ngOnInit(): void {
     this.route.queryParams.subscribe( params =>{
-      console.log(params);
       if(params['registered']== 'true'){
         this.fromRegistration = true;
       }
@@ -74,7 +73,7 @@ export class LoginComponent implements OnInit{
         this.router.navigate(['/shop']).then(r =>{});
       }
       else{
-        if(this.userService.getUser().isAdmin){
+        if(this.userService.getUser()?.isAdmin){
           this.router.navigate(['/admin-dashboard']).then(r =>{});
         }
         else {
