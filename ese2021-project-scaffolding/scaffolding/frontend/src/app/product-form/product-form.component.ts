@@ -57,7 +57,7 @@ export class ProductFormComponent implements OnInit {
           }
         }).subscribe((res: any) => {
           console.log(res);
-          this.product = new Product(res.productId, res.shopId, res.title, res.description, res.image, res.price, res.category, res.sold);
+          this.product = new Product(res.productId, res.shopId, res.title, res.description, res.image, res.price, res.productCategory, res.sold);
           console.log(this.product);
           this.initializeFormUpdate();
         }, (error: any) => {
@@ -83,11 +83,13 @@ export class ProductFormComponent implements OnInit {
 
   //does not work currently
   initializeFormUpdate(): void {
+    let categoryId = this.product?.category;
+    console.log(categoryId.toString());
     this.productForm = this.fb.group({
       "productTitle": new FormControl(this.product?.title, Validators.required),
       "productImage": new FormControl(this.product?.image),
       "productDescription": new FormControl(this.product?.description),
-      "productCategory": new FormControl(this.product?.category, Validators.required),
+      "productCategory": new FormControl(categoryId.toString(), Validators.required),
       "productPrice": new FormControl(this.product?.price, Validators.required)
     }, {
       validator: (form: FormGroup) => {
