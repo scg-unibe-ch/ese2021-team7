@@ -27,10 +27,10 @@
 
   <mat-card-actions class="group7-product-actions" align="end">
     <!-- Should only be shown in shop, not in detailed view-->
-    <button mat-button *ngIf="!showDetailedView" class="group7-product-actions-button" (click)="showDetails()">Details</button>
+    <button mat-button *ngIf="!showDetailedView" class="group7-product-actions-button" (click)="showProductDetails()">Details</button>
 
     <!-- Should only be usable for logged in users -->
-    <button mat-button *ngIf="!productToDisplay.sold" [disabled]="productToDisplay.sold || !showBuyNowButton" class="group7-product-actions-button"><mat-icon (click)="buyProduct()" class="group7-product-actions">shopping_cart</mat-icon></button>
+    <button mat-button *ngIf="!productToDisplay.sold" [disabled]="!showBuyNowButton || productToDisplay.sold || showDetailedView" class="group7-product-actions-button"><mat-icon (click)="buyProduct()" class="group7-product-actions">shopping_cart</mat-icon></button>
     <button mat-button *ngIf="productToDisplay.sold" class="group7-product-actions-button" [style.color]=" 'red' ">SOLD OUT</button>
 
     <!-- Should only be usable for admins -->
