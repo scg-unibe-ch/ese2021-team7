@@ -79,15 +79,20 @@ export class OrderListComponent implements OnInit {
     this.orderListService.cancelOrder(row.orderId)
       .subscribe((data: any) => {
           console.log(JSON.stringify(data));
-          this.refreshTable();
+          this.refreshTable(this.currentUser.userId);
         }
       );
   }
 
 
 
-  refreshTable(): void {
-    this.dataSource.loadAllOrders();
+  refreshTable(userId?: number): void {
+    if(userId!= null){
+      this.dataSource.loadUserData(userId)
+    }
+    else {
+      this.dataSource.loadAllOrders();
+    }
     //this.table.renderRows();
   }
 
