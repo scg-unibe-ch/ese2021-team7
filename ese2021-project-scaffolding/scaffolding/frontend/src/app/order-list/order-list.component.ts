@@ -8,9 +8,11 @@ import {environment} from "../../environments/environment";
 import {OrderState} from "./order/order-state";
 import { OrderListServiceService } from '../services/order-list-service.service';
 import { OrdersDataSourceService } from '../services/orders-data-source.service';
-import {MatTableModule} from '@angular/material/table';
+import {MatTable, MatTableModule} from '@angular/material/table';
 import { ProductService } from '../services/product.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {  ViewChild } from '@angular/core';
+import { concat } from 'rxjs';
 
 @Component({
   selector: 'app-order-list',
@@ -21,8 +23,9 @@ export class OrderListComponent implements OnInit {
 
   currentUser: User | undefined;
 
-  orderList : Order [] = [];
+  //orderList : Order [] = [];
 
+  @ViewChild(MatTable) table: MatTable<any>;
 
   //user for table design
   displayedColumns: string[] = ['orderId',  'productId', 'productName',
@@ -48,12 +51,12 @@ export class OrderListComponent implements OnInit {
     })
     //current Value
     this.currentUser = this.userService.getUser();
-    this.getListOfOrder();
+    //this.getListOfOrder();
     this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService, this.httpClient);
     this.dataSource.loadAllOrders();
   }
 
-  getListOfOrder(): void {
+/*  getListOfOrder(): void {
     if (typeof this.currentUser != 'undefined') {
       this.orderList = [];
       if(this.currentUser.isAdmin){
@@ -67,9 +70,9 @@ export class OrderListComponent implements OnInit {
       console.log("No orders available for undefined user.");
       this.router.navigate(['/feed'], {queryParams : {loggedIn : 'false'}});
     }
-  }
+  }*/
 
-  getOrdersByUserId(): void {
+  /*getOrdersByUserId(): void {
     this.orderList = [];
     let id = this.currentUser?.userId;
     if(typeof id != 'undefined'){
@@ -121,9 +124,9 @@ export class OrderListComponent implements OnInit {
         });
     }
     else console.log('Id was undefined')
-  }
+  }*/
 
-  getAllOrders(): void {
+/*  getAllOrders(): void {
     this.orderList = [];
     this.httpClient.get(environment.endpointURL + "order/all").subscribe((res: any) => {
       console.log(res);
@@ -150,16 +153,22 @@ export class OrderListComponent implements OnInit {
     }, (error: any) => {
       console.log(error);
     });
-  }
+  }*/
 
   shipOrder(row: any): void {
     console.log("shipping: " + JSON.stringify(row.orderId));
-    this.orderListService.shipOrder(row.orderId);
-    this.refreshTable();
+    //this.dataSource.shipOrder(row.orderId);
+    this.orderListService.shipOrder(row.orderId)
+      .subscribe((data: any) => {
+        console.log(JSON.stringify(data));
+        this.refreshTable();
+        }
+        );
   }
 
   refreshTable(): void {
     this.dataSource.loadAllOrders();
+    this.table.renderRows();
   }
 
 

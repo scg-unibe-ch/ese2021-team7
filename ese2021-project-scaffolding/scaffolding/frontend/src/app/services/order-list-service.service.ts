@@ -70,13 +70,10 @@ export class OrderListServiceService {
 
   }
 
-  shipOrder(orderId: number): void {
-      this.httpClient.post(environment.endpointURL + "order/ship", {
+  shipOrder(orderId: number): Observable<any> {
+      return this.httpClient.post(environment.endpointURL + "order/ship", {
         orderId: orderId
-      }).subscribe(
-        (res:any) => console.log(res),
-        (error: any) => console.log(error)
-      );
+      });
   }
 
 

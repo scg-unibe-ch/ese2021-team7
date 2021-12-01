@@ -36,11 +36,8 @@ export class OrdersDataSourceService implements DataSource<Order>{
   }
 
 
-
     loadAllOrders():void  {
-
       this.loadingSubject.next(true);
-
       this.orderListService.getAllOrders().pipe(
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false)),
