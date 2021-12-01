@@ -11,8 +11,14 @@ export class CategoryListComponent implements OnInit {
   constructor(private categoryService: CategoryService) { }
 
   ngOnInit(): void {
-    this.categoryService.getAllCategories();
-
+    //let categories = this.categoryService.getCategoriesfromBackend();
+    //console.log(categories);
+    let categoriesSubs = this.categoryService.getAllCategories();
+    console.log("object" + JSON.stringify(categoriesSubs));
+    let categoiresPorduct = this.categoryService.getProductCategories();
+    console.log("object" + JSON.stringify(categoiresPorduct));
+    let categoiresPost = this.categoryService.getPostCategories();
+    console.log("object" + JSON.stringify(categoiresPost));
   }
 
 }
