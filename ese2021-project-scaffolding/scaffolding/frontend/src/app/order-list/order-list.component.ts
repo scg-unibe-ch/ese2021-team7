@@ -22,17 +22,15 @@ import { concat } from 'rxjs';
 export class OrderListComponent implements OnInit {
 
   currentUser: User | undefined;
+  isAdmin: boolean | undefined;
 
   //orderList : Order [] = [];
 
   @ViewChild(MatTable) table: MatTable<any>;
 
   //user for table design
-  displayedColumns: string[] = ['orderId',  'productId', 'productName',
-    'productPrice', 'customerId', 'firstName', 'lastName',
-    'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod',
-    'orderStatus', 'actions'];
-  dataSource: OrdersDataSourceService;
+  displayedColumns: string[] = [];
+  dataSource: OrdersDataSourceService | undefined;
 
 
 
@@ -52,6 +50,12 @@ export class OrderListComponent implements OnInit {
     })
     //current Value
     this.currentUser = this.userService.getUser();
+    console.log("is currentuser admin: "+ this.currentUser?.isAdmin);
+    this.isAdmin = this.currentUser?.isAdmin;
+
+    //set displayed columns
+    this.setDisplayedColumns();
+
     //this.getListOfOrder();
     this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService, this.httpClient);
     this.dataSource.loadAllOrders();
@@ -174,6 +178,21 @@ export class OrderListComponent implements OnInit {
     this.table.renderRows();
   }
 
+
+  setDisplayedColumns(): void{
+    if(this.isAdmin){
+      this.displayedColumns =   ['orderId',  'productId', 'productName',
+        'productPrice', 'customerId', 'firstName', 'lastName',
+        'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod',
+        'orderStatus', 'actions'];
+    }
+    else {
+      this.displayedColumns =   ['orderId',  'productName',
+        'firstName', 'lastName',
+        'street', 'houseNumber', 'zipCode', 'city', 'productPrice',
+        'orderStatus', 'actions'];
+    }
+  }
 
 
 
