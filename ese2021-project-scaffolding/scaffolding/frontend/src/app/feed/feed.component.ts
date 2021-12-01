@@ -88,9 +88,8 @@ export class FeedComponent implements OnInit, DoCheck {
                 }
               }).subscribe((res: any) => {
                   this.postList.push(
-                    //new Post(post.postId, post.title, post.text, post.image, post.score, category.name, post.UserUserId, res.userName, this.evaluateVotingState(post.votingStatus)));
-                    new Post(post.postId, post.title, post.text, post.image, post.score, category.name, post.UserUserId, res.userName, VotingState.Upvoted));
-                },
+                    new Post(post.postId, post.title, post.text, post.image, post.score, category.name, post.UserUserId, res.userName, this.evaluateVotingState(post.votingStatus)));
+                  },
                 (error: any) => {
                   console.log(error);
                 });
