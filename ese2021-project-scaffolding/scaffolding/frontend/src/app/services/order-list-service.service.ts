@@ -23,7 +23,7 @@ export class OrderListServiceService {
    *
    * return: Observable<OrderToDisplay[]>
    */
-  getAllOrders(): Observable<any[]> {
+  getAllOrders(): Observable<OrderToDisplay[]> {
     return this.httpClient.get(environment.endpointURL + "order/all")
       .pipe(
         tap((tapOrders: any) => console.log("Tab dbOrders: " + JSON.stringify(tapOrders))),
@@ -38,23 +38,23 @@ export class OrderListServiceService {
               tap((tapProduct: any) => console.log(JSON.stringify("Tap Product: " + tapProduct))),
               map(
                 (product: any) => {
-                  return new OrderToDisplay(
-                    order.orderId,
-                    order.user,
-                    order.ProductProductId,
-                    product.title,
-                    product.image,
-                    product.description,
-                    product.price,
-                    "not yet connected",
-                    "not yet connected",
-                    order.street,
-                    order.houseNr,
-                    order.zip,
-                    order.city,
-                    order.paymentOption,
-                    order.orderStatus
-                  );
+                    return new OrderToDisplay(
+                      order.orderId,
+                      order.user,
+                      order.ProductProductId,
+                      product.title,
+                      product.image,
+                      product.description,
+                      product.price,
+                      order.firstName,
+                      order.lastName,
+                      order.street,
+                      order.houseNr,
+                      order.zip,
+                      order.city,
+                      order.paymentOption,
+                      order.orderStatus
+                    );
                 }
               )
             )))
