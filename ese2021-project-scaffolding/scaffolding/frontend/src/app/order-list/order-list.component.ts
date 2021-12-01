@@ -13,6 +13,9 @@ import { ProductService } from '../services/product.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {  ViewChild } from '@angular/core';
 import { concat } from 'rxjs';
+import { ConfirmationDialogModel } from '../ui/confirmation-dialog/confirmation-dialog';
+import { ConfirmationDialogComponent } from '../ui/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-order-list',
@@ -25,13 +28,9 @@ export class OrderListComponent implements OnInit {
   isAdmin: boolean | undefined;
 
 
-
-  //@ViewChild(MatTable) table: MatTable<any>;
-
-  //user for table design
+  //used for table design
   displayedColumns: string[] = [];
   dataSource: OrdersDataSourceService | undefined;
-
 
 
   constructor(
@@ -40,7 +39,8 @@ export class OrderListComponent implements OnInit {
     public userService: UserService,
     private orderListService: OrderListServiceService,
     private ordersDataSource: OrdersDataSourceService,
-    public productService: ProductService
+    public productService: ProductService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -53,18 +53,13 @@ export class OrderListComponent implements OnInit {
     console.log("is currentuser admin: "+ this.currentUser?.isAdmin);
     this.isAdmin = this.currentUser?.isAdmin;
 
-    //set displayed columns
     this.setDisplayedColumns();
-
     this.initializeDataSource(this.isAdmin);
-
-
   }
 
 
   shipOrder(row: any): void {
     console.log("shipping: " + JSON.stringify(row.orderId));
-    //this.dataSource.shipOrder(row.orderId);
     this.orderListService.shipOrder(row.orderId)
       .subscribe((data: any) => {
         console.log(JSON.stringify(data));
@@ -72,6 +67,7 @@ export class OrderListComponent implements OnInit {
         }
         );
   }
+
 
   cancelOrder(row: any): void {
     console.log("shipping: " + JSON.stringify(row.orderId));
@@ -85,7 +81,6 @@ export class OrderListComponent implements OnInit {
   }
 
 
-
   refreshTable(userId?: number): void {
     if(userId!= null){
       this.dataSource.loadOrders(userId)
@@ -93,7 +88,6 @@ export class OrderListComponent implements OnInit {
     else {
       this.dataSource.loadOrders();
     }
-    //this.table.renderRows();
   }
 
 
@@ -124,6 +118,37 @@ export class OrderListComponent implements OnInit {
     }
 
   }
+
+
+  confirmationCancel(row: any): void {
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to cancel this order?','Keep','Cancel order');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    })
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.cancelOrder(row);
+      }
+    });
+  }
+
+
+  confirmationShip(row:any): void{
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Ship order?','Discard','Ship');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    })
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.shipOrder(row);
+      }
+    });
+  }
+
 
 
 
