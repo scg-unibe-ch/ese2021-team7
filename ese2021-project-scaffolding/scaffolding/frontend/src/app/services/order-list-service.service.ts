@@ -48,7 +48,10 @@ export class OrderListServiceService {
             }).pipe(
               tap((tapProduct: any) => console.log(JSON.stringify("Tap Product: " + tapProduct))),
               map(
-                (product: any) => this.createOrderToDisplayFromBackendResponse(order, product) // join together and give back one OrderToDisplay
+                (product: any) => {
+                  order.orderStatus = this.getStringOfOrderStatus(order.orderStatus); //change orderStatus int for string
+                  return this.createOrderToDisplayFromBackendResponse(order, product);  // join together and give back one OrderToDisplay
+                }
               )
             )))
           return forkJoin(forkJoinArray); //forkjoin: give back array of observables

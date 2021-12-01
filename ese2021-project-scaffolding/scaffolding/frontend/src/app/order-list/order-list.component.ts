@@ -6,6 +6,7 @@ import {UserService} from "../services/user.service";
 import {Order} from "../models/order.model";
 import {environment} from "../../environments/environment";
 import {OrderState} from "./order/order-state";
+import {OrderComponent} from "./order/order.component";
 import { OrderListServiceService } from '../services/order-list-service.service';
 import { OrdersDataSourceService } from '../services/orders-data-source.service';
 import {MatTable, MatTableModule} from '@angular/material/table';
@@ -75,7 +76,7 @@ export class OrderListComponent implements OnInit {
     this.orderListService.cancelOrder(row.orderId)
       .subscribe((data: any) => {
           console.log(JSON.stringify(data));
-          this.refreshTable(this.currentUser.userId);
+          this.refreshTable(this.currentUser?.userId);
         }
       );
   }
@@ -83,10 +84,10 @@ export class OrderListComponent implements OnInit {
 
   refreshTable(userId?: number): void {
     if(userId!= null){
-      this.dataSource.loadOrders(userId)
+      this.dataSource?.loadOrders(userId)
     }
     else {
-      this.dataSource.loadOrders();
+      this.dataSource?.loadOrders();
     }
   }
 
@@ -107,7 +108,7 @@ export class OrderListComponent implements OnInit {
   }
 
 
-  initializeDataSource(isAdmin: boolean): void{
+  initializeDataSource(isAdmin: undefined | boolean): void{
     //this.getListOfOrder();
     this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService, this.httpClient);
     if(isAdmin) {
