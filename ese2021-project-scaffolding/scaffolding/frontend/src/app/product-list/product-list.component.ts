@@ -34,9 +34,7 @@ export class ProductListComponent implements OnInit {
     private route: Router,
     public userService: UserService,
     private dialog: MatDialog
-  ) {
-    //this.readProducts();
-  }
+  ) {  }
 
   ngOnInit(): void {
     // Listen for changes
@@ -53,8 +51,8 @@ export class ProductListComponent implements OnInit {
 
     // refresh shop
     this.filterBy = '';
-    this.readProducts();
     this.getProductCategories();
+    this.readProducts();
   }
 
   ngOnChange():void {
@@ -98,6 +96,7 @@ export class ProductListComponent implements OnInit {
       });
     });
   }
+
   refreshShop(): void {
     this.filterBy = '';
     this.getProductCategories();
@@ -123,7 +122,7 @@ export class ProductListComponent implements OnInit {
   }
 
   handleDelete(product: Product): void {
-    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?');
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?','Cancel','Delete product');
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       maxWidth: '400px',
       closeOnNavigation: true,

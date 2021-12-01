@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Post} from "../../models/post.model";
 import {User} from "../../models/user.model";
+import {VotingState} from "../../models/voting-state";
 
 @Component({
   selector: 'app-post',
@@ -15,6 +16,8 @@ export class PostComponent implements OnInit{
 
   showDeleteAndUpdateButton : boolean = false;
   showVotingButtons : boolean = false;
+  enableUpvote: boolean = false;
+  enableDownvote: boolean = false;
 
   isReadMore = false;
 
@@ -30,7 +33,7 @@ export class PostComponent implements OnInit{
   currentUser : User = new User(0, '', '', false,'','','','','','','','','');
 
   @Input()
-  postToDisplay: Post = new Post(0,'','','',0,'',0,'');
+  postToDisplay: Post = new Post(0,'','','',0,'',0,'', VotingState.NotAllowed);
 
   @Output()
   update = new EventEmitter<Post>();
@@ -73,6 +76,26 @@ export class PostComponent implements OnInit{
       }
       else if (this.loggedIn && this.currentUser.userId != this.postToDisplay.CreationUser){
         this.showVotingButtons = true;
+        // check if user already voted
+        switch (this.postToDisplay.votingState){
+          case VotingState.NotVoted: {
+            this.enableUpvote = this.enableDownvote = true;
+            break;
+          }
+          case VotingState.Upvoted: {
+            this.enableUpvote = false;
+            this.enableDownvote = true;
+            break;
+          }
+          case VotingState.Downvoted: {
+            this.enableUpvote = true;
+            this.enableDownvote = false;
+            break;
+          }
+          default: {
+            this.enableDownvote = this.enableUpvote = false;
+          }
+        }
       }
       else this.showVotingButtons = false;
     }
@@ -95,14 +118,14 @@ export class PostComponent implements OnInit{
 
   upvotePost(): void {
     // Emits event to parent component that Post got upvoted
-    if (this.showVotingButtons){
+    if (this.showVotingButtons && this.enableUpvote){
       this.upvote.emit(this.postToDisplay);
     }
   }
 
   downvotePost(): void{
     // Emits event to parent component that Post got downvoted
-    if (this.showVotingButtons) {
+    if (this.showVotingButtons && this.enableDownvote) {
       this.downvote.emit(this.postToDisplay);
     }
   }

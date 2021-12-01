@@ -38,10 +38,6 @@ export class OrderListServiceService {
               tap((tapProduct: any) => console.log(JSON.stringify("Tap Product: " + tapProduct))),
               map(
                 (product: any) => {
-                  let address = order.deliveryAdress.split(' ');
-                  while (address.length < 4) {
-                    address.push("");
-                  }
                   return new OrderToDisplay(
                     order.orderId,
                     order.user,
@@ -52,10 +48,10 @@ export class OrderListServiceService {
                     product.price,
                     "not yet connected",
                     "not yet connected",
-                    address[0],
-                    address[1],
-                    address[2],
-                    address[3],
+                    order.street,
+                    order.houseNr,
+                    order.zip,
+                    order.city,
                     order.paymentOption,
                     order.orderStatus
                   );

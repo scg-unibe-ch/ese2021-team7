@@ -78,8 +78,7 @@ export class OrderComponent implements OnInit, OnChanges{
     // TODO check if productId is sent from backend to order, use right productId
     this.httpClient.get(environment.endpointURL + "product/byId", {
       params: {
-        productId: 1
-        //productId: productId
+        productId: productId
       }
     }).subscribe((res: any) => {
       this.productDefined = true;
@@ -99,19 +98,13 @@ export class OrderComponent implements OnInit, OnChanges{
   }
 
   cancelOrder() {
-    this.handleCancel();
-    /*this.httpClient.get(environment.endpointURL + "order/cancel").subscribe((res: any) => {
-      console.log(res);
-    }, (error: any) => {
-      console.log(error);
-    });
-    // only enable if orderState is pending
-    this.orderToDisplay.state = OrderState.Cancelled;
-    this.showStateChangeButton = false;*/
+    if (this.orderToDisplay.state == OrderState.Pending){
+      this.handleCancel();
+    }
   }
 
   handleCancel(): void {
-    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to cancel this order?');
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to cancel this order?','No','Cancel order');
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       maxWidth: '400px',
       closeOnNavigation: true,
@@ -133,19 +126,13 @@ export class OrderComponent implements OnInit, OnChanges{
   }
 
   shipOrder() {
-    // only enable if orderState is pending
-    this.handleShip();
-      /*this.httpClient.get(environment.endpointURL + "order/ship").subscribe((res: any) => {
-        console.log(res);
-      }, (error: any) => {
-        console.log(error);
-      });
-      this.orderToDisplay.state = OrderState.Shipped;
-      this.showStateChangeButton = false;*/
+    if (this.orderToDisplay.state == OrderState.Pending){
+      this.handleShip();
+    }
   }
 
   handleShip(): void {
-    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to ship this order?');
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to ship this order?','Cancel','Ship order');
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       maxWidth: '400px',
       closeOnNavigation: true,
