@@ -25,9 +25,8 @@ export class PurchaseComponent implements OnInit {
 
   isSubmitted: boolean;
 
-  isCreate: boolean;
-
-  isUpdate: boolean;
+  //isCreate: boolean;
+  //isUpdate: boolean;
 
   constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService, private route: ActivatedRoute, private router: Router) {
     this.isSubmitted = false;
@@ -50,7 +49,7 @@ export class PurchaseComponent implements OnInit {
           }
         }).subscribe((res: any) => {
           console.log(res);
-          this.product = new Product(res.productId, 1, res.title,  res.description, res.image,  res.price, res.productCategory, false);
+          this.product = new Product(res.productId, 1, res.title,  res.description, res.image,  res.price, res.productCategory, !res.isAvailabe);
           console.log(this.product);
           this.initializePurchaseForm();
         }, (error: any) => {
@@ -62,21 +61,22 @@ export class PurchaseComponent implements OnInit {
 
   initializePurchaseForm(): void {
     this.purchaseForm = this.fb.group({
-      paymentMethod: new FormControl('Invoice', Validators.required),
-      firstName: new FormControl(this.user.firstName, Validators.required),
-      lastName: new FormControl(this.user.lastName, Validators.required),
-      street : new FormControl(this.user.street, Validators.required),
-      houseNumber : new FormControl(this.user.houseNumber),
-      zipCode : new FormControl(this.user.zipCode),
-      city : new FormControl(this.user.city),
+      paymentMethod: new FormControl("1",Validators.required),
+      firstName: new FormControl(this.user?.firstName, Validators.required),
+      lastName: new FormControl(this.user?.lastName, Validators.required),
+      street : new FormControl(this.user?.street, Validators.required),
+      houseNumber : new FormControl(this.user?.houseNumber),
+      zipCode : new FormControl(this.user?.zipCode),
+      city : new FormControl(this.user?.city),
     });
+
   }
 
 
   onSubmit(formDirective: FormGroupDirective): void{
     console.log(this.purchaseForm)
     this.isSubmitted = true;
-    if(this.purchaseForm.valid){
+    if(this.purchaseForm?.valid){
         this.sendPurchaseForm();
     }
   }
@@ -85,10 +85,16 @@ export class PurchaseComponent implements OnInit {
     console.log("purchase");
     console.log(this.purchaseForm);
     this.httpClient.post(environment.endpointURL + "order/create", {
-      deliveryAdress: this.purchaseForm?.value.firstName + " " + this.purchaseForm?.value.lastName + " " + this.purchaseForm?.value.street + " " + this.purchaseForm?.value.houseNumber + " " +
-        this.purchaseForm?.value.zipCode + " " + this.purchaseForm?.value.city,
+      firstName: this.purchaseForm?.value.firstName,
+      lastName: this.purchaseForm?.value.lastName,
+      street:this.purchaseForm?.value.street,
+      houseNr: this.purchaseForm?.value.houseNumber,
+      zip: this.purchaseForm?.value.zipCode,
+      city: this.purchaseForm?.value.city,
+      //deliveryAdress: this.purchaseForm?.value.firstName + " " + this.purchaseForm?.value.lastName + " " + this.purchaseForm?.value.street + " " + this.purchaseForm?.value.houseNumber + " " +
+        //this.purchaseForm?.value.zipCode + " " + this.purchaseForm?.value.city,
       paymentOption: this.purchaseForm?.value.paymentMethod,
-      user: this.user.userId,
+      user: this.user?.userId,
       productId: this.product.productId
     }, ).subscribe((res: any) => {
         console.log(res);
@@ -103,8 +109,13 @@ export class PurchaseComponent implements OnInit {
 
   }
 
-
-
+  //keep not sure if need when getting categories dynamically
+  //used to pre select default value in select
+  /*
+  compareFn(c1: any, c2: any): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
+  }
+*/
 
 
 }

@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import {MatCardModule} from '@angular/material/card';
-import { User } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { UserService } from '../services/user.service';
-import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
-import { Post } from '../models/post.model';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {UserService} from '../services/user.service';
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} from '@angular/forms';
+import {Post} from '../models/post.model';
+import {ActivatedRoute, Router} from '@angular/router';
+import {VotingState} from "../models/voting-state";
+
 @Component({
   selector: 'app-post-form',
   templateUrl: './post-form.component.html',
@@ -54,7 +54,7 @@ export class PostFormComponent implements OnInit {
         }).subscribe((res: any) => {
           console.log(res);
           //TODO create
-          this.post = new Post(res.postId, res.title, res.text, res.image, res.score, res.category,  res.UserUserId,'');
+          this.post = new Post(res.postId, res.title, res.text, res.image, res.score, res.category,  res.UserUserId,'', VotingState.NotAllowed);
           //this.post = new Post(res.postId, 0, res.title, res.text, res.image, res.upvote, res.downvote, 0, res.category, res.createdAt, res.UserUserId,'');
           console.log(this.post);
           this.initializeFormUpdate();
@@ -77,11 +77,12 @@ export class PostFormComponent implements OnInit {
   }
 
   initializeFormUpdate(): void {
+    let categoryId = this.post?.category;
     this.postForm = this.fb.group({
       "postTitle": new FormControl(this.post?.title, Validators.required),
       "postImage": new FormControl(this.post?.image),
       "postText": new FormControl(this.post?.text),
-      "postCategory": new FormControl(this.post?.category, Validators.required)
+      "postCategory": new FormControl(categoryId.toString(), Validators.required)
     }, {
       validator: (form: FormGroup) => {
         return this.checkPost(form);
