@@ -19,296 +19,123 @@ export class OrderListServiceService {
 
 
   /**
-   * Gets all orders.
+   * Gets all orders from database and returns array with full order information (with products added).
    *
-   * return: Observable<Order[]>
-   */
-  /*
-  getAllOrders(): Observable<Order[]> {
-    this.httpClient.get(environment.endpointURL + "order/all").subscribe((res: any) => {
-      console.log(res);
-      res.forEach((order: any) => {
-        let address = order.deliveryAdress.split(' ');
-        while (address.length<4){
-          address.push("");
-        }
-        this.orderList.push(
-          new Order(
-            order.orderId,
-            0,
-            order.user, // userId of the user which places the order
-            order.ProductProductId, // to indicate which product is sold
-            order.firstName,
-            order.lastName,
-            address[0],
-            address[1],
-            address[2],
-            address[3],
-            order.paymentOption,
-            order.orderStatus
-          ));
-      })
-    }, (error: any) => {
-      console.log(error);
-    });
-    console.log(this.orderList);
-    return of(this.orderList); //returns Observable of orderList
-
-  }
-*/
-
-
-  /**
-   * Gets all orders.
+   * Only returns orders for specific user if userId was provided.
    *
-   * return: Observable<Order[]>
+   * @param userId optional; returns all orders if not provided, otherwise just order for this specific user.
+   * @return Observable<OrderToDisplay[]>
    */
-
-  /*
-  getAllOrders(): Observable<Order[]> {
+  getAllOrders(userId?: number): Observable<OrderToDisplay[]> {
     return this.httpClient.get(environment.endpointURL + "order/all")
       .pipe(
-      map((dbOrders:any) => dbOrders.map(
-        (dbOrder: any) => {
-          let address = dbOrder.deliveryAdress.split(' ');
-          while (address.length<4){
-            address.push("");
+        tap((tapOrders: any) => console.log("Tab dbOrders: " + JSON.stringify(tapOrders))), //check result coming back
+        map((dbOrders: any[]) => dbOrders.filter((order:any) => { //filter data for user, if userId was provided
+          if(userId != null){
+            return order.user == userId;
+          } else {
+            return true;
           }
-            return new Order(
-              dbOrder.orderId,
-              0,
-              dbOrder.user, // userId of the user which places the order
-              dbOrder.ProductProductId, // to indicate which product is sold
-              dbOrder.firstName,
-              dbOrder.lastName,
-              address[0],
-              address[1],
-              address[2],
-              address[3],
-              dbOrder.paymentOption,
-              dbOrder.orderStatus
-            );
-          })))
-
-  }
-*/
-
-/*
-  getAllOrders(): Observable<OrderToDisplay[]> {
-    return this.httpClient.get(environment.endpointURL + "order/all")
-      .pipe(
-        concatMap((dbOrders:any) =>
-            dbOrders.map(
-              (dbOrder: any) => {
-                let orderToDisplay: OrderToDisplay;
-                let address = dbOrder.deliveryAdress.split(' ');
-                while (address.length < 4) {
-                  address.push("");
-                }
-                this.productService.getProductById(dbOrder.prodcutId).pipe(
-                  map((product: any) => {
-                     orderToDisplay = new OrderToDisplay(
-                      dbOrder.orderId,
-                      dbOrder.user,
-                      dbOrder.ProductProductId,
-                      "Product Title",
-                      "Product Image",
-                      "Product Description",
-                      "price",
-                      "first Name",
-                      "Las tName",
-                      address[0],
-                      address[1],
-                      address[2],
-                      address[3],
-                      dbOrder.paymentOption,
-                      dbOrder.orderStatus
-                     );
-                  }
-                  )
-                );
-                return orderToDisplay;
-              }
-            )
-
-
-        )
-        );
-  }
-*/
-/*
-
-  getAllOrders(): Observable<OrderToDisplay[]> {
-    return this.httpClient.get(environment.endpointURL + "order/all")
-      .pipe(
-        map((dbOrders:any) =>
-          dbOrders.map(
-            (dbOrder: any) => {
-              let address = dbOrder.deliveryAdress.split(' ');
-              while (address.length < 4) {
-                address.push("");
-              }
-                 return new OrderToDisplay(
-                    dbOrder.orderId,
-                    dbOrder.user,
-                    dbOrder.ProductProductId,
-                    "Product Title",
-                    "Product Image",
-                    "Product Description",
-                    546,
-                    "first Name",
-                    "Las tName",
-                    address[0],
-                    address[1],
-                    address[2],
-                    address[3],
-                    dbOrder.paymentOption,
-                    dbOrder.orderStatus
-                  );
-            }
-          )
-        )
-      );
-  }
-*/
-
-
-
-/*
-getAllOrders(): Observable<OrderToDisplay[]> {
-    return this.httpClient.get(environment.endpointURL + "order/all")
-      .pipe(
-        tap((tapOrders: any) => console.log("Tab dbOrders: " + JSON.stringify(tapOrders))),
-        map((dbOrders:any) =>
-          dbOrders.map(
-            (dbOrder: any) => {
-              this.productService.getProductById(dbOrder.prodcutId).pipe(
-                tap((tapProduct: any) => console.log("Tap Product: " + JSON.stringify(tapProduct))),
-                map(
-                  (product: any) => {
-                    let address = dbOrder.deliveryAdress.split(' ');
-                    while (address.length < 4) {
-                      address.push("");
-                    }
-                    return new OrderToDisplay(
-                      dbOrder.orderId,
-                      dbOrder.user,
-                      dbOrder.ProductProductId,
-                      "Product Title",
-                      "Product Image",
-                      "Product Description",
-                      234,
-                      "first Name",
-                      "Las tName",
-                      address[0],
-                      address[1],
-                      address[2],
-                      address[3],
-                      dbOrder.paymentOption,
-                      dbOrder.orderStatus
-                    );
-                  }
-
-
-
-              ));
-
-            }
-          )
-        ),
-        tap((tapAfter: any) => console.log("Tap after: "+ JSON.stringify(tapAfter)))
-      );
-  }*/
-
-
-
-  getAllOrders(): Observable<any[]> {
-    return this.httpClient.get(environment.endpointURL + "order/all")
-      .pipe(
-        tap((tapOrders: any) => console.log("Tab dbOrders: " + JSON.stringify(tapOrders))),
-        mergeMap((dbOrders:any[]) => {
+        })),
+        tap((tapOrders: any) => console.log("Tab User Filtered data: " + JSON.stringify(tapOrders))),
+        mergeMap((dbOrders:any[]) => { //mergeMap to handle inner observables
           let forkJoinArray: any[] = [];
-          dbOrders.forEach(
-            (order: any) => forkJoinArray.push(this.httpClient.get(environment.endpointURL + "product/byId", {
+          dbOrders.forEach( //replace each object in array through second call/observable
+            (order: any) => forkJoinArray.push(this.httpClient.get(environment.endpointURL + "product/byId", { //get product inorder
               params: {
                 productId: order.ProductProductId
               }
             }).pipe(
               tap((tapProduct: any) => console.log(JSON.stringify("Tap Product: " + tapProduct))),
               map(
-                (product: any) => {
-                  let address = order.deliveryAdress.split(' ');
-                  while (address.length < 4) {
-                    address.push("");
-                  }
-                  return new OrderToDisplay(
-                    order.orderId,
-                    order.user,
-                    order.ProductProductId,
-                    product.title,
-                    product.image,
-                    product.description,
-                    product.price,
-                    "not yet connected",
-                    "not yet connected",
-                    address[0],
-                    address[1],
-                    address[2],
-                    address[3],
-                    order.paymentOption,
-                    order.orderStatus
-                  );
-                }
+                (product: any) => this.createOrderToDisplayFromBackendResponse(order, product) // join together and give back one OrderToDisplay
               )
             )))
-          return forkJoin(forkJoinArray);
+          return forkJoin(forkJoinArray); //forkjoin: give back array of observables
           }
         ),
-        //forkJoin(),
         tap((res: any) => console.log(JSON.stringify(res)))
         )
 
-}
+  }
 
 
+  /**
+   * Sends order/ship request to backend with provided orderId.
+   *
+   * @param orderId
+   */
+  shipOrder(orderId: number): Observable<any> {
+      return this.httpClient.post(environment.endpointURL + "order/ship", {
+        orderId: orderId
+      });
+  }
 
-/*
-dbOrders.map(
-  (dbOrder: any) => {
-    console.log(dbOrder.ProductProductId);
-    let address = dbOrder.deliveryAdress.split(' ');
-    while (address.length < 4) {
-      address.push("");
+  /**
+   * Sends order/cancel order request to backend with provided orderId.
+   *
+   * @param orderId
+   */
+  cancelOrder(orderId: number): Observable<any> {
+    return this.httpClient.post(environment.endpointURL + "order/cancel", {
+      orderId: orderId
+    });
+  }
+
+
+  /**
+   * Creates an OrderToDisplay object from provided backend data (order and product).
+   *
+   * @param order
+   * @param product
+   * @return OrderToDisplay
+   */
+  createOrderToDisplayFromBackendResponse(order: any, product: any): OrderToDisplay {
+    return new OrderToDisplay(
+      order.orderId,
+      order.user,
+      order.ProductProductId,
+      product.title,
+      product.image,
+      product.description,
+      product.price,
+      order.firstName,
+      order.lastName,
+      order.street,
+      order.houseNr,
+      order.zip,
+      order.city,
+      order.paymentOption,
+      order.orderStatus);
+  }
+
+  /**
+   * Returns the string value for OrderStatus.
+   * 0 = pending
+   * 1 = shipped
+   * 2 = cancelled
+   *
+   * @param orderStatus: number
+   * @return string
+   */
+  getStringOfOrderStatus(orderStatus: number): string {
+    switch(orderStatus){
+      case 0:
+        return "Pending";
+        break;
+      case 1:
+        return "Shipped";
+        break;
+      case 2:
+        return "Cancelled";
+        break;
+      default:
+        return "Undefined";
+        break;
     }
-    this.httpClient.get(environment.endpointURL + "product/byId", {
-      params: {
-        productId: dbOrder.ProductProductId
-      }
-    }).pipe(
-      tap((tapProduct: any) => console.log(JSON.stringify("Tap Product: " + tapProduct))),
-      map(
-        (product: any) => {
-          return new OrderToDisplay(
-            dbOrder.orderId,
-            dbOrder.user,
-            dbOrder.ProductProductId,
-            product.title,
-            product.image,
-            product.description,
-            product.price,
-            "first Name",
-            "Las tName",
-            address[0],
-            address[1],
-            address[2],
-            address[3],
-            dbOrder.paymentOption,
-            dbOrder.orderStatus
-          );
-        }
-      )
-    );
-*/
+  }
+
+
 
 
 }

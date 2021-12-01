@@ -8,8 +8,14 @@ import {environment} from "../../environments/environment";
 import {OrderState} from "./order/order-state";
 import { OrderListServiceService } from '../services/order-list-service.service';
 import { OrdersDataSourceService } from '../services/orders-data-source.service';
-import {MatTableModule} from '@angular/material/table';
+import {MatTable, MatTableModule} from '@angular/material/table';
 import { ProductService } from '../services/product.service';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {  ViewChild } from '@angular/core';
+import { concat } from 'rxjs';
+import { ConfirmationDialogModel } from '../ui/confirmation-dialog/confirmation-dialog';
+import { ConfirmationDialogComponent } from '../ui/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-order-list',
@@ -19,12 +25,11 @@ import { ProductService } from '../services/product.service';
 export class OrderListComponent implements OnInit {
 
   currentUser: User | undefined;
+  isAdmin: boolean | undefined;
 
-  orderList : Order [] = [];
 
-
-  //user for table design
-  displayedColumns: string[] = ['orderId', 'costumerId', 'productId', 'productName','firstName', 'lastName', 'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod', 'state'];
+  //used for table design
+  displayedColumns: string[] = [];
   dataSource: OrdersDataSourceService | undefined;
 
 
@@ -34,7 +39,8 @@ export class OrderListComponent implements OnInit {
     public userService: UserService,
     private orderListService: OrderListServiceService,
     private ordersDataSource: OrdersDataSourceService,
-    public productService: ProductService
+    public productService: ProductService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -44,110 +50,106 @@ export class OrderListComponent implements OnInit {
     })
     //current Value
     this.currentUser = this.userService.getUser();
-    this.getListOfOrder();
-    this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService, this.httpClient);
-    this.dataSource.loadAllOrders();
+    console.log("is currentuser admin: "+ this.currentUser?.isAdmin);
+    this.isAdmin = this.currentUser?.isAdmin;
+
+    this.setDisplayedColumns();
+    this.initializeDataSource(this.isAdmin);
   }
 
-  getListOfOrder(): void {
-    if (typeof this.currentUser != 'undefined') {
-      this.orderList = [];
-      if(this.currentUser.isAdmin){
-        this.getAllOrders();
-      }
-      else {
-        this.getOrdersByUserId();
-      }
+
+  shipOrder(row: any): void {
+    console.log("shipping: " + JSON.stringify(row.orderId));
+    this.orderListService.shipOrder(row.orderId)
+      .subscribe((data: any) => {
+        console.log(JSON.stringify(data));
+        this.refreshTable();
+        }
+        );
+  }
+
+
+  cancelOrder(row: any): void {
+    console.log("shipping: " + JSON.stringify(row.orderId));
+    //this.dataSource.shipOrder(row.orderId);
+    this.orderListService.cancelOrder(row.orderId)
+      .subscribe((data: any) => {
+          console.log(JSON.stringify(data));
+          this.refreshTable(this.currentUser.userId);
+        }
+      );
+  }
+
+
+  refreshTable(userId?: number): void {
+    if(userId!= null){
+      this.dataSource.loadOrders(userId)
     }
     else {
-      console.log("No orders available for undefined user.");
-      this.router.navigate(['/feed'], {queryParams : {loggedIn : 'false'}});
+      this.dataSource.loadOrders();
     }
   }
 
-  getOrdersByUserId(): void {
-    this.orderList = [];
-    let id = this.currentUser?.userId;
-    if(typeof id != 'undefined'){
-      this.httpClient.get(environment.endpointURL + "order/byUser", {
-        params: {
-          userId: id
-        }
-      }).subscribe((res: any) => {
-          console.log(res);
-          res.forEach((order: any) => {
-            //let array = order.deliveryAdress.split(' ');
-            //while (array.length<4){
-              //array.push("");
-            //}
-            //TODO check if hard coding is correct
-            let orderState;
-            switch (order.orderStatus){
-              case 1: {
-                orderState = OrderState.Shipped;
-                break;
-              }
-              case 2: {
-                orderState = OrderState.Cancelled;
-                break;
-              }
-              default: {
-                orderState = OrderState.Pending;
-                break;
-              }
-            }
-            this.orderList.push(
-              new Order(
-                order.orderId,
-                order.orderListId, // to indicate that it belongs to a certain oder list
-                order.user, // userId of the user which places the order
-                order.productId, // to indicate which product is sold
-                order.firstName,
-                order.lastName,
-                order.street,
-                order.houseNr,
-                order.zip,
-                order.city,
-                order.paymentMethod,
-                orderState)
-            )});
-          console.log(this.orderList);
-        },
-        (error: any) => {
-          console.log(error);
-        });
+
+  setDisplayedColumns(): void{
+    if(this.isAdmin){
+      this.displayedColumns =   ['orderId',  'productId', 'productName',
+        'productPrice', 'customerId', 'firstName', 'lastName',
+        'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod',
+        'orderStatus', 'actions'];
     }
-    else console.log('Id was undefined')
+    else {
+      this.displayedColumns =   ['orderId',  'productName',
+        'firstName', 'lastName',
+        'street', 'houseNumber', 'zipCode', 'city', 'productPrice',
+        'orderStatus', 'actions'];
+    }
   }
 
-  getAllOrders(): void {
-    this.orderList = [];
-    this.httpClient.get(environment.endpointURL + "order/all").subscribe((res: any) => {
-      console.log(res);
-      res.forEach((order: any) => {
-        //let array = order.deliveryAdress.split(' ');
-        //while (array.length<4){
-          //array.push("");
-        //}
-          this.orderList.push(
-            new Order(
-              order.orderId,
-              order.orderListId, // to indicate that it belongs to a certain oder list
-              order.costumerId, // userId of the user which places the order
-              order.productId, // to indicate which product is sold
-              order.firstName,
-              order.lastName,
-              order.street,
-              order.houseNr,
-              order.zip,
-              order.city,
-              order.paymentMethod,
-              order.state));
-      });
-      console.log(this.orderList);
-    }, (error: any) => {
-      console.log(error);
+
+  initializeDataSource(isAdmin: boolean): void{
+    //this.getListOfOrder();
+    this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService, this.httpClient);
+    if(isAdmin) {
+      this.dataSource.loadOrders();
+    }
+    else{
+      this.dataSource.loadOrders(this.currentUser?.userId);
+    }
+
+  }
+
+
+  confirmationCancel(row: any): void {
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to cancel this order?','Keep','Cancel order');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    })
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.cancelOrder(row);
+      }
     });
   }
+
+
+  confirmationShip(row:any): void{
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Ship order?','Discard','Ship');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    })
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.shipOrder(row);
+      }
+    });
+  }
+
+
+
 
 }

@@ -1,4 +1,11 @@
-<div class="table-wrapper">
+<div class="table-wrapper" [ngClass]="isAdmin? '': 'user-order-list'">
+  <div class="table-title" class="group7-list-title" >
+    <h1 *ngIf="isAdmin">Orders</h1>
+    <h1 *ngIf="!isAdmin">My Orders</h1>
+  </div>
+  <div class="spinner-container" *ngIf="dataSource.loading$ | async" >
+    <mat-spinner></mat-spinner>
+  </div>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
     <!-- Order Id Column -->
@@ -8,9 +15,9 @@
     </ng-container>
 
     <!-- User Column -->
-    <ng-container matColumnDef="costumerId">
+    <ng-container matColumnDef="customerId">
       <th mat-header-cell *matHeaderCellDef> User Id </th>
-      <td mat-cell *matCellDef="let element"> {{element.costumerId}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.customerId}} </td>
     </ng-container>
 
     <!-- Product Column -->
@@ -23,6 +30,12 @@
     <ng-container matColumnDef="productName">
       <th mat-header-cell *matHeaderCellDef> Product Name </th>
       <td mat-cell *matCellDef="let element"> {{element.productName}} </td>
+    </ng-container>
+
+    <!-- Product Name Column -->
+    <ng-container matColumnDef="productPrice">
+      <th mat-header-cell *matHeaderCellDef> Price </th>
+      <td mat-cell *matCellDef="let element"> {{element.productPrice}} </td>
     </ng-container>
 
     <!-- First Name Column -->
@@ -69,9 +82,18 @@
 
 
     <!-- State Column -->
-    <ng-container matColumnDef="state">
-      <th mat-header-cell *matHeaderCellDef> State </th>
-      <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+    <ng-container matColumnDef="orderStatus">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element"> {{element.orderStatus}} </td>
+    </ng-container>
+
+    <!-- Action Buttons -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell  *matHeaderCellDef > Actions </th>
+      <td mat-cell *matCellDef="let element" >
+        <button mat-button (click)="confirmationShip(element)" *ngIf="isAdmin && element.orderStatus == 0"><mat-icon>local_shipping</mat-icon></button>
+        <button mat-button (click)="confirmationCancel(element)" *ngIf="!isAdmin && element.orderStatus == 0"><mat-icon>cancel</mat-icon></button>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
