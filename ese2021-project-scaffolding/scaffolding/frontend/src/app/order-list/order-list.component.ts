@@ -24,9 +24,9 @@ export class OrderListComponent implements OnInit {
   currentUser: User | undefined;
   isAdmin: boolean | undefined;
 
-  //orderList : Order [] = [];
 
-  @ViewChild(MatTable) table: MatTable<any>;
+
+  //@ViewChild(MatTable) table: MatTable<any>;
 
   //user for table design
   displayedColumns: string[] = [];
@@ -56,111 +56,11 @@ export class OrderListComponent implements OnInit {
     //set displayed columns
     this.setDisplayedColumns();
 
-    //this.getListOfOrder();
-    this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService, this.httpClient);
-    this.dataSource.loadAllOrders();
+    this.initializeDataSource();
+
+
   }
 
-/*  getListOfOrder(): void {
-    if (typeof this.currentUser != 'undefined') {
-      this.orderList = [];
-      if(this.currentUser.isAdmin){
-        this.getAllOrders();
-      }
-      else {
-        this.getOrdersByUserId();
-      }
-    }
-    else {
-      console.log("No orders available for undefined user.");
-      this.router.navigate(['/feed'], {queryParams : {loggedIn : 'false'}});
-    }
-  }*/
-
-  /*getOrdersByUserId(): void {
-    this.orderList = [];
-    let id = this.currentUser?.userId;
-    if(typeof id != 'undefined'){
-      this.httpClient.get(environment.endpointURL + "order/byUser", {
-        params: {
-          userId: id
-        }
-      }).subscribe((res: any) => {
-          console.log(res);
-          res.forEach((order: any) => {
-            //let array = order.deliveryAdress.split(' ');
-            //while (array.length<4){
-              //array.push("");
-            //}
-            //TODO check if hard coding is correct
-            let orderState;
-            switch (order.orderStatus){
-              case 1: {
-                orderState = OrderState.Shipped;
-                break;
-              }
-              case 2: {
-                orderState = OrderState.Cancelled;
-                break;
-              }
-              default: {
-                orderState = OrderState.Pending;
-                break;
-              }
-            }
-            this.orderList.push(
-              new Order(
-                order.orderId,
-                order.orderListId, // to indicate that it belongs to a certain oder list
-                order.user, // userId of the user which places the order
-                order.productId, // to indicate which product is sold
-                order.firstName,
-                order.lastName,
-                order.street,
-                order.houseNr,
-                order.zip,
-                order.city,
-                order.paymentMethod,
-                orderState)
-            )});
-          console.log(this.orderList);
-        },
-        (error: any) => {
-          console.log(error);
-        });
-    }
-    else console.log('Id was undefined')
-  }*/
-
-/*  getAllOrders(): void {
-    this.orderList = [];
-    this.httpClient.get(environment.endpointURL + "order/all").subscribe((res: any) => {
-      console.log(res);
-      res.forEach((order: any) => {
-        //let array = order.deliveryAdress.split(' ');
-        //while (array.length<4){
-          //array.push("");
-        //}
-          this.orderList.push(
-            new Order(
-              order.orderId,
-              order.orderListId, // to indicate that it belongs to a certain oder list
-              order.costumerId, // userId of the user which places the order
-              order.productId, // to indicate which product is sold
-              order.firstName,
-              order.lastName,
-              order.street,
-              order.houseNr,
-              order.zip,
-              order.city,
-              order.paymentMethod,
-              order.state));
-      });
-      console.log(this.orderList);
-    }, (error: any) => {
-      console.log(error);
-    });
-  }*/
 
   shipOrder(row: any): void {
     console.log("shipping: " + JSON.stringify(row.orderId));
@@ -188,7 +88,7 @@ export class OrderListComponent implements OnInit {
 
   refreshTable(): void {
     this.dataSource.loadAllOrders();
-    this.table.renderRows();
+    //this.table.renderRows();
   }
 
 
@@ -207,6 +107,18 @@ export class OrderListComponent implements OnInit {
     }
   }
 
+
+  initializeDataSource(): void{
+    //this.getListOfOrder();
+    this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService, this.httpClient);
+    if(this.isAdmin) {
+      this.dataSource.loadAllOrders();
+    }
+    else{
+      this.dataSource.loadUserData(this.currentUser?.userId);
+    }
+
+  }
 
 
 

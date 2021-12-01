@@ -66,6 +66,60 @@ export class OrderListServiceService {
 
   }
 
+  /**
+   * Gets user data
+   *
+   * return: Observable<OrderToDisplay[]>
+   */
+  getUserOrders(userId: number): Observable<OrderToDisplay[]> {
+    return this.httpClient.get(environment.endpointURL + "order/all")
+      .pipe(
+        tap((tapOrders: any) => console.log("Tab dbOrders: " + JSON.stringify(tapOrders))),
+        map((dbOrders: any[]) => dbOrders.filter((order:any) => order.user == userId)),
+        tap((tapOrders: any) => console.log("Tab User Filtered data: " + JSON.stringify(tapOrders))),
+        mergeMap((dbOrders:any[]) => {
+            let forkJoinArray: any[] = [];
+            dbOrders.forEach(
+              (order: any) => forkJoinArray.push(this.httpClient.get(environment.endpointURL + "product/byId", {
+                params: {
+                  productId: order.ProductProductId
+                }
+              }).pipe(
+                tap((tapProduct: any) => console.log(JSON.stringify("Tap Product: " + tapProduct))),
+                map(
+                  (product: any) => {
+                    return new OrderToDisplay(
+                      order.orderId,
+                      order.user,
+                      order.ProductProductId,
+                      product.title,
+                      product.image,
+                      product.description,
+                      product.price,
+                      order.firstName,
+                      order.lastName,
+                      order.street,
+                      order.houseNr,
+                      order.zip,
+                      order.city,
+                      order.paymentOption,
+                      order.orderStatus
+                    );
+                  }
+                )
+              )))
+            return forkJoin(forkJoinArray);
+          }
+        ),
+        tap((res: any) => console.log(JSON.stringify(res)))
+      )
+
+  }
+
+
+
+
+
   shipOrder(orderId: number): Observable<any> {
       return this.httpClient.post(environment.endpointURL + "order/ship", {
         orderId: orderId
