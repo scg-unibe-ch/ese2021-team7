@@ -100,10 +100,10 @@ export class FeedComponent implements OnInit, DoCheck {
   }
 
   evaluateVotingState(votingStatus: string): VotingState {
-    console.log('given votstat: ' + votingStatus);
+    console.log('given votestate: ' + votingStatus);
     switch (votingStatus){
       case 'not voted': {
-        console.log('found votestate: Not VOted')
+        console.log('found votestate: Not voted')
         return VotingState.NotVoted;
       }
       case 'upvoted': {
@@ -111,7 +111,7 @@ export class FeedComponent implements OnInit, DoCheck {
         return VotingState.Upvoted;
       }
       case 'downvoted': {
-        console.log('found votestate: downvOted')
+        console.log('found votestate: downvoted')
         return VotingState.Downvoted;
       }
       default: {
