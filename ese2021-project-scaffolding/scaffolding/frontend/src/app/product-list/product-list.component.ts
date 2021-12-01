@@ -10,6 +10,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
 import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 import {Post} from "../models/post.model";
+import { Category } from '../models/category';
+import { CategoryService } from '../services/category.service';
 
 @Component({
   selector: 'app-product-list',
@@ -27,16 +29,18 @@ export class ProductListComponent implements OnInit {
 
   filterBy: string = '';
 
-  productCategories: string[] = [];
+  productCategories: Category[] = [];
 
   constructor(
     public httpClient: HttpClient,
     private route: Router,
     public userService: UserService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private categoryService: CategoryService
   ) {  }
 
   ngOnInit(): void {
+
     // Listen for changes
     this.userService.loggedIn$.subscribe(res => {
       this.loggedIn = res;
@@ -51,13 +55,14 @@ export class ProductListComponent implements OnInit {
 
     // refresh shop
     this.filterBy = '';
-    this.getProductCategories();
+    this.productCategories = this.categoryService.getProductCategories();
     this.readProducts();
   }
 
   ngOnChange():void {
     this.evaluateAddProductPermission();
-    this.getProductCategories();
+    //this.getProductCategories();
+    this.productCategories = this.categoryService.getProductCategories();
   }
 
   ngDoCheck(): void {
@@ -80,7 +85,13 @@ export class ProductListComponent implements OnInit {
     this.httpClient.get(environment.endpointURL + "product/all").subscribe((res: any) => {
       this.currentShop = new ProductList(0, '', []);
       res.forEach((product: any) => {
-        this.httpClient.get(environment.endpointURL + "category/byId",{
+          if (this.checkIfProductIsAcceptedByFilter(this.categoryService.getCategoryById(product.productCategory).name)) {
+            this.currentShop.products.push(
+              new Product(product.productId, 0, product.title, product.description, product.image, product.price, this.categoryService.getCategoryById(product.productCategory), !product.isAvailable))
+          }
+
+
+/*        this.httpClient.get(environment.endpointURL + "category/byId",{
           params: {
             categoryId: product.productCategory
           }
@@ -92,14 +103,15 @@ export class ProductListComponent implements OnInit {
         },
           (error: any) => {
           console.log(error);
-          });
-      });
+          });*/
+      }
+      );
     });
   }
 
   refreshShop(): void {
     this.filterBy = '';
-    this.getProductCategories();
+    this.productCategories = this.categoryService.getProductCategories();
     this.readProducts();
   }
 
@@ -156,7 +168,7 @@ export class ProductListComponent implements OnInit {
     }
   }
 
-  getProductCategories(): void {
+/*  getProductCategories(): void {
     this.productCategories = [];
     this.httpClient.get(environment.endpointURL + "category/all").subscribe((res:any) => {
       res.forEach((category: any) => {
@@ -165,5 +177,5 @@ export class ProductListComponent implements OnInit {
         }
       });
     });
-  }
+  }*/
 }

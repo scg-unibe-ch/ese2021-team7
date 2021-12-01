@@ -17,20 +17,14 @@ export class ProductService {
   constructor(public httpClient: HttpClient) { }
 
 
-  public getProductById(productId: number): Product {
+  public getProductById(productId: number): Observable<any> {
     console.log("product service fired");
-    let product: Product;
-    this.httpClient.get(environment.endpointURL + "product/byId", {
+    return this.httpClient.get(environment.endpointURL + "product/byId", {
       params: {
         productId: productId
       }
     }).pipe(
-      tap((product: any) => console.log("Tap of product servcie: "+ JSON.stringify(product)))
-    ).subscribe(
-      (res: any) => {
-        product = new Product(res.productId, res.shopId, res.title, res.description, res.image, res.price, res.category, res.sold);
-      }
-   );
-    return product;
+      tap((product: any) => console.log("Tap of product service: "+ JSON.stringify(product)))
+    );
   }
 }

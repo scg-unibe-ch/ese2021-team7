@@ -14,7 +14,7 @@
   </div>
 
   <mat-card-content class="group7-product-content">
-    <div class="product-category">Category: {{productToDisplay.category}}</div><br/>
+    <div class="product-category">Category: {{productToDisplay.category.name}}</div><br/>
     <mat-card-title>{{productToDisplay.title}} </mat-card-title>
     <div *ngIf="showDetailedView">
       <p class="product-description">

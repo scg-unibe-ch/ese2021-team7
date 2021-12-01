@@ -48,6 +48,18 @@ export class CategoryService {
     return this.categories.filter((category: Category) => category.type == this.postType);
   }
 
+  getCategoryById(id: number): Category {
+    let returnCategory: Category;
+    this.categories.forEach(
+      (category: Category) => {
+        if(category.id == id){
+          returnCategory = category;
+        }
+      }
+      );
+    return returnCategory;
+}
+
 
 
 
