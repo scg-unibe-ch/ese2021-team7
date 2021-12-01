@@ -56,7 +56,7 @@ export class OrderListComponent implements OnInit {
     //set displayed columns
     this.setDisplayedColumns();
 
-    this.initializeDataSource();
+    this.initializeDataSource(this.isAdmin);
 
 
   }
@@ -88,10 +88,10 @@ export class OrderListComponent implements OnInit {
 
   refreshTable(userId?: number): void {
     if(userId!= null){
-      this.dataSource.loadUserData(userId)
+      this.dataSource.loadOrders(userId)
     }
     else {
-      this.dataSource.loadAllOrders();
+      this.dataSource.loadOrders();
     }
     //this.table.renderRows();
   }
@@ -113,14 +113,14 @@ export class OrderListComponent implements OnInit {
   }
 
 
-  initializeDataSource(): void{
+  initializeDataSource(isAdmin: boolean): void{
     //this.getListOfOrder();
     this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService, this.httpClient);
-    if(this.isAdmin) {
-      this.dataSource.loadAllOrders();
+    if(isAdmin) {
+      this.dataSource.loadOrders();
     }
     else{
-      this.dataSource.loadUserData(this.currentUser?.userId);
+      this.dataSource.loadOrders(this.currentUser?.userId);
     }
 
   }

@@ -36,26 +36,15 @@ export class OrdersDataSourceService implements DataSource<Order>{
   }
 
 
-    loadAllOrders():void  {
+    loadOrders(userId?: number): void  {
       this.loadingSubject.next(true);
-      this.orderListService.getAllOrders().pipe(
+      this.orderListService.getAllOrders(userId).pipe(
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false)),
         tap((data:OrderToDisplay[]) => console.log("Tap call:" + data))
       ).subscribe((orders: OrderToDisplay[]) => {
             console.log(orders);
             this.ordersSubject.next(orders)});
-    }
-
-    loadUserData(userId: number): void{
-      this.loadingSubject.next(true);
-      this.orderListService.getUserOrders(userId).pipe(
-        catchError(() => of([])),
-        finalize(() => this.loadingSubject.next(false)),
-        tap((data:OrderToDisplay[]) => console.log("Tap call:" + data))
-      ).subscribe((orders: OrderToDisplay[]) => {
-        console.log(orders);
-        this.ordersSubject.next(orders)});
     }
 
 
