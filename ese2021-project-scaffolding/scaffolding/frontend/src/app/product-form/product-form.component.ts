@@ -7,6 +7,8 @@ import { UserService } from '../services/user.service';
 import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
 import { Product } from '../models/product.model';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { CategoryService } from '../services/category.service';
+import { Category } from '../models/category';
 
 @Component({
   selector: 'app-product-form',
@@ -27,11 +29,19 @@ export class ProductFormComponent implements OnInit {
 
   isUpdate: boolean;
 
+  productCategories: Category[] = [];
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService, private route: ActivatedRoute, private router: Router) {
+
+  constructor(public httpClient: HttpClient,
+              private fb: FormBuilder,
+              public userService: UserService,
+              private route: ActivatedRoute,
+              private router: Router,
+              private categoryService: CategoryService) {
     this.isSubmitted= false;
     this.isCreate = false;
     this.isUpdate = false;
+    this.productCategories = this.categoryService.getProductCategories();
   }
 
   ngOnInit(): void {
