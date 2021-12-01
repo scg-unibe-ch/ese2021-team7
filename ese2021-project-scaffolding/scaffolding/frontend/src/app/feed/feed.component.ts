@@ -187,6 +187,7 @@ export class FeedComponent implements OnInit, DoCheck {
     this.httpClient.post(environment.endpointURL + "post/upvote", {
       postId: post.postId
     }).subscribe((res: any) => {
+      console.log(res);
       post.score = res.score;
     });
   }
@@ -195,6 +196,7 @@ export class FeedComponent implements OnInit, DoCheck {
     this.httpClient.post(environment.endpointURL + "post/downvote", {
       postId: post.postId
     }).subscribe((res: any) => {
+      console.log(res);
       post.score = res.score;
     });
   }

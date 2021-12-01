@@ -71,7 +71,6 @@ export class PostComponent implements OnInit{
   evaluateVotingButtonsPermission(){
     // set true only if logged in and user is not creator
     if (typeof this.currentUser != 'undefined') {
-      console.log('VOtestate is' +this.postToDisplay.votingState + ' for post ' + this.postToDisplay.postId);
       if (this.currentUser.isAdmin){
         this.showVotingButtons = false;
         this.enableUpvote = this.enableDownvote = false;
@@ -102,7 +101,6 @@ export class PostComponent implements OnInit{
       else this.showVotingButtons = false;
     }
     else this.showVotingButtons = false;
-    console.log('upvote is ' + this.enableUpvote + ' downvote is ' + this.enableDownvote);
   }
 
   updatePost(): void {
@@ -121,7 +119,6 @@ export class PostComponent implements OnInit{
 
   upvotePost(): void {
     // Emits event to parent component that Post got upvoted
-    console.log('upvote is: ' + this.enableUpvote);
     if (this.showVotingButtons && this.enableUpvote){
       this.postToDisplay.votingState = VotingState.Upvoted;
       this.enableDownvote = true;
@@ -132,7 +129,6 @@ export class PostComponent implements OnInit{
 
   downvotePost(): void{
     // Emits event to parent component that Post got downvoted
-    console.log('downvote is: ' + this.enableUpvote);
     if (this.showVotingButtons && this.enableDownvote) {
       this.postToDisplay.votingState = VotingState.Downvoted;
       this.enableDownvote = false;
