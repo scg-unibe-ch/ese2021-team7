@@ -72,6 +72,12 @@ export class OrderListServiceService {
       });
   }
 
+  cancelOrder(orderId: number): Observable<any> {
+    return this.httpClient.post(environment.endpointURL + "order/cancel", {
+      orderId: orderId
+    });
+  }
+
 
 
 }

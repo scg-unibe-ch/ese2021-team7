@@ -87,7 +87,8 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell  *matHeaderCellDef > Actions </th>
       <td mat-cell *matCellDef="let element" >
-        <button mat-button (click)="shipOrder(element)" *ngIf="element.orderStatus == 0"><mat-icon>local_shipping</mat-icon></button>
+        <button mat-button (click)="shipOrder(element)" *ngIf="isAdmin && element.orderStatus == 0"><mat-icon>local_shipping</mat-icon></button>
+        <button mat-button (click)="cancelOrder(element)" *ngIf="!isAdmin && element.orderStatus == 0"><mat-icon>cancel</mat-icon></button>
       </td>
     </ng-container>
 

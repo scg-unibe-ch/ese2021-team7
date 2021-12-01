@@ -173,6 +173,19 @@ export class OrderListComponent implements OnInit {
         );
   }
 
+  cancelOrder(row: any): void {
+    console.log("shipping: " + JSON.stringify(row.orderId));
+    //this.dataSource.shipOrder(row.orderId);
+    this.orderListService.cancelOrder(row.orderId)
+      .subscribe((data: any) => {
+          console.log(JSON.stringify(data));
+          this.refreshTable();
+        }
+      );
+  }
+
+
+
   refreshTable(): void {
     this.dataSource.loadAllOrders();
     this.table.renderRows();
