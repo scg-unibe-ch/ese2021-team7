@@ -25,7 +25,7 @@ export class PostService {
         let score = 0;
         // @ts-ignore
         for (const vote of post.Votes) {
-            if (vote.upvote) {
+            if (vote.upvote === 1) {
                 score += 1;
             } else {
                 score -= 1;
