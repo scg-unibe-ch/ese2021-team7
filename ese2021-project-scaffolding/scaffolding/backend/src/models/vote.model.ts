@@ -19,7 +19,7 @@ export class Vote extends Model<VoteAttributes> implements VoteAttributes {
                 primaryKey: true
             },
             upvote: {
-                type: DataTypes.BOOLEAN
+                type: DataTypes.INTEGER
             }
         },
             {
