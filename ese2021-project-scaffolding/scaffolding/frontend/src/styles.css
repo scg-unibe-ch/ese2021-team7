@@ -277,3 +277,15 @@ button, input {
 table {
   width: 100%;
 }
+
+.group7-list-title{
+  padding: 20px;
+  width: 100% !important;
+}
+
+
+.user-order-list{
+  max-width: 900px !important;
+  background-color: #eeeeee !important;
+}
+

@@ -40,6 +40,7 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import {MatTableModule} from '@angular/material/table';
 import { UserListComponent } from './user-list/user-list.component';
 import { CategoryListComponent } from './category-list/category-list.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -63,7 +64,7 @@ import { CategoryListComponent } from './category-list/category-list.component';
     ConfirmationDialogComponent,
     AdminDashboardComponent,
     UserListComponent,
-    CategoryListComponent,
+    CategoryListComponent
   ],
   imports: [
     BrowserModule,
@@ -86,6 +87,7 @@ import { CategoryListComponent } from './category-list/category-list.component';
     MatSidenavModule,
     MatDialogModule,
     MatTableModule,
+    MatProgressSpinnerModule,
     RouterModule.forRoot([
       { path: 'feed', component: FeedComponent },
       { path: 'profile', component: UserProfileComponent },
