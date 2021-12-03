@@ -9,6 +9,8 @@ import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-di
 import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {VotingState} from "../models/voting-state";
+import { CategoryService } from '../services/category.service';
+import { Category } from '../models/category';
 
 @Component({
   selector: 'app-feed',
@@ -26,17 +28,25 @@ export class FeedComponent implements OnInit, DoCheck {
 
   filterBy: string = '';
 
-  postCategories: string[] = [];
+  //array with post categories
+  postCategories: Category[] = [];
 
   constructor(
     public httpClient: HttpClient,
     private route: Router,
     public userService: UserService,
-    private dialog: MatDialog
-  ) {
-  }
+    private dialog: MatDialog,
+    private categoryService: CategoryService
+  ) {}
 
   ngOnInit(): void {
+    //set up categories
+    //listener for product categories
+    this.categoryService.postCategories$.subscribe(res => this.postCategories = res);
+    //current value of product categories
+    this.postCategories = this.categoryService.getProductCategories();
+
+
     // Listen for changes
     this.userService.loggedIn$.subscribe(res => {
       this.loggedIn = res;
@@ -47,7 +57,7 @@ export class FeedComponent implements OnInit, DoCheck {
     //current Value
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
-    this.getPostCategories();
+    //this.getPostCategories();
     this.evaluateAccessForCurrentUser();
   }
 
@@ -76,6 +86,17 @@ export class FeedComponent implements OnInit, DoCheck {
         console.log(res);
         this.postList = [];
         res.forEach((post: any) => {
+          let category = this.categoryService.getCategoryById(post.category);
+          this.httpClient.get(environment.endpointURL + "user/getById", {
+            params: {
+              userId: post.UserUserId
+            }
+          }).subscribe(
+            (user: any) => this.postList.push(this.createPostFromBackendResponse(post, category, user)),
+            (error: any) => console.log(error)
+            );
+
+          /*
           this.httpClient.get(environment.endpointURL + "category/byId",{
             params: {
               categoryId: post.category
@@ -93,10 +114,29 @@ export class FeedComponent implements OnInit, DoCheck {
                 (error: any) => {
                   console.log(error);
                 });
-            }
+            }*/
           });
         });
-      });
+  }
+
+  /**
+   * Takes backend responses and returns a Post object.
+   * @param post backend response
+   * @param category parsed Category object
+   * @param user backend response
+   * @private
+   */
+  private createPostFromBackendResponse(post: any, category: Category, user: any): Post {
+    return new Post(
+      post.postId,
+      post.title,
+      post.text,
+      post.image,
+      post.score,
+      category.name,
+      post.UserUserId,
+      user.userName,
+      this.evaluateVotingState(post.votingStatus));
   }
 
   evaluateVotingState(votingStatus: string): VotingState {
@@ -237,6 +277,7 @@ export class FeedComponent implements OnInit, DoCheck {
     }
   }
 
+  /*
   getPostCategories(): void {
     this.postCategories = [];
     this.httpClient.get(environment.endpointURL + "category/all").subscribe((res:any) => {
@@ -247,6 +288,6 @@ export class FeedComponent implements OnInit, DoCheck {
       });
     });
   }
-
+*/
 
 }
