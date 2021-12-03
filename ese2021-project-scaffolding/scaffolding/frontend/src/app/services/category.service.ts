@@ -118,7 +118,7 @@ export class CategoryService {
   /**
    * Gets categories from backend and updates the Categories field.
    */
-  getCategoriesFromBackend(): void {
+  private getCategoriesFromBackend(): void {
     this.categories = []; //delete exiting values
     this.httpClient.get(environment.endpointURL + "category/all").pipe(
       map(
@@ -126,7 +126,7 @@ export class CategoryService {
           data.map(
             (category: any) => this.createCategoryFromBackendResponse(category) //return array of Category[]
           )),
-      tap((data:any) => console.log("Categories received from backend: "+ JSON.stringify(data)))
+      //tap((data:any) => console.log("Categories received from backend: "+ JSON.stringify(data)))
     ).subscribe((data:any) => {
       this.categoriesSource.next(data);
       this.categories = data;
@@ -142,14 +142,6 @@ export class CategoryService {
   /*******************************************************************************************************************
    * Helper Methods
    ******************************************************************************************************************/
-
-  /**
-   * Updates Categories array
-   * @private
-   */
-  private updateCategories(): void{
-    this.getCategoriesFromBackend();
-  }
 
 
   /**

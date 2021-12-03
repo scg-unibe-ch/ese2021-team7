@@ -45,7 +45,6 @@ export class ProductListComponent implements OnInit {
     this.categoryService.productCategories$.subscribe(res => this.productCategories = res);
     //current value of product categories
     this.productCategories = this.categoryService.getProductCategories();
-    console.log("Products in component: " + this.productCategories);
 
     // Listen for changes
     this.userService.loggedIn$.subscribe(res => {
@@ -61,14 +60,11 @@ export class ProductListComponent implements OnInit {
 
     // refresh shop
     this.filterBy = 0;
-    //this.productCategories = this.categoryService.getProductCategories();
     this.readProducts();
   }
 
   ngOnChange():void {
     this.evaluateAddProductPermission();
-    //this.getProductCategories();
-    this.productCategories = this.categoryService.getProductCategories();
   }
 
   ngDoCheck(): void {
@@ -102,7 +98,6 @@ export class ProductListComponent implements OnInit {
 
   refreshShop(): void {
     this.filterBy = 0
-    //this.productCategories = this.categoryService.getProductCategories();
     this.readProducts();
   }
 
@@ -159,14 +154,4 @@ export class ProductListComponent implements OnInit {
     }
   }
 
-/*  getProductCategories(): void {
-    this.productCategories = [];
-    this.httpClient.get(environment.endpointURL + "category/all").subscribe((res:any) => {
-      res.forEach((category: any) => {
-        if (category.type == 1){
-          this.productCategories.push(category.name)
-        }
-      });
-    });
-  }*/
 }
