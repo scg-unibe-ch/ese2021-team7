@@ -41,6 +41,8 @@ import {MatTableModule} from '@angular/material/table';
 import { UserListComponent } from './user-list/user-list.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CategoryFormComponent } from './category-form/category-form.component';
+import { BaseFormComponent } from './base-form/base-form.component';
 
 
 @NgModule({
@@ -64,7 +66,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ConfirmationDialogComponent,
     AdminDashboardComponent,
     UserListComponent,
-    CategoryListComponent
+    CategoryListComponent,
+    CategoryFormComponent,
+    BaseFormComponent
   ],
   imports: [
     BrowserModule,
