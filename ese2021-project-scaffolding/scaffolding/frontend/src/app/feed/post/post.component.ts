@@ -73,6 +73,7 @@ export class PostComponent implements OnInit{
     if (typeof this.currentUser != 'undefined') {
       if (this.currentUser.isAdmin){
         this.showVotingButtons = false;
+        this.enableUpvote = this.enableDownvote = false;
       }
       else if (this.loggedIn && this.currentUser.userId != this.postToDisplay.CreationUser){
         this.showVotingButtons = true;
@@ -119,6 +120,9 @@ export class PostComponent implements OnInit{
   upvotePost(): void {
     // Emits event to parent component that Post got upvoted
     if (this.showVotingButtons && this.enableUpvote){
+      this.postToDisplay.votingState = VotingState.Upvoted;
+      this.enableDownvote = true;
+      this.enableUpvote = false;
       this.upvote.emit(this.postToDisplay);
     }
   }
@@ -126,6 +130,9 @@ export class PostComponent implements OnInit{
   downvotePost(): void{
     // Emits event to parent component that Post got downvoted
     if (this.showVotingButtons && this.enableDownvote) {
+      this.postToDisplay.votingState = VotingState.Downvoted;
+      this.enableDownvote = false;
+      this.enableUpvote = true;
       this.downvote.emit(this.postToDisplay);
     }
   }

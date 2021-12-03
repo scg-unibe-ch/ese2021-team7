@@ -37,8 +37,8 @@
   <mat-card-actions class="group7-post-actions" align="end">
 
     <!-- Should only be usable for logged in users -->
-    <button mat-button [disabled]="!showVotingButtons" class="group7-post-actions-button"><mat-icon (click)="upvotePost()" class="group7-post-actions">thumb_up</mat-icon></button>
-    <button mat-button [disabled]="!showVotingButtons"  class="group7-post-actions-button"><mat-icon (click)="downvotePost()" class="group7-post-actions">thumb_down</mat-icon></button>
+    <button mat-button *ngIf="showVotingButtons" [disabled]="!enableUpvote" class="group7-post-actions-button"><mat-icon (click)="upvotePost()" class="group7-post-actions">thumb_up</mat-icon></button>
+    <button mat-button *ngIf="showVotingButtons" [disabled]="!enableDownvote"  class="group7-post-actions-button"><mat-icon (click)="downvotePost()" class="group7-post-actions">thumb_down</mat-icon></button>
 
     <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" class="group7-post-actions-button"><mat-icon (click)="updatePost()" class="group7-post-actions">edit</mat-icon></button>
     <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" color="warn" class="group7-post-actions-button"><mat-icon (click)="deletePost()" class="group7-post-actions">delete</mat-icon></button>

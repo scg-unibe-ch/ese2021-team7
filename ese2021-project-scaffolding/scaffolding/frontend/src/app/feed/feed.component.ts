@@ -5,12 +5,9 @@ import {Post} from "../models/post.model";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {User} from "../models/user.model";
-import {Product} from "../models/product.model";
 import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
 import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {OrderState} from "../order-list/order/order-state";
-import {Vote} from "../models/vote.model";
 import {VotingState} from "../models/voting-state";
 
 @Component({
@@ -68,6 +65,7 @@ export class FeedComponent implements OnInit, DoCheck {
    */
   getFeedForUser(): void {
     let userId = this.currentUser?.userId || 0;
+    console.log(userId);
     this.httpClient.get(environment.endpointURL + "post/all", {
       params: {
         sortBy: this.sortBy,
@@ -75,6 +73,7 @@ export class FeedComponent implements OnInit, DoCheck {
       }
     }).subscribe(
       (res: any) => {
+        console.log(res);
         this.postList = [];
         res.forEach((post: any) => {
           this.httpClient.get(environment.endpointURL + "category/byId",{
@@ -90,7 +89,7 @@ export class FeedComponent implements OnInit, DoCheck {
               }).subscribe((res: any) => {
                   this.postList.push(
                     new Post(post.postId, post.title, post.text, post.image, post.score, category.name, post.UserUserId, res.userName, this.evaluateVotingState(post.votingStatus)));
-                },
+                  },
                 (error: any) => {
                   console.log(error);
                 });
@@ -101,18 +100,22 @@ export class FeedComponent implements OnInit, DoCheck {
   }
 
   evaluateVotingState(votingStatus: string): VotingState {
-    console.log('given votstat: ' + votingStatus);
+    console.log('given votestate: ' + votingStatus);
     switch (votingStatus){
       case 'not voted': {
+        console.log('found votestate: Not voted')
         return VotingState.NotVoted;
       }
       case 'upvoted': {
+        console.log('found votestate: upvoted')
         return VotingState.Upvoted;
       }
       case 'downvoted': {
+        console.log('found votestate: downvoted')
         return VotingState.Downvoted;
       }
       default: {
+        console.log('found votestate: not allowed')
         return VotingState.NotAllowed;
       }
     }
@@ -183,6 +186,7 @@ export class FeedComponent implements OnInit, DoCheck {
     this.httpClient.post(environment.endpointURL + "post/upvote", {
       postId: post.postId
     }).subscribe((res: any) => {
+      console.log(res);
       post.score = res.score;
     });
   }
@@ -191,6 +195,7 @@ export class FeedComponent implements OnInit, DoCheck {
     this.httpClient.post(environment.endpointURL + "post/downvote", {
       postId: post.postId
     }).subscribe((res: any) => {
+      console.log(res);
       post.score = res.score;
     });
   }
