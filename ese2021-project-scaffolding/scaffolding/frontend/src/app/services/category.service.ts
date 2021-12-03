@@ -111,6 +111,9 @@ export class CategoryService {
     return returnCategory;
   }
 
+  getDataSource(): BehaviorSubject<Category[]> {
+    return this.categoriesSource;
+  }
   /*******************************************************************************************************************
    * HTTP Request Handler
    ******************************************************************************************************************/
