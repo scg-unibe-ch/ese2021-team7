@@ -23,7 +23,8 @@ export class ProductComponent implements OnInit {
 
   showDetailedView: boolean = false;
 
-  productCategories: Category[];
+  @Input()
+  productCategories: Category[] = [];
 
   @Input()
   loggedIn : boolean | undefined;
@@ -57,7 +58,8 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productCategories = this.categoryService.getProductCategories();
+
+
     this.evaluateUpdateDeletePermission();
     this.evaluateBuyNowPermission();
 

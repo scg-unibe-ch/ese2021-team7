@@ -27,8 +27,9 @@ export class ProductListComponent implements OnInit {
 
   showAddProductButton: boolean = false;
 
-  filterBy: string = '';
+  filterBy: number = 0;
 
+  // stores product Categories
   productCategories: Category[] = [];
 
   constructor(
@@ -40,6 +41,11 @@ export class ProductListComponent implements OnInit {
   ) {  }
 
   ngOnInit(): void {
+    //listener for product categories
+    this.categoryService.productCategories$.subscribe(res => this.productCategories = res);
+    //current value of product categories
+    this.productCategories = this.categoryService.getProductCategories();
+    console.log("Products in component: " + this.productCategories);
 
     // Listen for changes
     this.userService.loggedIn$.subscribe(res => {
@@ -54,8 +60,8 @@ export class ProductListComponent implements OnInit {
     this.evaluateAddProductPermission();
 
     // refresh shop
-    this.filterBy = '';
-    this.productCategories = this.categoryService.getProductCategories();
+    this.filterBy = 0;
+    //this.productCategories = this.categoryService.getProductCategories();
     this.readProducts();
   }
 
@@ -85,33 +91,18 @@ export class ProductListComponent implements OnInit {
     this.httpClient.get(environment.endpointURL + "product/all").subscribe((res: any) => {
       this.currentShop = new ProductList(0, '', []);
       res.forEach((product: any) => {
-          if (this.checkIfProductIsAcceptedByFilter(this.categoryService.getCategoryById(product.productCategory).name)) {
+          if (this.checkIfProductIsAcceptedByFilter(this.categoryService.getCategoryById(product.productCategory))) {
             this.currentShop.products.push(
               new Product(product.productId, 0, product.title, product.description, product.image, product.price, this.categoryService.getCategoryById(product.productCategory), !product.isAvailable))
           }
-
-
-/*        this.httpClient.get(environment.endpointURL + "category/byId",{
-          params: {
-            categoryId: product.productCategory
-          }
-        }).subscribe((category: any) => {
-          if (this.checkIfProductIsAcceptedByFilter(category.name)) {
-            this.currentShop.products.push(
-              new Product(product.productId, 0, product.title, product.description, product.image, product.price, category.name, !product.isAvailable))
-          }
-        },
-          (error: any) => {
-          console.log(error);
-          });*/
       }
       );
     });
   }
 
   refreshShop(): void {
-    this.filterBy = '';
-    this.productCategories = this.categoryService.getProductCategories();
+    this.filterBy = 0
+    //this.productCategories = this.categoryService.getProductCategories();
     this.readProducts();
   }
 
@@ -156,12 +147,12 @@ export class ProductListComponent implements OnInit {
     this.readProducts();
   }
 
-  checkIfProductIsAcceptedByFilter(category: string): boolean {
-    if (this.filterBy == ''){
+  checkIfProductIsAcceptedByFilter(category: Category): boolean {
+    if (this.filterBy == 0){
       return true;
     }
     else{
-      if (this.filterBy == category){
+      if (this.filterBy == category.id){
         return true;
       }
       else return false;
