@@ -6,6 +6,10 @@ import {FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators} fro
 import {Post} from '../models/post.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {VotingState} from "../models/voting-state";
+import { Category } from '../models/category';
+import { CategoryService } from '../services/category.service';
+import { UserBackendService } from '../services/user-backend.service';
+import { PostService } from '../services/post.service';
 
 @Component({
   selector: 'app-post-form',
@@ -26,13 +30,30 @@ export class PostFormComponent implements OnInit {
 
   isUpdate: boolean;
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService, private route: ActivatedRoute, private router: Router) {
+  // array with post categories
+  postCategories: Category[] = [];
+
+  constructor(
+    public httpClient: HttpClient,
+    private fb: FormBuilder,
+    public userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private categoryService: CategoryService,
+    private userBackendService: UserBackendService,
+    private postService: PostService) {
     this.isSubmitted= false;
     this.isCreate = false;
     this.isUpdate = false;
   }
 
   ngOnInit(): void {
+    //set up categories
+    //listener for product categories
+    this.categoryService.postCategories$.subscribe(res => this.postCategories = res);
+    //current value of product categories
+    this.postCategories = this.categoryService.getPostCategories();
+
     this.route.queryParams.subscribe(params => {
       if(params['create'] == 'true'){
         this.isCreate = params['create'];
@@ -51,19 +72,26 @@ export class PostFormComponent implements OnInit {
           params: {
             postId: this.postId
           }
-        }).subscribe((res: any) => {
-          console.log(res);
-          //TODO create
-          this.post = new Post(res.postId, res.title, res.text, res.image, res.score, res.category,  res.UserUserId,'', VotingState.NotAllowed);
-          //this.post = new Post(res.postId, 0, res.title, res.text, res.image, res.upvote, res.downvote, 0, res.category, res.createdAt, res.UserUserId,'');
-          console.log(this.post);
-          this.initializeFormUpdate();
+        }).subscribe((post: any) => {
+          console.log(post);
+          let category = this.categoryService.getCategoryById(post.category);
+          this.httpClient.get(environment.endpointURL + "user/getById", {
+            params: {
+              userId: post.UserUserId
+            }
+          }).subscribe( (user:any) => {
+            this.post = this.postService.createPostFromBackendResponse(post, category, user);
+            console.log(this.post);
+            this.initializeFormUpdate();
+            }
+          );
         }, (error: any) => {
           console.log(error);
         });
       }
     }
   }
+
 
   initializeFormCreate(): void {
     this.postForm = this.fb.group({
@@ -77,12 +105,11 @@ export class PostFormComponent implements OnInit {
   }
 
   initializeFormUpdate(): void {
-    let categoryId = this.post?.category;
     this.postForm = this.fb.group({
       "postTitle": new FormControl(this.post?.title, Validators.required),
       "postImage": new FormControl(this.post?.image),
       "postText": new FormControl(this.post?.text),
-      "postCategory": new FormControl(categoryId.toString(), Validators.required)
+      "postCategory": new FormControl(this.post?.category.id, Validators.required)
     }, {
       validator: (form: FormGroup) => {
         return this.checkPost(form);
@@ -127,8 +154,6 @@ export class PostFormComponent implements OnInit {
       text: this.postForm?.value.postText,
       image: this.postForm?.value.postImage,
       category: this.postForm?.value.postCategory,
-      //upvote: this.post?.upvote,
-      //downvote: this.post?.downvote
     }, ).subscribe((res: any) => {
         console.log(res);
         this.isSubmitted = false;
@@ -141,7 +166,7 @@ export class PostFormComponent implements OnInit {
     }
 
   //currently not set
-  checkPost(form: FormGroup): {[s: string]: boolean}{
+  checkPost(form: FormGroup): {[s: string]: boolean} | null{
     if(form.value.postImage == "" && form.value.postText == ""){
       console.log("error");
       return {'missingPostContent': true};

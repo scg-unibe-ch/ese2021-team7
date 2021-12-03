@@ -11,6 +11,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {VotingState} from "../models/voting-state";
 import { CategoryService } from '../services/category.service';
 import { Category } from '../models/category';
+import { PostService } from '../services/post.service';
 
 @Component({
   selector: 'app-feed',
@@ -26,7 +27,7 @@ export class FeedComponent implements OnInit, DoCheck {
 
   sortBy: string = '0';
 
-  filterBy: string = '';
+  filterBy: number = 0;
 
   //array with post categories
   postCategories: Category[] = [];
@@ -36,7 +37,8 @@ export class FeedComponent implements OnInit, DoCheck {
     private route: Router,
     public userService: UserService,
     private dialog: MatDialog,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private postService: PostService
   ) {}
 
   ngOnInit(): void {
@@ -44,7 +46,7 @@ export class FeedComponent implements OnInit, DoCheck {
     //listener for product categories
     this.categoryService.postCategories$.subscribe(res => this.postCategories = res);
     //current value of product categories
-    this.postCategories = this.categoryService.getProductCategories();
+    this.postCategories = this.categoryService.getPostCategories();
 
 
     // Listen for changes
@@ -87,79 +89,20 @@ export class FeedComponent implements OnInit, DoCheck {
         this.postList = [];
         res.forEach((post: any) => {
           let category = this.categoryService.getCategoryById(post.category);
-          this.httpClient.get(environment.endpointURL + "user/getById", {
-            params: {
-              userId: post.UserUserId
-            }
-          }).subscribe(
-            (user: any) => this.postList.push(this.createPostFromBackendResponse(post, category, user)),
-            (error: any) => console.log(error)
+          if(this.checkIfPostIsAcceptedByFilter(category)){
+            this.httpClient.get(environment.endpointURL + "user/getById", {
+              params: {
+                userId: post.UserUserId
+              }
+            }).subscribe(
+              (user: any) => this.postList.push(this.postService.createPostFromBackendResponse(post, category, user)),
+              (error: any) => console.log(error)
             );
-
-          /*
-          this.httpClient.get(environment.endpointURL + "category/byId",{
-            params: {
-              categoryId: post.category
-            }
-          }).subscribe((category: any) => {
-            if (this.checkIfPostIsAcceptedByFilter(category.name)){
-              this.httpClient.get(environment.endpointURL + "user/getById", {
-                params: {
-                  userId: post.UserUserId
-                }
-              }).subscribe((res: any) => {
-                  this.postList.push(
-                    new Post(post.postId, post.title, post.text, post.image, post.score, category.name, post.UserUserId, res.userName, this.evaluateVotingState(post.votingStatus)));
-                  },
-                (error: any) => {
-                  console.log(error);
-                });
-            }*/
+          }
           });
         });
   }
 
-  /**
-   * Takes backend responses and returns a Post object.
-   * @param post backend response
-   * @param category parsed Category object
-   * @param user backend response
-   * @private
-   */
-  private createPostFromBackendResponse(post: any, category: Category, user: any): Post {
-    return new Post(
-      post.postId,
-      post.title,
-      post.text,
-      post.image,
-      post.score,
-      category.name,
-      post.UserUserId,
-      user.userName,
-      this.evaluateVotingState(post.votingStatus));
-  }
-
-  evaluateVotingState(votingStatus: string): VotingState {
-    console.log('given votestate: ' + votingStatus);
-    switch (votingStatus){
-      case 'not voted': {
-        console.log('found votestate: Not voted')
-        return VotingState.NotVoted;
-      }
-      case 'upvoted': {
-        console.log('found votestate: upvoted')
-        return VotingState.Upvoted;
-      }
-      case 'downvoted': {
-        console.log('found votestate: downvoted')
-        return VotingState.Downvoted;
-      }
-      default: {
-        console.log('found votestate: not allowed')
-        return VotingState.NotAllowed;
-      }
-    }
-  }
 
   getFeedForAdminsAndGuests(): void {
     this.httpClient.get(environment.endpointURL + "post/all", {
@@ -170,28 +113,21 @@ export class FeedComponent implements OnInit, DoCheck {
       (res: any) => {
         this.postList = [];
         res.forEach((post: any) => {
-          this.httpClient.get(environment.endpointURL + "category/byId",{
-            params: {
-              categoryId: post.category
-            }
-          }).subscribe((category: any) => {
-            if (this.checkIfPostIsAcceptedByFilter(category.name)){
-              this.httpClient.get(environment.endpointURL + "user/getById", {
-                params: {
-                  userId: post.UserUserId
-                }
-              }).subscribe((res: any) => {
-                  this.postList.push(
-                    new Post(post.postId, post.title, post.text, post.image, post.score, category.name, post.UserUserId, res.userName, VotingState.NotAllowed));
-                },
-                (error: any) => {
-                  console.log(error);
-                });
-            }
-          });
+          let category = this.categoryService.getCategoryById(post.category);
+          if(this.checkIfPostIsAcceptedByFilter(category)){
+            this.httpClient.get(environment.endpointURL + "user/getById", {
+              params: {
+                userId: post.UserUserId
+              }
+            }).subscribe(
+              (user: any) => this.postList.push(this.postService.createPostFromBackendResponse(post, category, user, VotingState.NotAllowed)),
+              (error: any) => console.log(error)
+            );
+          }
         });
       });
   }
+
 
   evaluateAccessForCurrentUser(): void {
     if (this.loggedIn){
@@ -217,8 +153,8 @@ export class FeedComponent implements OnInit, DoCheck {
   }
 
   reloadFeed() {
-    this.filterBy = '';
-    this.getPostCategories();
+    this.filterBy = 0;
+    //this.getPostCategories();
     this.evaluateAccessForCurrentUser();
   }
 
@@ -265,29 +201,18 @@ export class FeedComponent implements OnInit, DoCheck {
     this.evaluateAccessForCurrentUser();
   }
 
-  checkIfPostIsAcceptedByFilter(category: string):boolean {
-    if (this.filterBy == ''){
+  checkIfPostIsAcceptedByFilter(category: Category):boolean {
+    if (this.filterBy == 0){
       return true;
     }
     else{
-      if (this.filterBy == category){
+      if (this.filterBy == category.id){
         return true;
       }
       else return false;
     }
   }
 
-  /*
-  getPostCategories(): void {
-    this.postCategories = [];
-    this.httpClient.get(environment.endpointURL + "category/all").subscribe((res:any) => {
-      res.forEach((category: any) => {
-        if (category.type == 0){
-          this.postCategories.push(category.name)
-        }
-      });
-    });
-  }
-*/
+
 
 }

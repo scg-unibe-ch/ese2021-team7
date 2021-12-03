@@ -35,8 +35,7 @@
           <mat-form-field appearance="outline">
             <mat-label >Category</mat-label>
             <mat-select [formControlName]="'postCategory'" id="category"   required>
-              <mat-option value="2">Winterfell</mat-option>
-              <mat-option value="3">The Wall</mat-option>
+              <mat-option value="2" *ngFor="let category of postCategories" [value]="category.id">{{category.name}}</mat-option>
             </mat-select>
           </mat-form-field>
           <br/>
