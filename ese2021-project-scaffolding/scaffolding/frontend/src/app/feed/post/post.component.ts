@@ -34,7 +34,7 @@ export class PostComponent implements OnInit{
   currentUser : User = new User(0, '', '', false,'','','','','','','','','');
 
   @Input()
-  postToDisplay: Post = new Post(0,'','','',0,new Category(0, "undefined", 0),0,'', VotingState.NotAllowed);
+  postToDisplay: Post = new Post(0,'','','',0,new Category(0, "undefined", 0, "undefined"),0,'', VotingState.NotAllowed);
 
   @Output()
   update = new EventEmitter<Post>();

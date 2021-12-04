@@ -15,7 +15,7 @@ export class CategoryListComponent implements OnInit {
   categoriesData: CategoriesDataSourceService | undefined;
 
 
-  displayedColumns = ["id", "name", "type"];
+  displayedColumns = ["id", "name", "typeName"];
 
   constructor(private categoryService: CategoryService,
               private categoriesDataSource: CategoriesDataSourceService) { }

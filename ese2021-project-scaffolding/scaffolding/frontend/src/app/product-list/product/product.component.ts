@@ -33,7 +33,7 @@ export class ProductComponent implements OnInit {
   currentUser : User = new User(0, '', '', false,'','','','','','','','','');
 
   @Input()
-  productToDisplay: Product = new Product(0,0,'','','',0,new Category(0,"undefined", 1),false);
+  productToDisplay: Product = new Product(0,0,'','','',0,new Category(0,"undefined", 1, "undefined"),false);
 
   @Output()
   update = new EventEmitter<Product>();

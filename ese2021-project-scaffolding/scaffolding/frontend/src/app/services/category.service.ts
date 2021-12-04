@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Category } from '../models/category';
+import { CategoryType } from '../models/category-type';
 
 
 /**
@@ -96,7 +97,7 @@ export class CategoryService {
    * @param id
    */
   getCategoryById(id: number): Category {
-    let returnCategory: Category = new Category(0, "undefined", 0);
+    let returnCategory: Category = new Category(0, "undefined", 0, "undefined");
     //this.getCategoriesFromBackend(); //update categories from backend
     //console.log("Selection Id array: " + this.categories);
     this.categories.forEach(
@@ -173,7 +174,8 @@ export class CategoryService {
     return new Category(
       backendRes.categoryId,
       backendRes.name,
-      backendRes.type
+      backendRes.type == 0? CategoryType.Post : CategoryType.Product,
+      backendRes.type == 0? CategoryType[CategoryType.Post] : CategoryType[CategoryType.Product]
     );
   }
 
