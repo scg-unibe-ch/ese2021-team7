@@ -142,9 +142,25 @@ export class CategoryService {
   }
 
 
+  getCategoriesFromBackendAsObservable(): Observable<Category[]>{
+    return this.httpClient.get(environment.endpointURL + "category/all").pipe(
+      map(
+        (data:any) =>
+          data.map(
+            (category: any) => this.createCategoryFromBackendResponse(category) //return array of Category[]
+          )),
+      //tap((data:any) => console.log("Categories received from backend: "+ JSON.stringify(data)))
+    );
+  }
+
+
   /*******************************************************************************************************************
    * Helper Methods
    ******************************************************************************************************************/
+
+  refresh(): void{
+    this.getCategoriesFromBackend();
+  }
 
 
   /**

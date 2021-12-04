@@ -1,5 +1,7 @@
-import { DataSource } from '@angular/cdk/collections';
+import {CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { Category } from '../models/category';
 import { CategoriesDataSourceService } from '../services/categories-data-source.service';
 import { CategoryService } from '../services/category.service';
 
@@ -10,11 +12,13 @@ import { CategoryService } from '../services/category.service';
 })
 export class CategoryListComponent implements OnInit {
 
-  categoriesData: DataSource<any> | undefined;
+  categoriesData: CategoriesDataSourceService | undefined;
+
 
   displayedColumns = ["id", "name", "type"];
 
-  constructor(private categoryService: CategoryService, private categoriesDataSource: CategoriesDataSourceService) { }
+  constructor(private categoryService: CategoryService,
+              private categoriesDataSource: CategoriesDataSourceService) { }
 
   ngOnInit(): void {
     //let categories = this.categoryService.getCategoriesfromBackend();
@@ -26,7 +30,7 @@ export class CategoryListComponent implements OnInit {
     let categoiresPost = this.categoryService.getPostCategories();
     console.log("object" + JSON.stringify(categoiresPost));
     this.categoriesData = new CategoriesDataSourceService(this.categoryService);
-
+    //this.categoriesData.refreshData();
   }
 
 }

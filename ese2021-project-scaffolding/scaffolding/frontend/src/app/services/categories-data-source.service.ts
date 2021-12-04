@@ -11,11 +11,11 @@ import { CategoryService } from './category.service';
 export class CategoriesDataSourceService extends DataSource<Category[]>{
 
 
-  private categorySource = this.categoryService.getDataSource();
-
+  private categorySource = new BehaviorSubject<Category[]>([]);
 
   constructor(private categoryService: CategoryService) {
     super();
+    this.refreshData();
   }
 
 
@@ -25,6 +25,12 @@ export class CategoriesDataSourceService extends DataSource<Category[]>{
 
   disconnect(collectionViewer: CollectionViewer): void {
     this.categorySource.complete();
+  }
+
+  refreshData(): void {
+    this.categoryService.getCategoriesFromBackendAsObservable().subscribe(
+      (res: any) => this.categorySource.next(res)
+    );
   }
 
 
