@@ -17,13 +17,15 @@ export class CategoryFormService implements FormService{
   buildForm(preSets?: any): FormGroup{
     return this.fb.group({
       categoryName: new FormControl('', Validators.required),
+      categoryType: new FormControl('', Validators.required)
     });
   }
 
   sendForm(form: FormGroup, requestType: any): Observable<any>{
+    console.log("type: " + form?.value.categoryType);
     return this.httpClient.post(environment.endpointURL + requestType, {
       name: form?.value.categoryName,
-      type: 0
+      type: Number(form?.value.categoryType)
     });
   }
 

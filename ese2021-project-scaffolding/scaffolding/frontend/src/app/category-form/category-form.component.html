@@ -12,6 +12,14 @@
             <mat-label>Category Name</mat-label>
             <input matInput type="text" label="categoryName" placeholder="Name" id="categoryName" [formControlName]="'categoryName'" required>
           </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label >Type</mat-label>
+            <mat-select [formControlName]="'categoryType'" id="categoryType"   required>
+              <mat-option value="" >Select type</mat-option>
+              <mat-option value="0">Post</mat-option>
+              <mat-option value="1">Product</mat-option>
+            </mat-select>
+          </mat-form-field>
           <br/>
           <div class="form-action-button">
             <button mat-flat-button (click)="discardChanges()" class="group7-forms-button">Discard Changes</button>
