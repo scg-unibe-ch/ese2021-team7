@@ -107,7 +107,8 @@ import { BaseFormComponent } from './base-form/base-form.component';
       { path: 'order', component: OrderListComponent},
       { path: 'admin-dashboard', component: AdminDashboardComponent},
       { path: 'user-list', component:UserListComponent},
-      { path: 'category-list', component: CategoryListComponent}
+      { path: 'category-list', component: CategoryListComponent},
+      { path: 'category-form', component: CategoryFormComponent}
     ]),
   ],
   providers: [

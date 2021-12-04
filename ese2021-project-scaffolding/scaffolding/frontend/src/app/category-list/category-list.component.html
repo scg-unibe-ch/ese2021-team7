@@ -2,6 +2,9 @@
   <div class="table-title" class="group7-list-title" >
     <h1 >Categories</h1>
   </div>
+  <div>
+    <button mat-button [routerLink]="['/category-form']">add new</button>
+  </div>
   <table mat-table [dataSource]="categoriesData" class="mat-elevation-z8">
 
     <!-- Category Id Column -->
