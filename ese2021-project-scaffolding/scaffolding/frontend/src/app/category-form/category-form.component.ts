@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import {ActivatedRoute, Router } from '@angular/router';
 import { BaseFormComponent } from '../base-form/base-form.component';
 import { FormType } from '../models/form-type';
-import { FormService } from '../services/form.service';
+import { CategoryFormService } from '../services/category-form.service';
 
 @Component({
   selector: 'app-category-form',
@@ -18,10 +18,10 @@ export class CategoryFormComponent extends BaseFormComponent implements OnInit {
   protected routeAfterDiscard = "category-list";
 
   constructor(public fb: FormBuilder,
-              public formService: FormService,
+              public categoryFormService: CategoryFormService,
               public router: Router,
               public route: ActivatedRoute) {
-    super(fb, formService, router, route);
+    super(fb, categoryFormService, router, route);
   }
 
   ngOnInit(): void {

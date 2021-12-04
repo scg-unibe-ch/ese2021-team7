@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, FormGroupDirective } from '@angular/forms';
 import {ActivatedRoute, Router } from '@angular/router';
 import { Category } from '../models/category';
 import { FormType } from '../models/form-type';
+import { CategoryFormService } from '../services/category-form.service';
 import { FormService } from '../services/form.service';
 
 @Component({
@@ -31,11 +32,11 @@ export class BaseFormComponent implements OnInit {
   }
 
   initializeForm(formType: FormType, preSets?: any): void{
-    this.form = this.formService.formBuilderFactory(formType, preSets);
+    this.form = this.formService.buildForm(preSets);
   }
 
   onSubmit(formDirective: FormGroupDirective): void {
-    this.formService.sendForm(this.form, this.formType, this.requestType).subscribe(
+    this.formService.sendForm(this.form, this.requestType).subscribe(
       (res: any) => {
         this.isSubmitted = false;
         this.reRouteAfterSuccess(this.routeAfterSuccess, this.queryParamsRouteAfterSuccess);
