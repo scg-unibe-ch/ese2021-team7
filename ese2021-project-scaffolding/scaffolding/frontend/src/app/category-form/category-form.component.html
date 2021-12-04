@@ -1,5 +1,3 @@
-<div class="card-wrapper-center registration-form">
-  <mat-card class="group7-card">
     <mat-card-header>
       <mat-card-title>
         <h1 class="card-title" >Add new category</h1>
@@ -22,7 +20,7 @@
           </mat-form-field>
           <br/>
           <div class="form-action-button">
-            <button mat-flat-button (click)="discardChanges()" class="group7-forms-button">Discard Changes</button>
+            <button mat-flat-button (click)="discard()" class="group7-forms-button">Discard</button>
             <button mat-flat-button type="submit" [disabled]="!form.valid" class="group7-forms-button">Create Category</button><br/>
             <span *ngIf="!form.valid && isSubmitted" [ngClass]="!form.valid && isSubmitted ? 'is-invalid' : '' "><br/>Please choose a category name</span><br/>
           </div>
@@ -31,6 +29,4 @@
     </mat-card-content>
 
 
-  </mat-card>
 
-</div>

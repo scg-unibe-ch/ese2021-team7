@@ -70,6 +70,9 @@ import { BaseFormComponent } from './base-form/base-form.component';
     CategoryFormComponent,
     BaseFormComponent
   ],
+  entryComponents:[
+    CategoryFormComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

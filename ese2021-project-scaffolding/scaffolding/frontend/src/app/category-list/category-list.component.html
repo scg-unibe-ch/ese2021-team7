@@ -4,6 +4,8 @@
   </div>
   <div>
     <button mat-button [routerLink]="['/category-form']">Add new</button>
+    <button mat-button (click)="openForm()">Add new V2</button>
+
   </div>
   <table mat-table [dataSource]="categoriesData" class="mat-elevation-z8">
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import {ActivatedRoute, Router } from '@angular/router';
 import { BaseFormComponent } from '../base-form/base-form.component';
 import { FormType } from '../models/form-type';
@@ -20,12 +21,21 @@ export class CategoryFormComponent extends BaseFormComponent implements OnInit {
   constructor(public fb: FormBuilder,
               public categoryFormService: CategoryFormService,
               public router: Router,
-              public route: ActivatedRoute) {
+              public route: ActivatedRoute,
+              private dialogRef: MatDialogRef<CategoryFormComponent>) {
     super(fb, categoryFormService, router, route);
   }
 
   ngOnInit(): void {
     this.initializeForm(this.formType);
+  }
+
+  discard(): void {
+    this.dialogRef.close();
+  }
+
+  reRouteAfterSuccess(route: string, queryParams?: any): void {
+    this.dialogRef.close();
   }
 
 
