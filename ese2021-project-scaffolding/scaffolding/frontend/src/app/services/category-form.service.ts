@@ -9,11 +9,34 @@ import { FormService } from './form.service';
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Handles form creation and backend connection for the category form.
+ *
+ * @implements FormService
+ *
+ */
 export class CategoryFormService implements FormService{
+
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
 
   constructor(private fb: FormBuilder,
               private httpClient: HttpClient) { }
 
+  /*******************************************************************************************************************
+   * FORM BUILDER
+   ******************************************************************************************************************/
+
+  /**
+   * Overrrides parents method.
+   *
+   * Creates form controls for category form.
+   *
+   * Form fields: category name, category type
+   *
+   * @param preSets: category form does not have presets
+   */
   buildForm(preSets?: any): FormGroup{
     return this.fb.group({
       categoryName: new FormControl('', Validators.required),
@@ -21,8 +44,21 @@ export class CategoryFormService implements FormService{
     });
   }
 
+  /*******************************************************************************************************************
+   * BACKEND HANDLER
+   ******************************************************************************************************************/
+
+  /**
+   * Overrides parents method.
+   *
+   * Sends category/create request to backend.
+   *
+   * Backend params: name, type
+   *
+   * @param form: category form
+   * @param requestType: category/create
+   */
   sendForm(form: FormGroup, requestType: any): Observable<any>{
-    console.log("type: " + form?.value.categoryType);
     return this.httpClient.post(environment.endpointURL + requestType, {
       name: form?.value.categoryName,
       type: Number(form?.value.categoryType)

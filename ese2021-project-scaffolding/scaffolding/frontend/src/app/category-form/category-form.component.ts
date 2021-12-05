@@ -11,33 +11,56 @@ import { CategoryFormService } from '../services/category-form.service';
   templateUrl: './category-form.component.html',
   styleUrls: ['./category-form.component.css']
 })
+/**
+ * "Add new category" form.
+ *
+ * Admin can create new categories. Can choose name and category type.
+ *
+ * Displayed in Dialog Box in CategoryListComponent.
+ *
+ * @parent: BaseFormComponent
+ */
 export class CategoryFormComponent extends BaseFormComponent implements OnInit {
 
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
+
+  // overrides parent variables
   protected formType = FormType.Category;
   protected requestType = "category/create";
   protected routeAfterSuccess = "category-list";
   protected routeAfterDiscard = "category-list";
 
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
   constructor(public fb: FormBuilder,
-              public categoryFormService: CategoryFormService,
+              public categoryFormService: CategoryFormService, // pass the correct form service
               public router: Router,
               public route: ActivatedRoute,
               private dialogRef: MatDialogRef<CategoryFormComponent>) {
     super(fb, categoryFormService, router, route);
   }
 
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
   ngOnInit(): void {
-    this.initializeForm(this.formType);
+    this.initializeForm(); // implemented in parent class
   }
 
-  discard(): void {
-    this.dialogRef.close();
-  }
-
+  /*******************************************************************************************************************
+   * USER FLOW
+   ******************************************************************************************************************/
+  //override
   reRouteAfterSuccess(route: string, queryParams?: any): void {
     this.dialogRef.close();
   }
 
+  discard(): void {
+    this.dialogRef.close(); //closes dialog box
+  }
 
 
 }

@@ -25,10 +25,6 @@ export class CategoryService {
    * VARIABLES
    ******************************************************************************************************************/
 
-  //Category types: post, product
-  private postType = 0;
-  private productType = 1;
-
   // Categories array
   private categories: Category[] = [];
   private productCategories: Category[] = [];
@@ -58,7 +54,7 @@ export class CategoryService {
   }
 
   /*******************************************************************************************************************
-   * GET Requests
+   * GETTERS
    ******************************************************************************************************************/
   /**
    * Returns all categories.
@@ -112,15 +108,12 @@ export class CategoryService {
     return returnCategory;
   }
 
-  getDataSource(): BehaviorSubject<Category[]> {
-    return this.categoriesSource;
-  }
   /*******************************************************************************************************************
-   * HTTP Request Handler
+   * BACKEND HANDLERS
    ******************************************************************************************************************/
 
   /**
-   * Gets categories from backend and updates the Categories field.
+   * Gets all categories from backend and updates different categories variables.
    */
   private getCategoriesFromBackend(): void {
     this.categories = []; //delete exiting values
@@ -130,19 +123,19 @@ export class CategoryService {
           data.map(
             (category: any) => this.createCategoryFromBackendResponse(category) //return array of Category[]
           )),
-      //tap((data:any) => console.log("Categories received from backend: "+ JSON.stringify(data)))
     ).subscribe((data:any) => {
       this.categoriesSource.next(data);
       this.categories = data;
-      this.productCategories = data.filter((category: Category) => category.type == this.productType); //filter for product categories
-      this.postCategories = data.filter((category: Category) => category.type == this.postType); // filter for post categories
-      //console.log("Post Categories: " + JSON.stringify(this.postCategories));
-      //console.log("Product Categories: " + JSON.stringify(this.productCategories));
-      //console.log("All Categories: " + JSON.stringify(this.categories));
+      this.productCategories = data.filter((category: Category) => category.type == CategoryType.Product); //filter for product categories
+      this.postCategories = data.filter((category: Category) => category.type == CategoryType.Post); // filter for post categories
+
     });
   }
 
-
+  /**
+   * Gets all categories from backend and returns it as an observable.
+   * Used in CategoriesDataService.
+   */
   getCategoriesFromBackendAsObservable(): Observable<Category[]>{
     return this.httpClient.get(environment.endpointURL + "category/all").pipe(
       map(
@@ -150,18 +143,19 @@ export class CategoryService {
           data.map(
             (category: any) => this.createCategoryFromBackendResponse(category) //return array of Category[]
           )),
-      //tap((data:any) => console.log("Categories received from backend: "+ JSON.stringify(data)))
     );
   }
 
+  /**
+   * Refreshes data.
+   */
+  refresh(): void{
+    this.getCategoriesFromBackend();
+  }
 
   /*******************************************************************************************************************
    * Helper Methods
    ******************************************************************************************************************/
-
-  refresh(): void{
-    this.getCategoriesFromBackend();
-  }
 
 
   /**
