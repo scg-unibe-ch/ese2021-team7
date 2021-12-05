@@ -1,5 +1,6 @@
 <div class="card-wrapper-center">
   <div class="shop-wrapper">
+    <div class="buttons-wrapper">
     <button mat-flat-button [disabled]="!showAddProductButton" (click)="addProduct()" class="group7-forms-button">
       Add new product
     </button>
@@ -7,24 +8,29 @@
       Reload shop
     </button>
 
-    <mat-form-field>
-      <mat-select [(value)]="filterBy" placeholder="filter list by:" (selectionChange)="filterShop($event)" class="group7-select">
+    <mat-form-field appearance="outline">
+      <mat-select  placeholder="Choose category:" (selectionChange)="filterShop($event.value)" #selectFilter class="group7-select">
         <mat-option value="0">No Filter</mat-option>
         <mat-option *ngFor="let category of productCategories" [value]="category.id">{{category.name}}</mat-option>
       </mat-select>
     </mat-form-field>
+    </div>
 
-    <div  *ngFor="let productToDisplay of currentShop.products" class="group7-grid-tile shop-item">
+
+
+    <div  *ngFor="let productToDisplay of productList" class="group7-grid-tile shop-item">
       <app-product
         [productToDisplay]="productToDisplay"
         [loggedIn]="loggedIn"
         [currentUser]="currentUser"
-        (delete)="deleteProduct($event)"
+        (delete)="confirmDelete($event)"
         (update)="updateProduct($event)"
         (buy)="buyProduct($event)"
         [productCategories]="productCategories">
       </app-product>
     </div>
+
+
   </div>
 </div>
 

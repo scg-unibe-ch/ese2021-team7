@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Product} from "../models/product.model";
@@ -12,6 +12,11 @@ import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmatio
 import {Post} from "../models/post.model";
 import { Category } from '../models/category';
 import { CategoryService } from '../services/category.service';
+import { ShopService } from '../services/shop.service';
+import {DataSource } from '@angular/cdk/collections';
+import { ShopDataSourceService } from '../services/shop-data-source.service';
+import { Observable, of } from 'rxjs';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-product-list',
@@ -20,14 +25,19 @@ import { CategoryService } from '../services/category.service';
 })
 export class ProductListComponent implements OnInit {
 
-  currentShop: ProductList = new ProductList(0,'', []);
+  @ViewChild('selectFilter') selectFilter!: MatSelect;
+
+  //currentShop: ProductList = new ProductList(0,'', []);
+
+  //shop: ShopDataSourceService = new ShopDataSourceService(this.shopService);
+  productList: Product[] = [];
 
   loggedIn: boolean | undefined;
   currentUser: User | undefined;
 
   showAddProductButton: boolean = false;
 
-  filterBy: number = 0;
+  //filterBy: number = 0;
 
   // stores product Categories
   productCategories: Category[] = [];
@@ -37,7 +47,8 @@ export class ProductListComponent implements OnInit {
     private route: Router,
     public userService: UserService,
     private dialog: MatDialog,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private shopService: ShopService
   ) {  }
 
   ngOnInit(): void {
@@ -58,10 +69,15 @@ export class ProductListComponent implements OnInit {
 
     this.evaluateAddProductPermission();
 
-    // refresh shop
-    this.filterBy = 0;
-    this.readProducts();
+
+    // listern product list
+    this.shopService.products$.subscribe(res => {this.productList = res;
+    });
+    // get current value products
+    this.productList = this.shopService.getAllProducts();
   }
+
+
 
   ngOnChange():void {
     this.evaluateAddProductPermission();
@@ -82,23 +98,10 @@ export class ProductListComponent implements OnInit {
     else this.showAddProductButton = false;
   }
 
-  // READ all created products
-  readProducts(): void {
-    this.httpClient.get(environment.endpointURL + "product/all").subscribe((res: any) => {
-      this.currentShop = new ProductList(0, '', []);
-      res.forEach((product: any) => {
-          if (this.checkIfProductIsAcceptedByFilter(this.categoryService.getCategoryById(product.productCategory))) {
-            this.currentShop.products.push(
-              new Product(product.productId, 0, product.title, product.description, product.image, product.price, this.categoryService.getCategoryById(product.productCategory), !product.isAvailable))
-          }
-      }
-      );
-    });
-  }
 
   refreshShop(): void {
-    this.filterBy = 0
-    this.readProducts();
+    this.shopService.refresh();
+    this.selectFilter.value = 0; //sets category filter to "no filter" in DOM
   }
 
   addProduct(): void {
@@ -107,8 +110,18 @@ export class ProductListComponent implements OnInit {
     }
   }
 
-  deleteProduct(product: Product): void {
-    this.handleDelete(product);
+  confirmDelete(product: Product): void {
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?','Cancel','Delete product');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.shopService.deleteProduct(product);
+      }
+    });
   }
 
   updateProduct(product: Product): void {
@@ -119,38 +132,13 @@ export class ProductListComponent implements OnInit {
     this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
 
-  handleDelete(product: Product): void {
-    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?','Cancel','Delete product');
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      maxWidth: '400px',
-      closeOnNavigation: true,
-      data: dialogData
-    })
 
-    dialogRef.afterClosed().subscribe(dialogResult => {
-      if (dialogResult) {
-        this.httpClient.post(environment.endpointURL + "product/delete", {
-          productId: product.productId
-        }).subscribe(() => {
-          this.currentShop.products.splice(this.currentShop.products.indexOf(product), 1);
-        });
-      }
-    });
-  }
-
-  filterShop(event:any): void {
-    this.readProducts();
-  }
-
-  checkIfProductIsAcceptedByFilter(category: Category): boolean {
-    if (this.filterBy == 0){
-      return true;
+  filterShop(categoryId:any): void {
+    if(categoryId == 0) {
+      this.shopService.refresh();
     }
-    else{
-      if (this.filterBy == category.id){
-        return true;
-      }
-      else return false;
+    else {
+      this.shopService.filterShop(categoryId);
     }
   }
 
