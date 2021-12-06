@@ -33,7 +33,7 @@ export class ProductComponent implements OnInit {
   currentUser : User = new User(0, '', '', false,'','','','','','','','','');
 
   @Input()
-  productToDisplay: Product = new Product(0,0,'','','',0,new Category(0,"undefined", 1, "undefined"),false);
+  productToDisplay: Product = new Product(0,'','','',0,new Category(0,"undefined", 1, "undefined"),false);
 
   @Output()
   update = new EventEmitter<Product>();
@@ -71,7 +71,7 @@ export class ProductComponent implements OnInit {
             productId: params['productId']
           }
         }).subscribe((product: any) => {
-            this.productToDisplay = new Product(product.productId, 0, product.title, product.description, product.image, product.price, this.categoryService.getCategoryById(product.productCategory), !product.isAvailable);
+            this.productToDisplay = new Product(product.productId,  product.title, product.description, product.image, product.price, this.categoryService.getCategoryById(product.productCategory), !product.isAvailable);
             console.log(this.categoryService.getCategoryById(product.productCategory));
             this.showDetailedView = true;
           });

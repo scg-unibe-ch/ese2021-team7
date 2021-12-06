@@ -160,7 +160,6 @@ export class ShopService {
   private createProductFromBackendResponse(product: any): Product{
    return new Product(
      product.productId,
-     0,
      product.title,
      product.description,
      product.image,

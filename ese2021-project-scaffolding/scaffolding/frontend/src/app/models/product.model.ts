@@ -7,7 +7,7 @@ export class Product {
 
   constructor(
     public productId: number,
-    public shopId: number, // to indicate that it belongs to a certain shop
+    //public shopId: number, // to indicate that it belongs to a certain shop
     public title: string,
     public description: string,
     public image: string, // string containing the url to the image

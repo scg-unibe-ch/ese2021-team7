@@ -84,7 +84,6 @@ export class OrderComponent implements OnInit, OnChanges{
       this.productDefined = true;
       this.currentProduct = new Product(
         res.productId,
-        0,
         res.title,
         res.description,
         res.image,

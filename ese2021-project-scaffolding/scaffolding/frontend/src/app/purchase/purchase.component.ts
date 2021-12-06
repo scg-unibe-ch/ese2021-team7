@@ -21,13 +21,13 @@ export class PurchaseComponent implements OnInit {
 
   productId: number | undefined;
 
-  product = new Product(0, 0, "", "", "", 0, null, false);
+  product = new Product(0,  "", "", "", 0, new Category(0, "undefined", 0, "undefined"), false);
 
   user: User | undefined;
 
   isSubmitted: boolean;
 
-  productCategories: Category[];
+  productCategories: Category[] = [];
 
   //isCreate: boolean;
   //isUpdate: boolean;
@@ -59,7 +59,7 @@ export class PurchaseComponent implements OnInit {
           }
         }).subscribe((res: any) => {
           console.log(res);
-          this.product = new Product(res.productId, 1, res.title,  res.description, res.image,  res.price, this.categoryService.getCategoryById(res.productCategory), !res.isAvailabe);
+          this.product = new Product(res.productId,  res.title,  res.description, res.image,  res.price, this.categoryService.getCategoryById(res.productCategory), !res.isAvailabe);
           console.log(this.product);
           this.initializePurchaseForm();
         }, (error: any) => {
