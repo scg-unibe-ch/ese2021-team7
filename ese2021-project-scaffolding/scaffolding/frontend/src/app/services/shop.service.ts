@@ -157,7 +157,7 @@ export class ShopService {
    * @return Product
    * @private
    */
-  private createProductFromBackendResponse(product: any): Product{
+  createProductFromBackendResponse(product: any): Product{
    return new Product(
      product.productId,
      product.title,

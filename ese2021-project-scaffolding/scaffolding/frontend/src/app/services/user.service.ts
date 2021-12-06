@@ -13,9 +13,9 @@ export class UserService {
    * VARIABLES
    ******************************************************************************************************************/
 
-  private loggedIn: boolean | undefined;
+  private loggedIn: boolean = false;
 
-  private user: User | undefined;
+  private user: User = new User(0, "", "", false, "", "", "", "", "", "", "", "", "");
 
 
   /*******************************************************************************************************************
@@ -35,11 +35,11 @@ export class UserService {
    * GETTERS
    ******************************************************************************************************************/
 
-  getLoggedIn(): boolean | undefined {
+  getLoggedIn(): boolean  {
     return this.loggedIn;
   }
 
-  getUser(): User | undefined {
+  getUser(): User  {
     return this.user;
   }
 
