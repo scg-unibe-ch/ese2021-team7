@@ -26,11 +26,12 @@ import { ProductFormComponent } from '../product-form/product-form.component';
 })
 export class ProductListComponent implements OnInit {
 
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
+
   @ViewChild('selectFilter') selectFilter!: MatSelect;
 
-  //currentShop: ProductList = new ProductList(0,'', []);
-
-  //shop: ShopDataSourceService = new ShopDataSourceService(this.shopService);
   productList: Product[] = [];
 
   loggedIn: boolean | undefined;
@@ -38,10 +39,11 @@ export class ProductListComponent implements OnInit {
 
   showAddProductButton: boolean = false;
 
-  //filterBy: number = 0;
-
-  // stores product Categories
   productCategories: Category[] = [];
+
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
 
   constructor(
     public httpClient: HttpClient,
@@ -50,7 +52,12 @@ export class ProductListComponent implements OnInit {
     private dialog: MatDialog,
     private categoryService: CategoryService,
     private shopService: ShopService
-  ) {  }
+  ) { }
+
+
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
 
   ngOnInit(): void {
     //listener for product categories
@@ -68,8 +75,7 @@ export class ProductListComponent implements OnInit {
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
 
-    this.evaluateAddProductPermission();
-
+    this.evaluateAddProductPermission(); //check if user is admin and can add products
 
     // listern product list
     this.shopService.products$.subscribe(res => {this.productList = res;
@@ -77,8 +83,6 @@ export class ProductListComponent implements OnInit {
     // get current value products
     this.productList = this.shopService.getAllProducts();
   }
-
-
 
   ngOnChange():void {
     this.evaluateAddProductPermission();
@@ -90,21 +94,14 @@ export class ProductListComponent implements OnInit {
     this.currentUser = this.userService.getUser();
   }
 
-  evaluateAddProductPermission(): void {
-    // set true if user is admin
-    if (this.loggedIn){
-      if (this.currentUser?.isAdmin) this.showAddProductButton = true;
-      else this.showAddProductButton = false;
-    }
-    else this.showAddProductButton = false;
-  }
+  /*******************************************************************************************************************
+   * USER ACTIONS
+   ******************************************************************************************************************/
 
-
-  refreshShop(): void {
-    this.shopService.refresh();
-    this.selectFilter.value = 0; //sets category filter to "no filter" in DOM
-  }
-
+  /**
+   * Opens Dialog box with with product create form in it.
+   *
+   */
   addProduct(): void {
     const dialogRef = this.dialog.open(ProductFormComponent, {
       maxWidth: '400px',
@@ -120,6 +117,10 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens Dialog box to confirm delete.
+   *
+   */
   confirmDelete(product: Product): void {
     const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this product?','Cancel','Delete product');
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -134,7 +135,10 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-
+  /**
+   * Opens Dialog box with product update form in it.
+   *
+   */
   updateProduct(product: Product): void {
     const dialogRef = this.dialog.open(ProductFormComponent, {
       maxWidth: '400px',
@@ -148,14 +152,22 @@ export class ProductListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(dialogResult => {
       this.shopService.refresh();
     });
-    //this.route.navigate(['/product-form'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
   }
 
+
+  /**
+   * Re-routes to purchase form for chosen product.
+   * @param product: Product user wants to buy.
+   */
   buyProduct(product: Product): void{
     this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
 
-
+  /**
+   * Filters shop after product category if filter was selected by user.
+   *
+   * @param categoryId: Category to sort shop after.
+   */
   filterShop(categoryId:any): void {
     if(categoryId == 0) {
       this.shopService.refresh();
@@ -164,5 +176,37 @@ export class ProductListComponent implements OnInit {
       this.shopService.filterShop(categoryId);
     }
   }
+
+  /*******************************************************************************************************************
+   * HELPER METHODS
+   ******************************************************************************************************************/
+
+  /**
+   * Checks wheter user is admin and has permission to add new products.
+   * Sets parameters accordingly.
+   */
+  evaluateAddProductPermission(): void {
+    // set true if user is admin
+    if (this.loggedIn){
+      if (this.currentUser?.isAdmin) this.showAddProductButton = true;
+      else this.showAddProductButton = false;
+    }
+    else this.showAddProductButton = false;
+  }
+
+
+  /**
+   * Reloads shop.
+   */
+  refreshShop(): void {
+    this.shopService.refresh();
+    this.selectFilter.value = 0; //sets category filter to "no filter" in DOM
+  }
+
+
+
+
+
+
 
 }
