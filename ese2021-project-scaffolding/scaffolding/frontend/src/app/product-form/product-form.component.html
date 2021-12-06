@@ -1,65 +1,56 @@
-<div class="card-wrapper-center registration-form">
-  <mat-card class="group7-card">
-    <mat-card-header>
-      <mat-card-title>
+<!-- Title of form, changes depending on update or create -->
         <h1 class="card-title" *ngIf="isUpdate">Update Product</h1>
         <h1 class="card-title" *ngIf="isCreate">Create new Product</h1>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
+
+<!-- Begin of form -->
       <div class="form-wrapper">
-        <form  [formGroup]="productForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
+        <form *ngIf="!isLoading"  [formGroup]="form" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
+
+          <!-- Product Title -->
           <mat-form-field appearance="outline">
             <mat-label>Title</mat-label>
-            <input matInput type="text" label="productTitle" placeholder="Title" id="productTitle" [formControlName]="'productTitle'" required>
+            <input matInput type="text" label="productTitle" placeholder="Title" id="productTitle" formControlName="productTitle" required />
           </mat-form-field>
+
+          <!-- Product Image -->
           <mat-form-field appearance="outline">
             <mat-label>Image URL</mat-label>
-            <input matInput type="url" label="productImage" id="productImage" [formControlName]="'productImage'" >
+            <input matInput type="url" label="productImage" id="productImage" [formControlName]="'productImage'" />
           </mat-form-field>
-          <!--
-          <label for="postImage"  ><b>Image</b></label>
-          <input type="file" label="postImage" id="postImage" [formControlName]="'postImage'" class="file-upload" (change)="onFileSelected($event)" #fileUpload>
-          <div>
-            {{ filename || "No file uploaded yet."}}
-            <button mat-mini-fab color="primary" class="upload-btn" type="button" (click)="fileUpload.click()">
-              <mat-icon>attach_file</mat-icon>
-            </button>
-          </div>
-          <br/>
--->
+
+          <!-- Product Description -->
           <mat-form-field appearance="outline" id="mat-text">
             <mat-label>Description</mat-label>
             <textarea matInput type="text" label="productDescription" id="productDescription" placeholder="Product Description" [formControlName]="'productDescription'" id="text" required></textarea>
           </mat-form-field>
+
+          <!-- Product Category -->
           <mat-form-field appearance="outline">
             <mat-label >Category</mat-label>
             <mat-select [formControlName]="'productCategory'" id="category"   required>
               <mat-option *ngFor="let category of productCategories" [value]="category.id" >{{category.name}}</mat-option>
             </mat-select>
           </mat-form-field>
+
+          <!-- Product Price -->
           <mat-form-field appearance="outline" >
             <mat-label>Price</mat-label>
             <input matInput type="text" label="productPrice" id="productPrice" [formControlName]="'productPrice'" required>
-            <mat-error *ngIf="productForm.controls['productPrice'].touched && productForm.controls['productPrice'].value != '' && productForm.controls['productPrice']?.errors?.notValidPrice" class="is-invalid">Please enter a valid price</mat-error>
+            <mat-error *ngIf="form.controls['productPrice'].touched && form.controls['productPrice'].value != '' && form.controls['productPrice']?.errors?.notValidPrice" class="is-invalid">Please enter a valid price</mat-error>
           </mat-form-field>
           <br/>
+
+          <!-- Action Buttons -->
           <div class="form-action-button">
             <button mat-flat-button (click)="discardChanges()" class="group7-forms-button" *ngIf="isUpdate">Discard Changes</button>
-
-            <button mat-flat-button type="submit" [disabled]="!productForm.valid" class="group7-forms-button" *ngIf="isUpdate">Save Changes</button><br/>
-            <button mat-flat-button type="submit" [disabled]="!productForm.valid" class="group7-forms-button" *ngIf="isCreate">Create Product</button><br/>
-            <span *ngIf="!productForm.valid && isSubmitted" [ngClass]="!productForm.valid && isSubmitted ? 'is-invalid' : '' "><br/>Please add an image or description</span><br/>
+            <button mat-flat-button type="submit" [disabled]="!form.valid" class="group7-forms-button" *ngIf="isUpdate">Save Changes</button><br/>
+            <button mat-flat-button type="submit" [disabled]="!form.valid" class="group7-forms-button" *ngIf="isCreate">Create Product</button><br/>
+            <span *ngIf="!form.valid && isSubmitted" [ngClass]="!form.valid && isSubmitted ? 'is-invalid' : '' "><br/>Please add an image or description</span><br/>
           </div>
         </form>
       </div>
-      <div *ngIf="isUpdate && !product">
-        <span>No product found</span>
-      </div>
-    </mat-card-content>
 
 
-  </mat-card>
 
-</div>
+
 

@@ -17,6 +17,7 @@ import {DataSource } from '@angular/cdk/collections';
 import { ShopDataSourceService } from '../services/shop-data-source.service';
 import { Observable, of } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
+import { ProductFormComponent } from '../product-form/product-form.component';
 
 @Component({
   selector: 'app-product-list',
@@ -105,9 +106,18 @@ export class ProductListComponent implements OnInit {
   }
 
   addProduct(): void {
-    if (this.currentUser?.isAdmin){
-      this.route.navigate(['/product-form'],{queryParams: {create: 'true'}}).then(r => {})
-    }
+    const dialogRef = this.dialog.open(ProductFormComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: {
+        isUpdate: false,
+        isCreate: true,
+        productId: ""
+      }
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      this.shopService.refresh();
+    });
   }
 
   confirmDelete(product: Product): void {
@@ -124,8 +134,21 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+
   updateProduct(product: Product): void {
-    this.route.navigate(['/product-form'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
+    const dialogRef = this.dialog.open(ProductFormComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: {
+        isUpdate: true,
+        isCreate: false,
+        productId: product.productId
+      }
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      this.shopService.refresh();
+    });
+    //this.route.navigate(['/product-form'],{queryParams: {update: 'true', productId: (product.productId)}}).then(r => {})
   }
 
   buyProduct(product: Product): void{

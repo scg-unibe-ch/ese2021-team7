@@ -71,7 +71,8 @@ import { BaseFormComponent } from './base-form/base-form.component';
     BaseFormComponent
   ],
   entryComponents:[
-    CategoryFormComponent
+    CategoryFormComponent,
+    ProductFormComponent
   ],
   imports: [
     BrowserModule,

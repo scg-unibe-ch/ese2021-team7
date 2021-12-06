@@ -1,5 +1,8 @@
 import { Category } from "../models/category";
 
+/**
+ * Product in shop.
+ */
 export class Product {
 
   constructor(

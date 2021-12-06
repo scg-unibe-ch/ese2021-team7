@@ -17,12 +17,15 @@ import { HttpRequestBuilderService } from './http-request-builder.service';
  */
 export class ShopService {
 
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
+
   constructor(private httpRequestBuilder: HttpRequestBuilderService,
               private httpClient: HttpClient,
               private categoryService: CategoryService) {
-    this.getProductsFromBackend();
+    this.getProductsFromBackend(); // get products
   }
-
 
   /*******************************************************************************************************************
    * VARIABLES
@@ -37,7 +40,6 @@ export class ShopService {
 
     // Observable Sources
   private productsSource = new BehaviorSubject<Product[]>([]);
-
 
   // Stream
   products$ = this.productsSource.asObservable();
@@ -92,6 +94,20 @@ export class ShopService {
     );
   }
 
+  /**
+   * Gets specific product from backend. Returns Observable.
+   * @param productId: you want from backend.
+   */
+  getProductByIdAsObservable(productId: number): Observable<Product> {
+    return this.httpClient.get(environment.endpointURL + "product/byId", {
+      params: {
+        productId: productId
+      }
+    }).pipe(
+      map(product => this.createProductFromBackendResponse(product))
+    );
+  }
+
   /*******************************************************************************************************************
    * EVENTS
    ******************************************************************************************************************/
@@ -118,6 +134,11 @@ export class ShopService {
     );
   }
 
+  /**
+   * Delets product.
+   *
+   * @param product to be deletec.
+   */
   deleteProduct(product: Product): void {
     this.httpClient.post(environment.endpointURL + "product/delete", {
       productId: product.productId
@@ -125,7 +146,6 @@ export class ShopService {
       this.refresh();
     });
   }
-
 
   /*******************************************************************************************************************
    * Helper Methods
@@ -148,12 +168,6 @@ export class ShopService {
      this.categoryService.getCategoryById(product.productCategory),
      !product.isAvailable);
   }
-
-
-
-
-
-
 
 
 }
