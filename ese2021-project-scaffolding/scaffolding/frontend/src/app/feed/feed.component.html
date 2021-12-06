@@ -15,7 +15,7 @@
     <mat-form-field>
       <mat-select [(value)]="filterBy" placeholder="filter list by:" (selectionChange)="filterFeed($event)" class="group7-select">
         <mat-option value="">No Filter</mat-option>
-        <mat-option *ngFor="let category of postCategories" [value]="category">{{category}}</mat-option>
+        <mat-option *ngFor="let category of postCategories" [value]="category.id">{{category.name}}</mat-option>
       </mat-select>
     </mat-form-field>
 

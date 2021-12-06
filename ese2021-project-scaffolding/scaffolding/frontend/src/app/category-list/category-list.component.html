@@ -1,1 +1,37 @@
-<p>category-list works!</p>
+<div class="table-wrapper group7-small-table-wrapper">
+  <div class="table-title" class="group7-list-title" >
+    <h1 >Categories</h1>
+  </div>
+  <div>
+    <button mat-button (click)="openForm()">Add new</button>
+  </div>
+  <table mat-table  [dataSource]="categoriesData" class="mat-elevation-z8">
+
+    <!-- Category Id Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> Category Id </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <!-- Type Name Column -->
+    <ng-container matColumnDef="typeName">
+      <th mat-header-cell *matHeaderCellDef> Type  </th>
+      <td mat-cell *matCellDef="let element"> {{element.typeName}} </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+
+
+</div>
+
+

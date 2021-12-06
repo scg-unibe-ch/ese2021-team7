@@ -7,6 +7,8 @@ import { UserService } from '../services/user.service';
 import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
 import { Product } from '../models/product.model';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { CategoryService } from '../services/category.service';
+import { Category } from '../models/category';
 
 @Component({
   selector: 'app-purchase',
@@ -19,20 +21,28 @@ export class PurchaseComponent implements OnInit {
 
   productId: number | undefined;
 
-  product = new Product(0, 0, "", "", "", 0, "", false);
+  product = new Product(0, 0, "", "", "", 0, null, false);
 
   user: User | undefined;
 
   isSubmitted: boolean;
 
+  productCategories: Category[];
+
   //isCreate: boolean;
   //isUpdate: boolean;
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService, private route: ActivatedRoute, private router: Router) {
+  constructor(public httpClient: HttpClient,
+              private fb: FormBuilder,
+              public userService: UserService,
+              private route: ActivatedRoute,
+              private router: Router,
+              private categoryService: CategoryService) {
     this.isSubmitted = false;
   }
 
   ngOnInit(): void {
+    this.productCategories = this.categoryService.getProductCategories();
     if(!this.userService.getLoggedIn()){
       console.log("not logged In");
       this.router.navigate(['/login']);
@@ -49,7 +59,7 @@ export class PurchaseComponent implements OnInit {
           }
         }).subscribe((res: any) => {
           console.log(res);
-          this.product = new Product(res.productId, 1, res.title,  res.description, res.image,  res.price, res.productCategory, !res.isAvailabe);
+          this.product = new Product(res.productId, 1, res.title,  res.description, res.image,  res.price, this.categoryService.getCategoryById(res.productCategory), !res.isAvailabe);
           console.log(this.product);
           this.initializePurchaseForm();
         }, (error: any) => {

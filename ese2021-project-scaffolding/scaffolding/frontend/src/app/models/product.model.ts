@@ -1,3 +1,5 @@
+import { Category } from "../models/category";
+
 export class Product {
 
   constructor(
@@ -7,7 +9,7 @@ export class Product {
     public description: string,
     public image: string, // string containing the url to the image
     public price: number,
-    public category: string,
+    public category: Category,
     public sold: boolean // 0 if not sold, 1 if sold (i.e. if added to an order)
   ) {}
 }

@@ -9,8 +9,8 @@
 
     <mat-form-field>
       <mat-select [(value)]="filterBy" placeholder="filter list by:" (selectionChange)="filterShop($event)" class="group7-select">
-        <mat-option value="">No Filter</mat-option>
-        <mat-option *ngFor="let category of productCategories" [value]="category">{{category}}</mat-option>
+        <mat-option value="0">No Filter</mat-option>
+        <mat-option *ngFor="let category of productCategories" [value]="category.id">{{category.name}}</mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -21,7 +21,8 @@
         [currentUser]="currentUser"
         (delete)="deleteProduct($event)"
         (update)="updateProduct($event)"
-        (buy)="buyProduct($event)">
+        (buy)="buyProduct($event)"
+        [productCategories]="productCategories">
       </app-product>
     </div>
   </div>

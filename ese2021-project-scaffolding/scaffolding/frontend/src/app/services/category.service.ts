@@ -1,0 +1,176 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { Category } from '../models/category';
+import { CategoryType } from '../models/category-type';
+
+
+/**
+ * Gets categories from backend.
+ *
+ * Categories cannot be added, changed, or deleted.
+ *
+ * There are post categories and product categories.
+ *
+ */
+@Injectable({
+  providedIn: 'root'
+})
+export class CategoryService {
+
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
+
+  // Categories array
+  private categories: Category[] = [];
+  private productCategories: Category[] = [];
+  private postCategories: Category[] = [];
+
+  /*******************************************************************************************************************
+   * OBSERVABLE SOURCES & STREAMS
+   ******************************************************************************************************************/
+
+  // Observable Sources
+  private categoriesSource = new BehaviorSubject<Category[]>([]);
+  private productCategoriesSource = new BehaviorSubject<Category[]>([]);
+  private postCategoriesSource = new BehaviorSubject<Category[]>([]);
+
+
+  // Stream
+  categories$ = this.categoriesSource.asObservable();
+  productCategories$ = this.productCategoriesSource.asObservable();
+  postCategories$ = this.postCategoriesSource.asObservable();
+
+
+  /*******************************************************************************************************************
+   * Constructor
+   ******************************************************************************************************************/
+  constructor(private httpClient: HttpClient) {
+    this.getCategoriesFromBackend();
+  }
+
+  /*******************************************************************************************************************
+   * GETTERS
+   ******************************************************************************************************************/
+  /**
+   * Returns all categories.
+   *
+   * * @return: Category[]
+   */
+  getAllCategories(): Category[] {
+    //console.log("All Categories: " + this.categories);
+    return this.categories;
+  }
+
+  /**
+   * Returns Product categories only.
+   *
+   * @return: Category[]
+   */
+  getProductCategories(): Category[] {
+    //console.log("Product Categories: " + this.categories);
+    return this.productCategories;
+  }
+
+  /**
+   * Returns post categories only.
+   *
+   * @return: Category[]
+   */
+  getPostCategories(): Category[] {
+    //console.log("Post Categories: " + this.categories);
+    return this.postCategories;
+  }
+
+
+  /**
+   * Returns specific category for given category id.
+   *
+   * @param id
+   */
+  getCategoryById(id: number): Category {
+    let returnCategory: Category = new Category(0, "undefined", 0, "undefined");
+    //this.getCategoriesFromBackend(); //update categories from backend
+    //console.log("Selection Id array: " + this.categories);
+    this.categories.forEach(
+      (category: Category) => {
+        //console.log("filter category:" + JSON.stringify(category));
+        if(category.id == id){
+          returnCategory = category;
+        }
+      }
+      );
+    //console.log("Category filtered: " + returnCategory);
+    return returnCategory;
+  }
+
+  /*******************************************************************************************************************
+   * BACKEND HANDLERS
+   ******************************************************************************************************************/
+
+  /**
+   * Gets all categories from backend and updates different categories variables.
+   */
+  private getCategoriesFromBackend(): void {
+    this.categories = []; //delete exiting values
+    this.httpClient.get(environment.endpointURL + "category/all").pipe(
+      map(
+        (data:any) =>
+          data.map(
+            (category: any) => this.createCategoryFromBackendResponse(category) //return array of Category[]
+          )),
+    ).subscribe((data:any) => {
+      this.categoriesSource.next(data);
+      this.categories = data;
+      this.productCategories = data.filter((category: Category) => category.type == CategoryType.Product); //filter for product categories
+      this.postCategories = data.filter((category: Category) => category.type == CategoryType.Post); // filter for post categories
+
+    });
+  }
+
+  /**
+   * Gets all categories from backend and returns it as an observable.
+   * Used in CategoriesDataService.
+   */
+  getCategoriesFromBackendAsObservable(): Observable<Category[]>{
+    return this.httpClient.get(environment.endpointURL + "category/all").pipe(
+      map(
+        (data:any) =>
+          data.map(
+            (category: any) => this.createCategoryFromBackendResponse(category) //return array of Category[]
+          )),
+    );
+  }
+
+  /**
+   * Refreshes data.
+   */
+  refresh(): void{
+    this.getCategoriesFromBackend();
+  }
+
+  /*******************************************************************************************************************
+   * Helper Methods
+   ******************************************************************************************************************/
+
+
+  /**
+   * Takes backend response and returns Category object.
+   * @param backendRes
+   * @return Category
+   * @private
+   */
+  private createCategoryFromBackendResponse(backendRes: any): Category {
+    return new Category(
+      backendRes.categoryId,
+      backendRes.name,
+      backendRes.type == 0? CategoryType.Post : CategoryType.Product,
+      backendRes.type == 0? CategoryType[CategoryType.Post] : CategoryType[CategoryType.Product]
+    );
+  }
+
+}

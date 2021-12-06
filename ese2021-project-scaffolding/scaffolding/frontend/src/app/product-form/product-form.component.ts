@@ -7,6 +7,9 @@ import { UserService } from '../services/user.service';
 import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
 import { Product } from '../models/product.model';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { CategoryService } from '../services/category.service';
+import { Category } from '../models/category';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-product-form',
@@ -27,14 +30,23 @@ export class ProductFormComponent implements OnInit {
 
   isUpdate: boolean;
 
+  productCategories: Category[] = [];
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, public userService: UserService, private route: ActivatedRoute, private router: Router) {
-    this.isSubmitted= false;
-    this.isCreate = false;
-    this.isUpdate = false;
+
+  constructor(public httpClient: HttpClient,
+              private fb: FormBuilder,
+              public userService: UserService,
+              private route: ActivatedRoute,
+              private router: Router,
+              private categoryService: CategoryService,
+              private productService: ProductService) {
+                this.isSubmitted= false;
+                this.isCreate = false;
+                this.isUpdate = false;
   }
 
   ngOnInit(): void {
+    this.productCategories = this.categoryService.getProductCategories(); //get Product Categories
     this.route.queryParams.subscribe(params => {
       if (params['create'] == 'true') {
         this.isCreate = params['create'];
@@ -42,28 +54,33 @@ export class ProductFormComponent implements OnInit {
         this.isUpdate = params['update']
         this.productId = params['productId'];
       }
-      console.log(this.productId);
+      console.log("Product ID from params: " + this.productId);
     });
     if (this.isCreate) {
       this.initializeFormCreate();
     } else if (this.isUpdate) {
       this.initializeFormCreate();
-      //currently not set because no backend yet
-
       if (this.productId != null) {
-        this.httpClient.get(environment.endpointURL + "product/byId", {
-          params: {
-            productId: this.productId
-          }
-        }).subscribe((res: any) => {
-          console.log(res);
-          this.product = new Product(res.productId, res.shopId, res.title, res.description, res.image, res.price, res.productCategory, res.sold);
-          console.log(this.product);
-          this.initializeFormUpdate();
-        }, (error: any) => {
-          console.log(error);
-        });
+          this.initializeFormUpdate(this.productId);
       }
+    }
+  }
+
+  private initializeFormUpdate(productId: number): void {
+    this.productService.getProductById(this.productId)
+      .subscribe((product: any) => {
+        this.product = new Product(product.productId, 0, product.title, product.description, product.image, product.price, this.categoryService.getCategoryById(product.productCategory), this.checkIfProductIsSold(product))
+        console.log("Product to display " + this.product);
+        this.populateUpdateForm();
+      })
+  }
+
+  // does not yet check for CANCELLED ORDERS
+  private checkIfProductIsSold(product: any): boolean {
+    if(product.Orders.length == 0){
+      return false;
+    } else {
+      return true;
     }
   }
 
@@ -81,15 +98,13 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
-  //does not work currently
-  initializeFormUpdate(): void {
-    let categoryId = this.product?.category;
-    console.log(categoryId.toString());
+
+  populateUpdateForm(): void {
     this.productForm = this.fb.group({
       "productTitle": new FormControl(this.product?.title, Validators.required),
       "productImage": new FormControl(this.product?.image),
       "productDescription": new FormControl(this.product?.description),
-      "productCategory": new FormControl(categoryId.toString(), Validators.required),
+      "productCategory": new FormControl(this.product?.category.id, Validators.required),
       "productPrice": new FormControl(this.product?.price, Validators.required)
     }, {
       validator: (form: FormGroup) => {
@@ -178,6 +193,11 @@ export class ProductFormComponent implements OnInit {
   discardChanges(): void {
     this.isSubmitted = false;
     this.router.navigate(['/shop'], {queryParams: {loggedIn: 'true'}}).then(r =>{});
+  }
+
+
+  preSelection(element1: any): boolean{
+    return (element1.value == this.product?.category.id);
   }
 
 }

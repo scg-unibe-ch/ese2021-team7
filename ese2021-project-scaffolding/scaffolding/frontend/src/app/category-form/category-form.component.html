@@ -1,0 +1,32 @@
+    <mat-card-header>
+      <mat-card-title>
+        <h1 class="card-title" >Add new category</h1>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="form-wrapper">
+        <form  [formGroup]="form" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
+          <mat-form-field appearance="outline">
+            <mat-label>Category Name</mat-label>
+            <input matInput type="text" label="categoryName" placeholder="Name" id="categoryName" [formControlName]="'categoryName'" required>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label >Type</mat-label>
+            <mat-select [formControlName]="'categoryType'" id="categoryType"   required>
+              <mat-option value="" >Select type</mat-option>
+              <mat-option value="0">Post</mat-option>
+              <mat-option value="1">Product</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <br/>
+          <div class="form-action-button">
+            <button mat-flat-button (click)="discard()" class="group7-forms-button">Discard</button>
+            <button mat-flat-button type="submit" [disabled]="!form.valid" class="group7-forms-button">Create Category</button><br/>
+            <span *ngIf="!form.valid && isSubmitted" [ngClass]="!form.valid && isSubmitted ? 'is-invalid' : '' "><br/>Please choose a category name</span><br/>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
+
+
+
