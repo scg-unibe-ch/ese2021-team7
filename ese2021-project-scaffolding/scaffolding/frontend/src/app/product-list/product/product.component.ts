@@ -8,6 +8,7 @@ import {UserService} from "../../services/user.service";
 import { Category } from '../../models/category';
 import { CategoryService } from 'src/app/services/category.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { PermissionService } from 'src/app/services/permission.service';
 
 @Component({
   selector: 'app-product',
@@ -36,7 +37,7 @@ export class ProductComponent implements OnInit {
   productCategories: Category[] = [];*/
 
   @Input()
-  loggedIn : boolean | undefined;
+  loggedIn : boolean  = false;
 
   @Input()
   currentUser : User = new User(0, '', '', false,'','','','','','','','','');
@@ -70,6 +71,7 @@ export class ProductComponent implements OnInit {
     public userService: UserService,
     private route: ActivatedRoute,
     private router: Router,
+    private permissionService: PermissionService,
     //private categoryService: CategoryService,
     @Optional () private dialogRef: MatDialogRef<ProductComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: {showDetails: boolean, product: Product, user: User, isLoggedIn: boolean} //used to get Data in Dialog Box
@@ -94,8 +96,9 @@ export class ProductComponent implements OnInit {
       console.log(JSON.stringify(this.currentUser));
     }
 
-    this.evaluateUpdateDeletePermission();
-    this.evaluateBuyNowPermission();
+   this.setPermissions();
+    //this.evaluateUpdateDeletePermission();
+    //this.evaluateBuyNowPermission();
 
 
     /*    this.route.queryParams.subscribe(params => {
@@ -118,8 +121,7 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnChange(): void {
-    this.evaluateUpdateDeletePermission();
-    this.evaluateBuyNowPermission();
+    this.setPermissions();
   }
 
   /*******************************************************************************************************************
@@ -172,6 +174,13 @@ export class ProductComponent implements OnInit {
    * PERMISSIONS
    ******************************************************************************************************************/
 
+  setPermissions(): void{
+    this.showDeleteAndUpdateButton = this.permissionService.evaluateUpdateDeletePermission(this.loggedIn, this.currentUser);
+    this.showBuyNowButton = this.permissionService.evaluateBuyNowPermission(this.loggedIn, this.currentUser);
+  }
+
+
+/*
   evaluateUpdateDeletePermission(): void {
     // set true if user is admin
     if (this.loggedIn){
@@ -196,6 +205,7 @@ export class ProductComponent implements OnInit {
     else this.showBuyNowButton= true;
     console.log("nothing applies: " + this.showBuyNowButton);
   }
+*/
 
 
 }
