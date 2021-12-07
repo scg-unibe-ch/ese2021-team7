@@ -57,4 +57,18 @@ export class PermissionService {
     else return true;
   }
 
+  /**
+   * Checks wheter user is admin and has permission to add new products.
+   * Sets parameters accordingly.
+   */
+  evaluateAddProductPermission(loggedIn: boolean, user: User): boolean {
+    // set true if user is admin
+    if (loggedIn){
+      if (user.isAdmin) return true;
+      else return false;
+    }
+    else return false;
+  }
+
+
 }

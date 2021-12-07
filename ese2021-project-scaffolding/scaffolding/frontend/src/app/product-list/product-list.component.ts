@@ -19,6 +19,7 @@ import { Observable, of } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import { ProductFormComponent } from '../product-form/product-form.component';
 import { ProductComponent } from './product/product.component';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
   selector: 'app-product-list',
@@ -35,8 +36,8 @@ export class ProductListComponent implements OnInit {
 
   productList: Product[] = [];
 
-  loggedIn: boolean | undefined;
-  currentUser: User | undefined;
+  loggedIn: boolean = false;
+  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
 
   showAddProductButton: boolean = false;
 
@@ -52,7 +53,8 @@ export class ProductListComponent implements OnInit {
     public userService: UserService,
     private dialog: MatDialog,
     private categoryService: CategoryService,
-    private shopService: ShopService
+    private shopService: ShopService,
+    private permissionService: PermissionService
   ) { }
 
 
@@ -76,17 +78,18 @@ export class ProductListComponent implements OnInit {
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
 
-    this.evaluateAddProductPermission(); //check if user is admin and can add products
+    this.setPermissions();
 
     // listern product list
     this.shopService.products$.subscribe(res => {this.productList = res;
     });
     // get current value products
     this.productList = this.shopService.getAllProducts();
+
   }
 
   ngOnChange():void {
-    this.evaluateAddProductPermission();
+    this.setPermissions();
   }
 
   ngDoCheck(): void {
@@ -215,18 +218,13 @@ export class ProductListComponent implements OnInit {
    ******************************************************************************************************************/
 
   /**
-   * Checks wheter user is admin and has permission to add new products.
-   * Sets parameters accordingly.
+   * Sets permissions for "add product" button.
+   *
+   * Only admins can add products.
    */
-  evaluateAddProductPermission(): void {
-    // set true if user is admin
-    if (this.loggedIn){
-      if (this.currentUser?.isAdmin) this.showAddProductButton = true;
-      else this.showAddProductButton = false;
-    }
-    else this.showAddProductButton = false;
+  setPermissions(): void {
+    this.showAddProductButton = this.permissionService.evaluateAddProductPermission(this.loggedIn, this.currentUser);
   }
-
 
   /**
    * Reloads shop.
