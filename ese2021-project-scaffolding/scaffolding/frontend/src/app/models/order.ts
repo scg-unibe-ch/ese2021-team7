@@ -1,4 +1,10 @@
-export class OrderToDisplay {
+/**
+ * Order from shop.
+ *
+ * Because it is only used in OrderListComponent, and we have problems with nested obejects in the table, we
+ * do not use the composition pattern here.
+ */
+export class Order {
 
   constructor(
     public orderId: number,

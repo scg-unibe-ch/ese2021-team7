@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Order} from "../models/order.model";
 import {environment} from "../../environments/environment";
 import { Observable } from 'rxjs';
 import { from } from 'rxjs';
 import { of } from 'rxjs';
 import {catchError, concatAll, concatMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { ProductService } from './product.service';
-import { OrderToDisplay } from '../models/order-to-display';
 import { forkJoin } from 'rxjs';
+import { Order } from '../models/order';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +35,7 @@ export class OrderListServiceService {
    * @param userId optional; returns all orders if not provided, otherwise just order for this specific user.
    * @return Observable<OrderToDisplay[]>
    */
-  getAllOrders(userId?: number): Observable<OrderToDisplay[]> {
+  getAllOrders(userId?: number): Observable<Order[]> {
     return this.httpClient.get(environment.endpointURL + "order/all")
       .pipe(
         tap((tapOrders: any) => console.log("Tab dbOrders: " + JSON.stringify(tapOrders))), //check result coming back
@@ -106,8 +105,8 @@ export class OrderListServiceService {
    * @param product
    * @return OrderToDisplay
    */
-  createOrderToDisplayFromBackendResponse(order: any, product: any): OrderToDisplay {
-    return new OrderToDisplay(
+  createOrderToDisplayFromBackendResponse(order: any, product: any): Order {
+    return new Order(
       order.orderId,
       order.user,
       order.ProductProductId,

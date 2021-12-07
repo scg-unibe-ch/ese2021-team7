@@ -130,7 +130,7 @@ export class ProductComponent implements OnInit {
     // Emits event to parent component that Product got updated
     if (this.showDeleteAndUpdateButton){
       this.update.emit(this.productToDisplay);
-      this.dialogRef.close({updateProduct: true, product: this.productToDisplay});
+      this.dialogRef?.close({updateProduct: true, product: this.productToDisplay});
     }
   }
 
@@ -138,7 +138,7 @@ export class ProductComponent implements OnInit {
     // Emits event to parent component that Product got deleted
     if (this.showDeleteAndUpdateButton){
       this.delete.emit(this.productToDisplay);
-      this.dialogRef.close({deleteProduct: true, product: this.productToDisplay});
+      this.dialogRef?.close({deleteProduct: true, product: this.productToDisplay});
     }
   }
 
@@ -149,7 +149,7 @@ export class ProductComponent implements OnInit {
 
   closeDetailedView(): void{
     this.showDetailedView = false;
-    this.dialogRef.close(); //closes dialog box
+    this.dialogRef?.close(); //closes dialog box
     //this.router.navigate(['/shop']).then(r =>{});
   }
 
