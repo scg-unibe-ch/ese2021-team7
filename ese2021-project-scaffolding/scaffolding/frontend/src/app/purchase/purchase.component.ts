@@ -12,6 +12,7 @@ import { Category } from '../models/category';
 import { BaseFormComponent } from '../base-form/base-form.component';
 import { PurchaseFormService } from '../services/purchase-form.service';
 import { ShopService } from '../services/shop.service';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
   selector: 'app-purchase',
@@ -24,11 +25,12 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
    * VARIABLES
    ******************************************************************************************************************/
 
-  //overrides
+    //overrides
   form: FormGroup = new FormGroup({});
   protected requestType = "order/create";
   protected routeAfterSuccess = "shop";
   protected routeAfterDiscard = "shop";
+
 
   // to stop DOM form from loading to early
   isLoading: boolean = false;
@@ -40,16 +42,18 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
   //productId: number | undefined;
 
   // product User buys
-  product = new Product(0,  "", "", "", 0, new Category(0, "undefined", 0, "undefined"), false);
+  product = new Product(0, "", "", "", 0, new Category(0, "undefined", 0, "undefined"), false);
 
   //User
-  user: User  = new User(0, "", "", false, "", "", "", "", "", "", "", "", "");
+  currentUser: User = new User(0, "", "", false, "", "", "", "", "", "", "", "", "");
+  loggedIn: boolean = false;
 
 
   // presets for form creation, needs User and Product
   static PreSet = class {
     constructor(public presetUser: User,
-                public presetProduct: Product){}
+                public presetProduct: Product) {
+    }
   };
 
   //array with product categories
@@ -65,7 +69,8 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
               public router: Router,
               private categoryService: CategoryService,
               public purchaseFormSerivce: PurchaseFormService,
-              private shopService: ShopService) {
+              private shopService: ShopService,
+              private permissionService: PermissionService) {
     super(fb, purchaseFormSerivce, router, route);
   }
 
@@ -79,26 +84,35 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
     //current value of product categories
     this.productCategories = this.categoryService.getProductCategories();
 
-    if(!this.userService.getLoggedIn()){
-      console.log("not logged In");
-      this.router.navigate(['/login']);
-    }
-    else{
-      this.isLoading= true;
-      this.user = this.userService.getUser();
+    // Listen for changes
+    this.userService.loggedIn$.subscribe(res => {
+      this.loggedIn = res;
+    });
+    this.userService.user$.subscribe(res => {
+      this.currentUser = res;
+    })
+    this.loggedIn = this.userService.getLoggedIn();
+    this.currentUser = this.userService.getUser();
+
+    if (this.permissionService.permissionToAccessPurchaseForm(this.loggedIn, this.currentUser)) {
+      this.isLoading = true; //set loading flag
       let productId = 0;
       this.route.queryParams.subscribe(params => {
         productId = params['productId'];
       });
-      if(productId != null){
-        this.shopService.getProductByIdAsObservable(productId).
-        subscribe(product => {
+      if (productId != null) {
+        this.shopService.getProductByIdAsObservable(productId).subscribe(product => {
           this.product = this.shopService.createProductFromBackendResponse(product); // create Product object
-          this.initializeForm(new PurchaseComponent.PreSet(this.user, this.product)); //initialize form with presets
+          this.initializeForm(new PurchaseComponent.PreSet(this.currentUser, this.product)); //initialize form with presets
           this.isLoading = false;
         });
       }
+
+    } else {
+      if (this.currentUser.isAdmin) this.router.navigate(['/shop']);
+      else this.router.navigate(['/login'])
     }
   }
+
 }
 

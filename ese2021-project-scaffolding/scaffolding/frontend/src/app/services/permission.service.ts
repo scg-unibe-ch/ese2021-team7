@@ -16,7 +16,7 @@ export class PermissionService {
   constructor() { }
 
   /*******************************************************************************************************************
-   * PRODUCT SPECIFIC PERMISSIONS
+   * PRODUCT PERMISSIONS
    ******************************************************************************************************************/
 
   /**
@@ -57,6 +57,10 @@ export class PermissionService {
     else return true;
   }
 
+  /*******************************************************************************************************************
+   * SHOP PERMISSIONS
+   ******************************************************************************************************************/
+
   /**
    * Checks wheter user is admin and has permission to add new products.
    * Sets parameters accordingly.
@@ -66,6 +70,18 @@ export class PermissionService {
     if (loggedIn){
       if (user.isAdmin) return true;
       else return false;
+    }
+    else return false;
+  }
+
+  /*******************************************************************************************************************
+   * PURCHASE FORM PERMISSIONS
+   ******************************************************************************************************************/
+
+  permissionToAccessPurchaseForm(loggedIn: boolean, user: User): boolean {
+    if (loggedIn){
+      if (user.isAdmin) return false;
+      else return true;
     }
     else return false;
   }
