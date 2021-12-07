@@ -26,7 +26,8 @@
         (delete)="confirmDelete($event)"
         (update)="updateProduct($event)"
         (buy)="buyProduct($event)"
-        [productCategories]="productCategories">
+        (showDetails)="showProductDetails($event)">
+      <!--  [productCategories]="productCategories"-->
       </app-product>
     </div>
 

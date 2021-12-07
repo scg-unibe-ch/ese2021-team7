@@ -18,6 +18,7 @@ import { ShopDataSourceService } from '../services/shop-data-source.service';
 import { Observable, of } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import { ProductFormComponent } from '../product-form/product-form.component';
+import { ProductComponent } from './product/product.component';
 
 @Component({
   selector: 'app-product-list',
@@ -175,6 +176,39 @@ export class ProductListComponent implements OnInit {
     else {
       this.shopService.filterShop(categoryId);
     }
+  }
+
+  /**
+   * Shows product in dialog box with product details.
+   *
+   * Handels actions if user wants to buy product or admin update or delete.
+   *
+   * @param product: product to be shown in details view.
+   */
+  showProductDetails(product: Product): void{
+    const dialogRef = this.dialog.open(ProductComponent, {
+      width: '450px',
+      data: {
+        product: product,
+        showDetails: true,
+        user: this.currentUser,
+        isLoggedIn: this.loggedIn
+      }
+    });
+    dialogRef.afterClosed().subscribe(
+      (res:any) => {
+        if(res){
+          if(res.buyProduct){ //if user wants to buy
+            this.buyProduct(res.product);
+          } else if(res.updateProduct){ // if admin wants to update
+            this.updateProduct(res.product);
+          } else if(res.deleteProduct) { //if admin wants to delete
+            this.confirmDelete(res.product);
+          }
+        }
+        //console.log("PRoduct to buy: " + JSON.stringify(res));
+      }
+    );
   }
 
   /*******************************************************************************************************************
