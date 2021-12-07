@@ -158,7 +158,7 @@ export class ProductComponent implements OnInit {
     if (this.showBuyNowButton){
       if (this.loggedIn){
         this.buy.emit(this.productToDisplay);
-        this.dialogRef.close({buyProduct: true, product: this.productToDisplay});
+        this.dialogRef?.close({buyProduct: true, product: this.productToDisplay});
       }
       else {
         //console.log("Login to buy this product")
