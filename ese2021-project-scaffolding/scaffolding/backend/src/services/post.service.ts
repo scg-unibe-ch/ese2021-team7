@@ -51,7 +51,7 @@ export class PostService {
                     // @ts-ignore
                     return postA.getDataValue('score') - postB.getDataValue('score');
                 } else {
-                    return postA.postId - postB.postId;
+                    return postB.postId - postA.postId;
                 }
             });
         });
