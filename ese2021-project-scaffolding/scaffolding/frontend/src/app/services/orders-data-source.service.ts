@@ -17,14 +17,33 @@ import { forkJoin } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Used to display orders in table view.
+ *
+ * Implements DataSource interface.
+ */
 export class OrdersDataSourceService implements DataSource<Order>{
+
+  /*******************************************************************************************************************
+   * STREAMS & OBSERVABLES
+   ******************************************************************************************************************/
 
   private ordersSubject = new BehaviorSubject<OrderToDisplay[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
   public loading$ = this.loadingSubject.asObservable();
 
-  constructor(private orderListService: OrderListServiceService, public productService: ProductService, private httpClient: HttpClient) {}
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
+
+  constructor(private orderListService: OrderListServiceService,
+              public productService: ProductService,
+              private httpClient: HttpClient) {}
+
+  /*******************************************************************************************************************
+   * INTERFACE METHODS
+   ******************************************************************************************************************/
 
   connect(collectionViewer: CollectionViewer): Observable<any[]> {
     return this.ordersSubject.asObservable();
@@ -35,16 +54,19 @@ export class OrdersDataSourceService implements DataSource<Order>{
     this.loadingSubject.complete();
   }
 
+  /*******************************************************************************************************************
+   * FETCHING DATA
+   ******************************************************************************************************************/
 
     loadOrders(userId?: number): void  {
-      this.loadingSubject.next(true);
+      this.loadingSubject.next(true); // set on "loading" while fetching data
       this.orderListService.getAllOrders(userId).pipe(
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false)),
         tap((data:OrderToDisplay[]) => console.log("Tap call:" + data))
       ).subscribe((orders: OrderToDisplay[]) => {
             console.log(orders);
-            this.ordersSubject.next(orders)});
+            this.ordersSubject.next(orders)}); // pass on data to subject
     }
 
 

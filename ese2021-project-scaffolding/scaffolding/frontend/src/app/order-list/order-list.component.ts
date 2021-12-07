@@ -25,15 +25,21 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class OrderListComponent implements OnInit {
 
+
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
+
   currentUser: User | undefined;
   isAdmin: boolean | undefined;
-
 
   //used for table design
   displayedColumns: string[] = [];
   dataSource: OrdersDataSourceService | undefined;
 
-
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
   constructor(
     public httpClient: HttpClient,
     private router: Router,
@@ -44,6 +50,10 @@ export class OrderListComponent implements OnInit {
     private dialog: MatDialog
   ) {}
 
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
+
   ngOnInit(): void {
     // Listen for changes
     this.userService.user$.subscribe(res => {
@@ -51,14 +61,59 @@ export class OrderListComponent implements OnInit {
     })
     //current Value
     this.currentUser = this.userService.getUser();
+
     console.log("is currentuser admin: "+ this.currentUser?.isAdmin);
     this.isAdmin = this.currentUser?.isAdmin;
 
-    this.setDisplayedColumns();
-    this.initializeDataSource(this.isAdmin);
+    this.setDisplayedColumns(); // different columns for user and admin
+    this.initializeDataSource(this.isAdmin); //admin sees all orders, user only their own
   }
 
+  /*******************************************************************************************************************
+   * USER ACTIONS
+   ******************************************************************************************************************/
 
+  /**
+   * Opens dialog box to confirm cancelletion of order.
+   *
+   * @param row
+   */
+  confirmationCancel(row: any): void {
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to cancel this order?','Keep','Cancel order');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    })
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.cancelOrder(row);
+      }
+    });
+  }
+
+  /**
+   * Opens dialog box to confirm shipment of order.
+    * @param row
+   */
+  confirmationShip(row:any): void{
+    const dialogData = new ConfirmationDialogModel('Confirm', 'Ship order?','Discard','Ship');
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: dialogData
+    })
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      if (dialogResult) {
+        this.shipOrder(row);
+      }
+    });
+  }
+
+  /**
+   * Ships order
+   * @param row: row in data table.
+   */
   shipOrder(row: any): void {
     console.log("shipping: " + JSON.stringify(row.orderId));
     this.orderListService.shipOrder(row.orderId)
@@ -69,7 +124,10 @@ export class OrderListComponent implements OnInit {
         );
   }
 
-
+  /**
+   * Cancels order
+   * @param row: in data table.
+   */
   cancelOrder(row: any): void {
     console.log("shipping: " + JSON.stringify(row.orderId));
     //this.dataSource.shipOrder(row.orderId);
@@ -82,6 +140,14 @@ export class OrderListComponent implements OnInit {
   }
 
 
+  /*******************************************************************************************************************
+   * HELPER METHODS
+   ******************************************************************************************************************/
+
+  /**
+   * Refreshes data source.
+   * @param userId: if provided, only gets orders for this user.
+   */
   refreshTable(userId?: number): void {
     if(userId!= null){
       this.dataSource?.loadOrders(userId)
@@ -91,7 +157,9 @@ export class OrderListComponent implements OnInit {
     }
   }
 
-
+  /**
+   * Defines columns in DOM for admin and for user.
+   */
   setDisplayedColumns(): void{
     if(this.isAdmin){
       this.displayedColumns =   ['orderId',  'productId', 'productName',
@@ -107,7 +175,13 @@ export class OrderListComponent implements OnInit {
     }
   }
 
-
+  /**
+   * Loads data in data source.
+   *
+   * Admins can see all orders. Users can only see their own.
+   *
+   * @param isAdmin
+   */
   initializeDataSource(isAdmin: undefined | boolean): void{
     //this.getListOfOrder();
     this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService, this.httpClient);
@@ -117,40 +191,6 @@ export class OrderListComponent implements OnInit {
     else{
       this.dataSource.loadOrders(this.currentUser?.userId);
     }
-
   }
-
-
-  confirmationCancel(row: any): void {
-    const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to cancel this order?','Keep','Cancel order');
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      maxWidth: '400px',
-      closeOnNavigation: true,
-      data: dialogData
-    })
-    dialogRef.afterClosed().subscribe(dialogResult => {
-      if (dialogResult) {
-        this.cancelOrder(row);
-      }
-    });
-  }
-
-
-  confirmationShip(row:any): void{
-    const dialogData = new ConfirmationDialogModel('Confirm', 'Ship order?','Discard','Ship');
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      maxWidth: '400px',
-      closeOnNavigation: true,
-      data: dialogData
-    })
-    dialogRef.afterClosed().subscribe(dialogResult => {
-      if (dialogResult) {
-        this.shipOrder(row);
-      }
-    });
-  }
-
-
-
 
 }

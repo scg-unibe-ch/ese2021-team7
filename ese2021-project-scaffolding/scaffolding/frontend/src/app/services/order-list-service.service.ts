@@ -13,10 +13,20 @@ import { forkJoin } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+/**
+ * Handles backend requests for order lists.
+ */
 export class OrderListServiceService {
+
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
 
   constructor(public httpClient: HttpClient, public productService: ProductService) {}
 
+  /*******************************************************************************************************************
+   * BACKEND METHODS
+   ******************************************************************************************************************/
 
   /**
    * Gets all orders from database and returns array with full order information (with products added).
@@ -62,7 +72,6 @@ export class OrderListServiceService {
 
   }
 
-
   /**
    * Sends order/ship request to backend with provided orderId.
    *
@@ -85,6 +94,10 @@ export class OrderListServiceService {
     });
   }
 
+
+  /*******************************************************************************************************************
+   * HELPER METHODS
+   ******************************************************************************************************************/
 
   /**
    * Creates an OrderToDisplay object from provided backend data (order and product).

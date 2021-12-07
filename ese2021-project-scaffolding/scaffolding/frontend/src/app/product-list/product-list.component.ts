@@ -155,7 +155,6 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-
   /**
    * Re-routes to purchase form for chosen product.
    * @param product: Product user wants to buy.
@@ -236,11 +235,5 @@ export class ProductListComponent implements OnInit {
     this.shopService.refresh();
     this.selectFilter.value = 0; //sets category filter to "no filter" in DOM
   }
-
-
-
-
-
-
 
 }
