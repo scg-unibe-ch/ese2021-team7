@@ -18,6 +18,7 @@ import { ProductFormService } from '../services/product-form.service';
 import { ShopService } from '../services/shop.service';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import { PermissionService } from '../services/permission.service';
 
 @Component({
   selector: 'app-product-form',
@@ -44,6 +45,10 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
   // array with product categories
   productCategories: Category[] = [];
 
+  // User
+  loggedIn = false;
+  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
+
   /*******************************************************************************************************************
    * CONSTRUCTOR
    ******************************************************************************************************************/
@@ -56,6 +61,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
               private categoryService: CategoryService,
               private shopService: ShopService,
               private dialogRef: MatDialogRef<ProductFormComponent>,
+              private permissionService: PermissionService,
               @Inject(MAT_DIALOG_DATA) public dialogData: {isUpdate: boolean, isCreate: boolean, productId: number}) {
     super(fb, productFormService, router, route);
   }
@@ -69,6 +75,21 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
     this.categoryService.productCategories$.subscribe(res => this.productCategories = res);
     //current value of product categories
     this.productCategories = this.categoryService.getProductCategories();
+
+
+    // Listen for changes
+    this.userService.loggedIn$.subscribe(res => this.loggedIn = res);
+    this.userService.user$.subscribe(res => this.currentUser = res);
+    //get current values
+    this.loggedIn = this.userService.getLoggedIn();
+    this.currentUser = this.userService.getUser();
+
+    if(!this.permissionService.checkPermissionsToAccessProductForm(this.loggedIn, this.currentUser)){
+      if(this.dialogRef){
+        this.dialogRef.close();
+      }
+    }
+
 
     this.setUpFormType();
   }

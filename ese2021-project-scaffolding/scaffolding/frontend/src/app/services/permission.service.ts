@@ -126,5 +126,17 @@ export class PermissionService {
     else return false;
   }
 
+  /*******************************************************************************************************************
+   * PRODUCT FORM
+   ******************************************************************************************************************/
+
+  checkPermissionsToAccessProductForm(loggedIn: boolean, user: User): boolean {
+    if (loggedIn){
+      if (user.isAdmin) return true;
+      else return false;
+    }
+    else return false;
+  }
+
 
 }
