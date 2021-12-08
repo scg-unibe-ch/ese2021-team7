@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Post } from '../models/post.model';
 import { User } from '../models/user.model';
+import { VotingState } from '../models/voting-state';
 
 @Injectable({
   providedIn: 'root'
@@ -138,5 +140,70 @@ export class PermissionService {
     else return false;
   }
 
+  /*******************************************************************************************************************
+   * POST PERMISSIONS
+   ******************************************************************************************************************/
+
+  checkPermissionsProductUpdateAndDelete(loggedIn: boolean, user: User, post: Post): boolean {
+    // set true if user is admin or if user is creator of post
+    if (loggedIn) {
+      if (user.isAdmin) return true;
+      else if (user.userId == post.CreationUser) return true;
+      else return false;
+    }
+    else return false;
+  }
+
+  checkPermissionsShowVotingButtons(loggedIn: boolean, user: User, post: Post): boolean {
+    // set true only if logged in and user is not creator
+    if (loggedIn && !user.isAdmin && user.userId != post.CreationUser) return true;
+    else return false;
+  }
+
+  checkPermissionsUpvote(loggedIn: boolean, user: User, post: Post): boolean {
+    if (loggedIn && !user.isAdmin && user.userId != post.CreationUser) {
+      switch (post.votingState){
+        case VotingState.NotVoted: {
+          return true;
+          break;
+        }
+        case VotingState.Upvoted: {
+          return false;
+          break;
+        }
+        case VotingState.Downvoted: {
+          return true;
+          break;
+        }
+        default: {
+         return false;
+        }
+      }
+    }
+    else return false;
+  }
+
+  checkPermissionsDownvote(loggedIn: boolean, user: User, post: Post): boolean {
+    if (loggedIn && !user.isAdmin && user.userId != post.CreationUser) {
+      switch (post.votingState){
+        case VotingState.NotVoted: {
+          return true;
+          break;
+        }
+        case VotingState.Upvoted: {
+          return true;
+          break;
+        }
+        case VotingState.Downvoted: {
+          return false;
+          break;
+        }
+        default: {
+          return false;
+        }
+      }
+    }
+    else return false;
+  }
 
 }
