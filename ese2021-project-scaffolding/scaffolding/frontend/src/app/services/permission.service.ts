@@ -101,5 +101,17 @@ export class PermissionService {
     else return false;
   }
 
+  /*******************************************************************************************************************
+   * CATEGORY FORM
+   ******************************************************************************************************************/
+
+  checkPermissionsToAccessCategoryForm(loggedIn: boolean, user: User): boolean {
+    if (loggedIn){
+      if (user.isAdmin) return true;
+      else return false;
+    }
+    else return false;
+  }
+
 
 }
