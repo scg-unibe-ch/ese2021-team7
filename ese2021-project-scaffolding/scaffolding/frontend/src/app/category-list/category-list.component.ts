@@ -63,6 +63,7 @@ export class CategoryListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       (res:any) => {
         this.categoriesData.refreshData();
+        this.categoryService.refresh();
       }
     )
   }

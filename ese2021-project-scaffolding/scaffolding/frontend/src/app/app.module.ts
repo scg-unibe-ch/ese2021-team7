@@ -27,7 +27,6 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatSelectModule } from '@angular/material/select';
 import { OrderListComponent } from './order-list/order-list.component';
-import { OrderComponent } from './order-list/order/order.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductComponent } from './product-list/product/product.component';
 import { PurchaseComponent } from './purchase/purchase.component';
@@ -57,7 +56,6 @@ import { BaseFormComponent } from './base-form/base-form.component';
     PageNotFoundComponent,
     UserProfileComponent,
     OrderListComponent,
-    OrderComponent,
     ProductListComponent,
     ProductComponent,
     PurchaseComponent,
@@ -71,7 +69,8 @@ import { BaseFormComponent } from './base-form/base-form.component';
     BaseFormComponent
   ],
   entryComponents:[
-    CategoryFormComponent
+    CategoryFormComponent,
+    ProductFormComponent
   ],
   imports: [
     BrowserModule,

@@ -9,123 +9,96 @@ import { Product } from '../models/product.model';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../models/category';
+import { BaseFormComponent } from '../base-form/base-form.component';
+import { PurchaseFormService } from '../services/purchase-form.service';
+import { ShopService } from '../services/shop.service';
 
 @Component({
   selector: 'app-purchase',
   templateUrl: './purchase.component.html',
   styleUrls: ['./purchase.component.css']
 })
-export class PurchaseComponent implements OnInit {
+export class PurchaseComponent extends BaseFormComponent implements OnInit {
 
-  purchaseForm: FormGroup | undefined;
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
 
-  productId: number | undefined;
+  //overrides
+  form: FormGroup = new FormGroup({});
+  protected requestType = "order/create";
+  protected routeAfterSuccess = "shop";
+  protected routeAfterDiscard = "shop";
 
-  product = new Product(0, 0, "", "", "", 0, null, false);
+  // to stop DOM form from loading to early
+  isLoading: boolean = false;
 
-  user: User | undefined;
+  isSubmitted: boolean = false;
 
-  isSubmitted: boolean;
+  //purchaseForm: FormGroup | undefined;
 
-  productCategories: Category[];
+  //productId: number | undefined;
 
-  //isCreate: boolean;
-  //isUpdate: boolean;
+  // product User buys
+  product = new Product(0,  "", "", "", 0, new Category(0, "undefined", 0, "undefined"), false);
 
-  constructor(public httpClient: HttpClient,
-              private fb: FormBuilder,
+  //User
+  user: User  = new User(0, "", "", false, "", "", "", "", "", "", "", "", "");
+
+
+  // presets for form creation, needs User and Product
+  static PreSet = class {
+    constructor(public presetUser: User,
+                public presetProduct: Product){}
+  };
+
+  //array with product categories
+  productCategories: Category[] = [];
+
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
+
+  constructor(public fb: FormBuilder,
               public userService: UserService,
-              private route: ActivatedRoute,
-              private router: Router,
-              private categoryService: CategoryService) {
-    this.isSubmitted = false;
+              public route: ActivatedRoute,
+              public router: Router,
+              private categoryService: CategoryService,
+              public purchaseFormSerivce: PurchaseFormService,
+              private shopService: ShopService) {
+    super(fb, purchaseFormSerivce, router, route);
   }
 
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
+
   ngOnInit(): void {
+    //listener for product categories
+    this.categoryService.productCategories$.subscribe(res => this.productCategories = res);
+    //current value of product categories
     this.productCategories = this.categoryService.getProductCategories();
+
     if(!this.userService.getLoggedIn()){
       console.log("not logged In");
       this.router.navigate(['/login']);
     }
     else{
+      this.isLoading= true;
       this.user = this.userService.getUser();
+      let productId = 0;
       this.route.queryParams.subscribe(params => {
-          this.productId = params['productId'];
+        productId = params['productId'];
       });
-      if(this.productId != null){
-        this.httpClient.get(environment.endpointURL + "product/byId", {
-          params: {
-            productId: this.productId
-          }
-        }).subscribe((res: any) => {
-          console.log(res);
-          this.product = new Product(res.productId, 1, res.title,  res.description, res.image,  res.price, this.categoryService.getCategoryById(res.productCategory), !res.isAvailabe);
-          console.log(this.product);
-          this.initializePurchaseForm();
-        }, (error: any) => {
-          console.log(error);
+      if(productId != null){
+        this.shopService.getProductByIdAsObservable(productId).
+        subscribe(product => {
+          this.product = this.shopService.createProductFromBackendResponse(product); // create Product object
+          this.initializeForm(new PurchaseComponent.PreSet(this.user, this.product)); //initialize form with presets
+          this.isLoading = false;
         });
       }
     }
   }
-
-  initializePurchaseForm(): void {
-    this.purchaseForm = this.fb.group({
-      paymentMethod: new FormControl("1",Validators.required),
-      firstName: new FormControl(this.user?.firstName, Validators.required),
-      lastName: new FormControl(this.user?.lastName, Validators.required),
-      street : new FormControl(this.user?.street, Validators.required),
-      houseNumber : new FormControl(this.user?.houseNumber),
-      zipCode : new FormControl(this.user?.zipCode),
-      city : new FormControl(this.user?.city),
-    });
-
-  }
-
-
-  onSubmit(formDirective: FormGroupDirective): void{
-    console.log(this.purchaseForm)
-    this.isSubmitted = true;
-    if(this.purchaseForm?.valid){
-        this.sendPurchaseForm();
-    }
-  }
-
-  sendPurchaseForm(): void {
-    console.log("purchase");
-    console.log(this.purchaseForm);
-    this.httpClient.post(environment.endpointURL + "order/create", {
-      firstName: this.purchaseForm?.value.firstName,
-      lastName: this.purchaseForm?.value.lastName,
-      street:this.purchaseForm?.value.street,
-      houseNr: this.purchaseForm?.value.houseNumber,
-      zip: this.purchaseForm?.value.zipCode,
-      city: this.purchaseForm?.value.city,
-      //deliveryAdress: this.purchaseForm?.value.firstName + " " + this.purchaseForm?.value.lastName + " " + this.purchaseForm?.value.street + " " + this.purchaseForm?.value.houseNumber + " " +
-        //this.purchaseForm?.value.zipCode + " " + this.purchaseForm?.value.city,
-      paymentOption: this.purchaseForm?.value.paymentMethod,
-      user: this.user?.userId,
-      productId: this.product.productId
-    }, ).subscribe((res: any) => {
-        console.log(res);
-        this.isSubmitted = false;
-        this.router.navigate(['/shop']);
-      },
-      (error: any) =>{
-        console.log(error);
-        this.isSubmitted = false;
-      });
-
-
-  }
-
-  //keep not sure if need when getting categories dynamically
-  //used to pre select default value in select
-  /*
-  compareFn(c1: any, c2: any): boolean {
-    return c1 && c2 ? c1.id === c2.id : c1 === c2;
-  }
-*/
-
-
 }
+

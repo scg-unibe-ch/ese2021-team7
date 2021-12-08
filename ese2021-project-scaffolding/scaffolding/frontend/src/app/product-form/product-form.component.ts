@@ -10,194 +10,123 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { CategoryService } from '../services/category.service';
 import { Category } from '../models/category';
 import { ProductService } from '../services/product.service';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { Inject } from '@angular/core';
+import { BaseFormComponent } from '../base-form/base-form.component';
+import { FormType } from '../models/form-type';
+import { ProductFormService } from '../services/product-form.service';
+import { ShopService } from '../services/shop.service';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 
 @Component({
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.css']
 })
-export class ProductFormComponent implements OnInit {
+export class ProductFormComponent extends BaseFormComponent implements OnInit {
 
-  productForm: FormGroup | undefined;
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
+  // overrides parent variables
+  protected formType = FormType.Product;
+  form: FormGroup = new FormGroup({});
+  requestType = "";
 
-  productId: number | undefined;
+  //used to decide wheter update or create form
+  isUpdate: boolean = false;
+  isCreate: boolean = false;
 
-  product: Product | undefined;
+  // used because of asyn call
+  isLoading: boolean = false;
 
-  isSubmitted: boolean;
-
-  isCreate: boolean;
-
-  isUpdate: boolean;
-
+  // array with product categories
   productCategories: Category[] = [];
 
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
 
-  constructor(public httpClient: HttpClient,
-              private fb: FormBuilder,
+  constructor(public fb: FormBuilder,
               public userService: UserService,
-              private route: ActivatedRoute,
-              private router: Router,
+              public productFormService: ProductFormService,
+              public route: ActivatedRoute,
+              public router: Router,
               private categoryService: CategoryService,
-              private productService: ProductService) {
-                this.isSubmitted= false;
-                this.isCreate = false;
-                this.isUpdate = false;
+              private shopService: ShopService,
+              private dialogRef: MatDialogRef<ProductFormComponent>,
+              @Inject(MAT_DIALOG_DATA) public dialogData: {isUpdate: boolean, isCreate: boolean, productId: number}) {
+    super(fb, productFormService, router, route);
   }
+
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
 
   ngOnInit(): void {
-    this.productCategories = this.categoryService.getProductCategories(); //get Product Categories
-    this.route.queryParams.subscribe(params => {
-      if (params['create'] == 'true') {
-        this.isCreate = params['create'];
-      } else if (params['update'] == 'true') {
-        this.isUpdate = params['update']
-        this.productId = params['productId'];
-      }
-      console.log("Product ID from params: " + this.productId);
-    });
-    if (this.isCreate) {
-      this.initializeFormCreate();
-    } else if (this.isUpdate) {
-      this.initializeFormCreate();
-      if (this.productId != null) {
-          this.initializeFormUpdate(this.productId);
-      }
-    }
+    //listener for product categories
+    this.categoryService.productCategories$.subscribe(res => this.productCategories = res);
+    //current value of product categories
+    this.productCategories = this.categoryService.getProductCategories();
+
+    this.setUpFormType();
   }
 
-  private initializeFormUpdate(productId: number): void {
-    this.productService.getProductById(this.productId)
-      .subscribe((product: any) => {
-        this.product = new Product(product.productId, 0, product.title, product.description, product.image, product.price, this.categoryService.getCategoryById(product.productCategory), this.checkIfProductIsSold(product))
-        console.log("Product to display " + this.product);
-        this.populateUpdateForm();
-      })
+  /*******************************************************************************************************************
+   * USER FLOW
+   ******************************************************************************************************************/
+
+  /**
+   * Closes dialog box.
+   * Overrides parents method.
+   *
+   * @param route: not used
+   * @param queryParams: not used
+   */
+  reRouteAfterSuccess(route: string, queryParams?: any): void {
+    this.dialogRef.close();
   }
 
-  // does not yet check for CANCELLED ORDERS
-  private checkIfProductIsSold(product: any): boolean {
-    if(product.Orders.length == 0){
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-
-  initializeFormCreate(): void {
-    this.productForm = this.fb.group({
-      productTitle: new FormControl('', Validators.required),
-      productImage : new FormControl(''),
-      productDescription : new FormControl(''),
-      productCategory : new FormControl('', Validators.required),
-      productPrice : new FormControl('', Validators.compose([Validators.required,
-        this.patternValidator(/^[0-9]+(\.[0-9]{1,2})?$/, {'notValidPrice': true})]))
-    }, {
-      validator: (form: FormGroup) => {return this.checkProduct(form);}
-    });
-  }
-
-
-  populateUpdateForm(): void {
-    this.productForm = this.fb.group({
-      "productTitle": new FormControl(this.product?.title, Validators.required),
-      "productImage": new FormControl(this.product?.image),
-      "productDescription": new FormControl(this.product?.description),
-      "productCategory": new FormControl(this.product?.category.id, Validators.required),
-      "productPrice": new FormControl(this.product?.price, Validators.required)
-    }, {
-      validator: (form: FormGroup) => {
-        return this.checkProduct(form);
-      }
-    });
-  }
-
-  onSubmit(formDirective: FormGroupDirective): void{
-    console.log(this.productForm)
-    this.isSubmitted = true;
-    if(this.productForm?.valid){
-      if(this.isCreate){
-        this.sendCreateForm();
-      }
-      else if (this.isUpdate) {
-        this.sendUpdateForm();
-      }
-    }
-    this.router.navigate(['/shop']).then(r => {});
-  }
-
-  sendCreateForm(): void {
-    this.httpClient.post(environment.endpointURL + "product/create", {
-      title: this.productForm?.value.productTitle,
-      description: this.productForm?.value.productDescription,
-      image: this.productForm?.value.productImage,
-      productCategory: this.productForm?.value.productCategory,
-      price : this.productForm?.value.productPrice
-    }, ).subscribe((res: any) => {
-        console.log(res);
-        this.isSubmitted = false;
-      },
-      (error: any) =>{
-        console.log(error);
-        this.isSubmitted = false;
-      });
-  }
-
-  sendUpdateForm(): void {
-    this.httpClient.post(environment.endpointURL + "product/modify", {
-      productId: this.product?.productId,
-      shopId: this.product?.shopId,
-      title: this.productForm?.value.productTitle,
-      text: this.productForm?.value.productDescription,
-      image: this.productForm?.value.productImage,
-      productCategory: this.productForm?.value.productCategory,
-      price: this.productForm?.value.productPrice,
-      sold: this.productForm?.value.productSold
-    }, ).subscribe((res: any) => {
-        console.log(res);
-        this.isSubmitted = false;
-      },
-      (error: any) =>{
-        console.log(error);
-        this.isSubmitted = false;
-      });
-  }
-
-
-  checkProduct(form: FormGroup): {[s: string]: boolean}{
-    if(form.value.productImage == "" && form.value.productDescription == ""){
-      console.log("error");
-      return {'missingProductContent': true};
-    }
-    console.log("correct");
-    return null;
-  };
-
-
-  patternValidator(regex: RegExp, error: ValidationErrors): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } => {
-      if (!control.value) {
-        // if control is empty return no error
-        return null;
-      }
-
-      // test the value of the control against the regexp supplied
-      const valid = regex.test(control.value);
-
-      // if true, return no error (no error), else return error passed in the second parameter
-      return valid ? null : error;
-    };
-  }
-
+  /**
+   * Closes dialog box if user clicks on "Discard" button.
+   */
   discardChanges(): void {
-    this.isSubmitted = false;
-    this.router.navigate(['/shop'], {queryParams: {loggedIn: 'true'}}).then(r =>{});
+    this.dialogRef.close(); //closes dialog box
   }
 
+  /*******************************************************************************************************************
+   * HELPER METHODS
+   ******************************************************************************************************************
 
-  preSelection(element1: any): boolean{
-    return (element1.value == this.product?.category.id);
+  /**
+   * Checks whether form is used to create or update product.
+   *
+   * Initializes form with the right parameters.
+   *
+   * In case of update, gets product from ShopService and displays it as presets.
+   */
+  setUpFormType(): void{
+    if(this.dialogData.isUpdate){
+      //set parameters
+      this.isUpdate = true;
+      this.isCreate= false;
+      this.isLoading = true;
+      this.requestType = "product/modify";
+      //get product
+      this.shopService.getProductByIdAsObservable(this.dialogData.productId).
+      subscribe(product => {
+        this.initializeForm(product); //initialize form with preset
+        this.isLoading = false;
+        console.log(this.form);
+      });
+    } else if(this.dialogData.isCreate) {
+      this.isUpdate = false;
+      this.isCreate= true;
+      this.requestType = "product/create";
+      this.initializeForm(); //initialize form empty
+      console.log(this.form);
+    }
   }
 
 }

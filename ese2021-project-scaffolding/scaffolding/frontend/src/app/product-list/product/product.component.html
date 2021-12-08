@@ -1,14 +1,15 @@
-<div class="center">
+<div class="center" *ngIf="!showDetailedView">
 <mat-card class ="product">
 
   <mat-card-header>
     <div fxFlex></div>
   </mat-card-header>
 
+  <!--
   <mat-card-actions *ngIf="showDetailedView" class="product-close-button" align="end">
     <button mat-button fxLayoutAlign="right top" (click)="closeDetailedView()">Close detailed view<mat-icon class="product-close-button" [style.color]=" 'red' ">close</mat-icon></button>
   </mat-card-actions>
-
+-->
   <div class="product-image-wrapper">
     <img class="product-image" mat-card-image src="{{productToDisplay.image}}">
   </div>
@@ -38,4 +39,44 @@
     <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" color="warn" class="group7-product-actions-button"><mat-icon (click)="deleteProduct()" class="group7-product-actions">delete</mat-icon></button>
   </mat-card-actions>
 </mat-card>
+</div>
+
+<div *ngIf="showDetailedView">
+  <mat-card-header>
+    <div fxFlex></div>
+  </mat-card-header>
+
+  <mat-card-actions *ngIf="showDetailedView" class="product-close-button" align="end">
+    <button mat-button fxLayoutAlign="right top" (click)="closeDetailedView()"><mat-icon class="product-close-button" [style.color]=" 'red' ">close</mat-icon></button>
+  </mat-card-actions>
+
+  <div class="product-image-wrapper">
+    <img class="product-image" mat-card-image src="{{productToDisplay.image}}">
+  </div>
+
+  <mat-card-content class="group7-product-content">
+    <div class="product-category">Category: {{productToDisplay.category.name}}</div><br/>
+    <mat-card-title>{{productToDisplay.title}} </mat-card-title>
+    <div *ngIf="showDetailedView">
+      <p class="product-description">
+        {{productToDisplay.description}}
+      </p><br/>
+    </div>
+
+    <span class="product-price"> Price: {{productToDisplay.price}} CHF</span>
+  </mat-card-content>
+
+  <mat-card-actions class="group7-product-actions" align="end">
+    <!-- Should only be shown in shop, not in detailed view-->
+    <button mat-button *ngIf="!showDetailedView" class="group7-product-actions-button" (click)="showProductDetails()">Details</button>
+
+    <!-- Should only be usable for logged in users -->
+    <button mat-button *ngIf="!productToDisplay.sold" [disabled]="!showBuyNowButton || productToDisplay.sold " class="group7-product-actions-button"><mat-icon (click)="buyProduct()" class="group7-product-actions">shopping_cart</mat-icon></button>
+    <button mat-button *ngIf="productToDisplay.sold" class="group7-product-actions-button" [style.color]=" 'red' ">SOLD OUT</button>
+
+    <!-- Should only be usable for admins -->
+    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" class="group7-product-actions-button"><mat-icon (click)="updateProduct()" class="group7-product-actions">edit</mat-icon></button>
+    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" color="warn" class="group7-product-actions-button"><mat-icon (click)="deleteProduct()" class="group7-product-actions">delete</mat-icon></button>
+  </mat-card-actions>
+
 </div>

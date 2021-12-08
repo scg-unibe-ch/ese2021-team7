@@ -1,13 +1,21 @@
+<!-- Form is placed in mat-card -->
 <div class="card-wrapper-center registration-form purchase-form">
+  <!-- Header -->
   <mat-card class="group7-card">
     <mat-card-header>
       <mat-card-title>
         <h1 class="card-title" >Order now </h1>
       </mat-card-title>
     </mat-card-header>
+
+    <!-- Beginn Form -->
     <mat-card-content>
       <div class="form-wrapper">
-        <form [formGroup]="purchaseForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
+
+        <!-- Not Shown until backend calls complete -->
+        <form  *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
+
+          <!-- Product  -->
           <div class="product-display">
             <div class="product-display-image">
               <img class="product-thumbnail" src="{{product.image}}" />
@@ -15,15 +23,17 @@
             <div class="product-display-info">
               <span class="product-display-title">{{product.title}}</span><br>
               <span class="product-display-description">{{product.description}}</span>
-          </div>
-          <div class="product-display-price">
-            Total (incl. taxes)<br/>
-            <span class="product-price">{{product.price}} </span>
-            CHF
-          </div>
+            </div>
+            <div class="product-display-price">
+              Total (incl. taxes)<br/>
+              <span class="product-price">{{product.price}} </span>
+              CHF
+            </div>
           </div>
           <br>
           <br>
+
+          <!-- Payment Method -->
           <mat-form-field appearance="outline">
             <mat-label >Payment Method</mat-label>
             <mat-select [formControlName]="'paymentMethod'" id="paymentMethod"  required>
@@ -33,8 +43,8 @@
             </mat-select>
           </mat-form-field>
 
-            <p>Shipping address:</p>
-
+          <!-- Shipping address -->
+          <p>Shipping address:</p>
           <mat-form-field appearance="outline">
             <mat-label>First Name</mat-label>
             <input matInput type="text" placeholder="First Name" id="firstName" [formControlName]="'firstName'">
@@ -61,8 +71,10 @@
           </mat-form-field>
 
           <br/>
+
+          <!-- Action buttons -->
           <div class="form-action-button">
-            <button mat-flat-button type="submit" [disabled]="!purchaseForm.valid" class="group7-forms-button" >Order now</button><br/>
+            <button mat-flat-button type="submit" [disabled]="!form.valid" class="group7-forms-button" >Order now</button><br/>
           </div>
         </form>
       </div>
@@ -72,4 +84,5 @@
   </mat-card>
 
 </div>
+
 
