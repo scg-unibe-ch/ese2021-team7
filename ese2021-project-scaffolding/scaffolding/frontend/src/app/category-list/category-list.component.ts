@@ -3,12 +3,16 @@ import {ChangeDetectorRef, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { CategoryFormComponent } from '../category-form/category-form.component';
 import { Category } from '../models/category';
+import { User } from '../models/user.model';
 import { CategoriesDataSourceService } from '../services/categories-data-source.service';
 import { CategoryService } from '../services/category.service';
+import { PermissionService } from '../services/permission.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-category-list',
@@ -32,19 +36,37 @@ export class CategoryListComponent implements OnInit {
   // displayed columns
   displayedColumns = ["id", "name", "typeName"];
 
+  // User
+  loggedIn = false;
+  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
+
   /*******************************************************************************************************************
    * CONTRUCTOR
    ******************************************************************************************************************/
 
   constructor(private categoryService: CategoryService,
               private categoriesDataSource: CategoriesDataSourceService,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog,
+              private router: Router,
+              private permissionService: PermissionService,
+              private userService: UserService) { }
 
   /*******************************************************************************************************************
    * LIFECYCLE HOOKS
    ******************************************************************************************************************/
 
   ngOnInit(): void {
+    // Listen for changes
+    this.userService.loggedIn$.subscribe(res => this.loggedIn = res);
+    this.userService.user$.subscribe(res => this.currentUser = res);
+    //get current values
+    this.loggedIn = this.userService.getLoggedIn();
+    this.currentUser = this.userService.getUser();
+
+    if(!this.permissionService.checkPermissionsToAccessCategoryList(this.loggedIn, this.currentUser)){
+      this.router.navigate(['/home']).then(r => {});
+    }
+
     this.categoriesData.refreshData();
   }
 

@@ -67,7 +67,6 @@ export class CategoryFormComponent extends BaseFormComponent implements OnInit {
     this.initializeForm(); // implemented in parent class
     if(!this.permissionsService.checkPermissionsToAccessCategoryForm(this.loggedIn, this.currentUser)){
       if(this.dialogRef){
-        this.router.navigate(['/home']).then(r => {});
         this.dialogRef.close();
       }
 
