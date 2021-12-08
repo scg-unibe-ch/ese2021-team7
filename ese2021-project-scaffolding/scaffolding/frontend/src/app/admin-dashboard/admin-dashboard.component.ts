@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../models/user.model';
+import { PermissionService } from '../services/permission.service';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -11,34 +12,30 @@ import { UserService } from '../services/user.service';
 export class AdminDashboardComponent implements OnInit {
 
   loggedIn = false;
-  user: User | undefined;
+  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
 
   constructor(
     public userService: UserService,
-    private route: ActivatedRoute,
-    private router: Router
+    private router: ActivatedRoute,
+    private route: Router,
+    private permissionSerivce: PermissionService
               ) { }
 
   ngOnInit(): void {
     // Listen for changes
     this.userService.loggedIn$.subscribe(res => this.loggedIn = res);
-    this.userService.user$.subscribe(res => this.user = res);
+    this.userService.user$.subscribe(res => this.currentUser = res);
 
     // Current value
     this.loggedIn = this.userService.getLoggedIn();
-    this.user = this.userService.getUser();
+    this.currentUser = this.userService.getUser();
 
     //reroute if user is not admin
-    this.checkPermissionToAccess();
-  }
-
-  /**
-   * Checks if user is admin, otherwise re-routes.
-   */
-  checkPermissionToAccess(): void {
-    if(!this.user.isAdmin){
-      this.router.navigate(['/feed']).then(r => {});
+    if(!this.permissionSerivce.checkPermissionToAccessAdminDashboard(this.loggedIn, this.currentUser)) {
+      this.route.navigate(['/home']).then(r => {});
     }
   }
+
+
 
 }

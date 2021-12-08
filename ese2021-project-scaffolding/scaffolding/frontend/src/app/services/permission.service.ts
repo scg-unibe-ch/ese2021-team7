@@ -86,5 +86,20 @@ export class PermissionService {
     else return false;
   }
 
+  /*******************************************************************************************************************
+   * ADMIN DASHBOARD  PERMISSIONS
+   ******************************************************************************************************************/
+
+  /**
+   * Checks if user is admin, otherwise re-routes.
+   */
+  checkPermissionToAccessAdminDashboard(loggedIn: boolean, user: User): boolean {
+    if (loggedIn){
+      if (user.isAdmin) return true;
+      else return false;
+    }
+    else return false;
+  }
+
 
 }
