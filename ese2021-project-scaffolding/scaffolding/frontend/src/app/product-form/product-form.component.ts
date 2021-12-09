@@ -49,10 +49,6 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
   // used because of asyn call
   isLoading: boolean = false;
 
-  // array with product categories
-  productCategories: Category[] = [];
-
-
   /*******************************************************************************************************************
    * CONSTRUCTOR
    ******************************************************************************************************************/
@@ -60,7 +56,6 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
   constructor(
               public productFormService: ProductFormService,
               public route: ActivatedRoute,
-              private categoryService: CategoryService,
               private shopService: ShopService,
               private dialogRef: MatDialogRef<ProductFormComponent>,
               public injector: Injector,
@@ -73,14 +68,9 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-    //listener for product categories
-    this.categoryService.productCategories$.subscribe(res => this.productCategories = res);
-    //current value of product categories
-    this.productCategories = this.categoryService.getProductCategories();
-
     super.initializeUser();
     super.evaluateAccessPermissions();
-
+    super.initializeCategories();
     this.setUpFormType();
   }
 

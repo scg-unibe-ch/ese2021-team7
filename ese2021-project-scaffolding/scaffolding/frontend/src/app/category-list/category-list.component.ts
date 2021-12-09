@@ -47,7 +47,7 @@ export class CategoryListComponent extends BaseComponent implements OnInit {
    * CONTRUCTOR
    ******************************************************************************************************************/
 
-  constructor(private categoryService: CategoryService,
+  constructor(
               private categoriesDataSource: CategoriesDataSourceService,
               private dialog: MatDialog,
               public injector: Injector
