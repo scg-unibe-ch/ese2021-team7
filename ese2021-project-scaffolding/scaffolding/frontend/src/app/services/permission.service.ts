@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { AccessPermission } from '../models/access-permission';
+import { FeaturePermission } from '../models/feature-permission';
+import { PermissionType } from '../models/permission-type';
 import { Post } from '../models/post.model';
 import { User } from '../models/user.model';
 import { VotingState } from '../models/voting-state';
@@ -7,9 +10,49 @@ import { VotingState } from '../models/voting-state';
   providedIn: 'root'
 })
 /**
- * Used to handle permission settings (between guest, user, admin) in all components.
+ * Manges permissions settings (between guest, user, admin) for all components.
  */
 export class PermissionService {
+
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
+
+  private guestPermissions = ["AccessFeed", "AccessHome", "AccessShop"];
+  private adminAccessPermissions: AccessPermission =  new AccessPermission(
+    false, // accessPurchaseForm
+    true, // accessAdminDashBoard
+    true, // accessCategoryForm
+    true, // accessCategoryList
+    true, // accessProductForm
+    true, // accessHome
+    true, // accessFeed
+    true //accessShop
+  );
+  private userAccessPermissions: AccessPermission = new AccessPermission(
+    true, // accessPurchaseForm
+    false, // accessAdminDashBoard
+    false, // accessCategoryForm
+    false, // accessCategoryList
+    false, // accessProductForm
+    true, // accessHome
+    true, // accessFeed
+    true //accessShop
+  );
+
+  private adminFeaturePermissions: FeaturePermission = new FeaturePermission(
+    true, //productUpdateDelete
+    false, // purchaseProduct
+    true, // addProduct
+    false // createPost
+  );
+
+  private userFeaturePermissions: FeaturePermission = new FeaturePermission(
+    false, //productUpdateDelete
+    true, // purchaseProduct
+    false, // addProduct
+    true // createPost
+  );
 
   /*******************************************************************************************************************
    * CONSTRUCTOR
@@ -18,133 +61,64 @@ export class PermissionService {
   constructor() { }
 
   /*******************************************************************************************************************
-   * PRODUCT PERMISSIONS
+   * ACCESS PERMISSIONS
    ******************************************************************************************************************/
 
   /**
-   * Sets "update/delete" permissions for products.
-   *
-   * Only admins can update and delete products.
-   *
-   * @param loggedIn
-   * @param user
+   * Returns access permissions for admin.
    */
-  evaluateUpdateDeletePermission(loggedIn: boolean, user: User): boolean {
-    // set true if user is admin
-    if (loggedIn){
-      if (user.isAdmin) return true;
-      else return false;
-    }
-    else return false;
+  getAdminAccessPermissions(): AccessPermission {
+    return this.adminAccessPermissions;
   }
 
   /**
-   * Sets "buy" permissions on product.
-   *
-   * Only user can buy products, not admins. If user is not logged in, returns true as well.
-   *
-   * @param loggedIn
-   * @param user
+   * Returns access permissions for user.
    */
-  evaluateBuyNowPermission(loggedIn: boolean, user: User): boolean {
-    // set true if user is admin
-    if (loggedIn){
-      if (user.isAdmin) {
-        return false;
-      }
-      else {
-        return true;
-      }
-    }
-    else return true;
+  getUserAccessPermissions(): AccessPermission {
+    return this.userAccessPermissions;
   }
-
-  /*******************************************************************************************************************
-   * SHOP PERMISSIONS
-   ******************************************************************************************************************/
 
   /**
-   * Checks wheter user is admin and has permission to add new products.
-   * Sets parameters accordingly.
+   * Checks if a given guest, user, or admin has the permission to access a given component.
+   *
+   * @param loggedIn: guest = not looged in
+   * @param user: given user or admin
+   * @param permissionToAccess: type of permission (= access to which component)
    */
-  evaluateAddProductPermission(loggedIn: boolean, user: User): boolean {
-    // set true if user is admin
-    if (loggedIn){
-      if (user.isAdmin) return true;
+  evaluateAccessPermissions(loggedIn: boolean, user: User, permissionToAccess: PermissionType): boolean {
+    if(!loggedIn){
+      if(this.guestPermissions.includes(permissionToAccess)) return true; //check guest array
       else return false;
     }
-    else return false;
+    else {
+      return user.accessPermissions.checkPermissions(permissionToAccess); //otherwise evaluate
+    }
   }
 
   /*******************************************************************************************************************
-   * PURCHASE FORM PERMISSIONS
+   * FEATURE PERMISSIONS
    ******************************************************************************************************************/
 
-  permissionToAccessPurchaseForm(loggedIn: boolean, user: User): boolean {
-    if (loggedIn){
-      if (user.isAdmin) return false;
-      else return true;
-    }
-    else return false;
+  getAdminFeaturePermissions(): FeaturePermission {
+    return this.adminFeaturePermissions;
   }
 
-  /*******************************************************************************************************************
-   * ADMIN DASHBOARD  PERMISSIONS
-   ******************************************************************************************************************/
-
-  /**
-   * Checks if user is admin, otherwise re-routes.
-   */
-  checkPermissionToAccessAdminDashboard(loggedIn: boolean, user: User): boolean {
-    if (loggedIn){
-      if (user.isAdmin) return true;
-      else return false;
-    }
-    else return false;
-  }
-
-  /*******************************************************************************************************************
-   * CATEGORY FORM
-   ******************************************************************************************************************/
-
-  checkPermissionsToAccessCategoryForm(loggedIn: boolean, user: User): boolean {
-    if (loggedIn){
-      if (user.isAdmin) return true;
-      else return false;
-    }
-    else return false;
-  }
-
-
-  /*******************************************************************************************************************
-   * CATEGORY LIST
-   ******************************************************************************************************************/
-
-  checkPermissionsToAccessCategoryList(loggedIn: boolean, user: User): boolean {
-    if (loggedIn){
-      if (user.isAdmin) return true;
-      else return false;
-    }
-    else return false;
-  }
-
-  /*******************************************************************************************************************
-   * PRODUCT FORM
-   ******************************************************************************************************************/
-
-  checkPermissionsToAccessProductForm(loggedIn: boolean, user: User): boolean {
-    if (loggedIn){
-      if (user.isAdmin) return true;
-      else return false;
-    }
-    else return false;
+  getUserFeaturePermissions(): FeaturePermission {
+    return this.userFeaturePermissions;
   }
 
   /*******************************************************************************************************************
    * POST PERMISSIONS
    ******************************************************************************************************************/
 
-  checkPermissionsProductUpdateAndDelete(loggedIn: boolean, user: User, post: Post): boolean {
+  /**
+   * Checks if given guest, user, admin has permission to update/delete given post.
+   *
+   * @param loggedIn: not logged in = guest
+   * @param user: user or admin
+   * @param post: given post
+   */
+  checkPermissionsPostUpdateAndDelete(loggedIn: boolean, user: User, post: Post): boolean {
     // set true if user is admin or if user is creator of post
     if (loggedIn) {
       if (user.isAdmin) return true;
@@ -154,12 +128,26 @@ export class PermissionService {
     else return false;
   }
 
+  /**
+   * Checks if for given guest, user, admin voting buttons are shown for a given post
+   *
+   * @param loggedIn: not logged in = guest
+   * @param user: user or admin
+   * @param post: given post
+   */
   checkPermissionsShowVotingButtons(loggedIn: boolean, user: User, post: Post): boolean {
     // set true only if logged in and user is not creator
     if (loggedIn && !user.isAdmin && user.userId != post.CreationUser) return true;
     else return false;
   }
 
+  /**
+   * Checks if given guest, user, admin has permission to upvote given post.
+   *
+   * @param loggedIn: not logged in = guest
+   * @param user: user or admin
+   * @param post: given post
+   */
   checkPermissionsUpvote(loggedIn: boolean, user: User, post: Post): boolean {
     if (loggedIn && !user.isAdmin && user.userId != post.CreationUser) {
       switch (post.votingState){
@@ -183,6 +171,13 @@ export class PermissionService {
     else return false;
   }
 
+  /**
+   * Checks if given guest, user, admin has permission to downvote given post.
+   *
+   * @param loggedIn: not logged in = guest
+   * @param user: user or admin
+   * @param post: given post
+   */
   checkPermissionsDownvote(loggedIn: boolean, user: User, post: Post): boolean {
     if (loggedIn && !user.isAdmin && user.userId != post.CreationUser) {
       switch (post.votingState){

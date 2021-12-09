@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
@@ -13,6 +13,8 @@ import { BaseFormComponent } from '../base-form/base-form.component';
 import { PurchaseFormService } from '../services/purchase-form.service';
 import { ShopService } from '../services/shop.service';
 import { PermissionService } from '../services/permission.service';
+import { AccessPermission } from '../models/access-permission';
+import { PermissionType } from '../models/permission-type';
 
 @Component({
   selector: 'app-purchase',
@@ -25,28 +27,23 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
    * VARIABLES
    ******************************************************************************************************************/
 
-    //overrides
+  //overrides BaseForm
   form: FormGroup = new FormGroup({});
   protected requestType = "order/create";
   protected routeAfterSuccess = "shop";
   protected routeAfterDiscard = "shop";
 
+  // overrides Base component
+  permissionToAccess = PermissionType.AccessPurchaseForm;
+  routeIfNoAccess: string = "/shop";
 
   // to stop DOM form from loading to early
   isLoading: boolean = false;
 
   isSubmitted: boolean = false;
 
-  //purchaseForm: FormGroup | undefined;
-
-  //productId: number | undefined;
-
   // product User buys
   product = new Product(0, "", "", "", 0, new Category(0, "undefined", 0, "undefined"), false);
-
-  //User
-  currentUser: User = new User(0, "", "", false, "", "", "", "", "", "", "", "", "");
-  loggedIn: boolean = false;
 
 
   // presets for form creation, needs User and Product
@@ -64,14 +61,12 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
    ******************************************************************************************************************/
 
   constructor(public fb: FormBuilder,
-              public userService: UserService,
               public route: ActivatedRoute,
-              public router: Router,
               private categoryService: CategoryService,
               public purchaseFormSerivce: PurchaseFormService,
               private shopService: ShopService,
-              private permissionService: PermissionService) {
-    super(fb, purchaseFormSerivce, router, route);
+              public injector: Injector) {
+    super(purchaseFormSerivce, injector);
   }
 
   /*******************************************************************************************************************
@@ -84,17 +79,9 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
     //current value of product categories
     this.productCategories = this.categoryService.getProductCategories();
 
-    // Listen for changes
-    this.userService.loggedIn$.subscribe(res => {
-      this.loggedIn = res;
-    });
-    this.userService.user$.subscribe(res => {
-      this.currentUser = res;
-    })
-    this.loggedIn = this.userService.getLoggedIn();
-    this.currentUser = this.userService.getUser();
+    super.initializeUser();
+    super.evaluateAccessPermissions();
 
-    if (this.permissionService.permissionToAccessPurchaseForm(this.loggedIn, this.currentUser)) {
       this.isLoading = true; //set loading flag
       let productId = 0;
       this.route.queryParams.subscribe(params => {
@@ -107,12 +94,19 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
           this.isLoading = false;
         });
       }
-
-    } else {
-      if (this.currentUser.isAdmin) this.router.navigate(['/shop']);
-      else this.router.navigate(['/login'])
-    }
   }
+
+
+  /*******************************************************************************************************************
+   * PERMISSIONS
+   ******************************************************************************************************************/
+
+  //overrirdes Base Componente
+  protected reRouteIfNoAccess(route: string, queryParams?: any): void {
+    if (this.currentUser.isAdmin) this.router.navigate([this.routeIfNoAccess]);
+    else this.router.navigate(['/login']);
+  }
+
 
 }
 

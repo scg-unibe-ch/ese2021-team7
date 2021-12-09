@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
@@ -19,6 +19,8 @@ import { ShopService } from '../services/shop.service';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { PermissionService } from '../services/permission.service';
+import { AccessPermission } from '../models/access-permission';
+import { PermissionType } from '../models/permission-type';
 
 @Component({
   selector: 'app-product-form',
@@ -35,6 +37,11 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   requestType = "";
 
+  //override Base Component
+  // overrides
+  permissionToAccess = PermissionType.AccessProductForm;
+  routeIfNoAccess: string = "/shop";
+
   //used to decide wheter update or create form
   isUpdate: boolean = false;
   isCreate: boolean = false;
@@ -45,25 +52,20 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
   // array with product categories
   productCategories: Category[] = [];
 
-  // User
-  loggedIn = false;
-  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
 
   /*******************************************************************************************************************
    * CONSTRUCTOR
    ******************************************************************************************************************/
 
-  constructor(public fb: FormBuilder,
-              public userService: UserService,
+  constructor(
               public productFormService: ProductFormService,
               public route: ActivatedRoute,
-              public router: Router,
               private categoryService: CategoryService,
               private shopService: ShopService,
               private dialogRef: MatDialogRef<ProductFormComponent>,
-              private permissionService: PermissionService,
+              public injector: Injector,
               @Inject(MAT_DIALOG_DATA) public dialogData: {isUpdate: boolean, isCreate: boolean, productId: number}) {
-    super(fb, productFormService, router, route);
+    super(productFormService, injector);
   }
 
   /*******************************************************************************************************************
@@ -76,20 +78,8 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
     //current value of product categories
     this.productCategories = this.categoryService.getProductCategories();
 
-
-    // Listen for changes
-    this.userService.loggedIn$.subscribe(res => this.loggedIn = res);
-    this.userService.user$.subscribe(res => this.currentUser = res);
-    //get current values
-    this.loggedIn = this.userService.getLoggedIn();
-    this.currentUser = this.userService.getUser();
-
-    if(!this.permissionService.checkPermissionsToAccessProductForm(this.loggedIn, this.currentUser)){
-      if(this.dialogRef){
-        this.dialogRef.close();
-      }
-    }
-
+    super.initializeUser();
+    super.evaluateAccessPermissions();
 
     this.setUpFormType();
   }
@@ -149,5 +139,15 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
       console.log(this.form);
     }
   }
+
+/*******************************************************************************************************************
+ * PERMISSIONS
+ ******************************************************************************************************************/
+
+  //override Base Component
+  protected reRouteIfNoAccess(route: string, queryParams?: any): void {
+    this.dialogRef.close();
+  }
+
 
 }

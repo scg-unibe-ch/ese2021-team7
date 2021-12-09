@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -7,16 +7,17 @@ import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, Valid
 import { Observable, from, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { BaseComponent } from '../base/base.component';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export class RegistrationComponent {
+export class RegistrationComponent extends BaseComponent implements OnInit {
 
-  loggedIn: boolean | undefined;
-  userNameAlreadyInUse: boolean;
+  //loggedIn: boolean | undefined;
+  userNameAlreadyInUse: boolean = false;
 
   registrationForm = this.fb.group({
     userName: new FormControl('', Validators.compose([Validators.required]), [this.userNameInUseValidator()]),
@@ -37,13 +38,22 @@ export class RegistrationComponent {
     phoneNumber: new FormControl('')
   });
 
-  constructor(public httpClient: HttpClient, private fb: FormBuilder, private router: Router,public userService: UserService) {
-    this.userNameAlreadyInUse = false;
+  constructor(
+    public httpClient: HttpClient,
+    private fb: FormBuilder,
+    public injector: Injector
+  ) {
+    super(injector);
+    //this.userNameAlreadyInUse = false;
     // Listen for changes
-    userService.loggedIn$.subscribe(res => this.loggedIn = res);
+    //userService.loggedIn$.subscribe(res => this.loggedIn = res);
 
     // Current value
-    this.loggedIn = userService.getLoggedIn();
+    //this.loggedIn = userService.getLoggedIn();
+  }
+
+  onInit(): void {
+    super.initializeUser();
   }
 
   onSubmit(formDirective: FormGroupDirective): void {
@@ -82,7 +92,7 @@ export class RegistrationComponent {
 
 
   patternValidator(regex: RegExp, error: ValidationErrors): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } => {
+    return (control: AbstractControl): { [key: string]: any } | null => {
       if (!control.value) {
         // if control is empty return no error
         return null;
@@ -97,7 +107,7 @@ export class RegistrationComponent {
   }
 
   //currently not set
-  userNameValidator(control: FormControl): { [s: string]: boolean } {
+  userNameValidator(control: FormControl): { [s: string]: boolean } | null {
     if (this.userNameAlreadyInUse) {
       return {'userNameAlreadyInUse': true};
     }

@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { AccessPermission } from 'src/app/models/access-permission';
 import { Category } from 'src/app/models/category';
+import { FeaturePermission } from 'src/app/models/feature-permission';
 import { PermissionService } from 'src/app/services/permission.service';
 import {Post} from "../../models/post.model";
 import {User} from "../../models/user.model";
@@ -41,7 +43,7 @@ export class PostComponent implements OnInit{
   loggedIn : boolean = false;
 
   @Input()
-  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
+  currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
 
   @Input()
   postToDisplay: Post = new Post(0,'','','',0,new Category(0, "undefined", 0, "undefined"),0,'', VotingState.NotAllowed);
@@ -74,7 +76,7 @@ export class PostComponent implements OnInit{
   ngOnInit() {
     //this.evaluateUpdateDeletePermission();
     //this.evaluateVotingButtonsPermission();
-    this.showDeleteAndUpdateButton = this.permissionService.checkPermissionsProductUpdateAndDelete(this.loggedIn, this.currentUser, this.postToDisplay);
+    this.showDeleteAndUpdateButton = this.permissionService.checkPermissionsPostUpdateAndDelete(this.loggedIn, this.currentUser, this.postToDisplay);
     this.showVotingButtons = this.permissionService.checkPermissionsShowVotingButtons(this.loggedIn, this.currentUser, this.postToDisplay);
     this.enableUpvote = this.permissionService.checkPermissionsUpvote(this.loggedIn, this.currentUser, this.postToDisplay);
     this.enableDownvote = this.permissionService.checkPermissionsDownvote(this.loggedIn, this.currentUser, this.postToDisplay);
@@ -84,7 +86,7 @@ export class PostComponent implements OnInit{
   ngOnChanges(){
     //this.evaluateUpdateDeletePermission();
     //this.evaluateVotingButtonsPermission();
-    this.showDeleteAndUpdateButton = this.permissionService.checkPermissionsProductUpdateAndDelete(this.loggedIn, this.currentUser, this.postToDisplay);
+    this.showDeleteAndUpdateButton = this.permissionService.checkPermissionsPostUpdateAndDelete(this.loggedIn, this.currentUser, this.postToDisplay);
     this.showVotingButtons = this.permissionService.checkPermissionsShowVotingButtons(this.loggedIn, this.currentUser, this.postToDisplay);
     this.enableUpvote = this.permissionService.checkPermissionsUpvote(this.loggedIn, this.currentUser, this.postToDisplay);
     this.enableDownvote = this.permissionService.checkPermissionsDownvote(this.loggedIn, this.currentUser, this.postToDisplay);

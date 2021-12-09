@@ -1,4 +1,4 @@
-import {Component, DoCheck, OnInit} from '@angular/core';
+import {Component, DoCheck, Injector, OnInit} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Post} from "../models/post.model";
@@ -12,18 +12,22 @@ import {VotingState} from "../models/voting-state";
 import { CategoryService } from '../services/category.service';
 import { Category } from '../models/category';
 import { PostService } from '../services/post.service';
+import { AccessPermission } from '../models/access-permission';
+import { BaseComponent } from '../base/base.component';
+import { PermissionType } from '../models/permission-type';
 
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.css']
 })
-export class FeedComponent implements OnInit, DoCheck {
+export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
+
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
 
   postList: Post[] = [];
-
-  loggedIn: boolean | undefined;
-  currentUser: User | undefined;
 
   sortBy: string = '0';
 
@@ -32,14 +36,27 @@ export class FeedComponent implements OnInit, DoCheck {
   //array with post categories
   postCategories: Category[] = [];
 
+  // overrides
+  permissionToAccess = PermissionType.AccessHome;
+  routeIfNoAccess: string = "/home";
+
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
+
   constructor(
     public httpClient: HttpClient,
-    private route: Router,
-    public userService: UserService,
     private dialog: MatDialog,
     private categoryService: CategoryService,
-    private postService: PostService
-  ) {}
+    private postService: PostService,
+    public injector: Injector
+  ) {
+    super(injector);
+  }
+
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
 
   ngOnInit(): void {
     //set up categories
@@ -49,17 +66,9 @@ export class FeedComponent implements OnInit, DoCheck {
     this.postCategories = this.categoryService.getPostCategories();
 
 
-    // Listen for changes
-    this.userService.loggedIn$.subscribe(res => {
-      this.loggedIn = res;
-    });
-    this.userService.user$.subscribe(res => {
-      this.currentUser = res;
-    })
-    //current Value
-    this.loggedIn = this.userService.getLoggedIn();
-    this.currentUser = this.userService.getUser();
-    //this.getPostCategories();
+    super.initializeUser(); //parents method
+    super.evaluateAccessPermissions();
+
     this.evaluateAccessForCurrentUser();
   }
 
@@ -148,7 +157,7 @@ export class FeedComponent implements OnInit, DoCheck {
   }
 
   updatePost(post: Post): void {
-    this.route.navigate(['/post-form'], {queryParams: {update: 'true', postId: (post.postId)}}).then(r => {
+    this.router.navigate(['/post-form'], {queryParams: {update: 'true', postId: (post.postId)}}).then(r => {
     });
   }
 

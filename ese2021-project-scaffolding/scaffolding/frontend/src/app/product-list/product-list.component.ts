@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Product} from "../models/product.model";
@@ -20,13 +20,16 @@ import { MatSelect } from '@angular/material/select';
 import { ProductFormComponent } from '../product-form/product-form.component';
 import { ProductComponent } from './product/product.component';
 import { PermissionService } from '../services/permission.service';
+import { AccessPermission } from '../models/access-permission';
+import { BaseComponent } from '../base/base.component';
+import { PermissionType } from '../models/permission-type';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent extends BaseComponent implements OnInit {
 
   /*******************************************************************************************************************
    * VARIABLES
@@ -34,14 +37,15 @@ export class ProductListComponent implements OnInit {
 
   @ViewChild('selectFilter') selectFilter!: MatSelect;
 
+  // Products in shop
   productList: Product[] = [];
 
-  loggedIn: boolean = false;
-  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
-
-  showAddProductButton: boolean = false;
-
+  // Array with product categories
   productCategories: Category[] = [];
+
+  // overrides
+  permissionToAccess = PermissionType.AccessHome;
+  routeIfNoAccess: string = "/home";
 
   /*******************************************************************************************************************
    * CONSTRUCTOR
@@ -49,13 +53,13 @@ export class ProductListComponent implements OnInit {
 
   constructor(
     public httpClient: HttpClient,
-    private route: Router,
-    public userService: UserService,
     private dialog: MatDialog,
     private categoryService: CategoryService,
     private shopService: ShopService,
-    private permissionService: PermissionService
-  ) { }
+    public injector: Injector
+  ) {
+    super(injector);
+  }
 
 
   /*******************************************************************************************************************
@@ -68,17 +72,8 @@ export class ProductListComponent implements OnInit {
     //current value of product categories
     this.productCategories = this.categoryService.getProductCategories();
 
-    // Listen for changes
-    this.userService.loggedIn$.subscribe(res => {
-      this.loggedIn = res;
-    });
-    this.userService.user$.subscribe( res => {
-      this.currentUser = res;
-    })
-    this.loggedIn = this.userService.getLoggedIn();
-    this.currentUser = this.userService.getUser();
-
-    this.setPermissions();
+    super.initializeUser();
+    super.evaluateAccessPermissions();
 
     // listern product list
     this.shopService.products$.subscribe(res => {this.productList = res;
@@ -86,16 +81,6 @@ export class ProductListComponent implements OnInit {
     // get current value products
     this.productList = this.shopService.getAllProducts();
 
-  }
-
-  ngOnChange():void {
-    this.setPermissions();
-  }
-
-  ngDoCheck(): void {
-    //current Value
-    this.loggedIn = this.userService.getLoggedIn();
-    this.currentUser = this.userService.getUser();
   }
 
   /*******************************************************************************************************************
@@ -163,7 +148,7 @@ export class ProductListComponent implements OnInit {
    * @param product: Product user wants to buy.
    */
   buyProduct(product: Product): void{
-    this.route.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
+    this.router.navigate(['/purchase'],{queryParams: {productId: (product.productId)}}).then(r => {})
   }
 
   /**
@@ -216,15 +201,6 @@ export class ProductListComponent implements OnInit {
   /*******************************************************************************************************************
    * HELPER METHODS
    ******************************************************************************************************************/
-
-  /**
-   * Sets permissions for "add product" button.
-   *
-   * Only admins can add products.
-   */
-  setPermissions(): void {
-    this.showAddProductButton = this.permissionService.evaluateAddProductPermission(this.loggedIn, this.currentUser);
-  }
 
   /**
    * Reloads shop.
