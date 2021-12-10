@@ -6,7 +6,7 @@
     </div>
     <mat-action-list class="group7-sidenav-list" (click)="sidenav.close()">
     <button mat-list-item class="group7-sidenav-button"  routerLink="/feed" routerLinkActive="active">Feed</button>
-    <button mat-list-item class="group7-sidenav-button" [routerLink]="['/post-form']" [queryParams]="{create: 'true'}" *ngIf="currentUser?.featuresPermissions?.createPost" >Create Post</button>
+    <!--<button mat-list-item class="group7-sidenav-button" [routerLink]="['/post-form']" [queryParams]="{create: 'true'}" *ngIf="currentUser?.featuresPermissions?.createPost" >Create Post</button> -->
     <button mat-list-item class="group7-sidenav-button" routerLink="/order" routerLinkActive="active" *ngIf="loggedIn">Orders</button>
     <button mat-list-item class="group7-sidenav-button" routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
     <button mat-list-item class="group7-sidenav-button"  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>

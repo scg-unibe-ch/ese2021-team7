@@ -49,4 +49,18 @@ export class ValidatorService {
   };
 
 
+  checkPost(form: FormGroup): {[s: string]: boolean} | null{
+    if(form.value.postImage == "" && form.value.postText == ""){
+      console.log("error");
+      return {'missingPostContent': true};
+    }
+    console.log("correct");
+    return null;
+  };
+
+
+
+
+
+
 }

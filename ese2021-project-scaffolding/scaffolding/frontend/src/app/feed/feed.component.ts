@@ -17,6 +17,7 @@ import { BaseComponent } from '../base/base.component';
 import { PermissionType } from '../models/permission-type';
 import { FeedService } from '../services/feed.service';
 import { MatSelect } from '@angular/material/select';
+import { PostFormComponent } from '../post-form/post-form.component';
 
 @Component({
   selector: 'app-feed',
@@ -68,8 +69,10 @@ export class FeedComponent extends BaseComponent implements OnInit {
     super.initializeUser(); //parents method
     super.evaluateAccessPermissions();
     super.initializeCategories();
+    //console.log(this.postCategories);
 
     //loads Data
+    //this.feedService.setUserAndLoggedIn(this.loggedIn, this.currentUser);
     this.feedService.refreshPosts(this.loggedIn, this.currentUser);
     //listener
     this.feedService.posts$.subscribe(res => this.postList = res);
@@ -78,7 +81,6 @@ export class FeedComponent extends BaseComponent implements OnInit {
 
     //loading flag
     this.feedService.postsLoading$.subscribe(res => this.isLoading = res);
-
   }
 
 
@@ -97,8 +99,43 @@ export class FeedComponent extends BaseComponent implements OnInit {
     this.feedService.refreshPosts(this.loggedIn, this.currentUser);
   }
 
+  /**
+   * Opens Dialog box with product update form in it.
+   *
+   */
   updatePost(post: Post): void {
-    this.router.navigate(['/post-form'], {queryParams: {update: 'true', postId: (post.postId)}}).then(r => {
+    const dialogRef = this.dialog.open(PostFormComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: {
+        isUpdate: true,
+        isCreate: false,
+        postId: post.postId,
+        userId: post.CreationUser
+      }
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      this.feedService.refreshPosts(this.loggedIn, this.currentUser);
+    });
+  }
+
+  /**
+   * Opens Dialog box with with product create form in it.
+   *
+   */
+  createPost(): void {
+    const dialogRef = this.dialog.open(PostFormComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: {
+        isUpdate: false,
+        isCreate: true,
+        productId: "",
+        userId: ""
+      }
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      this.feedService.refreshPosts(this.loggedIn, this.currentUser);
     });
   }
 
@@ -106,7 +143,6 @@ export class FeedComponent extends BaseComponent implements OnInit {
   reloadFeed() {
    this.feedService.refreshPosts(this.loggedIn, this.currentUser);
   }
-
 
   confirmDelete(post: Post): void {
   const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this post?','Cancel','Delete post');
