@@ -28,6 +28,7 @@ export class BaseComponent implements OnInit {
   //User
   loggedIn = false;
   currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
+  //currentUser: User | undefined;
 
   // Access permissions for componoents
   // to be overwritten by child
@@ -63,6 +64,11 @@ export class BaseComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
+  checkUserStatus(): void {
+    this.userService.checkUserStatus();
+  }
+
   /*******************************************************************************************************************
    * HELPER METHODS
    ******************************************************************************************************************/
@@ -80,6 +86,7 @@ export class BaseComponent implements OnInit {
     // Current value
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
+    //this.checkUserStatus();
   }
 
   /**

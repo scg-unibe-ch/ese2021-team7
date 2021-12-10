@@ -51,6 +51,34 @@ export class LoginComponent extends BaseComponent implements OnInit{
   }
 
   loginUser(): void {
+    this.userService.loginUser(this.userToLogin)
+      .subscribe((res: any) => {
+        console.log(JSON.stringify(res));
+      localStorage.setItem('userToken', res.token);
+      localStorage.setItem('userId', res.user.userId);
+      this.userService.setLoggedIn(true);
+      this.userService.setUser(this.userService.createUserFromBackendReponse(res.user));
+        this.resetLoginForm();
+        this.endpointLogin = '';
+        if (this.fromShop){
+          this.router.navigate(['/shop']).then(r =>{});
+        }
+        else{
+          if(this.userService.getUser()?.isAdmin){
+            this.router.navigate(['/admin-dashboard']).then(r =>{});
+          }
+          else {
+            this.router.navigate(['/feed']).then(r => {});
+          }
+        }
+      }, (error) => {
+        this.handleLoginError(error);
+        this.resetLoginForm();
+      });
+  }
+
+
+   /*
     this.httpClient.post(environment.endpointURL + "user/login", {
       userName: this.userToLogin.username,
       password: this.userToLogin.password,
@@ -59,6 +87,7 @@ export class LoginComponent extends BaseComponent implements OnInit{
       localStorage.setItem('userName', res.user.userName);
       localStorage.setItem('email', res.user.email);
       localStorage.setItem('userToken', res.token);
+      localStorage.setItem('userId', res.userId);
 
       this.userService.setLoggedIn(true);
 
@@ -89,7 +118,7 @@ export class LoginComponent extends BaseComponent implements OnInit{
       this.handleLoginError(error);
       this.resetLoginForm();
     });
-  }
+  }*/
 
   handleLoginError(error: HttpErrorResponse){
     // if neither username, nor email are provided
@@ -126,13 +155,12 @@ export class LoginComponent extends BaseComponent implements OnInit{
   }
 
   logoutUser(): void {
-    this.router.navigate(['../feed']).then(r =>{});
-
-    localStorage.removeItem('userName');
-    localStorage.removeItem('email');
+    localStorage.removeItem('userId');
     localStorage.removeItem('userToken');
 
     this.userService.setLoggedIn(false);
     this.userService.setUser(undefined);
+
+    //this.router.navigate(['../feed']).then(r =>{});
   }
 }

@@ -1,4 +1,4 @@
-import {Component, DoCheck, Injector, OnInit} from '@angular/core';
+import {Component, DoCheck, Injector, OnInit, ViewChild} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Post} from "../models/post.model";
@@ -15,17 +15,21 @@ import { PostService } from '../services/post.service';
 import { AccessPermission } from '../models/access-permission';
 import { BaseComponent } from '../base/base.component';
 import { PermissionType } from '../models/permission-type';
+import { FeedService } from '../services/feed.service';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.css']
 })
-export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
+export class FeedComponent extends BaseComponent implements OnInit {
 
   /*******************************************************************************************************************
    * VARIABLES
    ******************************************************************************************************************/
+
+  @ViewChild('sortSelect') selectFilter!: MatSelect;
 
   postList: Post[] = [];
 
@@ -33,10 +37,12 @@ export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
 
   filterBy: number = 0;
 
-  //array with post categories
-  postCategories: Category[] = [];
+  isLoading: boolean = false;
 
-  // overrides
+  //array with post categories
+  //postCategories: Category[] = [];
+
+  // overrides BaseComponent
   permissionToAccess = PermissionType.AccessHome;
   routeIfNoAccess: string = "/home";
 
@@ -48,7 +54,8 @@ export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
     public httpClient: HttpClient,
     private dialog: MatDialog,
     private postService: PostService,
-    public injector: Injector
+    public injector: Injector,
+    private feedService: FeedService
   ) {
     super(injector);
   }
@@ -58,102 +65,36 @@ export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-/*    //set up categories
-    //listener for product categories
-    this.categoryService.postCategories$.subscribe(res => this.postCategories = res);
-    //current value of product categories
-    this.postCategories = this.categoryService.getPostCategories();*/
-
-
     super.initializeUser(); //parents method
     super.evaluateAccessPermissions();
     super.initializeCategories();
 
-    this.evaluateAccessForCurrentUser();
-  }
+    //loads Data
+    this.feedService.refreshPosts(this.loggedIn, this.currentUser);
+    //listener
+    this.feedService.posts$.subscribe(res => this.postList = res);
+    //current value
+    this.postList = this.feedService.getPosts();
 
-  ngDoCheck(): void {
-    //current Value
-    this.loggedIn = this.userService.getLoggedIn();
-    this.currentUser = this.userService.getUser();
-  }
+    //loading flag
+    this.feedService.postsLoading$.subscribe(res => this.isLoading = res);
 
-  // ORDER - Feed
-  /*
-  0 = sorted by creation date
-  1 = sorted by score
-  default = sorted by creation date
-   */
-  getFeedForUser(): void {
-    let userId = this.currentUser?.userId || 0;
-    console.log(userId);
-    this.httpClient.get(environment.endpointURL + "post/all", {
-      params: {
-        sortBy: this.sortBy,
-        userId: userId
-      }
-    }).subscribe(
-      (res: any) => {
-        console.log(res);
-        this.postList = [];
-        res.forEach((post: any) => {
-          let category = this.categoryService.getCategoryById(post.category);
-          if(this.checkIfPostIsAcceptedByFilter(category)){
-            this.httpClient.get(environment.endpointURL + "user/getById", {
-              params: {
-                userId: post.UserUserId
-              }
-            }).subscribe(
-              (user: any) => this.postList.push(this.postService.createPostFromBackendResponse(post, category, user)),
-              (error: any) => console.log(error)
-            );
-          }
-          });
-        });
   }
 
 
-  getFeedForAdminsAndGuests(): void {
-    this.httpClient.get(environment.endpointURL + "post/all", {
-      params: {
-        sortBy: this.sortBy
-      }
-    }).subscribe(
-      (res: any) => {
-        this.postList = [];
-        res.forEach((post: any) => {
-          let category = this.categoryService.getCategoryById(post.category);
-          if(this.checkIfPostIsAcceptedByFilter(category)){
-            this.httpClient.get(environment.endpointURL + "user/getById", {
-              params: {
-                userId: post.UserUserId
-              }
-            }).subscribe(
-              (user: any) => this.postList.push(this.postService.createPostFromBackendResponse(post, category, user, VotingState.NotAllowed)),
-              (error: any) => console.log(error)
-            );
-          }
-        });
-      });
+  /*******************************************************************************************************************
+   * USER ACTIONS
+   ******************************************************************************************************************/
+
+
+  sortFeed(event: any):void  {
+    this.feedService.setSorting(event.value);
+    this.feedService.refreshPosts(this.loggedIn, this.currentUser);
   }
 
-
-  evaluateAccessForCurrentUser(): void {
-    if (this.loggedIn){
-      if (!this.currentUser?.isAdmin){
-        this.getFeedForUser();
-      }
-      else {
-        this.getFeedForAdminsAndGuests();
-      }
-    }
-    else {
-      this.getFeedForAdminsAndGuests();
-    }
-  }
-
-  deletePost(post: Post): void {
-    this.handleDelete(post);
+  filterFeed(event:any):void {
+    this.feedService.setFilter(event.value);
+    this.feedService.refreshPosts(this.loggedIn, this.currentUser);
   }
 
   updatePost(post: Post): void {
@@ -161,31 +102,13 @@ export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
     });
   }
 
+
   reloadFeed() {
-    this.filterBy = 0;
-    //this.getPostCategories();
-    this.evaluateAccessForCurrentUser();
+   this.feedService.refreshPosts(this.loggedIn, this.currentUser);
   }
 
-  upvotePost(post: Post) {
-    this.httpClient.post(environment.endpointURL + "post/upvote", {
-      postId: post.postId
-    }).subscribe((res: any) => {
-      console.log(res);
-      post.score = res.score;
-    });
-  }
 
-  downvotePost(post: Post) {
-    this.httpClient.post(environment.endpointURL + "post/downvote", {
-      postId: post.postId
-    }).subscribe((res: any) => {
-      console.log(res);
-      post.score = res.score;
-    });
-  }
-
-  handleDelete(post: Post): void {
+  confirmDelete(post: Post): void {
   const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this post?','Cancel','Delete post');
   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
     maxWidth: '400px',
@@ -194,34 +117,25 @@ export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
   })
   dialogRef.afterClosed().subscribe(dialogResult => {
     if (dialogResult) {
-      this.httpClient.post(environment.endpointURL + "post/delete", {
-        postId: post.postId
-      }).subscribe(() => {
-        this.postList.splice(this.postList.indexOf(post), 1);
-      });
-    }});
-  }
-
-  sortFeed(event: any) {
-    this.evaluateAccessForCurrentUser();
-  }
-
-  filterFeed(event:any) {
-    this.evaluateAccessForCurrentUser();
-  }
-
-  checkIfPostIsAcceptedByFilter(category: Category):boolean {
-    if (this.filterBy == 0){
-      return true;
-    }
-    else{
-      if (this.filterBy == category.id){
-        return true;
+        this.feedService.deletePost(post.postId)
+          .subscribe(res =>  this.feedService.refreshPosts(this.loggedIn, this.currentUser));
       }
-      else return false;
-    }
+    });
   }
 
+
+  upvotePost(post: Post) {
+    this.feedService.upvotePost(post.postId).subscribe((res: any) => {
+      post.score = res.score;
+    });
+  }
+
+  downvotePost(post: Post) {
+    return this.feedService.downvotePost(post.postId)
+      .subscribe((res: any) => {
+      post.score = res.score;
+    });
+  }
 
 
 }
