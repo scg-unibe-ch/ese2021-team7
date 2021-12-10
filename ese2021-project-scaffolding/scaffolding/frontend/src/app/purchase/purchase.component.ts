@@ -48,7 +48,7 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
 
   // presets for form creation, needs User and Product
   static PreSet = class {
-    constructor(public presetUser: User,
+    constructor(public presetUser: User | undefined,
                 public presetProduct: Product) {
     }
   };
@@ -80,11 +80,16 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
         productId = params['productId'];
       });
       if (productId != null) {
-        this.shopService.getProductByIdAsObservable(productId).subscribe(product => {
-          this.product = this.shopService.createProductFromBackendResponse(product); // create Product object
-          this.initializeForm(new PurchaseComponent.PreSet(this.currentUser, this.product)); //initialize form with presets
-          this.isLoading = false;
-        });
+        if(this.currentUser == undefined) {
+          this.router.navigate(['/login']);
+        }
+        else {
+          this.shopService.getProductByIdAsObservable(productId).subscribe(product => {
+            this.product = this.shopService.createProductFromBackendResponse(product); // create Product object
+            this.initializeForm(new PurchaseComponent.PreSet(this.currentUser, this.product)); //initialize form with presets
+            this.isLoading = false;
+          });
+        }
       }
   }
 
@@ -95,8 +100,10 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
 
   //overrirdes Base Component
   protected reRouteIfNoAccess(route: string, queryParams?: any): void {
-    if (this.currentUser.isAdmin) this.router.navigate([this.routeIfNoAccess]);
-    else this.router.navigate(['/login']);
+    if(this.currentUser == undefined) this.router.navigate(['/login']);
+    else if (this.currentUser.isAdmin) {
+      this.router.navigate([this.routeIfNoAccess]);
+    } else {this.router.navigate(['/login']);}
   }
 
 

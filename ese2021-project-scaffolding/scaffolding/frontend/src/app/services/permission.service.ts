@@ -85,12 +85,13 @@ export class PermissionService {
    * @param user: given user or admin
    * @param permissionToAccess: type of permission (= access to which component)
    */
-  evaluateAccessPermissions(loggedIn: boolean, user: User, permissionToAccess: PermissionType): boolean {
-    if(!loggedIn){
-      if(this.guestPermissions.includes(permissionToAccess)) return true; //check guest array
-      else return false;
-    }
-    else {
+  evaluateAccessPermissions(loggedIn: boolean, user: User | undefined, permissionToAccess: PermissionType): boolean {
+    if(user == undefined) {
+      if(!loggedIn){
+        if(this.guestPermissions.includes(permissionToAccess)) return true; //check guest array
+        else return false;
+      } else return false;
+    } else {
       return user.accessPermissions.checkPermissions(permissionToAccess); //otherwise evaluate
     }
   }
@@ -118,9 +119,10 @@ export class PermissionService {
    * @param user: user or admin
    * @param post: given post
    */
-  checkPermissionsPostUpdateAndDelete(loggedIn: boolean, user: User, post: Post): boolean {
+  checkPermissionsPostUpdateAndDelete(loggedIn: boolean, user: User | undefined, post: Post): boolean {
     // set true if user is admin or if user is creator of post
-    if (loggedIn) {
+    if(user == undefined ) return false;
+    else if (loggedIn) {
       if (user.isAdmin) return true;
       else if (user.userId == post.CreationUser) return true;
       else return false;
@@ -135,9 +137,10 @@ export class PermissionService {
    * @param user: user or admin
    * @param post: given post
    */
-  checkPermissionsShowVotingButtons(loggedIn: boolean, user: User, post: Post): boolean {
+  checkPermissionsShowVotingButtons(loggedIn: boolean, user: User | undefined, post: Post): boolean {
     // set true only if logged in and user is not creator
-    if (loggedIn && !user.isAdmin && user.userId != post.CreationUser) return true;
+    if(user == undefined ) return false;
+    else if (loggedIn && !user.isAdmin && user.userId != post.CreationUser) return true;
     else return false;
   }
 
@@ -148,8 +151,9 @@ export class PermissionService {
    * @param user: user or admin
    * @param post: given post
    */
-  checkPermissionsUpvote(loggedIn: boolean, user: User, post: Post): boolean {
-    if (loggedIn && !user.isAdmin && user.userId != post.CreationUser) {
+  checkPermissionsUpvote(loggedIn: boolean, user: User | undefined, post: Post): boolean {
+    if(user == undefined) return false;
+    else if (loggedIn && !user?.isAdmin && user?.userId != post.CreationUser) {
       switch (post.votingState){
         case VotingState.NotVoted: {
           return true;
@@ -178,9 +182,10 @@ export class PermissionService {
    * @param user: user or admin
    * @param post: given post
    */
-  checkPermissionsDownvote(loggedIn: boolean, user: User, post: Post): boolean {
-    if (loggedIn && !user.isAdmin && user.userId != post.CreationUser) {
-      switch (post.votingState){
+  checkPermissionsDownvote(loggedIn: boolean, user: User | undefined, post: Post): boolean {
+    if (user == undefined) return false;
+    else if (loggedIn && !user?.isAdmin && user?.userId != post.CreationUser) {
+      switch (post.votingState) {
         case VotingState.NotVoted: {
           return true;
           break;
@@ -197,8 +202,9 @@ export class PermissionService {
           return false;
         }
       }
-    }
-    else return false;
+    } else return false;
   }
+
+
 
 }

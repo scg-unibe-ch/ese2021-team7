@@ -27,8 +27,8 @@ export class BaseComponent implements OnInit {
 
   //User
   loggedIn = false;
-  currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
-  //currentUser: User | undefined;
+  //currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
+  currentUser: User | undefined;
 
   // Access permissions for componoents
   // to be overwritten by child

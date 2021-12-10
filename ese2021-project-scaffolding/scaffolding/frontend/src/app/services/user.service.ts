@@ -21,7 +21,8 @@ export class UserService {
 
   private loggedIn: boolean = false;
 
-  private user: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
+  //private user: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
+  private user: User | undefined;
 
 
   /*******************************************************************************************************************
@@ -45,7 +46,7 @@ export class UserService {
     return this.loggedIn;
   }
 
-  getUser(): User {
+  getUser(): User | undefined {
     return this.user;
   }
 

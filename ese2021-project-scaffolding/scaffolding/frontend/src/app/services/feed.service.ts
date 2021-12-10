@@ -73,7 +73,7 @@ export class FeedService {
    * BACKEND HANDLERS
    ******************************************************************************************************************/
 
-  private getAllPostsFromBackend(loggedIn: boolean, requestUser: User): void {
+  private getAllPostsFromBackend(loggedIn: boolean, requestUser: User | undefined): void {
     this.postsLoading.next(true);
     this.getHttpRequest(this.sorting,requestUser)
       .pipe(
@@ -86,7 +86,7 @@ export class FeedService {
                 //tap((tapUser: any) => console.log(JSON.stringify("Tap user: " + tapUser))),
                 map(
                   (user: any) => {
-                    if(requestUser.isAdmin || !loggedIn){
+                    if(requestUser == undefined || requestUser.isAdmin || !loggedIn){
                       return this.createPostFromBackendResponse(post, this.categoryService.getCategoryById(post.category), user, VotingState.NotAllowed);  // join together and give back one OrderToDisplay
                     } else {
                       return this.createPostFromBackendResponse(post, this.categoryService.getCategoryById(post.category), user);  // join together and give back one OrderToDisplay
@@ -117,9 +117,9 @@ export class FeedService {
   }
 
 
-  private getHttpRequest(sorting: number, user?: User): Observable<any> {
+  private getHttpRequest(sorting: number, user?: User | undefined): Observable<any> {
     if(sorting != 0) {
-      if(user){
+      if(user && user != undefined){
         console.log("Request: get all; user  set:  " + JSON.stringify(user) + "  sorting: " + sorting);
         return this.httpClient.get(environment.endpointURL + "post/all", {params: {
             sortBy: sorting,
@@ -134,7 +134,7 @@ export class FeedService {
         });
       }
     } else {
-      if(user) {
+      if(user && user != undefined) {
         console.log("Request: get all; user set:  "+ JSON.stringify(user)  + " no sorting: " + sorting);
         return this.httpClient.get(environment.endpointURL + "post/all", {
           params: {
@@ -149,7 +149,7 @@ export class FeedService {
       }
   }
 
-  refreshPosts(loggedIn: boolean, requestUser: User): void {
+  refreshPosts(loggedIn: boolean, requestUser: User | undefined): void {
     this.getAllPostsFromBackend(loggedIn, requestUser);
   }
 

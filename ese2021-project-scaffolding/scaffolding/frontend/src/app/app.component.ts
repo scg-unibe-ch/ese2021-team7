@@ -87,8 +87,7 @@ export class AppComponent extends BaseComponent implements OnInit {
   }*/
 
   logoutUser(): void {
-    localStorage.removeItem('userName');
-    localStorage.removeItem('email');
+    localStorage.removeItem('userId');
     localStorage.removeItem('userToken');
 
     this.userService.setLoggedIn(false);
