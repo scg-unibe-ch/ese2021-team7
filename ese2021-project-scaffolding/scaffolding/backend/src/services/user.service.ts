@@ -4,6 +4,7 @@ import { ErrorCodes } from '../errorCodes';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {Op} from 'sequelize';
+import {randomInt} from 'crypto';
 
 export class UserService {
 
@@ -110,6 +111,22 @@ export class UserService {
                     }
                 }
             );
+    }
+
+    public discoverHouse(user: UserAttributes): Promise<any> {
+        return User.findByPk(user.userId)
+            .then(existingUser => {
+                if (existingUser) {
+                    if (existingUser.house) {
+                        return Promise.reject({message: 'house was already set for user'});
+                    }
+                    existingUser.house = randomInt(1, 10);
+                    existingUser.save();
+                    return Promise.resolve({house: existingUser.house});
+                } else {
+                    return Promise.reject({message: 'no user found with id ' + user.userId});
+                }
+            });
     }
 
     public getAll(): Promise<User[]> {
