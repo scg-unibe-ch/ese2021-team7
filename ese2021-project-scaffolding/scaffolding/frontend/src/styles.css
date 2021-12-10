@@ -295,3 +295,8 @@ table {
   height: 100%;
   background-color: #eeeeee !important;
 }
+
+.group7-voted {
+  color: #571677 !important;
+  background-color: #e1e1e1 !important;
+}
