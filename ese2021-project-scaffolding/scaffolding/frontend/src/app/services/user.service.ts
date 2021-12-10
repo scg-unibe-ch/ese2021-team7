@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
-import {Observable, Subject } from 'rxjs';
+import {BehaviorSubject, Observable, Subject } from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import { AccessPermission } from '../models/access-permission';
@@ -24,6 +24,7 @@ export class UserService {
   //private user: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
   private user: User | undefined;
 
+  private isLoading: boolean = false;
 
   /*******************************************************************************************************************
    * OBSERVABLE SOURCES & STREAMS
@@ -32,10 +33,12 @@ export class UserService {
   // Observable Sources
   private loggedInSource = new Subject<boolean>();
   private userSource = new Subject<User>();
+  private loadingSource = new BehaviorSubject<boolean>(false);
 
   // Observable Streams
   loggedIn$ = this.loggedInSource.asObservable();
   user$ = this.userSource.asObservable();
+  loading$ = this.loadingSource.asObservable();
 
 
   /*******************************************************************************************************************
@@ -67,7 +70,8 @@ export class UserService {
    * CHECK STATUS
    ******************************************************************************************************************/
 
-  checkUserStatus(): void {
+/*  checkUserStatus(): void {
+    this.loadingSource.next(true);
     if(!this.loggedIn) {
       console.log("loggedin " + this.loggedIn);
       let userId = localStorage.getItem('userId');
@@ -83,6 +87,27 @@ export class UserService {
         this.setLoggedIn(false);
       }
     }
+    this.loadingSource.next(false);
+  }*/
+
+  checkUserStatus(): void {
+    this.loadingSource.next(true);
+    if(!this.loggedIn) {
+      console.log("loggedin " + this.loggedIn);
+      let userId = localStorage.getItem('userId');
+      if (userId) {
+        console.log("User Id from local storage: " + userId);
+        this.userBackendService.getUserByIdAsObservable(Number(userId))
+          .subscribe(user => {
+            console.log("relogin: " + JSON.stringify(user));
+            this.setUser(this.createUserFromBackendReponse(user));
+            this.setLoggedIn(true);
+          })
+      } else {
+        this.setLoggedIn(false);
+      }
+    }
+    this.loadingSource.next(false);
   }
 
 

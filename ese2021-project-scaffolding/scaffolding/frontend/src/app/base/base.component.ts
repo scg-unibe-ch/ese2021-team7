@@ -29,6 +29,7 @@ export class BaseComponent implements OnInit {
   loggedIn = false;
   //currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
   currentUser: User | undefined;
+  isLoading: boolean = false;
 
   // Access permissions for componoents
   // to be overwritten by child
@@ -86,7 +87,11 @@ export class BaseComponent implements OnInit {
     // Current value
     this.loggedIn = this.userService.getLoggedIn();
     this.currentUser = this.userService.getUser();
-    //this.checkUserStatus();
+
+    //listener
+    this.userService.loading$.subscribe(res => this.isLoading = res);
+
+    this.checkUserStatus();
   }
 
   /**
