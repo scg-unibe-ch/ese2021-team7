@@ -42,13 +42,13 @@ export class RegistrationFormService implements FormService {
       lastName: new FormControl(''),
       street: new FormControl(''),
       houseNumber: new FormControl('', Validators.compose([
-        this.validatorService.patternValidator(/^[0-9]*$/, {'notValidHouseNr': true})])),
+        this.validatorService.patternValidator(/^[0-9]*$/, {'notValidHouseNr': true})])), //only numbers
       zipCode: new FormControl('', Validators.compose([
-        this.validatorService.patternValidator(/^\d{4}$/, {'notValidZipCode': true})])),
+        this.validatorService.patternValidator(/^\d{4}$/, {'notValidZipCode': true})])), //excactly 4 digits
       city: new FormControl(''),
       birthday: new FormControl(''),
       phoneNumber: new FormControl('', Validators.compose([
-        this.validatorService.patternValidator(/^[\+]?[0-9]{11}$/, {'notValidPhoneNr': true})]))
+        this.validatorService.patternValidator(/^[\+]?[0-9]{11}$/, {'notValidPhoneNr': true})])) // of form +41795554433
     });
   }
 

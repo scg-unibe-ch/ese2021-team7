@@ -1,26 +1,39 @@
+<!-- Wrapper and Card -->
 <div class="card-wrapper-center registration-form">
   <mat-card *ngIf="!loggedIn" class="group7-card">
+
+    <!-- Title -->
     <mat-card-header>
       <mat-card-title><h1 class="card-title">SIGN UP</h1></mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="form-wrapper">
+        
+        <!-- Begin of Form -->
         <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
+
+          <!--Username -->
           <mat-form-field appearance="outline">
             <mat-label>Username</mat-label>
             <input matInput type="text"  placeholder="User Name" id="username" [formControlName]="'userName'" [ngClass]="form.controls['userName']?.errors?.userNameInUse ? 'is-invalid' : '' " required>
             <mat-error *ngIf="form.controls['email'].touched && form.controls['userName'].value != '' && form.controls['userName']?.errors?.userNameInUse" class="is-invalid">Username already in use</mat-error>
           </mat-form-field>
+
+          <!-- Email -->
           <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
             <input matInput type="email" placeholder="Email" id="email" [formControlName]="'email'" [ngClass]="form.controls['email']?.errors?.emailInUse ? 'is-invalid' : '' " required>
             <mat-error *ngIf="form.controls['email'].touched && form.controls['email'].value != '' && form.controls['email']?.errors?.emailInUse" class="is-invalid">Email already in use</mat-error>
           </mat-form-field>
+
+          <!-- Password -->
           <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
             <input matInput type="password" placeholder="Password" id="password" [formControlName]="'password'" [ngClass]="form.controls['password']?.hasError('required') ? 'is-invalid' : ''" required>
             </mat-form-field>
             <div>
+
+              <!-- Password requirements -->
               <span>Password must contain:</span><br/>
                 <div>
                   <mat-icon [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'" [color]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'">
@@ -63,41 +76,59 @@
                   <span [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('noSpecialCharacter') ? 'is-invalid' : 'valid'">min. one special character (@#$%^&-()+=)</span>
                 </div>
               </div><br/>
+
+          <!-- First Name -->
             <mat-form-field appearance="outline">
               <mat-label>First Name</mat-label>
               <input matInput type="text" placeholder="First Name" id="firstName" [formControlName]="'firstName'">
             </mat-form-field>
+
+          <!-- Last Name -->
             <mat-form-field appearance="outline">
               <mat-label>Last Name</mat-label>
               <input matInput type="text" placeholder="Last Name" id="lastName" [formControlName]="'lastName'">
             </mat-form-field>
+
+          <!-- Street -->
             <mat-form-field appearance="outline">
               <mat-label>Street</mat-label>
               <input matInput type="text" placeholder="Street"  id="street" [formControlName]="'street'">
             </mat-form-field>
+
+          <!-- House Nr. -->
             <mat-form-field appearance="outline">
               <mat-label>Nr.</mat-label>
               <input matInput type="text"  placeholder="Nr." id="houseNumber" [formControlName]="'houseNumber'">
               <mat-error *ngIf="form.controls['houseNumber'].touched && form.controls['houseNumber'].value != '' && form.controls['houseNumber']?.errors?.notValidHouseNr" class="is-invalid">Enter a valid house number</mat-error>
             </mat-form-field>
+
+          <!-- Zip Code -->
             <mat-form-field appearance="outline">
               <mat-label>Zip Code</mat-label>
               <input matInput type="text" placeholder="Zip Code"  id="zipCode" [formControlName]="'zipCode'">
               <mat-error *ngIf="form.controls['zipCode'].touched && form.controls['zipCode'].value != '' && form.controls['zipCode']?.errors?.notValidZipCode" class="is-invalid">Enter a valid ZIP Code</mat-error>
             </mat-form-field>
+
+          <!-- City -->
             <mat-form-field appearance="outline">
               <mat-label>City</mat-label>
               <input matInput type="text" placeholder="City"  id="city" [formControlName]="'city'">
             </mat-form-field>
+
+          <!-- Birthday -->
             <mat-form-field appearance="outline">
               <mat-label>Birthday</mat-label>
               <input matInput type="date" placeholder="Birthday"  min="1900-01-01" max="2021-10-07" id="birthday" [formControlName]="'birthday'">
             </mat-form-field>
+
+          <!-- Phone -->
             <mat-form-field appearance="outline">
               <mat-label>Phone Number</mat-label>
               <input matInput type="tel" placeholder="Phone: +41 79 ..."   id="phoneNumber" [formControlName]="'phoneNumber'">
               <mat-error *ngIf="form.controls['phoneNumber'].touched && form.controls['phoneNumber'].value != '' && form.controls['phoneNumber']?.errors?.notValidPhoneNr" class="is-invalid">Enter a valid phone number, e.g. +41793332211</mat-error>
             </mat-form-field>
+
+          <!-- Submit Button -->
           <div class="form-action-button">
             <button mat-flat-button type="submit" [disabled]="!form.valid" class="form-action-button group7-forms-button">Sign Up</button>
           </div>
