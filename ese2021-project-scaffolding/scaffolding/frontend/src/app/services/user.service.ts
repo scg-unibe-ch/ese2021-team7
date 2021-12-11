@@ -147,15 +147,17 @@ export class UserService {
    ******************************************************************************************************************/
 
   createUserFromBackendReponse(res: any): User {
+    let user = new User(res.userId, res.userName, res.password, res.admin, res.firstName,
+      res.lastName, res.email, res.street, res.houseNumber, res.zipCode, res.city,
+      res.birthday, res.phoneNumber);
     if (res.admin) {
-      return new User(res.userId, res.userName, res.password, res.admin, res.firstName,
-        res.lastName, res.email, res.street, res.houseNumber, res.zipCode, res.city,
-        res.birthday, res.phoneNumber, this.permissionService.getAdminAccessPermissions(), this.permissionService.getAdminFeaturePermissions());
+      user.setAccessPermissions(this.permissionService.getAdminAccessPermissions());
+      user.setFeaturesPermissions(this.permissionService.getAdminFeaturePermissions());
     } else {
-      return new User(res.userId, res.userName, res.password, res.admin, res.firstName,
-        res.lastName, res.email, res.street, res.houseNumber, res.zipCode, res.city,
-        res.birthday, res.phoneNumber, this.permissionService.getUserAccessPermissions(), this.permissionService.getUserFeaturePermissions());
+      user.setAccessPermissions(this.permissionService.getUserAccessPermissions());
+      user.setFeaturesPermissions(this.permissionService.getUserFeaturePermissions());
     }
+    return user;
   }
 
   /*******************************************************************************************************************

@@ -17,7 +17,16 @@ export class User {
     public city: string,
     public birthday: string, // form yyyy-mm-dd
     public phoneNumber: string,
-    public accessPermissions: AccessPermission, // access permissions of user
-    public featuresPermissions: FeaturePermission // (static/independent) permissions for certain features
+    public accessPermissions?: AccessPermission, // access permissions of user
+    public featuresPermissions?: FeaturePermission // (static/independent) permissions for certain features
   ) {}
+
+  setAccessPermissions(accessPermission: AccessPermission): void {
+    this.accessPermissions = accessPermission;
+  }
+
+  setFeaturesPermissions(featuresPermissions: FeaturePermission): void {
+    this.featuresPermissions = featuresPermissions;
+  }
+
 }
