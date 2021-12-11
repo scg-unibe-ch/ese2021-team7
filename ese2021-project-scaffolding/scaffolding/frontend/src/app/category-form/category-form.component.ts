@@ -55,9 +55,10 @@ export class CategoryFormComponent extends BaseFormComponent implements OnInit {
    * LIFECYCLE HOOKS
    ******************************************************************************************************************/
   ngOnInit(): void {
-    super.initializeUser();
-    super.initializeForm(); // implemented in parent class
-    super.evaluateAccessPermissions();
+    super.ngOnInit();
+    //super.initializeUser();
+    //super.initializeForm(); // implemented in parent class
+    //super.evaluateAccessPermissions();
   }
 
   /*******************************************************************************************************************

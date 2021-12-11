@@ -39,7 +39,7 @@ export class LoginComponent extends BaseComponent implements OnInit{
 
 
   ngOnInit(): void {
-    super.initializeUser();
+    super.ngOnInit();
     this.route.queryParams.subscribe( params =>{
       if(params['registered']== 'true'){
         this.fromRegistration = true;

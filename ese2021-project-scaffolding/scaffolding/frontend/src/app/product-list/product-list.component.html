@@ -1,7 +1,7 @@
 <div class="card-wrapper-center">
-  <div class="shop-wrapper">
+  <div class="shop-wrapper" *ngIf="!isLoadingUser && !isLoadingCategories">
     <div class="buttons-wrapper">
-    <button mat-flat-button [disabled]="!currentUser.featuresPermissions.addProduct" (click)="addProduct()" class="group7-forms-button">
+    <button mat-flat-button [disabled]="canAddProduct" (click)="addProduct()" class="group7-forms-button">
       Add new product
     </button>
     <button mat-flat-button (click) ="refreshShop()" class="group7-forms-button">

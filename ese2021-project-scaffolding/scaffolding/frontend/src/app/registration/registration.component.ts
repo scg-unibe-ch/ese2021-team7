@@ -53,7 +53,7 @@ export class RegistrationComponent extends BaseComponent implements OnInit {
   }
 
   onInit(): void {
-    super.initializeUser();
+    super.ngOnInit();
   }
 
   onSubmit(formDirective: FormGroupDirective): void {

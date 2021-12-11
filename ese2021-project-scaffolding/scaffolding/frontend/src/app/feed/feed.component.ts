@@ -38,7 +38,7 @@ export class FeedComponent extends BaseComponent implements OnInit {
 
   filterBy: number = 0;
 
-  isLoading: boolean = false;
+  isLoadingPosts: boolean = false;
 
   //array with post categories
   //postCategories: Category[] = [];
@@ -66,11 +66,12 @@ export class FeedComponent extends BaseComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-    super.initializeUser(); //parents method
-    super.evaluateAccessPermissions();
-    super.initializeCategories();
+    //super.initializeUser(); //parents method
+    //super.evaluateAccessPermissions();
+    //super.initializeCategories();
     //console.log(this.postCategories);
 
+    super.ngOnInit();
     //loads Data
     //this.feedService.setUserAndLoggedIn(this.loggedIn, this.currentUser);
     this.feedService.refreshPosts(this.loggedIn, this.currentUser);
@@ -80,7 +81,7 @@ export class FeedComponent extends BaseComponent implements OnInit {
     this.postList = this.feedService.getPosts();
 
     //loading flag
-    this.feedService.postsLoading$.subscribe(res => this.isLoading = res);
+    this.feedService.postsLoading$.subscribe(res => this.isLoadingPosts = res);
   }
 
 

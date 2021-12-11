@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnChanges, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccessPermission } from '../models/access-permission';
 import { Category } from '../models/category';
@@ -19,7 +19,7 @@ import { UserService } from '../services/user.service';
  *
  * Handles user management and permissions.
  */
-export class BaseComponent implements OnInit {
+export class BaseComponent implements OnInit, OnChanges {
 
   /*******************************************************************************************************************
    * VARIABLES
@@ -29,7 +29,10 @@ export class BaseComponent implements OnInit {
   loggedIn = false;
   //currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
   currentUser: User | undefined;
-  isLoading: boolean = false;
+
+  // Loading flags
+  isLoadingUser: boolean = false;
+  isLoadingCategories: boolean = false;
 
   // Access permissions for componoents
   // to be overwritten by child
@@ -62,7 +65,14 @@ export class BaseComponent implements OnInit {
    * LIFECYCLE HOOKS
    ******************************************************************************************************************/
 
+  ngOnChanges(): void {
+    this.checkUserStatus();
+  }
+
+
   ngOnInit(): void {
+    this.initializeUser();
+    this.initializeCategories();
   }
 
 
@@ -89,7 +99,7 @@ export class BaseComponent implements OnInit {
     this.currentUser = this.userService.getUser();
 
     //listener
-    this.userService.loading$.subscribe(res => this.isLoading = res);
+    this.userService.loading$.subscribe(res => this.isLoadingUser = res);
 
     this.checkUserStatus();
   }
@@ -137,6 +147,9 @@ export class BaseComponent implements OnInit {
     this.categoryService.postCategories$.subscribe(res => this.postCategories = res);
     //current value of post categories
     this.postCategories = this.categoryService.getPostCategories();
+
+    //listener
+    this.userService.loading$.subscribe(res => this.isLoadingCategories = res);
   }
 
 

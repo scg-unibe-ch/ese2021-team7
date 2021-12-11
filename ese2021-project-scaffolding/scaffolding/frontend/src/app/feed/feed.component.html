@@ -1,5 +1,5 @@
 <div class="card-wrapper-center">
-  <div class="feed-wrapper" *ngIf="!isLoading">
+  <div class="feed-wrapper" *ngIf="!isLoadingUser && !isLoadingCategories && !isLoadingPosts">
     <button mat-flat-button (click)="reloadFeed()" class="group7-forms-button">
       Reload Feed
     </button>
