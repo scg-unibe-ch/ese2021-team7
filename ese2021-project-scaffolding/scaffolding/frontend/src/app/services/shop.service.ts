@@ -5,7 +5,6 @@ import { map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Product } from '../models/product.model';
 import { CategoryService } from './category.service';
-import { HttpRequestBuilderService } from './http-request-builder.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +20,7 @@ export class ShopService {
    * CONSTRUCTOR
    ******************************************************************************************************************/
 
-  constructor(private httpRequestBuilder: HttpRequestBuilderService,
+  constructor(
               private httpClient: HttpClient,
               private categoryService: CategoryService) {
     this.getProductsFromBackend(); // get products
