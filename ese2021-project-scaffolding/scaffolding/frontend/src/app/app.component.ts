@@ -87,12 +87,14 @@ export class AppComponent extends BaseComponent implements OnInit {
   }*/
 
   logoutUser(): void {
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userToken');
-
-    this.userService.setLoggedIn(false);
-    this.userService.setUser(undefined);
+    this.userService.logoutUser();
     this.router.navigate(['../home']).then(r =>{});
+    /*    localStorage.removeItem('userId');
+        localStorage.removeItem('userToken');
+
+        this.userService.setLoggedIn(false);
+        this.userService.setUser(undefined);
+        this.router.navigate(['../home']).then(r =>{});*/
   }
 
 }

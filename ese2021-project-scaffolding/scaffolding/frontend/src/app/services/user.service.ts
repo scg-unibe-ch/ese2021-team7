@@ -7,7 +7,7 @@ import { AccessPermission } from '../models/access-permission';
 import { FeaturePermission } from '../models/feature-permission';
 import { PermissionService } from './permission.service';
 import { FormGroup } from '@angular/forms';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,6 @@ export class UserService {
    ******************************************************************************************************************/
 
   private loggedIn: boolean = false;
-
-  //private user: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
   private user: User | undefined;
 
   private isLoading: boolean = false;
@@ -38,6 +36,23 @@ export class UserService {
   loggedIn$ = this.loggedInSource.asObservable();
   user$ = this.userSource.asObservable();
   loading$ = this.loadingSource.asObservable();
+
+
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
+
+  constructor(
+    private permissionService: PermissionService,
+    private httpClient: HttpClient
+  ) {
+    // Observer
+    this.loggedIn$.subscribe(res => this.loggedIn = res);
+    this.user$.subscribe(res => this.user = res);
+
+    // Default values
+    this.setLoggedIn(false);
+  }
 
 
   /*******************************************************************************************************************
@@ -90,40 +105,46 @@ export class UserService {
   }
 
 
-
-
-  /*******************************************************************************************************************
-   * CONSTRUCTOR
-   ******************************************************************************************************************/
-
-  constructor(
-  private permissionService: PermissionService,
-  private httpClient: HttpClient
-  ) {
-    // Observer
-    this.loggedIn$.subscribe(res => this.loggedIn = res);
-    this.user$.subscribe(res => this.user = res);
-
-    // Default values
-    this.setLoggedIn(false);
-  }
-
   /*******************************************************************************************************************
    * LOGIN
    ******************************************************************************************************************/
 
+  /**
+   * Sends 'user/login' request to backend.
+   *
+   * Sets UserService/LocalStorage on logged in in case of success.
+   *
+   * @param userToLogin
+   */
   loginUser(userToLogin: User): Observable<any> {
     return this.httpClient.post(environment.endpointURL + "user/login", {
       userName: userToLogin.username,
       password: userToLogin.password,
       email: userToLogin.email
-    });
+    }).pipe(
+      tap((res: any) => {
+        localStorage.setItem('userToken', res.token);
+        localStorage.setItem('userId', res.user.userId);
+        this.setLoggedIn(true);
+        this.setUser(this.createUserFromBackendReponse(res.user));
+      })
+    );
+  }
+
+  /**
+   * Performs logout.
+   */
+  logoutUser(): void {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userToken');
+
+    this.setLoggedIn(false);
+    this.setUser(undefined);
   }
 
   /*******************************************************************************************************************
    * HELPER METHODS
    ******************************************************************************************************************/
-
 
   createUserFromBackendReponse(res: any): User {
     if (res.admin) {

@@ -28,7 +28,6 @@ export class RegistrationFormService implements FormService {
    * @param preSets: none
    */
   buildForm(preSets?: any): FormGroup{
-    console.log("Presets: " + JSON.stringify(preSets));
     return this.fb.group({
       userName: new FormControl('', Validators.compose([Validators.required]), [this.validatorService.userNameInUseValidator()]),
       password: new FormControl(null, Validators.compose([Validators.required,
