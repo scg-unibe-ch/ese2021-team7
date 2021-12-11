@@ -7,6 +7,11 @@ export class ProductService {
 
     private categoryService = new CategoryService();
 
+    /***
+     * Add the avalability of a product as a new data value to the object
+     * @param product
+     * @private The availability is added to the model and accessible as a data value, hence this method is private
+     */
     private setAvailability(product: Product) {
         let available = true;
         // @ts-ignore

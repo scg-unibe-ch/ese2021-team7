@@ -47,6 +47,11 @@ export class OrderService {
         return Order.findAll();
     }
 
+    /***
+     * Cancels an order specified by it's id. Only existing and pending orders can be cancelle. Any attempt to cancel
+     * non existing, shipped or already cancelled order will leat to a rejected promise
+     * @param orderId Id of the order which sould be cancelled
+     */
     public async cancelOrder(orderId: number): Promise<Order> {
         return Order.findByPk(orderId).then(async dbOrder => {
             if (dbOrder) {
@@ -66,6 +71,11 @@ export class OrderService {
         });
     }
 
+    /***
+     * Changes the OrderStatus from "Pending" to "Shipped". Only existing and pending orders can be shipped. Any
+     * attempt to do otherwise will lead to a rejected promise.
+     * @param orderId The id of the order which should be shipped
+     */
     public async shipOrder(orderId: number): Promise<Order> {
         return Order.findByPk(orderId).then(async dbOrder => {
             if (dbOrder) {

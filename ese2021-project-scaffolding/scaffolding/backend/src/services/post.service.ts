@@ -21,6 +21,12 @@ export class PostService {
         });
     }
 
+    /***
+     * Calculate the score, i.e. the sum of the upvotes and sets it as a new DataValue. Upvotes are recorded as 1,
+     * downvotes as -1
+     * @param post The post for which the score should be calculated
+     * @private The score is added to the model and accessible as a datavalue, hence this method is private
+     */
     private setScore(post: Post) {
         let score = 0;
         // @ts-ignore
