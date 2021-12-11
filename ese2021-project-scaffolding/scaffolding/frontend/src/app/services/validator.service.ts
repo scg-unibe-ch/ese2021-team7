@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import {AbstractControl, AsyncValidatorFn, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ import {AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angul
  */
 export class ValidatorService {
 
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
 
 
   /**
@@ -57,6 +59,49 @@ export class ValidatorService {
     console.log("correct");
     return null;
   };
+
+  /*******************************************************************************************************************
+   * REGISTRATION FORM
+   ******************************************************************************************************************/
+
+  userNameInUseValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Promise<ValidationErrors | null> => {
+      const promise = new Promise<any>((resolve, reject) => {
+        this.httpClient.post(environment.endpointURL + "user/checkUserNameOrEmailInUse", {
+          userName: control.value
+        }).subscribe((res: any) => {
+          if (res.inUse == true) {
+            resolve({userNameInUse: true});
+          } else {
+            resolve(null);
+          }
+        }, error => {
+          console.log(error);
+        });
+      });
+      return promise;
+    }
+  }
+
+
+  emailInUseValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Promise<ValidationErrors | null> => {
+      const promise = new Promise<any>((resolve, reject) => {
+        this.httpClient.post(environment.endpointURL + "user/checkUserNameOrEmailInUse", {
+          email: control.value
+        }).subscribe((res: any) => {
+          if (res.inUse == true) {
+            resolve({emailInUse: true});
+          } else {
+            resolve(null);
+          }
+        }, error => {
+          console.log(error);
+        });
+      });
+      return promise;
+    };
+  }
 
 
 

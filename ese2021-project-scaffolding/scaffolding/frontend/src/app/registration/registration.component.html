@@ -5,62 +5,62 @@
     </mat-card-header>
     <mat-card-content>
       <div class="form-wrapper">
-        <form [formGroup]="registrationForm" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
+        <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
           <mat-form-field appearance="outline">
             <mat-label>Username</mat-label>
-            <input matInput type="text"  placeholder="User Name" id="username" [formControlName]="'userName'" [ngClass]="registrationForm.controls['userName']?.errors?.userNameInUse ? 'is-invalid' : '' " required>
-            <mat-error *ngIf="registrationForm.controls['email'].touched && registrationForm.controls['userName'].value != '' && registrationForm.controls['userName']?.errors?.userNameInUse" class="is-invalid">Username already in use</mat-error>
+            <input matInput type="text"  placeholder="User Name" id="username" [formControlName]="'userName'" [ngClass]="form.controls['userName']?.errors?.userNameInUse ? 'is-invalid' : '' " required>
+            <mat-error *ngIf="form.controls['email'].touched && form.controls['userName'].value != '' && form.controls['userName']?.errors?.userNameInUse" class="is-invalid">Username already in use</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
-            <input matInput type="email" placeholder="Email" id="email" [formControlName]="'email'" [ngClass]="registrationForm.controls['email']?.errors?.emailInUse ? 'is-invalid' : '' " required>
-            <mat-error *ngIf="registrationForm.controls['email'].touched && registrationForm.controls['email'].value != '' && registrationForm.controls['email']?.errors?.emailInUse" class="is-invalid">Email already in use</mat-error>
+            <input matInput type="email" placeholder="Email" id="email" [formControlName]="'email'" [ngClass]="form.controls['email']?.errors?.emailInUse ? 'is-invalid' : '' " required>
+            <mat-error *ngIf="form.controls['email'].touched && form.controls['email'].value != '' && form.controls['email']?.errors?.emailInUse" class="is-invalid">Email already in use</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
-            <input matInput type="password" placeholder="Password" id="password" [formControlName]="'password'" [ngClass]="registrationForm.controls['password']?.hasError('required') ? 'is-invalid' : ''" required>
+            <input matInput type="password" placeholder="Password" id="password" [formControlName]="'password'" [ngClass]="form.controls['password']?.hasError('required') ? 'is-invalid' : ''" required>
             </mat-form-field>
             <div>
               <span>Password must contain:</span><br/>
                 <div>
-                  <mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'" [color]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'">
-                  {{ registrationForm.controls['password'].hasError('required') ||
-                registrationForm.controls['password'].hasError('minlength') ? 'cancel' :
+                  <mat-icon [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'" [color]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'">
+                  {{ form.controls['password'].hasError('required') ||
+                  form.controls['password'].hasError('minlength') ? 'cancel' :
                   'check_circle' }}
                   </mat-icon>
-                <span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'"> min. 8 characters</span>
+                <span [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('minlength') ? 'is-invalid' : 'valid'"> min. 8 characters</span>
                 </div>
                 <div>
-                  <mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noNumberInPassword') ? 'is-invalid' : 'valid'">
-                  {{ registrationForm.controls['password'].hasError('required') ||
-                registrationForm.controls['password'].hasError('noNumberInPassword') ? 'cancel' :
+                  <mat-icon [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('noNumberInPassword') ? 'is-invalid' : 'valid'">
+                  {{ form.controls['password'].hasError('required') ||
+                  form.controls['password'].hasError('noNumberInPassword') ? 'cancel' :
                   'check_circle' }}
                   </mat-icon>
-                  <span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noNumberInPassword') ? 'is-invalid' : 'valid'">min. one number (0-9)</span>
+                  <span [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('noNumberInPassword') ? 'is-invalid' : 'valid'">min. one number (0-9)</span>
                 </div>
                 <div>
-                  <mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noSmallLetter') ? 'is-invalid' : 'valid'">
-                  {{ registrationForm.controls['password'].hasError('required') ||
-                registrationForm.controls['password'].hasError('noSmallLetter') ? 'cancel' :
+                  <mat-icon [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('noSmallLetter') ? 'is-invalid' : 'valid'">
+                  {{ form.controls['password'].hasError('required') ||
+                  form.controls['password'].hasError('noSmallLetter') ? 'cancel' :
                   'check_circle' }}
                 </mat-icon>
-                <span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noSmallLetter') ? 'is-invalid' : 'valid'">min. one small letter (a-z)</span>
+                <span [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('noSmallLetter') ? 'is-invalid' : 'valid'">min. one small letter (a-z)</span>
                 </div>
                 <div>
-                  <mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noCapitalLetter') ? 'is-invalid' : 'valid'">
-                  {{ registrationForm.controls['password'].hasError('required') ||
-                registrationForm.controls['password'].hasError('noCapitalLetter') ? 'cancel' :
+                  <mat-icon [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('noCapitalLetter') ? 'is-invalid' : 'valid'">
+                  {{ form.controls['password'].hasError('required') ||
+                  form.controls['password'].hasError('noCapitalLetter') ? 'cancel' :
                   'check_circle' }}
                  </mat-icon>
-                  <span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noCapitalLetter') ? 'is-invalid' : 'valid'">min one capital letter (A-Z)</span>
+                  <span [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('noCapitalLetter') ? 'is-invalid' : 'valid'">min one capital letter (A-Z)</span>
                 </div>
                 <div>
-                  <mat-icon [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noSpecialCharacter') ? 'is-invalid' : 'valid'">
-                  {{ registrationForm.controls['password'].hasError('required') ||
-                registrationForm.controls['password'].hasError('noSpecialCharacter') ? 'cancel' :
+                  <mat-icon [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('noSpecialCharacter') ? 'is-invalid' : 'valid'">
+                  {{ form.controls['password'].hasError('required') ||
+                  form.controls['password'].hasError('noSpecialCharacter') ? 'cancel' :
                   'check_circle' }}
                   </mat-icon>
-                  <span [ngClass]="registrationForm.controls['password']?.hasError('required') || registrationForm.controls['password']?.hasError('noSpecialCharacter') ? 'is-invalid' : 'valid'">min. one special character (@#$%^&-()+=)</span>
+                  <span [ngClass]="form.controls['password']?.hasError('required') || form.controls['password']?.hasError('noSpecialCharacter') ? 'is-invalid' : 'valid'">min. one special character (@#$%^&-()+=)</span>
                 </div>
               </div><br/>
             <mat-form-field appearance="outline">
@@ -78,10 +78,12 @@
             <mat-form-field appearance="outline">
               <mat-label>Nr.</mat-label>
               <input matInput type="text"  placeholder="Nr." id="houseNumber" [formControlName]="'houseNumber'">
+              <mat-error *ngIf="form.controls['houseNumber'].touched && form.controls['houseNumber'].value != '' && form.controls['houseNumber']?.errors?.notValidHouseNr" class="is-invalid">Enter a valid house number</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Zip Code</mat-label>
               <input matInput type="text" placeholder="Zip Code"  id="zipCode" [formControlName]="'zipCode'">
+              <mat-error *ngIf="form.controls['zipCode'].touched && form.controls['zipCode'].value != '' && form.controls['zipCode']?.errors?.notValidZipCode" class="is-invalid">Enter a valid ZIP Code</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>City</mat-label>
@@ -93,10 +95,11 @@
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Phone Number</mat-label>
-              <input matInput type="text" placeholder="Phone"  id="phoneNumber" [formControlName]="'phoneNumber'">
+              <input matInput type="tel" placeholder="Phone: +41 79 ..."   id="phoneNumber" [formControlName]="'phoneNumber'">
+              <mat-error *ngIf="form.controls['phoneNumber'].touched && form.controls['phoneNumber'].value != '' && form.controls['phoneNumber']?.errors?.notValidPhoneNr" class="is-invalid">Enter a valid phone number, e.g. +41793332211</mat-error>
             </mat-form-field>
           <div class="form-action-button">
-            <button mat-flat-button type="submit" [disabled]="!registrationForm.valid" class="form-action-button group7-forms-button">Sign Up</button>
+            <button mat-flat-button type="submit" [disabled]="!form.valid" class="form-action-button group7-forms-button">Sign Up</button>
           </div>
         </form>
       </div>
