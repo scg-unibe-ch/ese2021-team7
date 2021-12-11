@@ -12,7 +12,7 @@ import { Product } from '../models/product.model';
 import { User } from '../models/user.model';
 import { VotingState } from '../models/voting-state';
 import { CategoryService } from './category.service';
-import { UserBackendService } from './user-backend.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -45,8 +45,8 @@ export class FeedService {
 
   constructor(
     public httpClient: HttpClient,
-    public backendUserService: UserBackendService,
-    public categoryService: CategoryService
+    public categoryService: CategoryService,
+    private userService: UserService
   ) {}
 
   /*******************************************************************************************************************
@@ -81,7 +81,7 @@ export class FeedService {
         mergeMap((posts:any[]) => { //mergeMap to handle inner observables
             let forkJoinArray: any[] = [];
             posts.forEach( //replace each object in array through second call/observable
-              (post: any) => forkJoinArray.push(this.backendUserService.getUserByIdAsObservable(post.UserUserId)
+              (post: any) => forkJoinArray.push(this.userService.getUserByIdAsObservable(post.UserUserId)
                 .pipe(
                 //tap((tapUser: any) => console.log(JSON.stringify("Tap user: " + tapUser))),
                 map(

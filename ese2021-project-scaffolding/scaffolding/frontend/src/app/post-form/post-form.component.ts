@@ -8,7 +8,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {VotingState} from "../models/voting-state";
 import { Category } from '../models/category';
 import { CategoryService } from '../services/category.service';
-import { UserBackendService } from '../services/user-backend.service';
 import { PostService } from '../services/post.service';
 import { User } from '../models/user.model';
 import { AccessPermission } from '../models/access-permission';
@@ -49,7 +48,6 @@ export class PostFormComponent extends BaseFormComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private userBackendService: UserBackendService,
     private postService: PostService,
     private dialogRef: MatDialogRef<PostFormComponent>,
     public injector: Injector,

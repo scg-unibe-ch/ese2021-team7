@@ -5,7 +5,6 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import { AccessPermission } from '../models/access-permission';
 import { FeaturePermission } from '../models/feature-permission';
-import { UserBackendService } from './user-backend.service';
 import { PermissionService } from './permission.service';
 import { FormGroup } from '@angular/forms';
 import { map } from 'rxjs/operators';
@@ -70,26 +69,6 @@ export class UserService {
    * CHECK STATUS
    ******************************************************************************************************************/
 
-/*  checkUserStatus(): void {
-    this.loadingSource.next(true);
-    if(!this.loggedIn) {
-      console.log("loggedin " + this.loggedIn);
-      let userId = localStorage.getItem('userId');
-      if (userId) {
-        console.log("User Id from local storage: " + userId);
-        this.userBackendService.getUserByIdAsObservable(Number(userId))
-          .subscribe(user => {
-            console.log("relogin: " + JSON.stringify(user));
-            this.setUser(this.createUserFromBackendReponse(user));
-            this.setLoggedIn(true);
-          })
-      } else {
-        this.setLoggedIn(false);
-      }
-    }
-    this.loadingSource.next(false);
-  }*/
-
   checkUserStatus(): void {
     this.loadingSource.next(true);
     if(!this.loggedIn) {
@@ -97,7 +76,7 @@ export class UserService {
       let userId = localStorage.getItem('userId');
       if (userId) {
         console.log("User Id from local storage: " + userId);
-        this.userBackendService.getUserByIdAsObservable(Number(userId))
+        this.getUserByIdAsObservable(Number(userId))
           .subscribe(user => {
             console.log("relogin: " + JSON.stringify(user));
             this.setUser(this.createUserFromBackendReponse(user));
@@ -111,14 +90,16 @@ export class UserService {
   }
 
 
+
+
   /*******************************************************************************************************************
    * CONSTRUCTOR
    ******************************************************************************************************************/
 
   constructor(
-    private userBackendService: UserBackendService,
   private permissionService: PermissionService,
-private httpClient: HttpClient) {
+  private httpClient: HttpClient
+  ) {
     // Observer
     this.loggedIn$.subscribe(res => this.loggedIn = res);
     this.user$.subscribe(res => this.user = res);
@@ -154,6 +135,30 @@ private httpClient: HttpClient) {
         res.lastName, res.email, res.street, res.houseNumber, res.zipCode, res.city,
         res.birthday, res.phoneNumber, this.permissionService.getUserAccessPermissions(), this.permissionService.getUserFeaturePermissions());
     }
+  }
+
+  /*******************************************************************************************************************
+   * BACKEND METHODS
+   ******************************************************************************************************************/
+
+
+  getUserById(userId: number): User | undefined{
+    let user = undefined;
+    this.httpClient.get(environment.endpointURL + "user/getById", {
+      params: {
+        userId: userId
+      }
+    }).subscribe(res => user=res);
+    return user;
+
+  }
+
+  getUserByIdAsObservable(userId: number): Observable<any> {
+    return this.httpClient.get(environment.endpointURL + "user/getById", {
+      params: {
+        userId: userId
+      }
+    });
   }
 
 
