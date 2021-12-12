@@ -43,6 +43,9 @@ export class ProductListComponent extends BaseComponent implements OnInit {
   // Array with product categories
   productCategories: Category[] = [];
 
+  //Flag add product
+  canAddProduct: boolean = false;
+
   // overrides
   permissionToAccess = PermissionType.AccessHome;
   routeIfNoAccess: string = "/home";
@@ -71,9 +74,13 @@ export class ProductListComponent extends BaseComponent implements OnInit {
     //current value of product categories
     this.productCategories = this.categoryService.getProductCategories();*/
 
-    super.initializeUser();
-    super.evaluateAccessPermissions();
-    super.initializeCategories();
+    //super.initializeUser();
+    //super.evaluateAccessPermissions();
+    //super.initializeCategories();
+
+    super.ngOnInit();
+    if(this.currentUser == undefined ) this.canAddProduct = false;
+    else if(this.currentUser.featuresPermissions) this.canAddProduct = this.currentUser.featuresPermissions.addProduct;
 
     // listern product list
     this.shopService.products$.subscribe(res => {this.productList = res;

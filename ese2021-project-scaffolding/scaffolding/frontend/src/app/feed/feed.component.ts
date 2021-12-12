@@ -1,4 +1,4 @@
-import {Component, DoCheck, Injector, OnInit} from '@angular/core';
+import {Component, DoCheck, Injector, OnInit, ViewChild} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Post} from "../models/post.model";
@@ -15,17 +15,22 @@ import { PostService } from '../services/post.service';
 import { AccessPermission } from '../models/access-permission';
 import { BaseComponent } from '../base/base.component';
 import { PermissionType } from '../models/permission-type';
+import { FeedService } from '../services/feed.service';
+import { MatSelect } from '@angular/material/select';
+import { PostFormComponent } from '../post-form/post-form.component';
 
 @Component({
   selector: 'app-feed',
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.css']
 })
-export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
+export class FeedComponent extends BaseComponent implements OnInit {
 
   /*******************************************************************************************************************
    * VARIABLES
    ******************************************************************************************************************/
+
+  @ViewChild('sortSelect') selectFilter!: MatSelect;
 
   postList: Post[] = [];
 
@@ -33,10 +38,14 @@ export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
 
   filterBy: number = 0;
 
-  //array with post categories
-  postCategories: Category[] = [];
+  isLoadingPosts: boolean = false;
 
-  // overrides
+  canCreatePosts: boolean = false;
+
+  //array with post categories
+  //postCategories: Category[] = [];
+
+  // overrides BaseComponent
   permissionToAccess = PermissionType.AccessHome;
   routeIfNoAccess: string = "/home";
 
@@ -48,7 +57,8 @@ export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
     public httpClient: HttpClient,
     private dialog: MatDialog,
     private postService: PostService,
-    public injector: Injector
+    public injector: Injector,
+    private feedService: FeedService
   ) {
     super(injector);
   }
@@ -58,134 +68,92 @@ export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-/*    //set up categories
-    //listener for product categories
-    this.categoryService.postCategories$.subscribe(res => this.postCategories = res);
-    //current value of product categories
-    this.postCategories = this.categoryService.getPostCategories();*/
+    //super.initializeUser(); //parents method
+    //super.evaluateAccessPermissions();
+    //super.initializeCategories();
+    //console.log(this.postCategories);
 
+    super.ngOnInit();
+    //loads Data
+    //this.feedService.setUserAndLoggedIn(this.loggedIn, this.currentUser);
+    this.feedService.refreshPosts(this.loggedIn, this.currentUser);
+    //listener
+    this.feedService.posts$.subscribe(res => this.postList = res);
+    //current value
+    this.postList = this.feedService.getPosts();
+    //loading flag
+    this.feedService.postsLoading$.subscribe(res => this.isLoadingPosts = res);
 
-    super.initializeUser(); //parents method
-    super.evaluateAccessPermissions();
-    super.initializeCategories();
-
-    this.evaluateAccessForCurrentUser();
+    // set Permissions to create post
+    if (this.currentUser == undefined) {
+      this.canCreatePosts = false;
+    } else if (this.currentUser.featuresPermissions) {
+      this.canCreatePosts = this.currentUser.featuresPermissions?.checkPermissions(PermissionType.CreatePost);
+      }
   }
 
-  ngDoCheck(): void {
-    //current Value
-    this.loggedIn = this.userService.getLoggedIn();
-    this.currentUser = this.userService.getUser();
+
+  /*******************************************************************************************************************
+   * USER ACTIONS
+   ******************************************************************************************************************/
+
+
+  sortFeed(event: any):void  {
+    this.feedService.setSorting(event.value);
+    this.feedService.refreshPosts(this.loggedIn, this.currentUser);
   }
 
-  // ORDER - Feed
-  /*
-  0 = sorted by creation date
-  1 = sorted by score
-  default = sorted by creation date
+  filterFeed(event:any):void {
+    this.feedService.setFilter(event.value);
+    this.feedService.refreshPosts(this.loggedIn, this.currentUser);
+  }
+
+  /**
+   * Opens Dialog box with product update form in it.
+   *
    */
-  getFeedForUser(): void {
-    let userId = this.currentUser?.userId || 0;
-    console.log(userId);
-    this.httpClient.get(environment.endpointURL + "post/all", {
-      params: {
-        sortBy: this.sortBy,
-        userId: userId
-      }
-    }).subscribe(
-      (res: any) => {
-        console.log(res);
-        this.postList = [];
-        res.forEach((post: any) => {
-          let category = this.categoryService.getCategoryById(post.category);
-          if(this.checkIfPostIsAcceptedByFilter(category)){
-            this.httpClient.get(environment.endpointURL + "user/getById", {
-              params: {
-                userId: post.UserUserId
-              }
-            }).subscribe(
-              (user: any) => this.postList.push(this.postService.createPostFromBackendResponse(post, category, user)),
-              (error: any) => console.log(error)
-            );
-          }
-          });
-        });
-  }
-
-
-  getFeedForAdminsAndGuests(): void {
-    this.httpClient.get(environment.endpointURL + "post/all", {
-      params: {
-        sortBy: this.sortBy
-      }
-    }).subscribe(
-      (res: any) => {
-        this.postList = [];
-        res.forEach((post: any) => {
-          let category = this.categoryService.getCategoryById(post.category);
-          if(this.checkIfPostIsAcceptedByFilter(category)){
-            this.httpClient.get(environment.endpointURL + "user/getById", {
-              params: {
-                userId: post.UserUserId
-              }
-            }).subscribe(
-              (user: any) => this.postList.push(this.postService.createPostFromBackendResponse(post, category, user, VotingState.NotAllowed)),
-              (error: any) => console.log(error)
-            );
-          }
-        });
-      });
-  }
-
-
-  evaluateAccessForCurrentUser(): void {
-    if (this.loggedIn){
-      if (!this.currentUser?.isAdmin){
-        this.getFeedForUser();
-      }
-      else {
-        this.getFeedForAdminsAndGuests();
-      }
-    }
-    else {
-      this.getFeedForAdminsAndGuests();
-    }
-  }
-
-  deletePost(post: Post): void {
-    this.handleDelete(post);
-  }
-
   updatePost(post: Post): void {
-    this.router.navigate(['/post-form'], {queryParams: {update: 'true', postId: (post.postId)}}).then(r => {
+    const dialogRef = this.dialog.open(PostFormComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: {
+        isUpdate: true,
+        isCreate: false,
+        postId: post.postId,
+        userId: post.CreationUser
+      }
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      this.feedService.refreshPosts(this.loggedIn, this.currentUser);
     });
   }
+
+  /**
+   * Opens Dialog box with with product create form in it.
+   *
+   */
+  createPost(): void {
+    const dialogRef = this.dialog.open(PostFormComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+      data: {
+        isUpdate: false,
+        isCreate: true,
+        productId: "",
+        userId: ""
+      }
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      this.feedService.refreshPosts(this.loggedIn, this.currentUser);
+    });
+  }
+
 
   reloadFeed() {
-    this.filterBy = 0;
-    //this.getPostCategories();
-    this.evaluateAccessForCurrentUser();
+   this.feedService.refreshPosts(this.loggedIn, this.currentUser);
   }
 
-  upvotePost(post: Post) {
-    this.httpClient.post(environment.endpointURL + "post/upvote", {
-      postId: post.postId
-    }).subscribe((res: any) => {
-      console.log(res);
-      post.score = res.score;
-    });
-  }
-
-  downvotePost(post: Post) {
-    this.httpClient.post(environment.endpointURL + "post/downvote", {
-      postId: post.postId
-    }).subscribe((res: any) => {
-      console.log(res);
-      post.score = res.score;
-    });
-  }
-
-  handleDelete(post: Post): void {
+  confirmDelete(post: Post): void {
   const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this post?','Cancel','Delete post');
   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
     maxWidth: '400px',
@@ -194,34 +162,25 @@ export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
   })
   dialogRef.afterClosed().subscribe(dialogResult => {
     if (dialogResult) {
-      this.httpClient.post(environment.endpointURL + "post/delete", {
-        postId: post.postId
-      }).subscribe(() => {
-        this.postList.splice(this.postList.indexOf(post), 1);
-      });
-    }});
-  }
-
-  sortFeed(event: any) {
-    this.evaluateAccessForCurrentUser();
-  }
-
-  filterFeed(event:any) {
-    this.evaluateAccessForCurrentUser();
-  }
-
-  checkIfPostIsAcceptedByFilter(category: Category):boolean {
-    if (this.filterBy == 0){
-      return true;
-    }
-    else{
-      if (this.filterBy == category.id){
-        return true;
+        this.feedService.deletePost(post.postId)
+          .subscribe(res =>  this.feedService.refreshPosts(this.loggedIn, this.currentUser));
       }
-      else return false;
-    }
+    });
   }
 
+
+  upvotePost(post: Post) {
+    this.feedService.upvotePost(post.postId).subscribe((res: any) => {
+      post.score = res.score;
+    });
+  }
+
+  downvotePost(post: Post) {
+    return this.feedService.downvotePost(post.postId)
+      .subscribe((res: any) => {
+      post.score = res.score;
+    });
+  }
 
 
 }

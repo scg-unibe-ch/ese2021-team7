@@ -57,6 +57,8 @@ export class BaseFormComponent extends BaseComponent implements OnInit {
 
   //left empty, to be overwritten by child
   ngOnInit(): void {
+    super.ngOnInit();
+    this.initializeForm();
   }
 
 

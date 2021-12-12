@@ -1,4 +1,4 @@
-<div class="table-wrapper" [ngClass]="currentUser.isAdmin? '': 'group7-small-table-wrapper'">
+<div class="table-wrapper" [ngClass]="currentUser.isAdmin? '': 'group7-small-table-wrapper'" *ngIf="!isLoadingUser && !isLoadingCategories">
   <div class="table-title" class="group7-list-title" >
     <h1 *ngIf="currentUser.isAdmin">Orders</h1>
     <h1 *ngIf="!currentUser.isAdmin">My Orders</h1>

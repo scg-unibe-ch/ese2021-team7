@@ -69,7 +69,7 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
 
   ngOnInit(): void {
     super.initializeUser();
-    super.evaluateAccessPermissions();
+    //super.evaluateAccessPermissions();
     super.initializeCategories();
     this.setUpFormType();
   }

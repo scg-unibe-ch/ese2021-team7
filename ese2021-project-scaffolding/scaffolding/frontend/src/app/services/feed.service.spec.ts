@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UserBackendService } from './user-backend.service';
+import { FeedService } from './feed.service';
 
-describe('UserBackendService', () => {
-  let service: UserBackendService;
+describe('FeedService', () => {
+  let service: FeedService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(UserBackendService);
+    service = TestBed.inject(FeedService);
   });
 
   it('should be created', () => {

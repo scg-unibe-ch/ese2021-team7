@@ -30,6 +30,8 @@ export class CategoryService {
   private productCategories: Category[] = [];
   private postCategories: Category[] = [];
 
+  private categoriesLoading: boolean = false;
+
   /*******************************************************************************************************************
    * OBSERVABLE SOURCES & STREAMS
    ******************************************************************************************************************/
@@ -38,12 +40,14 @@ export class CategoryService {
   private categoriesSource = new BehaviorSubject<Category[]>([]);
   private productCategoriesSource = new BehaviorSubject<Category[]>([]);
   private postCategoriesSource = new BehaviorSubject<Category[]>([]);
+  private cateogiresLoadingSource = new BehaviorSubject<boolean>(false);
 
 
   // Stream
   categories$ = this.categoriesSource.asObservable();
   productCategories$ = this.productCategoriesSource.asObservable();
   postCategories$ = this.postCategoriesSource.asObservable();
+  categoriesLoadgin$ = this.cateogiresLoadingSource.asObservable();
 
 
   /*******************************************************************************************************************
@@ -116,6 +120,7 @@ export class CategoryService {
    * Gets all categories from backend and updates different categories variables.
    */
   private getCategoriesFromBackend(): void {
+    this.cateogiresLoadingSource.next(true);
     this.categories = []; //delete exiting values
     this.httpClient.get(environment.endpointURL + "category/all").pipe(
       map(
@@ -128,7 +133,7 @@ export class CategoryService {
       this.categories = data;
       this.productCategories = data.filter((category: Category) => category.type == CategoryType.Product); //filter for product categories
       this.postCategories = data.filter((category: Category) => category.type == CategoryType.Post); // filter for post categories
-
+      this.cateogiresLoadingSource.next(false);
     });
   }
 

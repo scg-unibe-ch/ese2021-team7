@@ -14,8 +14,11 @@
 
         <!-- Not Shown until backend calls complete -->
         <form  *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
+          <mat-stepper >
+            <mat-step>
+              <ng-template matStepLabel>Your order</ng-template>
 
-          <!-- Product  -->
+              <!-- Product  -->
           <div class="product-display">
             <div class="product-display-image">
               <img class="product-thumbnail" src="{{product.image}}" />
@@ -32,50 +35,77 @@
           </div>
           <br>
           <br>
+              <div>
+                <button mat-button matStepperNext type="button"  class="group7-forms-button">Next</button>
+              </div>
+            </mat-step>
+            <mat-step formGroupName="shippingAddress" [stepControl]="form.get('shippingAddress')" >
+              <ng-template matStepLabel>Shipping Address</ng-template>
 
-          <!-- Payment Method -->
-          <mat-form-field appearance="outline">
-            <mat-label >Payment Method</mat-label>
-            <mat-select [formControlName]="'paymentMethod'" id="paymentMethod"  required>
-              <mat-option label="0" value="0" >none</mat-option>
-              <mat-option value="1" >Invoice</mat-option>
-              <mat-option value="2" >Credit Card</mat-option>
-            </mat-select>
-          </mat-form-field>
 
           <!-- Shipping address -->
           <p>Shipping address:</p>
           <mat-form-field appearance="outline">
             <mat-label>First Name</mat-label>
-            <input matInput type="text" placeholder="First Name" id="firstName" [formControlName]="'firstName'">
+            <input matInput type="text" placeholder="First Name" id="firstName" formControlName="firstName">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Last Name</mat-label>
-            <input matInput type="text" placeholder="Last Name" id="lastName" [formControlName]="'lastName'">
-          </mat-form-field>
+            <input matInput type="text" placeholder="Last Name" id="lastName" formControlName="lastName">
+          </mat-form-field><br/>
           <mat-form-field appearance="outline">
             <mat-label>Street</mat-label>
-            <input matInput type="text" placeholder="Street"  id="street" [formControlName]="'street'">
+            <input matInput type="text" placeholder="Street"  id="street" formControlName="street">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Nr.</mat-label>
-            <input matInput type="text"  placeholder="Nr." id="houseNumber" [formControlName]="'houseNumber'">
-          </mat-form-field>
+            <input matInput type="text"  placeholder="Nr." id="houseNumber" formControlName="houseNumber">
+          </mat-form-field><br/>
           <mat-form-field appearance="outline">
             <mat-label>Zip Code</mat-label>
-            <input matInput type="text" placeholder="Zip Code"  id="zipCode" [formControlName]="'zipCode'">
+            <input matInput type="text" placeholder="Zip Code"  id="zipCode" formControlName="zipCode">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>City</mat-label>
-            <input matInput type="text" placeholder="City"  id="city" [formControlName]="'city'">
+            <input matInput type="text" placeholder="City"  id="city" formControlName="city">
           </mat-form-field>
 
           <br/>
+              <div>
+                <button mat-button matStepperPrevious type="button" class="group7-forms-button">Back</button>
+                <button mat-button matStepperNext type="button"  class="group7-forms-button">Next</button>
+              </div>
+            </mat-step>
+
+            <mat-step formGroupName="paymentMethods" [stepControl]="form.get('paymentMethods')" >
+              <ng-template matStepLabel>Payment Method</ng-template>
+
+
+            <!-- Payment Method -->
+            <mat-form-field appearance="outline">
+              <mat-label >Payment Method</mat-label>
+              <mat-select formControlName="paymentMethod" id="paymentMethod"  required>
+                <mat-option label="0" value="0" >none</mat-option>
+                <mat-option value="1" >Invoice</mat-option>
+                <mat-option value="2" >Credit Card</mat-option>
+              </mat-select>
+            </mat-form-field>
+              <div>
+                <button mat-button matStepperPrevious type="button" class="group7-forms-button">Back</button>
+                <button mat-button matStepperNext type="button"  class="group7-forms-button">Next</button>
+              </div>
+            </mat-step>
+            <mat-step>
+              <ng-template matStepLabel>Confirm your order</ng-template>
 
           <!-- Action buttons -->
           <div class="form-action-button">
+            <p>Confirm your order</p>
+            <button mat-button matStepperPrevious type="button" class="group7-forms-button">Back</button>
             <button mat-flat-button type="submit" [disabled]="!form.valid" class="group7-forms-button" >Order now</button><br/>
           </div>
+            </mat-step>
+          </mat-stepper>
         </form>
       </div>
     </mat-card-content>

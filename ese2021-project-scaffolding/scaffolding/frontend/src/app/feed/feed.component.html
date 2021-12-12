@@ -1,20 +1,20 @@
 <div class="card-wrapper-center">
-  <div class="feed-wrapper">
+  <div class="feed-wrapper" *ngIf="!isLoadingUser && !isLoadingCategories && !isLoadingPosts">
     <button mat-flat-button (click)="reloadFeed()" class="group7-forms-button">
       Reload Feed
     </button>
+    <button mat-button *ngIf="canCreatePosts" (click)="createPost()" class="group7-forms-button">Create Post</button>
 
     <mat-form-field>
-      <mat-select [(value)]="sortBy" placeholder="sort list by:" (selectionChange)="sortFeed($event)" class="group7-select">
-        <mat-option value="0">None</mat-option>
-        <mat-option value="0">creation date</mat-option>
-        <mat-option value="1">score</mat-option>
+      <mat-select [(value)]="sortBy" placeholder="Sort feed by" (selectionChange)="sortFeed($event)" class="group7-select" id="sortSelect">
+        <mat-option value="0">Creation Date</mat-option>
+        <mat-option value="1">Score</mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field>
       <mat-select [(value)]="filterBy" placeholder="filter list by:" (selectionChange)="filterFeed($event)" class="group7-select">
-        <mat-option value="">No Filter</mat-option>
+        <mat-option value="0">No Filter</mat-option>
         <mat-option *ngFor="let category of postCategories" [value]="category.id">{{category.name}}</mat-option>
       </mat-select>
     </mat-form-field>
@@ -24,7 +24,7 @@
         [postToDisplay]="postToDisplay"
         [loggedIn]="loggedIn"
         [currentUser]="currentUser"
-        (delete)="deletePost($event)"
+        (delete)="confirmDelete($event)"
         (update)="updatePost($event)"
         (upvote)="upvotePost($event)"
         (downvote)="downvotePost($event)">

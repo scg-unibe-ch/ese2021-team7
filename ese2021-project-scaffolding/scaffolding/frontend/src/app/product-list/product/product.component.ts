@@ -44,7 +44,8 @@ export class ProductComponent extends BaseComponent implements OnInit {
   loggedIn : boolean  = false;
 
   @Input()
-  currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false),House.default);
+  //currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
+  currentUser: User | undefined;
 
   @Input()
   productToDisplay: Product = new Product(0,'','','',0,new Category(0,"undefined", 1, "undefined"),false);
@@ -96,9 +97,15 @@ export class ProductComponent extends BaseComponent implements OnInit {
       console.log(JSON.stringify(this.currentUser));
     }
 
-   if(!this.loggedIn) this.showBuyNowButton = true;
-   else this.showBuyNowButton = this.currentUser?.featuresPermissions.purchaseProduct;
-   this.showDeleteAndUpdateButton = this.currentUser?.featuresPermissions.productUpdateDelete;
+   if(this.currentUser == undefined) {
+     this.showBuyNowButton = true;
+   } else {
+     if (!this.loggedIn) this.showBuyNowButton = true;
+     else if(this.currentUser.featuresPermissions) {
+       this.showBuyNowButton = this.currentUser?.featuresPermissions?.purchaseProduct;
+       this.showDeleteAndUpdateButton = this.currentUser?.featuresPermissions?.productUpdateDelete;
+     }
+   }
 
    //this.setPermissions();
     //this.evaluateUpdateDeletePermission();

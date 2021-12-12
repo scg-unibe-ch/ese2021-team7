@@ -58,10 +58,12 @@ export class OrderListComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
 
 
-    super.initializeUser();
-
+    ///super.initializeUser();
+    super.ngOnInit();
     this.setDisplayedColumns(); // different columns for user and admin
-    this.initializeDataSource(this.currentUser.isAdmin); //admin sees all orders, user only their own
+    if(this.currentUser != undefined) {
+      this.initializeDataSource(this.currentUser.isAdmin); //admin sees all orders, user only their own
+    }
   }
 
   /*******************************************************************************************************************
@@ -156,18 +158,20 @@ export class OrderListComponent extends BaseComponent implements OnInit {
    * Defines columns in DOM for admin and for user.
    */
   setDisplayedColumns(): void{
-    if(this.currentUser.isAdmin){
-      this.displayedColumns =   ['orderId',  'productId', 'productName',
-        'productPrice', 'customerId', 'firstName', 'lastName',
-        'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod',
-        'orderStatus', 'actions'];
-    }
-    else {
-      this.displayedColumns =   ['orderId',  'productName',
-        'firstName', 'lastName',
-        'street', 'houseNumber', 'zipCode', 'city', 'productPrice',
-        'orderStatus', 'actions'];
-    }
+    if(this.currentUser == undefined) {
+      this.displayedColumns = [];
+    } else if(this.currentUser.isAdmin){
+        this.displayedColumns =   ['orderId',  'productId', 'productName',
+          'productPrice', 'customerId', 'firstName', 'lastName',
+          'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod',
+          'orderStatus', 'actions'];
+      }
+      else {
+        this.displayedColumns =   ['orderId',  'productName',
+          'firstName', 'lastName',
+          'street', 'houseNumber', 'zipCode', 'city', 'productPrice',
+          'orderStatus', 'actions'];
+      }
   }
 
   /**

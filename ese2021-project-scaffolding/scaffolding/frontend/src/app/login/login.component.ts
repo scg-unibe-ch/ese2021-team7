@@ -18,17 +18,21 @@ import {House} from "../models/house";
 })
 export class LoginComponent extends BaseComponent implements OnInit{
 
-  //loggedIn: boolean | undefined;
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
 
-  //user: User | undefined;
-
+  // flags used to display message/reroute
   fromRegistration: boolean | undefined;
+  fromShop: boolean = false;
 
-  userToLogin: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false),House.default);
+  userToLogin: User = new User(0, '', '', false,'','','','','','','','','',House.default, new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
 
   endpointLogin: string = '';
 
-  fromShop: boolean = false;
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
 
   constructor(
     public httpClient: HttpClient,
@@ -38,9 +42,16 @@ export class LoginComponent extends BaseComponent implements OnInit{
     super(injector);
   }
 
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
 
   ngOnInit(): void {
-    super.initializeUser();
+    super.ngOnInit();
+
+    // sets flags for
+    // displays message if guest is routed here from registration
+    //  re-routing if guest comes here from shop/wanting purchase a product and has to log in
     this.route.queryParams.subscribe( params =>{
       if(params['registered']== 'true'){
         this.fromRegistration = true;
@@ -51,47 +62,48 @@ export class LoginComponent extends BaseComponent implements OnInit{
     })
   }
 
+  /*******************************************************************************************************************
+   * USER ACTIONS
+   ******************************************************************************************************************/
+  /**
+   * Logs in user.
+   *
+   * Re-routes in case of success, handles error otherwise.
+   *
+   */
   loginUser(): void {
-    this.httpClient.post(environment.endpointURL + "user/login", {
-      userName: this.userToLogin.username,
-      password: this.userToLogin.password,
-      email: this.userToLogin.email
-    }).subscribe((res: any) => {
-      localStorage.setItem('userName', res.user.userName);
-      localStorage.setItem('email', res.user.email);
-      localStorage.setItem('userToken', res.token);
-
-      this.userService.setLoggedIn(true);
-
-      if(res.user.admin){
-        this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.admin,res.user.firstName,
-          res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city,
-          res.user.birthday,res.user.phoneNumber, this.permissionService.getAdminAccessPermissions(), this.permissionService.getAdminFeaturePermissions(),res.house));
-      } else {
-        this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password, res.user.admin, res.user.firstName,
-          res.user.lastName, res.user.email, res.user.street, res.user.houseNumber, res.user.zipCode, res.user.city,
-          res.user.birthday, res.user.phoneNumber, this.permissionService.getUserAccessPermissions(), this.permissionService.getUserFeaturePermissions(),res.house));
-      }
-
-      this.resetLoginForm();
-      this.endpointLogin = '';
-      if (this.fromShop){
-        this.router.navigate(['/shop']).then(r =>{});
-      }
-      else{
-        if(this.userService.getUser()?.isAdmin){
-          this.router.navigate(['/admin-dashboard']).then(r =>{});
+    this.userService.loginUser(this.userToLogin)
+      .subscribe((res: any) => {
+        this.resetLoginForm();
+        this.endpointLogin = '';
+        if (this.fromShop){
+          this.router.navigate(['/shop']).then(r =>{});
         }
-        else {
-          this.router.navigate(['/feed']).then(r => {});
+        else{
+          if(this.userService.getUser()?.isAdmin){
+            this.router.navigate(['/admin-dashboard']).then(r =>{});
+          }
+          else {
+            this.router.navigate(['/feed']).then(r => {});
+          }
         }
-      }
-    }, (error) => {
-      this.handleLoginError(error);
-      this.resetLoginForm();
-    });
+      }, (error) => {
+        this.handleLoginError(error);
+        this.resetLoginForm();
+      });
   }
 
+  /*******************************************************************************************************************
+   * HELPER METHODS
+   ******************************************************************************************************************/
+
+  /**
+   * Handles login error.
+   *
+   * Displays correct error message depending on backend error code.
+   *
+   * @param error: backend error
+   */
   handleLoginError(error: HttpErrorResponse){
     // if neither username, nor email are provided
     if(error.error.message == '21'){
@@ -114,6 +126,10 @@ export class LoginComponent extends BaseComponent implements OnInit{
     }
   }
 
+  /*******************************************************************************************************************
+   * DOM METHODS
+   ******************************************************************************************************************/
+
   clearEmailField(): void {
     this.userToLogin.email = '';
   }
@@ -126,14 +142,4 @@ export class LoginComponent extends BaseComponent implements OnInit{
     this.userToLogin.username = this.userToLogin.email = this.userToLogin.password = '';
   }
 
-  logoutUser(): void {
-    this.router.navigate(['../feed']).then(r =>{});
-
-    localStorage.removeItem('userName');
-    localStorage.removeItem('email');
-    localStorage.removeItem('userToken');
-
-    this.userService.setLoggedIn(false);
-    this.userService.setUser(undefined);
-  }
 }

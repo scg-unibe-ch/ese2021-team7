@@ -4,5 +4,6 @@ export enum FormType {
   Product = "PRODUCT",
   Purchase = "PURCHASE",
   Login = "LOGIN",
-  Register = "REGISTER"
+  Register = "REGISTER",
+  SelectHouse = "SELECTHOUSE"
 }

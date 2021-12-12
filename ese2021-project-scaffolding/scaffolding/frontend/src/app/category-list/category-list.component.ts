@@ -61,9 +61,10 @@ export class CategoryListComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
 
-    super.initializeUser();
-    super.evaluateAccessPermissions();
+    //super.initializeUser();
+    //super.evaluateAccessPermissions();
 
+    super.ngOnInit();
     this.categoriesData.refreshData();
   }
 

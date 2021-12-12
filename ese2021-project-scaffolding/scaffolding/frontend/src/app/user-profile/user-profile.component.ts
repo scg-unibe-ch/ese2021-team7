@@ -4,6 +4,8 @@ import {UserService} from "../services/user.service";
 import {Router} from "@angular/router";
 import { AccessPermission } from '../models/access-permission';
 import { BaseComponent } from '../base/base.component';
+import { SelectHouseComponent } from '../select-house/select-house.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-profile',
@@ -17,32 +19,39 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
   address : String | undefined;
   birthday: String | undefined;
 
-  constructor(public injector: Injector
+  constructor(public injector: Injector,
+              private dialog: MatDialog,
+
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
-/*    // Listen for changes
-    this.userService.loggedIn$.subscribe(res => {
-      this.loggedIn = res;
-    });
-    this.userService.user$.subscribe( res => {
-      this.currentUser = res;
-    });*/
 
     super.initializeUser();
 
     //current Value
-    this.loggedIn = this.userService.getLoggedIn();
-    this.currentUser = this.userService.getUser();
+    //this.loggedIn = this.userService.getLoggedIn();
+    //this.currentUser = this.userService.getUser();
     if(typeof this.currentUser != 'undefined'){
       this.address = this.currentUser.street + " " + this.currentUser.houseNumber + ", " + this.currentUser.zipCode + " " + this.currentUser.city;
       this.birthday = this.currentUser.birthday.substring(8,10) + "." + this.currentUser.birthday.substring(5,7) + "." + this.currentUser.birthday.substring(0,4);
     }
   }
 
-  viewOrders() {
+  viewOrders():void {
     this.router.navigate(['/order'], {queryParams : {userId : this.currentUser?.userId}})
   }
+
+
+  chooseHouse(): void{
+    const dialogRef = this.dialog.open(SelectHouseComponent, {
+      maxWidth: '400px',
+      closeOnNavigation: true,
+    });
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("dialog closed");
+    });
+  }
+
 }
