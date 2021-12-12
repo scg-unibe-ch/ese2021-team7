@@ -93,6 +93,30 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
       }
   }
 
+  /*******************************************************************************************************************
+   * USER ACTIONS
+   ******************************************************************************************************************/
+
+  /**
+   * Override parents method.
+   * 
+   * Submits form to backend and handles re-routing in case of success/error.
+   * @param formDirective
+   */
+  onSubmit(formDirective: FormGroupDirective): void {
+    this.formService.sendForm(this.form, this.requestType).subscribe(
+      (res: any) => {
+        this.isSubmitted = false;
+        this.shopService.refresh();
+        this.router.navigate(['/shop']);
+      },
+      (error: any) =>{
+        console.log(error);
+        this.isSubmitted = false;
+      });
+  }
+
+
 
   /*******************************************************************************************************************
    * PERMISSIONS
