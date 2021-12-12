@@ -3,6 +3,8 @@ import { User } from '../models/user.model';
 import { Subject } from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
+import { AccessPermission } from '../models/access-permission';
+import { FeaturePermission } from '../models/feature-permission';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +17,7 @@ export class UserService {
 
   private loggedIn: boolean = false;
 
-  private user: User = new User(0, "", "", false, "", "", "", "", "", "", "", "", "");
+  private user: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false,), new FeaturePermission(false, false, false, false));
 
 
   /*******************************************************************************************************************

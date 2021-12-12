@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TodoList } from './models/todo-list.model';
 import { environment } from '../environments/environment';
 import { UserService } from './services/user.service';
 import { User } from './models/user.model';
 import {ActivatedRoute, Router} from "@angular/router";
+import { BaseComponent } from './base/base.component';
+import { PermissionType } from './models/permission-type';
 
 
 @Component({
@@ -12,40 +14,50 @@ import {ActivatedRoute, Router} from "@angular/router";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  title = 'Game of Thrones';
+export class AppComponent extends BaseComponent implements OnInit {
 
-  todoLists: TodoList[] = [];
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
 
-  newTodoListName: string = '';
+    title = 'Game of Thrones';
 
-  //TODO
-  loggedIn: boolean | undefined;
+  // overrides
+  permissionToAccess = PermissionType.AccessHome;
+  routeIfNoAccess: string = "/home";
 
-  user: User | undefined;
 
-  enableCreatePost: boolean = false;
+
+
+
+ // enableCreatePost: boolean = false;
 
   //used for sidenav
   events: string[] = [];
   opened: boolean | undefined;
 
   //used for Admin Dashboard
-  isAdmin = false;
+  //isAdmin = false;
+
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
 
   constructor(
     public httpClient: HttpClient,
-    public userService: UserService,
     private route: ActivatedRoute,
-    private router: Router
+    public injector: Injector
   ) {
+    super(injector);
   }
 
   ngOnInit() {
-    this.getCurrentUser();
+    super.initializeUser();
+    super.evaluateAccessPermissions();
+    //this.getCurrentUser();
   }
 
-  getCurrentUser(): void {
+  /*getCurrentUser(): void {
     // listen for changes in loggedIn
     this.userService.loggedIn$.subscribe(res => {
       this.loggedIn = res
@@ -65,14 +77,14 @@ export class AppComponent implements OnInit {
     // Current value
     this.user = this.userService.getUser();
     this.enableCreatePost = this.checkPermissionConditions(this.user?.isAdmin);
-  }
+  }*/
 
-  checkPermissionConditions(isAdmin: boolean | undefined): boolean {
+/*  checkPermissionConditions(isAdmin: boolean | undefined): boolean {
     if(this.userService.getLoggedIn() && !isAdmin){
       return true;
     }
     return  false;
-  }
+  }*/
 
   logoutUser(): void {
     localStorage.removeItem('userName');
@@ -81,7 +93,7 @@ export class AppComponent implements OnInit {
 
     this.userService.setLoggedIn(false);
     this.userService.setUser(undefined);
-    this.router.navigate(['../feed']).then(r =>{});
+    this.router.navigate(['../home']).then(r =>{});
   }
 
 }

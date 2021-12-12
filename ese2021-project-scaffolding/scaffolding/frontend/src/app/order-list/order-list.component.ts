@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Injector, OnInit} from '@angular/core';
 import {User} from "../models/user.model";
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
@@ -15,21 +15,23 @@ import { concat } from 'rxjs';
 import { ConfirmationDialogModel } from '../ui/confirmation-dialog/confirmation-dialog';
 import { ConfirmationDialogComponent } from '../ui/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AccessPermission } from '../models/access-permission';
+import { BaseComponent } from '../base/base.component';
 
 @Component({
   selector: 'app-order-list',
   templateUrl: './order-list.component.html',
   styleUrls: ['./order-list.component.css']
 })
-export class OrderListComponent implements OnInit {
+export class OrderListComponent extends BaseComponent implements OnInit {
 
 
   /*******************************************************************************************************************
    * VARIABLES
    ******************************************************************************************************************/
 
-  currentUser: User | undefined;
-  isAdmin: boolean | undefined;
+  //currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false, false));
+  //isAdmin: boolean | undefined;
 
   //used for table design
   displayedColumns: string[] = [];
@@ -40,31 +42,26 @@ export class OrderListComponent implements OnInit {
    ******************************************************************************************************************/
   constructor(
     public httpClient: HttpClient,
-    private router: Router,
-    public userService: UserService,
     private orderListService: OrderListServiceService,
     private ordersDataSource: OrdersDataSourceService,
     public productService: ProductService,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    public injector: Injector
+  ) {
+    super(injector);
+  }
 
   /*******************************************************************************************************************
    * LIFECYCLE HOOKS
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-    // Listen for changes
-    this.userService.user$.subscribe(res => {
-      this.currentUser = res;
-    })
-    //current Value
-    this.currentUser = this.userService.getUser();
 
-    console.log("is currentuser admin: "+ this.currentUser?.isAdmin);
-    this.isAdmin = this.currentUser?.isAdmin;
+
+    super.initializeUser();
 
     this.setDisplayedColumns(); // different columns for user and admin
-    this.initializeDataSource(this.isAdmin); //admin sees all orders, user only their own
+    this.initializeDataSource(this.currentUser.isAdmin); //admin sees all orders, user only their own
   }
 
   /*******************************************************************************************************************
@@ -159,7 +156,7 @@ export class OrderListComponent implements OnInit {
    * Defines columns in DOM for admin and for user.
    */
   setDisplayedColumns(): void{
-    if(this.isAdmin){
+    if(this.currentUser.isAdmin){
       this.displayedColumns =   ['orderId',  'productId', 'productName',
         'productPrice', 'customerId', 'firstName', 'lastName',
         'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod',

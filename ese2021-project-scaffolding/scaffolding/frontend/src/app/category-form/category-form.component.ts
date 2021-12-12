@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import {ActivatedRoute, Router } from '@angular/router';
 import { BaseFormComponent } from '../base-form/base-form.component';
+import { AccessPermission } from '../models/access-permission';
 import { FormType } from '../models/form-type';
+import { PermissionType } from '../models/permission-type';
+import { User } from '../models/user.model';
 import { CategoryFormService } from '../services/category-form.service';
+import { PermissionService } from '../services/permission.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-category-form',
@@ -32,29 +37,39 @@ export class CategoryFormComponent extends BaseFormComponent implements OnInit {
   protected routeAfterSuccess = "category-list";
   protected routeAfterDiscard = "category-list";
 
+  // overrides Base component
+  permissionToAccess = PermissionType.AccessCategoryForm;
+
   /*******************************************************************************************************************
    * CONSTRUCTOR
    ******************************************************************************************************************/
-  constructor(public fb: FormBuilder,
+  constructor(
               public categoryFormService: CategoryFormService, // pass the correct form service
-              public router: Router,
-              public route: ActivatedRoute,
-              private dialogRef: MatDialogRef<CategoryFormComponent>) {
-    super(fb, categoryFormService, router, route);
+              private dialogRef: MatDialogRef<CategoryFormComponent>,
+              public injector: Injector
+              ) {
+    super(categoryFormService, injector);
   }
 
   /*******************************************************************************************************************
    * LIFECYCLE HOOKS
    ******************************************************************************************************************/
   ngOnInit(): void {
-    this.initializeForm(); // implemented in parent class
+    super.initializeUser();
+    super.initializeForm(); // implemented in parent class
+    super.evaluateAccessPermissions();
   }
 
   /*******************************************************************************************************************
    * USER FLOW
    ******************************************************************************************************************/
-  //override
+  //override Form
   reRouteAfterSuccess(route: string, queryParams?: any): void {
+    this.dialogRef.close();
+  }
+
+  //override Base Component
+  protected reRouteIfNoAccess(route: string, queryParams?: any): void {
     this.dialogRef.close();
   }
 

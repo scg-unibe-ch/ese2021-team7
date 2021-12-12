@@ -1,10 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Injector, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, FormGroupDirective } from '@angular/forms';
 import {ActivatedRoute, Router } from '@angular/router';
+import { BaseComponent } from '../base/base.component';
 import { Category } from '../models/category';
 import { FormType } from '../models/form-type';
 import { CategoryFormService } from '../services/category-form.service';
 import { FormService } from '../services/form.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-base-form',
@@ -18,11 +20,13 @@ import { FormService } from '../services/form.service';
  *
  * Used by: CategoryFormComponent.
  */
-export class BaseFormComponent implements OnInit {
+export class BaseFormComponent extends BaseComponent implements OnInit {
 
   /*******************************************************************************************************************
    * VARIABLES
    ******************************************************************************************************************/
+
+
 
   form: FormGroup = new FormGroup({});
   isSubmitted: boolean = false;
@@ -40,11 +44,12 @@ export class BaseFormComponent implements OnInit {
    * CONSTRUCTOR
    ******************************************************************************************************************/
 
-  constructor(public fb: FormBuilder,
-              public formService: FormService, //child form to pass in correct form service
-              public router: Router,
-              public route: ActivatedRoute,
-              ) {}
+  constructor(
+    public formService: FormService, //child form to pass in correct form service
+    public injector: Injector
+              ) {
+    super(injector);
+  }
 
   /*******************************************************************************************************************
    * LIFECYCLE HOOKS

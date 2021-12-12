@@ -1,25 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { User } from '../models/user.model';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { UserService } from '../services/user.service';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { OnInit } from '@angular/core';
+import { AccessPermission } from '../models/access-permission';
+import { PermissionService } from '../services/permission.service';
+import { BaseComponent } from '../base/base.component';
+import { FeaturePermission } from '../models/feature-permission';
 
 @Component({
   selector: 'app-user',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent extends BaseComponent implements OnInit{
 
-  loggedIn: boolean | undefined;
+  //loggedIn: boolean | undefined;
 
-  user: User | undefined;
+  //user: User | undefined;
 
   fromRegistration: boolean | undefined;
 
-  userToLogin: User = new User(0, '', '', false,'','','','','','','','','');
+  userToLogin: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
 
   endpointLogin: string = '';
 
@@ -27,21 +31,15 @@ export class LoginComponent implements OnInit{
 
   constructor(
     public httpClient: HttpClient,
-    public userService: UserService,
     private route: ActivatedRoute,
-    private router: Router
+    public injector: Injector
   ) {
-    // Listen for changes
-    userService.loggedIn$.subscribe(res => this.loggedIn = res);
-    userService.user$.subscribe(res => this.user = res);
-
-    // Current value
-    this.loggedIn = userService.getLoggedIn();
-    this.user = userService.getUser();
+    super(injector);
   }
 
 
   ngOnInit(): void {
+    super.initializeUser();
     this.route.queryParams.subscribe( params =>{
       if(params['registered']== 'true'){
         this.fromRegistration = true;
@@ -63,9 +61,16 @@ export class LoginComponent implements OnInit{
       localStorage.setItem('userToken', res.token);
 
       this.userService.setLoggedIn(true);
-      this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.admin,res.user.firstName,
-        res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city,
-        res.user.birthday,res.user.phoneNumber));
+
+      if(res.user.admin){
+        this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.admin,res.user.firstName,
+          res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city,
+          res.user.birthday,res.user.phoneNumber, this.permissionService.getAdminAccessPermissions(), this.permissionService.getAdminFeaturePermissions()));
+      } else {
+        this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password, res.user.admin, res.user.firstName,
+          res.user.lastName, res.user.email, res.user.street, res.user.houseNumber, res.user.zipCode, res.user.city,
+          res.user.birthday, res.user.phoneNumber, this.permissionService.getUserAccessPermissions(), this.permissionService.getUserFeaturePermissions()));
+      }
 
       this.resetLoginForm();
       this.endpointLogin = '';

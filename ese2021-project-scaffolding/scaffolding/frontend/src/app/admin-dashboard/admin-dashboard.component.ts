@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BaseComponent } from '../base/base.component';
+import { AccessPermission } from '../models/access-permission';
+import { PermissionType } from '../models/permission-type';
 import { User } from '../models/user.model';
+import { PermissionService } from '../services/permission.service';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -8,37 +12,33 @@ import { UserService } from '../services/user.service';
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css']
 })
-export class AdminDashboardComponent implements OnInit {
+export class AdminDashboardComponent extends BaseComponent implements OnInit {
 
-  loggedIn = false;
-  user: User | undefined;
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
+
+  // overrides
+  permissionToAccess = PermissionType.AccessAdminDashBoard;
+  routeIfNoAccess: string = "/home";
+
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
 
   constructor(
-    public userService: UserService,
-    private route: ActivatedRoute,
-    private router: Router
-              ) { }
-
-  ngOnInit(): void {
-    // Listen for changes
-    this.userService.loggedIn$.subscribe(res => this.loggedIn = res);
-    this.userService.user$.subscribe(res => this.user = res);
-
-    // Current value
-    this.loggedIn = this.userService.getLoggedIn();
-    this.user = this.userService.getUser();
-
-    //reroute if user is not admin
-    this.checkPermissionToAccess();
+    public injector: Injector
+              ) {
+    super(injector);
   }
 
-  /**
-   * Checks if user is admin, otherwise re-routes.
-   */
-  checkPermissionToAccess(): void {
-    if(!this.user.isAdmin){
-      this.router.navigate(['/feed']).then(r => {});
-    }
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
+
+  ngOnInit(): void {
+    super.initializeUser();
+    super.evaluateAccessPermissions();
   }
 
 }

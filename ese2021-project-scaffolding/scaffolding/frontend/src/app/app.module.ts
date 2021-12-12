@@ -42,6 +42,7 @@ import { CategoryListComponent } from './category-list/category-list.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CategoryFormComponent } from './category-form/category-form.component';
 import { BaseFormComponent } from './base-form/base-form.component';
+import { BaseComponent } from './base/base.component';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { BaseFormComponent } from './base-form/base-form.component';
     UserListComponent,
     CategoryListComponent,
     CategoryFormComponent,
-    BaseFormComponent
+    BaseFormComponent,
+    BaseComponent
   ],
   entryComponents:[
     CategoryFormComponent,

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import {MatCardModule} from '@angular/material/card';
 import { User } from '../models/user.model';
 import { HttpClient } from '@angular/common/http';
@@ -12,6 +12,9 @@ import { Category } from '../models/category';
 import { BaseFormComponent } from '../base-form/base-form.component';
 import { PurchaseFormService } from '../services/purchase-form.service';
 import { ShopService } from '../services/shop.service';
+import { PermissionService } from '../services/permission.service';
+import { AccessPermission } from '../models/access-permission';
+import { PermissionType } from '../models/permission-type';
 
 @Component({
   selector: 'app-purchase',
@@ -24,32 +27,30 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
    * VARIABLES
    ******************************************************************************************************************/
 
-  //overrides
+  //overrides BaseForm
   form: FormGroup = new FormGroup({});
   protected requestType = "order/create";
   protected routeAfterSuccess = "shop";
   protected routeAfterDiscard = "shop";
+
+  // overrides Base component
+  permissionToAccess = PermissionType.AccessPurchaseForm;
+  routeIfNoAccess: string = "/shop";
 
   // to stop DOM form from loading to early
   isLoading: boolean = false;
 
   isSubmitted: boolean = false;
 
-  //purchaseForm: FormGroup | undefined;
-
-  //productId: number | undefined;
-
   // product User buys
-  product = new Product(0,  "", "", "", 0, new Category(0, "undefined", 0, "undefined"), false);
-
-  //User
-  user: User  = new User(0, "", "", false, "", "", "", "", "", "", "", "", "");
+  product = new Product(0, "", "", "", 0, new Category(0, "undefined", 0, "undefined"), false);
 
 
   // presets for form creation, needs User and Product
   static PreSet = class {
     constructor(public presetUser: User,
-                public presetProduct: Product){}
+                public presetProduct: Product) {
+    }
   };
 
   //array with product categories
@@ -60,13 +61,12 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
    ******************************************************************************************************************/
 
   constructor(public fb: FormBuilder,
-              public userService: UserService,
               public route: ActivatedRoute,
-              public router: Router,
               private categoryService: CategoryService,
               public purchaseFormSerivce: PurchaseFormService,
-              private shopService: ShopService) {
-    super(fb, purchaseFormSerivce, router, route);
+              private shopService: ShopService,
+              public injector: Injector) {
+    super(purchaseFormSerivce, injector);
   }
 
   /*******************************************************************************************************************
@@ -79,26 +79,34 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
     //current value of product categories
     this.productCategories = this.categoryService.getProductCategories();
 
-    if(!this.userService.getLoggedIn()){
-      console.log("not logged In");
-      this.router.navigate(['/login']);
-    }
-    else{
-      this.isLoading= true;
-      this.user = this.userService.getUser();
+    super.initializeUser();
+    super.evaluateAccessPermissions();
+
+      this.isLoading = true; //set loading flag
       let productId = 0;
       this.route.queryParams.subscribe(params => {
         productId = params['productId'];
       });
-      if(productId != null){
-        this.shopService.getProductByIdAsObservable(productId).
-        subscribe(product => {
+      if (productId != null) {
+        this.shopService.getProductByIdAsObservable(productId).subscribe(product => {
           this.product = this.shopService.createProductFromBackendResponse(product); // create Product object
-          this.initializeForm(new PurchaseComponent.PreSet(this.user, this.product)); //initialize form with presets
+          this.initializeForm(new PurchaseComponent.PreSet(this.currentUser, this.product)); //initialize form with presets
           this.isLoading = false;
         });
       }
-    }
   }
+
+
+  /*******************************************************************************************************************
+   * PERMISSIONS
+   ******************************************************************************************************************/
+
+  //overrirdes Base Componente
+  protected reRouteIfNoAccess(route: string, queryParams?: any): void {
+    if (this.currentUser.isAdmin) this.router.navigate([this.routeIfNoAccess]);
+    else this.router.navigate(['/login']);
+  }
+
+
 }
 

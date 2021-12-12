@@ -1,5 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { AccessPermission } from 'src/app/models/access-permission';
 import { Category } from 'src/app/models/category';
+import { FeaturePermission } from 'src/app/models/feature-permission';
+import { PermissionService } from 'src/app/services/permission.service';
 import {Post} from "../../models/post.model";
 import {User} from "../../models/user.model";
 import {VotingState} from "../../models/voting-state";
@@ -11,30 +14,43 @@ import {VotingState} from "../../models/voting-state";
 })
 export class PostComponent implements OnInit{
 
-  post: Post | undefined;
-  postId: number | undefined;
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
+
+  //post: Post | undefined;
+  //postId: number | undefined;
   Score: number = 0;
 
+  //flags for permissions
   showDeleteAndUpdateButton : boolean = false;
   showVotingButtons : boolean = false;
   enableUpvote: boolean = false;
   enableDownvote: boolean = false;
 
-  isReadMore = false;
 
   //used for handling "Read More" functionality
+  isReadMore = false;
   fullText:  string | undefined;
   shortText:  string | undefined;
   postTooLong = false;
+
+  /*******************************************************************************************************************
+   * INPUTS
+   ******************************************************************************************************************/
 
   @Input()
   loggedIn : boolean = false;
 
   @Input()
-  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
+  currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
 
   @Input()
   postToDisplay: Post = new Post(0,'','','',0,new Category(0, "undefined", 0, "undefined"),0,'', VotingState.NotAllowed);
+
+  /*******************************************************************************************************************
+   * OUPUTS
+   ******************************************************************************************************************/
 
   @Output()
   update = new EventEmitter<Post>();
@@ -48,18 +64,35 @@ export class PostComponent implements OnInit{
   @Output()
   downvote = new EventEmitter<Post>();
 
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
+
+  constructor(
+    private permissionService: PermissionService) {}
+
+
+
   ngOnInit() {
-    this.evaluateUpdateDeletePermission();
-    this.evaluateVotingButtonsPermission();
+    //this.evaluateUpdateDeletePermission();
+    //this.evaluateVotingButtonsPermission();
+    this.showDeleteAndUpdateButton = this.permissionService.checkPermissionsPostUpdateAndDelete(this.loggedIn, this.currentUser, this.postToDisplay);
+    this.showVotingButtons = this.permissionService.checkPermissionsShowVotingButtons(this.loggedIn, this.currentUser, this.postToDisplay);
+    this.enableUpvote = this.permissionService.checkPermissionsUpvote(this.loggedIn, this.currentUser, this.postToDisplay);
+    this.enableDownvote = this.permissionService.checkPermissionsDownvote(this.loggedIn, this.currentUser, this.postToDisplay);
     this.createFullTextAndShortText();
   }
 
   ngOnChanges(){
-    this.evaluateUpdateDeletePermission();
-    this.evaluateVotingButtonsPermission();
+    //this.evaluateUpdateDeletePermission();
+    //this.evaluateVotingButtonsPermission();
+    this.showDeleteAndUpdateButton = this.permissionService.checkPermissionsPostUpdateAndDelete(this.loggedIn, this.currentUser, this.postToDisplay);
+    this.showVotingButtons = this.permissionService.checkPermissionsShowVotingButtons(this.loggedIn, this.currentUser, this.postToDisplay);
+    this.enableUpvote = this.permissionService.checkPermissionsUpvote(this.loggedIn, this.currentUser, this.postToDisplay);
+    this.enableDownvote = this.permissionService.checkPermissionsDownvote(this.loggedIn, this.currentUser, this.postToDisplay);
   }
 
-  evaluateUpdateDeletePermission(): void {
+  /*evaluateUpdateDeletePermission(): void {
     // set true if user is admin or if user is creator of post
     if (typeof this.currentUser != 'undefined') {
       if (this.currentUser.isAdmin) this.showDeleteAndUpdateButton = true;
@@ -102,7 +135,7 @@ export class PostComponent implements OnInit{
       else this.showVotingButtons = false;
     }
     else this.showVotingButtons = false;
-  }
+  }*/
 
   updatePost(): void {
     // Emits event to parent component that Post got updated

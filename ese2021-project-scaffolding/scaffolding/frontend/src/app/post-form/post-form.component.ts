@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Injector, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {UserService} from '../services/user.service';
@@ -10,13 +10,19 @@ import { Category } from '../models/category';
 import { CategoryService } from '../services/category.service';
 import { UserBackendService } from '../services/user-backend.service';
 import { PostService } from '../services/post.service';
+import { User } from '../models/user.model';
+import { AccessPermission } from '../models/access-permission';
+import { BaseComponent } from '../base/base.component';
 
 @Component({
   selector: 'app-post-form',
   templateUrl: './post-form.component.html',
   styleUrls: ['./post-form.component.css']
 })
-export class PostFormComponent implements OnInit {
+export class PostFormComponent extends BaseComponent implements OnInit {
+
+  //currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false, false));
+
 
   postForm: FormGroup | undefined;
 
@@ -24,11 +30,11 @@ export class PostFormComponent implements OnInit {
 
   post: Post | undefined;
 
-  isSubmitted: boolean;
+  isSubmitted: boolean = false;
 
-  isCreate: boolean;
+  isCreate: boolean = false;
 
-  isUpdate: boolean;
+  isUpdate: boolean = false;
 
   // array with post categories
   postCategories: Category[] = [];
@@ -38,13 +44,12 @@ export class PostFormComponent implements OnInit {
     private fb: FormBuilder,
     public userService: UserService,
     private route: ActivatedRoute,
-    private router: Router,
     private categoryService: CategoryService,
     private userBackendService: UserBackendService,
-    private postService: PostService) {
-    this.isSubmitted= false;
-    this.isCreate = false;
-    this.isUpdate = false;
+    private postService: PostService,
+    public injector: Injector) {
+    super(injector);
+
   }
 
   ngOnInit(): void {

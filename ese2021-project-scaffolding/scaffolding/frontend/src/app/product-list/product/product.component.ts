@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Optional, Output} from '@angular/core';
+import { Component, EventEmitter, Inject, Injector, Input, OnInit, Optional, Output} from '@angular/core';
 import {Product} from "../../models/product.model";
 import {User} from "../../models/user.model";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -8,13 +8,17 @@ import {UserService} from "../../services/user.service";
 import { Category } from '../../models/category';
 import { CategoryService } from 'src/app/services/category.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { PermissionService } from 'src/app/services/permission.service';
+import { AccessPermission } from 'src/app/models/access-permission';
+import { FeaturePermission } from 'src/app/models/feature-permission';
+import { BaseComponent } from 'src/app/base/base.component';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css']
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent extends BaseComponent implements OnInit {
 
   /*******************************************************************************************************************
    * VARIABLES
@@ -36,10 +40,10 @@ export class ProductComponent implements OnInit {
   productCategories: Category[] = [];*/
 
   @Input()
-  loggedIn : boolean | undefined;
+  loggedIn : boolean  = false;
 
   @Input()
-  currentUser : User = new User(0, '', '', false,'','','','','','','','','');
+  currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
 
   @Input()
   productToDisplay: Product = new Product(0,'','','',0,new Category(0,"undefined", 1, "undefined"),false);
@@ -66,14 +70,15 @@ export class ProductComponent implements OnInit {
    ******************************************************************************************************************/
 
   constructor(
-    //public httpClient: HttpClient,
-    public userService: UserService,
+    //public userService: UserService,
     private route: ActivatedRoute,
-    private router: Router,
-    //private categoryService: CategoryService,
+    public injector: Injector,
+    //private router: Router,
+    //private permissionService: PermissionService,
     @Optional () private dialogRef: MatDialogRef<ProductComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: {showDetails: boolean, product: Product, user: User, isLoggedIn: boolean} //used to get Data in Dialog Box
   ) {
+    super(injector);
   }
 
   /*******************************************************************************************************************
@@ -81,10 +86,6 @@ export class ProductComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-/*    // Listen for changes
-    this.userService.loggedIn$.subscribe(res => this.loggedIn = res);
-    // Current value
-    this.loggedIn = this.userService.getLoggedIn();*/
 
    if(this.dialogData?.showDetails){
       this.showDetailedView = this.dialogData?.showDetails;
@@ -94,8 +95,13 @@ export class ProductComponent implements OnInit {
       console.log(JSON.stringify(this.currentUser));
     }
 
-    this.evaluateUpdateDeletePermission();
-    this.evaluateBuyNowPermission();
+   if(!this.loggedIn) this.showBuyNowButton = true;
+   else this.showBuyNowButton = this.currentUser?.featuresPermissions.purchaseProduct;
+   this.showDeleteAndUpdateButton = this.currentUser?.featuresPermissions.productUpdateDelete;
+
+   //this.setPermissions();
+    //this.evaluateUpdateDeletePermission();
+    //this.evaluateBuyNowPermission();
 
 
     /*    this.route.queryParams.subscribe(params => {
@@ -118,8 +124,7 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnChange(): void {
-    this.evaluateUpdateDeletePermission();
-    this.evaluateBuyNowPermission();
+    //this.setPermissions();
   }
 
   /*******************************************************************************************************************
@@ -164,38 +169,20 @@ export class ProductComponent implements OnInit {
         //console.log("Login to buy this product")
         // redirect to login if user is not logged in
         this.router.navigate(['/login'],{queryParams: {fromShop: 'true'}}).then(r =>{});
+        this.dialogRef?.close({buyProduct: true, product: this.productToDisplay});
       }
     }
   }
 
-  /*******************************************************************************************************************
+/*  /!*******************************************************************************************************************
    * PERMISSIONS
-   ******************************************************************************************************************/
+   ******************************************************************************************************************!/
 
-  evaluateUpdateDeletePermission(): void {
-    // set true if user is admin
-    if (this.loggedIn){
-      if (this.currentUser.isAdmin) this.showDeleteAndUpdateButton = true;
-      else this.showDeleteAndUpdateButton = false;
-    }
-    else this.showDeleteAndUpdateButton = false;
-  }
+  setPermissions(): void{
+    this.showDeleteAndUpdateButton = this.permissionService.evaluateUpdateDeletePermission(this.loggedIn, this.currentUser);
+    this.showBuyNowButton = this.permissionService.evaluateBuyNowPermission(this.loggedIn, this.currentUser);
+  }*/
 
-  evaluateBuyNowPermission(): void {
-    // set true if user is admin
-    if (this.loggedIn){
-      if (this.currentUser.isAdmin) {
-        console.log("Buy button disabled;")
-        this.showBuyNowButton = false;
-      }
-      else {
-        console.log("Buy button enabled;")
-        this.showBuyNowButton= true;
-      }
-    }
-    else this.showBuyNowButton= true;
-    console.log("nothing applies: " + this.showBuyNowButton);
-  }
 
 
 }

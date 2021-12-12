@@ -6,7 +6,7 @@
     </div>
     <mat-action-list class="group7-sidenav-list" (click)="sidenav.close()">
     <button mat-list-item class="group7-sidenav-button"  routerLink="/feed" routerLinkActive="active">Feed</button>
-    <button mat-list-item class="group7-sidenav-button" [routerLink]="['/post-form']" [queryParams]="{create: 'true'}" *ngIf="enableCreatePost" >Create Post</button>
+    <button mat-list-item class="group7-sidenav-button" [routerLink]="['/post-form']" [queryParams]="{create: 'true'}" *ngIf="currentUser?.featuresPermissions?.createPost" >Create Post</button>
     <button mat-list-item class="group7-sidenav-button" routerLink="/order" routerLinkActive="active" *ngIf="loggedIn">Orders</button>
     <button mat-list-item class="group7-sidenav-button" routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
     <button mat-list-item class="group7-sidenav-button"  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
@@ -28,17 +28,17 @@
       <span class="spacer"></span>
       <button mat-icon-button class="profile-icon" aria-label="Profile" [matMenuTriggerFor]="profile">
         <mat-icon *ngIf="!loggedIn">help</mat-icon>
-        <span *ngIf="loggedIn" color="white">{{user?.username || "ERROR"}}</span>
+        <span *ngIf="loggedIn" color="white">{{currentUser?.username || "ERROR"}}</span>
       </button>
       <mat-menu #profile="matMenu">
-        <button mat-menu-item  routerLink="/admin-dashboard" routerLinkActive="active" *ngIf="isAdmin">Admin dashboard</button>
+        <button mat-menu-item  routerLink="/admin-dashboard" routerLinkActive="active" *ngIf="currentUser?.isAdmin">Admin dashboard</button>
         <button mat-menu-item  routerLink="/profile" routerLinkActive="active" *ngIf="loggedIn">Profile</button>
         <button mat-menu-item  (click)="logoutUser()" *ngIf="loggedIn"><mat-icon>logout</mat-icon>Logout</button>
         <button mat-menu-item  routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
         <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
       </mat-menu>
     </mat-toolbar>
-    <div class="group7-main-content" [ngClass]="isAdmin? 'group7-admin-main-content' : ''">
+    <div class="group7-main-content" [ngClass]="currentUser?.isAdmin? 'group7-admin-main-content' : ''">
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
