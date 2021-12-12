@@ -47,7 +47,6 @@ export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
   constructor(
     public httpClient: HttpClient,
     private dialog: MatDialog,
-    private categoryService: CategoryService,
     private postService: PostService,
     public injector: Injector
   ) {
@@ -59,15 +58,16 @@ export class FeedComponent extends BaseComponent implements OnInit, DoCheck {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-    //set up categories
+/*    //set up categories
     //listener for product categories
     this.categoryService.postCategories$.subscribe(res => this.postCategories = res);
     //current value of product categories
-    this.postCategories = this.categoryService.getPostCategories();
+    this.postCategories = this.categoryService.getPostCategories();*/
 
 
     super.initializeUser(); //parents method
     super.evaluateAccessPermissions();
+    super.initializeCategories();
 
     this.evaluateAccessForCurrentUser();
   }

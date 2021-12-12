@@ -1,9 +1,11 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AccessPermission } from '../models/access-permission';
+import { Category } from '../models/category';
 import { FeaturePermission } from '../models/feature-permission';
 import { PermissionType } from '../models/permission-type';
 import { User } from '../models/user.model';
+import { CategoryService } from '../services/category.service';
 import { PermissionService } from '../services/permission.service';
 import { UserService } from '../services/user.service';
 
@@ -33,10 +35,15 @@ export class BaseComponent implements OnInit {
   routeIfNoAccess: string = "";
   queryParmasIfNoAccess: string ="";
 
+  //categories for posts and products
+  productCategories: Category[] = [];
+  postCategories: Category[] = [];
+
   // Services
   protected userService: UserService;
   protected permissionService: PermissionService;
   protected router: Router;
+  protected categoryService: CategoryService
 
   /*******************************************************************************************************************
    * CONSTRUCTOR
@@ -46,6 +53,7 @@ export class BaseComponent implements OnInit {
     this.userService = injector.get(UserService);
     this.permissionService = injector.get(PermissionService);
     this.router = injector.get(Router);
+    this.categoryService = injector.get(CategoryService);
   }
 
   /*******************************************************************************************************************
@@ -100,6 +108,23 @@ export class BaseComponent implements OnInit {
     else{
       this.router.navigate([route]).then((r:any) =>{});
     }
+  }
+
+
+  /**
+   * Gets current user from UserService and sets up listener.
+   *
+   * Must be set in child classes in ngOnInit.
+   */
+  initializeCategories(): void {
+    //listener for product categories
+    this.categoryService.productCategories$.subscribe(res => this.productCategories = res);
+    //current value of product categories
+    this.productCategories = this.categoryService.getProductCategories();
+    //listener for post categories
+    this.categoryService.postCategories$.subscribe(res => this.postCategories = res);
+    //current value of post categories
+    this.postCategories = this.categoryService.getPostCategories();
   }
 
 

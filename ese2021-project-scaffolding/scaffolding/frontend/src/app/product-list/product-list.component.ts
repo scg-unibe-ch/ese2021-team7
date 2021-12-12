@@ -54,7 +54,6 @@ export class ProductListComponent extends BaseComponent implements OnInit {
   constructor(
     public httpClient: HttpClient,
     private dialog: MatDialog,
-    private categoryService: CategoryService,
     private shopService: ShopService,
     public injector: Injector
   ) {
@@ -67,13 +66,14 @@ export class ProductListComponent extends BaseComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-    //listener for product categories
+/*    //listener for product categories
     this.categoryService.productCategories$.subscribe(res => this.productCategories = res);
     //current value of product categories
-    this.productCategories = this.categoryService.getProductCategories();
+    this.productCategories = this.categoryService.getProductCategories();*/
 
     super.initializeUser();
     super.evaluateAccessPermissions();
+    super.initializeCategories();
 
     // listern product list
     this.shopService.products$.subscribe(res => {this.productList = res;

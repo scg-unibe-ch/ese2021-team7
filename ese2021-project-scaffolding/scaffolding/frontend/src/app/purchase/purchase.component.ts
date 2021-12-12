@@ -53,16 +53,12 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
     }
   };
 
-  //array with product categories
-  productCategories: Category[] = [];
-
   /*******************************************************************************************************************
    * CONSTRUCTOR
    ******************************************************************************************************************/
 
   constructor(public fb: FormBuilder,
               public route: ActivatedRoute,
-              private categoryService: CategoryService,
               public purchaseFormSerivce: PurchaseFormService,
               private shopService: ShopService,
               public injector: Injector) {
@@ -74,13 +70,9 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-    //listener for product categories
-    this.categoryService.productCategories$.subscribe(res => this.productCategories = res);
-    //current value of product categories
-    this.productCategories = this.categoryService.getProductCategories();
-
     super.initializeUser();
     super.evaluateAccessPermissions();
+    super.initializeCategories();
 
       this.isLoading = true; //set loading flag
       let productId = 0;
@@ -101,7 +93,7 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
    * PERMISSIONS
    ******************************************************************************************************************/
 
-  //overrirdes Base Componente
+  //overrirdes Base Component
   protected reRouteIfNoAccess(route: string, queryParams?: any): void {
     if (this.currentUser.isAdmin) this.router.navigate([this.routeIfNoAccess]);
     else this.router.navigate(['/login']);

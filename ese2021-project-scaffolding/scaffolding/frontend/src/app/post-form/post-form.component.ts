@@ -21,8 +21,9 @@ import { BaseComponent } from '../base/base.component';
 })
 export class PostFormComponent extends BaseComponent implements OnInit {
 
-  //currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false, false));
-
+  /*******************************************************************************************************************
+   * VARIABLES
+   ******************************************************************************************************************/
 
   postForm: FormGroup | undefined;
 
@@ -36,15 +37,14 @@ export class PostFormComponent extends BaseComponent implements OnInit {
 
   isUpdate: boolean = false;
 
-  // array with post categories
-  postCategories: Category[] = [];
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
 
   constructor(
     public httpClient: HttpClient,
     private fb: FormBuilder,
-    public userService: UserService,
     private route: ActivatedRoute,
-    private categoryService: CategoryService,
     private userBackendService: UserBackendService,
     private postService: PostService,
     public injector: Injector) {
@@ -52,12 +52,15 @@ export class PostFormComponent extends BaseComponent implements OnInit {
 
   }
 
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
+
   ngOnInit(): void {
-    //set up categories
-    //listener for product categories
-    this.categoryService.postCategories$.subscribe(res => this.postCategories = res);
-    //current value of product categories
-    this.postCategories = this.categoryService.getPostCategories();
+
+    super.initializeUser();
+    super.initializeCategories();
+
 
     this.route.queryParams.subscribe(params => {
       if(params['create'] == 'true'){
@@ -97,6 +100,9 @@ export class PostFormComponent extends BaseComponent implements OnInit {
     }
   }
 
+  /*******************************************************************************************************************
+   * HELPER METHODS
+   ******************************************************************************************************************/
 
   initializeFormCreate(): void {
     this.postForm = this.fb.group({
