@@ -28,6 +28,8 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
   // Loading flag
   isLoading: boolean = false;
 
+  isOptional: boolean = true;
+
 
   /*******************************************************************************************************************
    * CONSTRUCTOR
@@ -48,8 +50,12 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
     super.ngOnInit();
     this.isLoading = true; //wait with DOM until form is initialized
     super.initializeForm();
+    console.log(this.form);
     this.isLoading = false;
   }
+
+
+  get formArray(): AbstractControl | null { return this.form.get('formArray'); }
 
 }
 

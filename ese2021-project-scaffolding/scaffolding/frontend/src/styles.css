@@ -300,3 +300,7 @@ table {
   color: #571677 !important;
   background-color: #e1e1e1 !important;
 }
+
+.spacer{
+  flex: 1 1 auto;
+}

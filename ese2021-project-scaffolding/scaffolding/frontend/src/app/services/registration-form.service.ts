@@ -28,8 +28,55 @@ export class RegistrationFormService implements FormService {
    * @param preSets: none
    */
   buildForm(preSets?: any): FormGroup{
+    //console.log("Presets: " + JSON.stringify(preSets));
     return this.fb.group({
-      userName: new FormControl('', Validators.compose([Validators.required]), [this.validatorService.userNameInUseValidator()]),
+      loginDetails: this.fb.group({
+        userName: ['', Validators.compose([Validators.required]), [this.validatorService.userNameInUseValidator()]],
+        password: [null, Validators.compose([Validators.required,
+          this.validatorService.patternValidator(/(?=.*[0-9])[0-9]{1,}/, {'noNumberInPassword': true}),
+          this.validatorService.patternValidator(/(?=.*[a-z])[a-z]{1,}/, {'noSmallLetter': true}),
+          this.validatorService.patternValidator(/(?=.*[A-Z])[A-Z]{1,}/, {'noCapitalLetter': true}),
+          this.validatorService.patternValidator(/(?=.*[@#$%^&-+=()])[@#$%^&-+=()]{1,}/, {'noSpecialCharacter': true}),
+          Validators.minLength(8)])],
+        email: ['', Validators.email, [this.validatorService.emailInUseValidator()]],
+      }),
+      address: this.fb.group({
+        firstName: [''],
+        lastName: [''],
+        street: [''],
+        houseNumber: ['', Validators.compose([this.validatorService.patternValidator(/^[0-9]*$/, {'notValidHouseNr': true})])], //only numbers
+        zipCode: ['', Validators.compose([this.validatorService.patternValidator(/^\d{4}$/, {'notValidZipCode': true})])], //excactly 4 digits
+        city: ['']
+      }),
+      personalDetails: this.fb.group({
+        birthday: [''],
+        phoneNumber: ['', Validators.compose([
+          this.validatorService.patternValidator(/^[\+]?[0-9]{11}$/, {'notValidPhoneNr': true})])] // of form +41795554433
+      })
+      /*formArray: this.fb.array([
+        this.fb.group({
+          userName: ['', Validators.compose([Validators.required]), [this.validatorService.userNameInUseValidator()]],
+          password: [null, Validators.compose([Validators.required,
+          this.validatorService.patternValidator(/(?=.*[0-9])[0-9]{1,}/, {'noNumberInPassword': true}),
+          this.validatorService.patternValidator(/(?=.*[a-z])[a-z]{1,}/, {'noSmallLetter': true}),
+          this.validatorService.patternValidator(/(?=.*[A-Z])[A-Z]{1,}/, {'noCapitalLetter': true}),
+          this.validatorService.patternValidator(/(?=.*[@#$%^&-+=()])[@#$%^&-+=()]{1,}/, {'noSpecialCharacter': true}),
+          Validators.minLength(8)])],
+          email: ['', Validators.email, [this.validatorService.emailInUseValidator()]],
+          firstName : [''],
+          lastName : [''],
+          street : [''],
+          houseNumber: ['', Validators.compose([this.validatorService.patternValidator(/^[0-9]*$/, {'notValidHouseNr': true})])], //only numbers
+          zipCode: ['', Validators.compose([this.validatorService.patternValidator(/^\d{4}$/, {'notValidZipCode': true})])], //excactly 4 digits
+          city: [''],
+          birthday: [''],
+          phoneNumber: ['', Validators.compose([
+          this.validatorService.patternValidator(/^[\+]?[0-9]{11}$/, {'notValidPhoneNr': true})])] // of form +41795554433
+      })
+    ])*/
+  });
+
+/*      userName: new FormControl('', Validators.compose([Validators.required]), [this.validatorService.userNameInUseValidator()]),
       password: new FormControl(null, Validators.compose([Validators.required,
         this.validatorService.patternValidator(/(?=.*[0-9])[0-9]{1,}/, {'noNumberInPassword': true}),
         this.validatorService.patternValidator(/(?=.*[a-z])[a-z]{1,}/, {'noSmallLetter': true}),
@@ -47,8 +94,8 @@ export class RegistrationFormService implements FormService {
       city: new FormControl(''),
       birthday: new FormControl(''),
       phoneNumber: new FormControl('', Validators.compose([
-        this.validatorService.patternValidator(/^[\+]?[0-9]{11}$/, {'notValidPhoneNr': true})])) // of form +41795554433
-    });
+        this.validatorService.patternValidator(/^[\+]?[0-9]{11}$/, {'notValidPhoneNr': true})])) // of form +41795554433*/
+
   }
 
   /*******************************************************************************************************************
@@ -65,17 +112,17 @@ export class RegistrationFormService implements FormService {
    */
   sendForm(form: FormGroup, requestType: any): Observable<any>{
     return this.httpClient.post(environment.endpointURL + requestType, {
-      userName: form.value.userName,
-      password: form.value.password,
-      firstName: form.value.firstName,
-      lastName: form.value.lastName,
-      email: form.value.email,
-      street: form.value.street,
-      houseNumber: form.value.houseNumber,
-      zipCode: form.value.zipCode,
-      city: form.value.city,
-      phoneNumber: form.value.phoneNumber,
-      birthday: form.value.birthday
+      userName: form.value.loginDetails.userName,
+      password: form.value.loginDetails.password,
+      firstName: form.value.address.firstName,
+      lastName: form.value.address.lastName,
+      email: form.value.loginDetails.email,
+      street: form.value.address.street,
+      houseNumber: form.value.address.houseNumber,
+      zipCode: form.value.address.zipCode,
+      city: form.value.address.city,
+      phoneNumber: form.value.personalDetails.phoneNumber,
+      birthday: form.value.personalDetails.birthday
     });
   }
 
