@@ -99,7 +99,7 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
 
   /**
    * Override parents method.
-   * 
+   *
    * Submits form to backend and handles re-routing in case of success/error.
    * @param formDirective
    */

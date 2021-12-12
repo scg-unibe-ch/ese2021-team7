@@ -3,7 +3,7 @@
     <button mat-flat-button (click)="reloadFeed()" class="group7-forms-button">
       Reload Feed
     </button>
-    <button mat-button (click)="createPost()" class="group7-forms-button">Create Post</button>
+    <button mat-button *ngIf="canCreatePosts" (click)="createPost()" class="group7-forms-button">Create Post</button>
 
     <mat-form-field>
       <mat-select [(value)]="sortBy" placeholder="Sort feed by" (selectionChange)="sortFeed($event)" class="group7-select" id="sortSelect">

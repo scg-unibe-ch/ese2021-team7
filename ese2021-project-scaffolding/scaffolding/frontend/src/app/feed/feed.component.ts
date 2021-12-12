@@ -40,6 +40,8 @@ export class FeedComponent extends BaseComponent implements OnInit {
 
   isLoadingPosts: boolean = false;
 
+  canCreatePosts: boolean = false;
+
   //array with post categories
   //postCategories: Category[] = [];
 
@@ -79,9 +81,15 @@ export class FeedComponent extends BaseComponent implements OnInit {
     this.feedService.posts$.subscribe(res => this.postList = res);
     //current value
     this.postList = this.feedService.getPosts();
-
     //loading flag
     this.feedService.postsLoading$.subscribe(res => this.isLoadingPosts = res);
+
+    // set Permissions to create post
+    if (this.currentUser == undefined) {
+      this.canCreatePosts = false;
+    } else if (this.currentUser.featuresPermissions) {
+      this.canCreatePosts = this.currentUser.featuresPermissions?.checkPermissions(PermissionType.CreatePost);
+      }
   }
 
 
