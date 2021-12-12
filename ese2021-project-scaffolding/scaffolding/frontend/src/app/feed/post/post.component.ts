@@ -6,6 +6,7 @@ import { PermissionService } from 'src/app/services/permission.service';
 import {Post} from "../../models/post.model";
 import {User} from "../../models/user.model";
 import {VotingState} from "../../models/voting-state";
+import {House} from "../../models/house";
 
 @Component({
   selector: 'app-post',
@@ -43,7 +44,7 @@ export class PostComponent implements OnInit{
   loggedIn : boolean = false;
 
   @Input()
-  currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
+  currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false),House.default);
 
   @Input()
   postToDisplay: Post = new Post(0,'','','',0,new Category(0, "undefined", 0, "undefined"),0,'', VotingState.NotAllowed);

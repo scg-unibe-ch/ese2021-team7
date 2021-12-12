@@ -9,6 +9,7 @@ import { AccessPermission } from '../models/access-permission';
 import { PermissionService } from '../services/permission.service';
 import { BaseComponent } from '../base/base.component';
 import { FeaturePermission } from '../models/feature-permission';
+import {House} from "../models/house";
 
 @Component({
   selector: 'app-user',
@@ -23,7 +24,7 @@ export class LoginComponent extends BaseComponent implements OnInit{
 
   fromRegistration: boolean | undefined;
 
-  userToLogin: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
+  userToLogin: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false),House.default);
 
   endpointLogin: string = '';
 
@@ -65,11 +66,11 @@ export class LoginComponent extends BaseComponent implements OnInit{
       if(res.user.admin){
         this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password,res.user.admin,res.user.firstName,
           res.user.lastName,res.user.email,res.user.street,res.user.houseNumber,res.user.zipCode,res.user.city,
-          res.user.birthday,res.user.phoneNumber, this.permissionService.getAdminAccessPermissions(), this.permissionService.getAdminFeaturePermissions()));
+          res.user.birthday,res.user.phoneNumber, this.permissionService.getAdminAccessPermissions(), this.permissionService.getAdminFeaturePermissions(),res.house));
       } else {
         this.userService.setUser(new User(res.user.userId, res.user.userName, res.user.password, res.user.admin, res.user.firstName,
           res.user.lastName, res.user.email, res.user.street, res.user.houseNumber, res.user.zipCode, res.user.city,
-          res.user.birthday, res.user.phoneNumber, this.permissionService.getUserAccessPermissions(), this.permissionService.getUserFeaturePermissions()));
+          res.user.birthday, res.user.phoneNumber, this.permissionService.getUserAccessPermissions(), this.permissionService.getUserFeaturePermissions(),res.house));
       }
 
       this.resetLoginForm();

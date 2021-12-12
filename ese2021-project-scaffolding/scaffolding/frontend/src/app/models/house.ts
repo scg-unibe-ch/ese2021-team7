@@ -1,4 +1,5 @@
-export enum Houses {
+export enum House {
+  default = 0,
   Stark = 1,
   Lannister =2,
   Arryn = 3,
