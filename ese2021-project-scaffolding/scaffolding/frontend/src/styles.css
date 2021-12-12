@@ -296,8 +296,13 @@ table {
   background-color: #eeeeee !important;
 }
 
-.group7-voted {
-  color: #571677 !important;
+.group7-upvoted {
+  color: #228b22 !important;
+  background-color: #e1e1e1 !important;
+}
+
+.group7-downvoted {
+  color: #cc1212 !important;
   background-color: #e1e1e1 !important;
 }
 
