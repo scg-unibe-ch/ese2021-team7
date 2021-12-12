@@ -18,6 +18,7 @@ export class User {
     public birthday: string, // form yyyy-mm-dd
     public phoneNumber: string,
     public accessPermissions: AccessPermission, // access permissions of user
-    public featuresPermissions: FeaturePermission // (static/independent) permissions for certain features
+    public featuresPermissions: FeaturePermission, // (static/independent) permissions for certain features
+    public house: string // house for different UI layout
   ) {}
 }
