@@ -8,6 +8,7 @@ import { FeaturePermission } from '../models/feature-permission';
 import { PermissionService } from './permission.service';
 import { FormGroup } from '@angular/forms';
 import { map, tap } from 'rxjs/operators';
+import { House } from '../models/house';
 
 @Injectable({
   providedIn: 'root'
@@ -149,7 +150,7 @@ export class UserService {
   createUserFromBackendReponse(res: any): User {
     let user = new User(res.userId, res.userName, res.password, res.admin, res.firstName,
       res.lastName, res.email, res.street, res.houseNumber, res.zipCode, res.city,
-      res.birthday, res.phoneNumber);
+      res.birthday, res.phoneNumber, House.default);
     if (res.admin) {
       user.setAccessPermissions(this.permissionService.getAdminAccessPermissions());
       user.setFeaturesPermissions(this.permissionService.getAdminFeaturePermissions());

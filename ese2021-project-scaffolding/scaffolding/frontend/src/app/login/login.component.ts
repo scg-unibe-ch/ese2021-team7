@@ -9,6 +9,7 @@ import { AccessPermission } from '../models/access-permission';
 import { PermissionService } from '../services/permission.service';
 import { BaseComponent } from '../base/base.component';
 import { FeaturePermission } from '../models/feature-permission';
+import {House} from "../models/house";
 
 @Component({
   selector: 'app-user',
@@ -25,7 +26,7 @@ export class LoginComponent extends BaseComponent implements OnInit{
   fromRegistration: boolean | undefined;
   fromShop: boolean = false;
 
-  userToLogin: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
+  userToLogin: User = new User(0, '', '', false,'','','','','','','','','',House.default, new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
 
   endpointLogin: string = '';
 
@@ -64,7 +65,6 @@ export class LoginComponent extends BaseComponent implements OnInit{
   /*******************************************************************************************************************
    * USER ACTIONS
    ******************************************************************************************************************/
-
   /**
    * Logs in user.
    *

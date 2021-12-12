@@ -1,5 +1,6 @@
 import { AccessPermission } from "./access-permission";
 import { FeaturePermission } from "./feature-permission";
+import {House} from "./house";
 
 export class User {
 
@@ -17,8 +18,9 @@ export class User {
     public city: string,
     public birthday: string, // form yyyy-mm-dd
     public phoneNumber: string,
+    public house: House, // house for different UI layout
     public accessPermissions?: AccessPermission, // access permissions of user
-    public featuresPermissions?: FeaturePermission // (static/independent) permissions for certain features
+    public featuresPermissions?: FeaturePermission, // (static/independent) permissions for certain features
   ) {}
 
   setAccessPermissions(accessPermission: AccessPermission): void {
