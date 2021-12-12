@@ -101,8 +101,10 @@ export class ProductComponent extends BaseComponent implements OnInit {
      this.showBuyNowButton = true;
    } else {
      if (!this.loggedIn) this.showBuyNowButton = true;
-     else this.showBuyNowButton = this.currentUser?.featuresPermissions.purchaseProduct;
-     this.showDeleteAndUpdateButton = this.currentUser?.featuresPermissions.productUpdateDelete;
+     else if(this.currentUser.featuresPermissions) {
+       this.showBuyNowButton = this.currentUser?.featuresPermissions?.purchaseProduct;
+       this.showDeleteAndUpdateButton = this.currentUser?.featuresPermissions?.productUpdateDelete;
+     }
    }
 
    //this.setPermissions();
