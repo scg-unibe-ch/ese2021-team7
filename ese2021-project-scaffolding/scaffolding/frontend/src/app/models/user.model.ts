@@ -1,5 +1,6 @@
 import { AccessPermission } from "./access-permission";
 import { FeaturePermission } from "./feature-permission";
+import {House} from "./house";
 
 export class User {
 
@@ -18,6 +19,7 @@ export class User {
     public birthday: string, // form yyyy-mm-dd
     public phoneNumber: string,
     public accessPermissions: AccessPermission, // access permissions of user
-    public featuresPermissions: FeaturePermission // (static/independent) permissions for certain features
+    public featuresPermissions: FeaturePermission, // (static/independent) permissions for certain features
+    public house: House // house for different UI layout
   ) {}
 }

@@ -8,6 +8,7 @@ import { User } from '../models/user.model';
 import { CategoryService } from '../services/category.service';
 import { PermissionService } from '../services/permission.service';
 import { UserService } from '../services/user.service';
+import {House} from "../models/house";
 
 @Component({
   selector: 'app-base',
@@ -27,9 +28,9 @@ export class BaseComponent implements OnInit {
 
   //User
   loggedIn = false;
-  currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
+  currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false),House.default);
 
-  // Access permissions for componoents
+  // Access permissions for components
   // to be overwritten by child
   permissionToAccess: PermissionType = PermissionType.AccessHome;
   routeIfNoAccess: string = "";
