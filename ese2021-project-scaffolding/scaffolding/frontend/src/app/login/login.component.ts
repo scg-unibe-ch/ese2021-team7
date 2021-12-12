@@ -26,7 +26,7 @@ export class LoginComponent extends BaseComponent implements OnInit{
   fromRegistration: boolean | undefined;
   fromShop: boolean = false;
 
-  userToLogin: User = new User(0, '', '', false,'','','','','','','','','',House.default, new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
+  userToLogin: User = new User(0, '', '', false,'','','','','','','','','',House.default, new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false, false));
 
   endpointLogin: string = '';
 

@@ -9,6 +9,8 @@ import { PermissionService } from './permission.service';
 import { FormGroup } from '@angular/forms';
 import { map, tap } from 'rxjs/operators';
 import { House } from '../models/house';
+import { OrderListServiceService } from './order-list-service.service';
+import { Order } from '../models/order';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +47,8 @@ export class UserService {
 
   constructor(
     private permissionService: PermissionService,
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private orderListService: OrderListServiceService
   ) {
     // Observer
     this.loggedIn$.subscribe(res => this.loggedIn = res);
@@ -151,12 +154,19 @@ export class UserService {
     let user = new User(res.userId, res.userName, res.password, res.admin, res.firstName,
       res.lastName, res.email, res.street, res.houseNumber, res.zipCode, res.city,
       res.birthday, res.phoneNumber, House.default);
+    //set correct permissions
     if (res.admin) {
       user.setAccessPermissions(this.permissionService.getAdminAccessPermissions());
       user.setFeaturesPermissions(this.permissionService.getAdminFeaturePermissions());
     } else {
       user.setAccessPermissions(this.permissionService.getUserAccessPermissions());
       user.setFeaturesPermissions(this.permissionService.getUserFeaturePermissions());
+    }
+    //check if user can select House
+    if (res.house) {
+      if (user.featuresPermissions) user.featuresPermissions.setSelectHousePermission(true);
+    } else {
+    if (user.featuresPermissions) user.featuresPermissions.setSelectHousePermission(false);
     }
     return user;
   }
@@ -185,5 +195,19 @@ export class UserService {
     });
   }
 
+
+  /*******************************************************************************************************************
+   * SELECT HOUSE
+   ******************************************************************************************************************/
+
+  checkSelectHousePermission(user: User): Observable<any>{
+    return this.orderListService.getAllOrders(user.userId)
+      .pipe(
+        map((orders: Order[]) => {
+          let filteredOrders: Order[] = orders.filter((order: Order) => order.orderStatus == "Shipped");
+          return filteredOrders.length >= 2;
+        }),
+    );
+  }
 
 }

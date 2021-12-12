@@ -6,12 +6,21 @@ import { PermissionType } from "./permission-type";
  */
 export class FeaturePermission implements IPermission {
 
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
+
   constructor(
     public productUpdateDelete: boolean,
     public purchaseProduct: boolean,
     public addProduct: boolean,
-    public createPost: boolean) {
+    public createPost: boolean,
+    public selectHouse: boolean) {
   }
+
+  /*******************************************************************************************************************
+   * HELPER METHODS
+   ******************************************************************************************************************/
 
   // interface method implementation
   checkPermissions(permissionType: PermissionType): boolean {
@@ -28,9 +37,26 @@ export class FeaturePermission implements IPermission {
       case PermissionType.CreatePost:
         return this.createPost;
         break;
+      case PermissionType.SelectHouse:
+        return this.selectHouse;
+        break;
       default:
         return false;
         break;
     }
   }
+
+  /*******************************************************************************************************************
+   * SETTER
+   ******************************************************************************************************************/
+
+  /**
+   * Sets value for selectHouse permission.
+   *
+   * @param value
+   */
+  setSelectHousePermission(value: boolean): void {
+    this.selectHouse = value;
+  }
+
 }

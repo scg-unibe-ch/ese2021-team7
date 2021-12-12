@@ -24,7 +24,7 @@
       <button mat-flat-button (click)="viewOrders()" class="group7-forms-button">
         View Orders
       </button>
-      <button mat-flat-button (click)="chooseHouse()" class="group7-forms-button">
+      <button mat-flat-button *ngIf="showSelectHouseButton" (click)="chooseHouse()" class="group7-forms-button">
         Choose House
       </button>
 
