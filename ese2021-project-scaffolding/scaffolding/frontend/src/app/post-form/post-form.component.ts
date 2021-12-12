@@ -128,5 +128,16 @@ export class PostFormComponent extends BaseFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Closes dialog box.
+   * Overrides parents method.
+   *
+   * @param route: not used
+   * @param queryParams: not used
+   */
+  reRouteAfterSuccess(route: string, queryParams?: any): void {
+    this.dialogRef.close();
+  }
+
 
 }
