@@ -80,7 +80,7 @@ export class ProductListComponent extends BaseComponent implements OnInit {
 
     super.ngOnInit();
     if(this.currentUser == undefined ) this.canAddProduct = false;
-    else this.canAddProduct = this.currentUser.featuresPermissions.addProduct;
+    else if(this.currentUser.featuresPermissions) this.canAddProduct = this.currentUser.featuresPermissions.addProduct;
 
     // listern product list
     this.shopService.products$.subscribe(res => {this.productList = res;
