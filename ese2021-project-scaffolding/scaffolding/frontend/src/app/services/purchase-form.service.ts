@@ -33,8 +33,26 @@ export class PurchaseFormService implements FormService {
    */
   buildForm(preSets?: any): FormGroup {
     return this.fb.group({
-      paymentMethod: new FormControl("1", Validators.required),
-      firstName: new FormControl(preSets.presetUser.firstName, Validators.required),
+      paymentMethods: this.fb.group({
+        paymentMethod: ["1", Validators.required]
+      }),
+      shippingAddress: this.fb.group({
+        firstName: [preSets.presetUser.firstName, Validators.required],
+        lastName: [preSets.presetUser.lastName, Validators.required],
+        street: [preSets.presetUser.street, Validators.required],
+        houseNumber: [preSets.presetUser.houseNumber],
+        zipCode: [preSets.presetUser.zipCode],
+        city: [preSets.presetUser.city]
+      }),
+      productId: [preSets.presetProduct.productId],
+      userId: [preSets.presetUser.userId]
+    });
+
+/*    paymentMethods: this.fb.group({
+      paymentMethod: new FormControl("1", Validators.required)
+    }),
+      shippingAddress: this.fb.group
+    firstName: new FormControl(preSets.presetUser.firstName, Validators.required),
       lastName: new FormControl(preSets.presetUser.lastName, Validators.required),
       street: new FormControl(preSets.presetUser.street, Validators.required),
       houseNumber: new FormControl(preSets.presetUser.houseNumber),
@@ -42,7 +60,7 @@ export class PurchaseFormService implements FormService {
       city: new FormControl(preSets.presetUser.city),
       productId: new FormControl(preSets.presetProduct.productId),
       userId: new FormControl(preSets.presetUser.userId)
-    });
+  });*/
   }
 
   /*******************************************************************************************************************
@@ -59,13 +77,13 @@ export class PurchaseFormService implements FormService {
    */
   sendForm(form: FormGroup, requestType: any): Observable<any> {
     return this.httpClient.post(environment.endpointURL + requestType, {
-      firstName: form.value.firstName,
-      lastName: form.value.lastName,
-      street: form.value.street,
-      houseNr: form.value.houseNumber,
-      zip: form.value.zipCode,
-      city: form.value.city,
-      paymentOption: form.value.paymentMethod,
+      firstName: form.value.shippingAddress.firstName,
+      lastName: form.value.shippingAddress.lastName,
+      street: form.value.shippingAddress.street,
+      houseNr: form.value.shippingAddress.houseNumber,
+      zip: form.value.shippingAddress.zipCode,
+      city: form.value.shippingAddress.city,
+      paymentOption: form.value.paymentMethods.paymentMethod,
       user: Number(form.value.userId), //number
       productId: Number(form.value.productId) //number
     } );
