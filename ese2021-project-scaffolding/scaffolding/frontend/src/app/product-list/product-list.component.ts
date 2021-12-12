@@ -82,12 +82,14 @@ export class ProductListComponent extends BaseComponent implements OnInit {
     if(this.currentUser == undefined ) this.canAddProduct = false;
     else if(this.currentUser.featuresPermissions) this.canAddProduct = this.currentUser.featuresPermissions.addProduct;
 
-    // listern product list
+    // listen product list
     this.shopService.products$.subscribe(res => {this.productList = res;
     });
     // get current value products
     this.productList = this.shopService.getAllProducts();
 
+    // refresh shop to load all changes
+    this.shopService.refresh();
   }
 
   /*******************************************************************************************************************

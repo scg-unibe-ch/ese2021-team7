@@ -59,6 +59,7 @@ export class OrderListServiceService {
               map(
                 (product: any) => {
                   order.orderStatus = this.getStringOfOrderStatus(order.orderStatus); //change orderStatus int for string
+                  order.paymentOption = this.getStringOfPaymentMethod(order.paymentOption); // change paymentMethod inf for string
                   return this.createOrderToDisplayFromBackendResponse(order, product);  // join together and give back one OrderToDisplay
                 }
               )
@@ -143,6 +144,20 @@ export class OrderListServiceService {
         break;
       case 2:
         return "Cancelled";
+        break;
+      default:
+        return "Undefined";
+        break;
+    }
+  }
+
+  getStringOfPaymentMethod(paymentMethod: number): string {
+    switch(paymentMethod){
+      case 1:
+        return "Invoice";
+        break;
+      case 2:
+        return "Credit Card";
         break;
       default:
         return "Undefined";
