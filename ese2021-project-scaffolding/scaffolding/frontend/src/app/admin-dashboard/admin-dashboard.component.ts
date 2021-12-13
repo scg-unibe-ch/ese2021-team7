@@ -40,6 +40,7 @@ export class AdminDashboardComponent extends BaseComponent implements OnInit {
     //super.initializeUser();
     //super.evaluateAccessPermissions();
     super.ngOnInit();
+    super.evaluateAccessPermissions();
   }
 
 }

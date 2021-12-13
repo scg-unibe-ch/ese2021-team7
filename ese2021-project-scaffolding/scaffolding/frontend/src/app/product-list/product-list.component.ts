@@ -69,16 +69,9 @@ export class ProductListComponent extends BaseComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-/*    //listener for product categories
-    this.categoryService.productCategories$.subscribe(res => this.productCategories = res);
-    //current value of product categories
-    this.productCategories = this.categoryService.getProductCategories();*/
-
-    //super.initializeUser();
-    //super.evaluateAccessPermissions();
-    //super.initializeCategories();
 
     super.ngOnInit();
+    this.evaluateAccessPermissions();
     if(this.currentUser == undefined ) this.canAddProduct = false;
     else if(this.currentUser.featuresPermissions) this.canAddProduct = this.currentUser.featuresPermissions.addProduct;
 

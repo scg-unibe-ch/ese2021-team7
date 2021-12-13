@@ -47,7 +47,7 @@ export class CategoryService {
   categories$ = this.categoriesSource.asObservable();
   productCategories$ = this.productCategoriesSource.asObservable();
   postCategories$ = this.postCategoriesSource.asObservable();
-  categoriesLoadgin$ = this.cateogiresLoadingSource.asObservable();
+  //categoriesLoadgin$ = this.cateogiresLoadingSource.asObservable();
 
 
   /*******************************************************************************************************************
@@ -127,13 +127,14 @@ export class CategoryService {
         (data:any) =>
           data.map(
             (category: any) => this.createCategoryFromBackendResponse(category) //return array of Category[]
-          )),
+          ))
     ).subscribe((data:any) => {
       this.categoriesSource.next(data);
       this.categories = data;
       this.productCategories = data.filter((category: Category) => category.type == CategoryType.Product); //filter for product categories
       this.postCategories = data.filter((category: Category) => category.type == CategoryType.Post); // filter for post categories
-      this.cateogiresLoadingSource.next(false);
+      this.productCategoriesSource.next(this.productCategories);
+      this.postCategoriesSource.next(this.postCategories);
     });
   }
 
@@ -147,7 +148,19 @@ export class CategoryService {
         (data:any) =>
           data.map(
             (category: any) => this.createCategoryFromBackendResponse(category) //return array of Category[]
-          )),
+          ))
+    );
+  }
+
+  getPostCategoriesFromBackendAsObservable(): Observable<Category[]> {
+    return this.getCategoriesFromBackendAsObservable().pipe(
+      map((categories: Category []) => categories.filter((category: Category) => category.type == CategoryType.Post))
+    );
+  }
+
+  getProductCategoriesFromBackendAsObservable(): Observable<Category[]> {
+    return this.getCategoriesFromBackendAsObservable().pipe(
+      map((categories: Category []) => categories.filter((category: Category) => category.type == CategoryType.Product))
     );
   }
 

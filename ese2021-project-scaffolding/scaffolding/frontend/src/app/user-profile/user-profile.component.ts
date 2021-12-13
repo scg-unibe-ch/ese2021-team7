@@ -29,17 +29,13 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    super.initializeUser();
+    super.ngOnInit();
 
     if(this.currentUser != undefined) {
       this.userService.checkSelectHousePermission(this.currentUser)
         .subscribe(res => this.showSelectHouseButton = res);
     }
 
-    //current Value
-    //this.loggedIn = this.userService.getLoggedIn();
-    //this.currentUser = this.userService.getUser();
     if(typeof this.currentUser != 'undefined'){
       this.address = this.currentUser.street + " " + this.currentUser.houseNumber + ", " + this.currentUser.zipCode + " " + this.currentUser.city;
       this.birthday = this.currentUser.birthday.substring(8,10) + "." + this.currentUser.birthday.substring(5,7) + "." + this.currentUser.birthday.substring(0,4);

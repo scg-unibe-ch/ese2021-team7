@@ -17,7 +17,6 @@ export class ProductService {
 
 
   public getProductById(productId: number): Observable<any> {
-    console.log("product service fired");
     return this.httpClient.get(environment.endpointURL + "product/byId", {
       params: {
         productId: productId
