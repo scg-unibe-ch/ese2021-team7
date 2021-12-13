@@ -9,7 +9,7 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
       <mat-form-field appearance="outline">
         <mat-label >House</mat-label>
-        <mat-select formControlName="house" id="house"   required>
+        <mat-select formControlName="house" id="house" required name="house" ngDefaultControl>
           <mat-option value="" >Choose</mat-option>
           <mat-option value="1" >Stark</mat-option>
           <mat-option value="2" >Targaryen</mat-option>

@@ -1,9 +1,9 @@
-<div class="table-wrapper" [ngClass]="currentUser.isAdmin? '': 'group7-small-table-wrapper'" *ngIf="!isLoadingUser && !isLoadingCategories">
+<div class="table-wrapper" [ngClass]="currentUser?.isAdmin? '': 'group7-small-table-wrapper'" *ngIf="!isLoadingUser && !isLoadingCategories">
   <div class="table-title" class="group7-list-title" >
-    <h1 *ngIf="currentUser.isAdmin">Orders</h1>
-    <h1 *ngIf="!currentUser.isAdmin">My Orders</h1>
+    <h1 *ngIf="currentUser?.isAdmin">Orders</h1>
+    <h1 *ngIf="!currentUser?.isAdmin">My Orders</h1>
   </div>
-  <div class="spinner-container" *ngIf="dataSource.loading$ | async" >
+  <div class="spinner-container" *ngIf="dataSource?.loading$ | async" >
     <mat-spinner></mat-spinner>
   </div>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -91,8 +91,8 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell  *matHeaderCellDef > Actions </th>
       <td mat-cell *matCellDef="let element" >
-        <button mat-button (click)="confirmationShip(element)" *ngIf="currentUser.isAdmin && element.orderStatus == 'Pending' "><mat-icon>local_shipping</mat-icon></button>
-        <button mat-button (click)="confirmationCancel(element)" *ngIf="!currentUser.isAdmin && element.orderStatus == 'Pending'"><mat-icon>cancel</mat-icon></button>
+        <button mat-button (click)="confirmationShip(element)" *ngIf="currentUser?.isAdmin && element.orderStatus == 'Pending' "><mat-icon>local_shipping</mat-icon></button>
+        <button mat-button (click)="confirmationCancel(element)" *ngIf="!currentUser?.isAdmin && element.orderStatus == 'Pending'"><mat-icon>cancel</mat-icon></button>
       </td>
     </ng-container>
 

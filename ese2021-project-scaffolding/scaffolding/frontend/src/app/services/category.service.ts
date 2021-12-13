@@ -26,7 +26,7 @@ export class CategoryService {
    ******************************************************************************************************************/
 
   // Categories array
-  private categories: Category[] = [];
+  public categories: Category[] = [];
   private productCategories: Category[] = [];
   private postCategories: Category[] = [];
 

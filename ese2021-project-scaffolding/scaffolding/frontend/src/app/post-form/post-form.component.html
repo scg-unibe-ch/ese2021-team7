@@ -9,11 +9,11 @@
         <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
           <mat-form-field appearance="outline">
             <mat-label>Title</mat-label>
-            <input matInput type="text" label="postTitle" placeholder="Title" id="postTitle" [formControlName]="'postTitle'" required>
+            <input matInput type="text" label="postTitle" placeholder="Title" id="postTitle" required name="postTitle">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Image URL</mat-label>
-            <input matInput type="url" label="postImage" id="postImage" [formControlName]="'postImage'" >
+            <input matInput type="url" label="postImage" id="postImage" name="postImage" >
           </mat-form-field>
           <!--
           <label for="postImage"  ><b>Image</b></label>
@@ -28,11 +28,11 @@
 -->
           <mat-form-field appearance="outline" id="mat-text">
             <mat-label>Text</mat-label>
-            <textarea matInput type="text" label="postText" id="postField" placeholder="Post text" [formControlName]="'postText'" id="text"></textarea>
+            <textarea matInput type="text" label="postText" id="postField" placeholder="Post text" name="postText" id="text"></textarea>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label >Category</mat-label>
-            <mat-select [formControlName]="'postCategory'" id="category"   required>
+            <mat-select name="postCategory" id="category"   required>
               <mat-option value="2" *ngFor="let category of postCategories" [value]="category.id">{{category.name}}</mat-option>
             </mat-select>
           </mat-form-field>

@@ -9,25 +9,25 @@
           <!-- Product Title -->
           <mat-form-field appearance="outline">
             <mat-label>Title</mat-label>
-            <input matInput type="text" label="productTitle" placeholder="Title" id="productTitle" formControlName="productTitle" required />
+            <input matInput type="text" label="productTitle" placeholder="Title" id="productTitle" name="productTitle" required />
           </mat-form-field>
 
           <!-- Product Image -->
           <mat-form-field appearance="outline">
             <mat-label>Image URL</mat-label>
-            <input matInput type="url" label="productImage" id="productImage" [formControlName]="'productImage'" />
+            <input matInput type="url" label="productImage" id="productImage" name="productImage" />
           </mat-form-field>
 
           <!-- Product Description -->
           <mat-form-field appearance="outline" id="mat-text">
             <mat-label>Description</mat-label>
-            <textarea matInput type="text" label="productDescription" id="productDescription" placeholder="Product Description" [formControlName]="'productDescription'" id="text" required></textarea>
+            <textarea matInput type="text" label="productDescription" id="productDescription" placeholder="Product Description" name="'productDescription'" id="text" required></textarea>
           </mat-form-field>
 
           <!-- Product Category -->
           <mat-form-field appearance="outline">
             <mat-label >Category</mat-label>
-            <mat-select [formControlName]="'productCategory'" id="category"   required>
+            <mat-select name="productCategory" id="category"   required>
               <mat-option *ngFor="let category of productCategories" [value]="category.id" >{{category.name}}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -35,8 +35,8 @@
           <!-- Product Price -->
           <mat-form-field appearance="outline" >
             <mat-label>Price</mat-label>
-            <input matInput type="text" label="productPrice" id="productPrice" [formControlName]="'productPrice'" required>
-            <mat-error *ngIf="form.controls['productPrice'].touched && form.controls['productPrice'].value != '' && form.controls['productPrice']?.errors?.notValidPrice" class="is-invalid">Please enter a valid price</mat-error>
+            <input matInput type="text" label="productPrice" id="productPrice" name="productPrice" required>
+            <mat-error *ngIf="form.controls['productPrice']?.touched && form.controls['productPrice']?.value != '' && form.controls['productPrice']?.errors?.notValidPrice" class="is-invalid">Please enter a valid price</mat-error>
           </mat-form-field>
           <br/>
 
