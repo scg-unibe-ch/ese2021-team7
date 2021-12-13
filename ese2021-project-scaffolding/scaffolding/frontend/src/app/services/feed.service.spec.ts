@@ -16,4 +16,21 @@ describe('FeedService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  /**
+   * Check if arrays are empty in the beginning
+   */
+  it('posts arrays should be empty in the beginning', () =>{
+    expect(service.getPosts().length).toEqual(0);
+  })
+
+
+  //createPostFromBackendResponse
+
+  //evaluateVotingState
+
+  //getAllPostsFromBackend
+
+  //getHttpRequest
+
 });

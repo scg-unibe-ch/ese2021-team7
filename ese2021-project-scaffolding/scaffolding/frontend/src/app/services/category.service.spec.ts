@@ -24,9 +24,7 @@ describe('CategoryService', () => {
    * Check if arrays are empty in the beginning
    */
   it('arrays should be empty', () =>{
-    expect(service.getProductCategories().length).toBeGreaterThanOrEqual(0);
-    expect(service.getProductCategories().length).toBeLessThanOrEqual(0);
-
+    expect(service.getProductCategories().length).toEqual(0);
   })
 
 });
