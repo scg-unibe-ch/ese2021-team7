@@ -255,14 +255,26 @@ button, input {
   overflow:hidden;
 }
 
+.admin-dashboard-card{
+  cursor: pointer;
+}
+
 .admin-dashboard-title{
   text-align: center;
 }
+
 .admin-dashboard-content{
-  width: 100% !important;
+  height: 50px;
+  width: 100px;
   text-align: center;
+  align-content: center;
   padding: 0px;
 }
+
+.admin-dashboard-actions{
+  text-align: center;
+}
+
 .admin-dashboard-icons{
   font-size: 5em;
   color: #262626;
