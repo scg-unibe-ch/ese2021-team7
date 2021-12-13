@@ -58,8 +58,8 @@ The user's house, a randomly chosen integer in {1, 2, ..., 9}. In all subsequent
 {
     "house": 5
 }
-If the specified userId does not exist, or if the user already has a house, Status code 500 is returned.
 ```
+If the specified userId does not exist, or if the user already has a house, Status code 500 is returned.
 # /post
 ## GET /post/all
 Returns all posts. If sortBy is 1, posts are ordered by their score. Otherwise, posts are ordered by creation time.

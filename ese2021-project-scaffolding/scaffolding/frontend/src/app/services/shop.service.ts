@@ -52,7 +52,6 @@ export class ShopService {
    * * @return: Product[]
    */
   getAllProducts(): Product[] {
-    console.log("All Products: " + this.products);
     return this.products;
   }
 
@@ -73,9 +72,7 @@ export class ShopService {
           ))
     ).subscribe((data:any) => {
       this.productsSource.next(data);
-      console.log("Data to be saved: "+ JSON.stringify(data));
       this.products = data;
-      console.log("Data saved: " + JSON.stringify(this.products));
     });
   }
 

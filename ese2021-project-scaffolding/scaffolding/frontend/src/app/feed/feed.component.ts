@@ -18,6 +18,7 @@ import { PermissionType } from '../models/permission-type';
 import { FeedService } from '../services/feed.service';
 import { MatSelect } from '@angular/material/select';
 import { PostFormComponent } from '../post-form/post-form.component';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-feed',
@@ -68,28 +69,33 @@ export class FeedComponent extends BaseComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-    //super.initializeUser(); //parents method
-    //super.evaluateAccessPermissions();
-    //super.initializeCategories();
-    //console.log(this.postCategories);
 
-    super.ngOnInit();
-    //loads Data
-    //this.feedService.setUserAndLoggedIn(this.loggedIn, this.currentUser);
-    this.feedService.refreshPosts(this.loggedIn, this.currentUser);
-    //listener
-    this.feedService.posts$.subscribe(res => this.postList = res);
-    //current value
-    this.postList = this.feedService.getPosts();
-    //loading flag
-    this.feedService.postsLoading$.subscribe(res => this.isLoadingPosts = res);
+    //super.ngOnInit();
+    super.initializeCurrentValues().subscribe(
+      res => {
+        this.loggedIn = res[1];
+        this.currentUser = res[2];
+        this.postCategories = res[3];
+        this.productCategories = res[4];
 
-    // set Permissions to create post
-    if (this.currentUser == undefined) {
-      this.canCreatePosts = false;
-    } else if (this.currentUser.featuresPermissions) {
-      this.canCreatePosts = this.currentUser.featuresPermissions?.checkPermissions(PermissionType.CreatePost);
-      }
+        //loads Data
+        //this.feedService.setUserAndLoggedIn(this.loggedIn, this.currentUser);
+        this.feedService.refreshPosts(this.loggedIn, this.currentUser);
+        //listener
+        this.feedService.posts$.subscribe(res => this.postList = res);
+        //current value
+        this.postList = this.feedService.getPosts();
+        //loading flag
+        this.feedService.postsLoading$.subscribe(res => this.isLoadingPosts = res);
+
+        // set Permissions to create post
+        if (this.currentUser == undefined) {
+          this.canCreatePosts = false;
+        } else if (this.currentUser.featuresPermissions) {
+          this.canCreatePosts = this.currentUser.featuresPermissions?.checkPermissions(PermissionType.CreatePost);
+        }
+      });
+    super.setUpListeners();
   }
 
 

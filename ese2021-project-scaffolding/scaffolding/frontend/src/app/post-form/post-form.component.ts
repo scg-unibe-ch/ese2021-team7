@@ -62,9 +62,8 @@ export class PostFormComponent extends BaseFormComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-
-    super.initializeUser();
-    super.initializeCategories();
+    super.ngOnInit();
+    super.evaluateAccessPermissions();
     this.setUpFormType();
   }
 

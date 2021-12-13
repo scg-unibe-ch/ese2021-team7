@@ -56,9 +56,6 @@ export class OrderListComponent extends BaseComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-
-
-    ///super.initializeUser();
     super.ngOnInit();
     this.setDisplayedColumns(); // different columns for user and admin
     if(this.currentUser != undefined) {
