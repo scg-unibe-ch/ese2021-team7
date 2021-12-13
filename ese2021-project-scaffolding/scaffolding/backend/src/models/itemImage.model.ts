@@ -1,4 +1,4 @@
-import { Optional, Model, DataTypes, Sequelize, Association } from 'sequelize';
+import {Association, DataTypes, Model, Optional, Sequelize} from 'sequelize';
 import {TodoItem} from './todoitem.model';
 
 export interface ItemImageAttributes {
@@ -7,7 +7,8 @@ export interface ItemImageAttributes {
     todoItemId: number;
 }
 
-export interface ItemCreationAttributes extends Optional<ItemImageAttributes, 'imageId'> { }
+export interface ItemCreationAttributes extends Optional<ItemImageAttributes, 'imageId'> {
+}
 
 export class ItemImage extends Model<ItemImageAttributes, ItemCreationAttributes> implements ItemImageAttributes {
     public static associations: {
@@ -35,7 +36,7 @@ export class ItemImage extends Model<ItemImageAttributes, ItemCreationAttributes
                     allowNull: false
                 }
             },
-            { tableName: 'itemImages', sequelize }
+            {tableName: 'itemImages', sequelize}
         );
     }
 

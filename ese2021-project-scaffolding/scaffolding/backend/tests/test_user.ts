@@ -1,10 +1,9 @@
-import { describe } from 'mocha';
-import * as sinon from 'sinon';
+import {describe} from 'mocha';
 // @ts-ignore
 import bcrypt from 'bcrypt';
 import * as chai from 'chai';
 
-import { UserService } from '../src/services/user.service';
+import {UserService} from '../src/services/user.service';
 import {LoginResponse} from '../src/models/login.model';
 import {ErrorCodes} from '../src/errorCodes';
 
@@ -23,7 +22,7 @@ afterEach(function () {
 
 describe('Test User.register', () => {
     describe('Test whether registering with an existing user name is rejected', () => {
-        it('Should reject promise if the user name is already existing', function() {
+        it('Should reject promise if the user name is already existing', function () {
             const user = {
                 userId: 1,
                 userName: 'lion50',
@@ -31,6 +30,7 @@ describe('Test User.register', () => {
                 admin: false,
                 firstName: 'Hans-Peter',
                 lastName: 'Kurth',
+                house: 2,
                 email: 'lion@safari.com',
                 street: '2nd street',
                 houseNumber: '2',
@@ -170,7 +170,7 @@ describe('Successful login', () => {
                         assert((response as LoginResponse).token.length > 20);
                         assert.equal((response as LoginResponse).user.userName, 'lion50');
                     },
-                    rejection => {
+                    () => {
                         assert.fail('expected success');
                     }
                 ).catch((error) => {

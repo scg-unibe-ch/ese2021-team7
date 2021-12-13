@@ -1,7 +1,5 @@
-import { Model, Sequelize, DataTypes } from 'sequelize';
-import { User } from './user.model';
-import { Product } from './product.model';
-import {OrderController} from '../controllers/order.controller';
+import {DataTypes, Model, Sequelize} from 'sequelize';
+import {Product} from './product.model';
 
 export interface OrderAttributes {
     orderId: number;
@@ -30,39 +28,39 @@ export class Order extends Model<OrderAttributes> implements OrderAttributes {
 
     public static initialize(sequelize: Sequelize) {
         Order.init({
-            orderId: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
+                orderId: {
+                    type: DataTypes.INTEGER,
+                    autoIncrement: true,
+                    primaryKey: true
+                },
+                firstName: {
+                    type: DataTypes.STRING
+                },
+                lastName: {
+                    type: DataTypes.STRING
+                },
+                street: {
+                    type: DataTypes.STRING
+                },
+                houseNr: {
+                    type: DataTypes.STRING
+                },
+                zip: {
+                    type: DataTypes.STRING
+                },
+                city: {
+                    type: DataTypes.STRING
+                },
+                paymentOption: {
+                    type: DataTypes.INTEGER
+                },
+                orderStatus: {
+                    type: DataTypes.INTEGER
+                },
+                user: {
+                    type: DataTypes.INTEGER
+                }
             },
-            firstName: {
-                type: DataTypes.STRING
-            },
-            lastName: {
-                type: DataTypes.STRING
-            },
-            street: {
-                type: DataTypes.STRING
-            },
-            houseNr: {
-                type: DataTypes.STRING
-            },
-            zip: {
-                type: DataTypes.STRING
-            },
-            city: {
-                type: DataTypes.STRING
-            },
-            paymentOption: {
-                type: DataTypes.INTEGER
-            },
-            orderStatus: {
-                type: DataTypes.INTEGER
-            },
-            user: {
-                type: DataTypes.INTEGER
-            }
-        },
             {
                 sequelize,
                 tableName: 'order'

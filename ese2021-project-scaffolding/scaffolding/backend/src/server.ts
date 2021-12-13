@@ -1,17 +1,17 @@
-import express, { Application , Request, Response } from 'express';
+import express, {Application} from 'express';
 import morgan from 'morgan';
-import { TodoItemController } from './controllers/todoitem.controller';
-import { TodoListController } from './controllers/todolist.controller';
-import { UserController } from './controllers/user.controller';
-import { SecuredController } from './controllers/secured.controller';
-import { Sequelize } from 'sequelize';
-import { TodoList } from './models/todolist.model';
-import { TodoItem } from './models/todoitem.model';
-import { User } from './models/user.model';
-import { Post } from './models/post.model';
-import { Product } from './models/product.model';
-import { Order } from './models/order.model';
-import { Vote } from './models/vote.model';
+import {TodoItemController} from './controllers/todoitem.controller';
+import {TodoListController} from './controllers/todolist.controller';
+import {UserController} from './controllers/user.controller';
+import {SecuredController} from './controllers/secured.controller';
+import {Sequelize} from 'sequelize';
+import {TodoList} from './models/todolist.model';
+import {TodoItem} from './models/todoitem.model';
+import {User} from './models/user.model';
+import {Post} from './models/post.model';
+import {Product} from './models/product.model';
+import {Order} from './models/order.model';
+import {Vote} from './models/vote.model';
 import {Category} from './models/category.model';
 
 

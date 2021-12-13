@@ -1,6 +1,6 @@
-import { Model, Sequelize, DataTypes } from 'sequelize';
-import { Post } from './post.model';
-import { User } from './user.model';
+import {DataTypes, Model, Sequelize} from 'sequelize';
+import {Post} from './post.model';
+import {User} from './user.model';
 
 export interface VoteAttributes {
     voteId: number;
@@ -13,15 +13,15 @@ export class Vote extends Model<VoteAttributes> implements VoteAttributes {
 
     public static initialize(sequelize: Sequelize) {
         Vote.init({
-            voteId: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
+                voteId: {
+                    type: DataTypes.INTEGER,
+                    autoIncrement: true,
+                    primaryKey: true
+                },
+                upvote: {
+                    type: DataTypes.INTEGER
+                }
             },
-            upvote: {
-                type: DataTypes.INTEGER
-            }
-        },
             {
                 sequelize,
                 tableName: 'vote'

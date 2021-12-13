@@ -1,12 +1,21 @@
-import { Optional, Model, HasManyGetAssociationsMixin, HasManyAddAssociationMixin, DataTypes, Sequelize, Association } from 'sequelize';
-import { TodoItem } from './todoitem.model';
+import {
+    Association,
+    DataTypes,
+    HasManyAddAssociationMixin,
+    HasManyGetAssociationsMixin,
+    Model,
+    Optional,
+    Sequelize
+} from 'sequelize';
+import {TodoItem} from './todoitem.model';
 
 export interface TodoListAttributes {
     todoListId: number;
     name: string;
 }
 
-export interface TodoListCreationAttributes extends Optional<TodoListAttributes, 'todoListId'> { }
+export interface TodoListCreationAttributes extends Optional<TodoListAttributes, 'todoListId'> {
+}
 
 export class TodoList extends Model<TodoListAttributes, TodoListCreationAttributes> implements TodoListAttributes {
 
@@ -34,9 +43,10 @@ export class TodoList extends Model<TodoListAttributes, TodoListCreationAttribut
                     allowNull: false
                 }
             },
-            { tableName: 'todolists', sequelize }
+            {tableName: 'todolists', sequelize}
         );
     }
+
     public static createAssociations() {
         TodoList.hasMany(TodoItem, {
             as: 'todoItems',

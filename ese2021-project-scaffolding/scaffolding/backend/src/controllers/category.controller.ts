@@ -1,5 +1,4 @@
-
-import express, { Router, Request, Response } from 'express';
+import express, {Request, Response, Router} from 'express';
 import {CategoryService} from '../services/category.service';
 
 const categoryController: Router = express.Router();

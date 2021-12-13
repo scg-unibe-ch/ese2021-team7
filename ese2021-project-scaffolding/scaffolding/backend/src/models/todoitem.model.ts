@@ -1,5 +1,5 @@
-import {Optional, Model, Sequelize, DataTypes, Association} from 'sequelize';
-import { TodoList } from './todolist.model';
+import {Association, DataTypes, Model, Optional, Sequelize} from 'sequelize';
+import {TodoList} from './todolist.model';
 import {ItemImage} from './itemImage.model';
 
 export interface TodoItemAttributes {
@@ -11,7 +11,8 @@ export interface TodoItemAttributes {
 }
 
 // tells sequelize that todoItemId is not a required field
-export interface TodoItemCreationAttributes extends Optional<TodoItem, 'todoItemId'> { }
+export interface TodoItemCreationAttributes extends Optional<TodoItem, 'todoItemId'> {
+}
 
 
 export class TodoItem extends Model<TodoItemAttributes, TodoItemCreationAttributes> implements TodoItemAttributes {
@@ -29,32 +30,33 @@ export class TodoItem extends Model<TodoItemAttributes, TodoItemCreationAttribut
 
     public static initialize(sequelize: Sequelize) { // definition for database
         TodoItem.init({
-            todoItemId: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
+                todoItemId: {
+                    type: DataTypes.INTEGER,
+                    autoIncrement: true,
+                    primaryKey: true
+                },
+                name: {
+                    type: DataTypes.STRING,
+                    allowNull: false
+                },
+                done: {
+                    type: DataTypes.BOOLEAN,
+                    allowNull: false
+                },
+                itemImage: {
+                    type: DataTypes.BOOLEAN,
+                    allowNull: true
+                },
+                todoListId: {
+                    type: DataTypes.INTEGER,
+                    allowNull: false
+                }
             },
-            name: {
-                type: DataTypes.STRING,
-                allowNull: false
-            },
-            done: {
-                type: DataTypes.BOOLEAN,
-                allowNull: false
-            },
-            itemImage: {
-                type: DataTypes.BOOLEAN,
-                allowNull: true
-            },
-            todoListId: {
-                type: DataTypes.INTEGER,
-                allowNull: false
-            }
-        },
-        { sequelize, tableName: 'todoItems' }
+            {sequelize, tableName: 'todoItems'}
         );
 
     }
+
     public static createAssociations() {
         TodoItem.belongsTo(TodoList, {
             targetKey: 'todoListId',

@@ -7,23 +7,6 @@ export class ProductService {
 
     private categoryService = new CategoryService();
 
-    /***
-     * Add the avalability of a product as a new data value to the object
-     * @param product
-     * @private The availability is added to the model and accessible as a data value, hence this method is private
-     */
-    private setAvailability(product: Product) {
-        let available = true;
-        // @ts-ignore
-        for (const order of product.Orders) {
-            if (order.orderStatus === OrderStatus.PENDNIG || order.orderStatus === OrderStatus.SHIPPED) {
-                available = false;
-            }
-        }
-        // @ts-ignore
-        product.setDataValue('isAvailable', available);
-    }
-
     public async getProductById(productId: string): Promise<Product> {
         return Product.findByPk(productId, {include: Order}).then(dbProduct => {
             if (dbProduct) {
@@ -96,5 +79,22 @@ export class ProductService {
             return Promise.reject({message: 'Invalid category: category does not exist, or is of wrong type'});
         }
         return Product.create(product).then(createdProduct => this.getProductById('' + createdProduct.productId));
+    }
+
+    /***
+     * Add the availability of a product as a new data value to the object
+     * @param product
+     * @private The availability is added to the model and accessible as a data value, hence this method is private
+     */
+    private setAvailability(product: Product) {
+        let available = true;
+        // @ts-ignore
+        for (const order of product.Orders) {
+            if (order.orderStatus === OrderStatus.PENDNIG || order.orderStatus === OrderStatus.SHIPPED) {
+                available = false;
+            }
+        }
+        // @ts-ignore
+        product.setDataValue('isAvailable', available);
     }
 }

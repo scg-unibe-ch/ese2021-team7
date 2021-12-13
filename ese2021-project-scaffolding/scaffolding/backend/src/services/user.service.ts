@@ -1,6 +1,6 @@
-import {UserAttributes, User} from '../models/user.model';
-import { LoginResponse, LoginRequest } from '../models/login.model';
-import { ErrorCodes } from '../errorCodes';
+import {User, UserAttributes} from '../models/user.model';
+import {LoginRequest, LoginResponse} from '../models/login.model';
+import {ErrorCodes} from '../errorCodes';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import {Op} from 'sequelize';
