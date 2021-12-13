@@ -77,7 +77,7 @@ export class FeedService {
     this.postsLoading.next(true);
     this.getHttpRequest(this.sorting,requestUser)
       .pipe(
-        tap((posts: any) => console.log("Backend response: " + JSON.stringify(posts))),
+        //tap((posts: any) => console.log("Backend response: " + JSON.stringify(posts))),
         mergeMap((posts:any[]) => { //mergeMap to handle inner observables
             let forkJoinArray: any[] = [];
             posts.forEach( //replace each object in array through second call/observable
@@ -97,7 +97,7 @@ export class FeedService {
             return forkJoin(forkJoinArray); //forkjoin: give back array of observables
           }
         ),
-        tap((res: any) => console.log("Piped array: " + JSON.stringify(res))),
+        //tap((res: any) => console.log("Piped array: " + JSON.stringify(res))),
         //filter if set
         map((posts: any) =>
           posts.filter((post: Post) => {
@@ -107,8 +107,8 @@ export class FeedService {
               return post.category.id == this.filter;
             }
           }) //checks if category id matches
-        ),
-        tap((res: any) => console.log("Filtered and sorted array: " + JSON.stringify(res)))
+        )
+        //tap((res: any) => console.log("Filtered and sorted array: " + JSON.stringify(res)))
       ).subscribe(res => {
         this.postSource.next(res);
         this.posts = res;
@@ -120,13 +120,13 @@ export class FeedService {
   private getHttpRequest(sorting: number, user?: User | undefined): Observable<any> {
     if(sorting != 0) {
       if(user && user != undefined){
-        console.log("Request: get all; user  set:  " + JSON.stringify(user) + "  sorting: " + sorting);
+        //console.log("Request: get all; user  set:  " + JSON.stringify(user) + "  sorting: " + sorting);
         return this.httpClient.get(environment.endpointURL + "post/all", {params: {
             sortBy: sorting,
             userId: user.userId
           }});
       } else {
-        console.log("Request: get all; user not set:  " + JSON.stringify(user)  + "  sorting: " + sorting);
+       // console.log("Request: get all; user not set:  " + JSON.stringify(user)  + "  sorting: " + sorting);
         return this.httpClient.get(environment.endpointURL + "post/all", {
           params: {
             sortBy: sorting
@@ -135,7 +135,7 @@ export class FeedService {
       }
     } else {
       if(user && user != undefined) {
-        console.log("Request: get all; user set:  "+ JSON.stringify(user)  + " no sorting: " + sorting);
+        //console.log("Request: get all; user set:  "+ JSON.stringify(user)  + " no sorting: " + sorting);
         return this.httpClient.get(environment.endpointURL + "post/all", {
           params: {
             userId: user.userId
@@ -143,7 +143,7 @@ export class FeedService {
         });
       }
         else {
-        console.log("Request: get all; user not set: "+ JSON.stringify(user)  + "no sorting: " + sorting);
+        //console.log("Request: get all; user not set: "+ JSON.stringify(user)  + "no sorting: " + sorting);
         return this.httpClient.get(environment.endpointURL + "post/all");
         }
       }

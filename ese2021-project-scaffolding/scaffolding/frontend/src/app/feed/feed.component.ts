@@ -68,12 +68,9 @@ export class FeedComponent extends BaseComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-    //super.initializeUser(); //parents method
-    //super.evaluateAccessPermissions();
-    //super.initializeCategories();
-    //console.log(this.postCategories);
 
     super.ngOnInit();
+
     //loads Data
     //this.feedService.setUserAndLoggedIn(this.loggedIn, this.currentUser);
     this.feedService.refreshPosts(this.loggedIn, this.currentUser);
