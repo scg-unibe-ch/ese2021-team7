@@ -36,4 +36,10 @@ userController.get('/all',
     }
 );
 
+userController.post('/discoverHouse',
+    (req: Request, res: Response) => {
+        userService.discoverHouse(req.body).then(house => res.send(house)).catch(err => res.status(500).send(err));
+    }
+);
+
 export const UserController: Router = userController;

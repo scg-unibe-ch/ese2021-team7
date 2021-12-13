@@ -6,6 +6,7 @@ export interface UserAttributes {
     userName: string;
     password: string;
     admin: boolean;
+    house: number;
     firstName: string;
     lastName: string;
     email: string;
@@ -24,6 +25,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
     userName!: string;
     password!: string;
     admin!: boolean;
+    house: number;
     firstName: string;
     lastName: string;
     email: string;
@@ -55,6 +57,9 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
             },
             firstName: {
                 type: DataTypes.STRING,
+            },
+            house: {
+                type: DataTypes.INTEGER,
             },
             lastName: {
                 type: DataTypes.STRING,
