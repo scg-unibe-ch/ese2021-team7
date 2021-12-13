@@ -43,6 +43,23 @@ If a user is found: HTTP status code 200 and the user's data in the response:
     "inUse": false
 }
 ```
+## POST /user/discoverHouse
+A house is determined for a user that does not already have a house.
+### Request
+```
+{
+    "userId": int
+}
+```
+### Response
+The user's house, a randomly chosen integer in {1, 2, ..., 9}. In all subsequent user requests, the user's house 
+(key: "house") will be returned with all the other fields.
+```
+{
+    "house": 5
+}
+If the specified userId does not exist, or if the user already has a house, Status code 500 is returned.
+```
 # /post
 ## GET /post/all
 Returns all posts. If sortBy is 1, posts are ordered by their score. Otherwise, posts are ordered by creation time.
@@ -65,9 +82,27 @@ e.g. GET /post/all?sortBy=1&userId=3
         "category": null,
         "createdAt": "2021-10-22T19:42:01.988Z",
         "updatedAt": "2021-10-22T19:42:01.994Z",
-        "UserUserId": 9,
+        "UserUserId": 2,
         "score": 1,
-        "votingStatus": "not voted|upvoted|downvoted"
+        "votingStatus": "not voted|upvoted|downvoted",
+        "User": {
+            "userId": 2,
+            "userName": "Second User",
+            "password": "$2b$12$1ZGnQjoyHgtO1u1N62HcT.3RC.qhuBzo3pEgHARXDrc19KUrZ8VFy",
+            "admin": false,
+            "firstName": "Second",
+            "house": 5,
+            "lastName": "User",
+            "email": "user@user.me",
+            "street": "Main street",
+            "houseNumber": "1",
+            "zipCode": "3000",
+            "city": "Bern",
+            "birthday": null,
+            "phoneNumber": "+410000000",
+            "createdAt": null,
+            "updatedAt": "2021-12-10T21:46:02.507Z"
+        }
     },
     {
         "postId": 15,
@@ -78,7 +113,25 @@ e.g. GET /post/all?sortBy=1&userId=3
         "createdAt": "2021-10-22T19:42:01.443Z",
         "updatedAt": "2021-10-22T19:42:01.454Z",
         "score": -1,
-        "votingStatus": "not voted|upvoted|downvoted"
+        "votingStatus": "not voted|upvoted|downvoted",
+        "User": {
+            "userId": 2,
+            "userName": "Second User",
+            "password": "$2b$12$1ZGnQjoyHgtO1u1N62HcT.3RC.qhuBzo3pEgHARXDrc19KUrZ8VFy",
+            "admin": false,
+            "firstName": "Second",
+            "house": 5,
+            "lastName": "User",
+            "email": "user@user.me",
+            "street": "Main street",
+            "houseNumber": "1",
+            "zipCode": "3000",
+            "city": "Bern",
+            "birthday": null,
+            "phoneNumber": "+410000000",
+            "createdAt": null,
+            "updatedAt": "2021-12-10T21:46:02.507Z"
+        }
     },
     ...
 ]
@@ -104,7 +157,25 @@ GET /post/byId?postId=1&userId=3
     "updatedAt": "2021-10-22T17:25:20.264Z",
     "UserUserId": 1
     "score": -1,
-    "votingStatus": "not voted|upvoted|downvoted"
+    "votingStatus": "not voted|upvoted|downvoted",
+        "User": {
+            "userId": 2,
+            "userName": "Second User",
+            "password": "$2b$12$1ZGnQjoyHgtO1u1N62HcT.3RC.qhuBzo3pEgHARXDrc19KUrZ8VFy",
+            "admin": false,
+            "firstName": "Second",
+            "house": 5,
+            "lastName": "User",
+            "email": "user@user.me",
+            "street": "Main street",
+            "houseNumber": "1",
+            "zipCode": "3000",
+            "city": "Bern",
+            "birthday": null,
+            "phoneNumber": "+410000000",
+            "createdAt": null,
+            "updatedAt": "2021-12-10T21:46:02.507Z"
+        }
 }
 ```
 ## POST /post/create
@@ -132,7 +203,25 @@ The created post is returned. Returns HTTP status code 200 on success, 403 if de
     "createdAt": "2021-10-22T20:08:07.399Z",
     "UserUserId": 9
     "score": 0,
-    "votingStatus": "not voted"
+    "votingStatus": "not voted",
+    "User": {
+        "userId": 2,
+        "userName": "Second User",
+        "password": "$2b$12$1ZGnQjoyHgtO1u1N62HcT.3RC.qhuBzo3pEgHARXDrc19KUrZ8VFy",
+        "admin": false,
+        "firstName": "Second",
+        "house": 5,
+        "lastName": "User",
+        "email": "user@user.me",
+        "street": "Main street",
+        "houseNumber": "1",
+        "zipCode": "3000",
+        "city": "Bern",
+        "birthday": null,
+        "phoneNumber": "+410000000",
+        "createdAt": null,
+        "updatedAt": "2021-12-10T21:46:02.507Z"
+    }
 }
 ```
 ## POST /post/modify
@@ -163,7 +252,25 @@ The modified post is returned. Returns HTTP status code 200 on success, 403 if d
     "createdAt": "2021-10-22T20:08:07.399Z",
     "UserUserId": 9
     "score": 0,
-    "votingStatus": "not voted"
+    "votingStatus": "not voted",
+    "User": {
+        "userId": 2,
+        "userName": "Second User",
+        "password": "$2b$12$1ZGnQjoyHgtO1u1N62HcT.3RC.qhuBzo3pEgHARXDrc19KUrZ8VFy",
+        "admin": false,
+        "firstName": "Second",
+        "house": 5,
+        "lastName": "User",
+        "email": "user@user.me",
+        "street": "Main street",
+        "houseNumber": "1",
+        "zipCode": "3000",
+        "city": "Bern",
+        "birthday": null,
+        "phoneNumber": "+410000000",
+        "createdAt": null,
+        "updatedAt": "2021-12-10T21:46:02.507Z"
+    }
 }
 ```
 ## POST /post/delete
@@ -200,7 +307,25 @@ The votingStatus in the response is the voter's votingStatus.
     "updatedAt": "2021-10-22T19:55:44.100Z",
     "UserUserId": 1
     "score": 0,
-    "votingStatus": "upvoted|downvoted"
+    "votingStatus": "upvoted|downvoted",
+    "User": {
+        "userId": 2,
+        "userName": "Second User",
+        "password": "$2b$12$1ZGnQjoyHgtO1u1N62HcT.3RC.qhuBzo3pEgHARXDrc19KUrZ8VFy",
+        "admin": false,
+        "firstName": "Second",
+        "house": 5,
+        "lastName": "User",
+        "email": "user@user.me",
+        "street": "Main street",
+        "houseNumber": "1",
+        "zipCode": "3000",
+        "city": "Bern",
+        "birthday": null,
+        "phoneNumber": "+410000000",
+        "createdAt": null,
+        "updatedAt": "2021-12-10T21:46:02.507Z"
+    }
 }
 ```
 # /product

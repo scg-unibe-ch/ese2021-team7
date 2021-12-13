@@ -10,7 +10,7 @@ export class PostService {
     private voteService: VoteService;
 
     public async getPostById(postId: string, userId: string | undefined): Promise<Post> {
-        return Post.findByPk(postId, {include: Vote}).then(dbPost => {
+        return Post.findByPk(postId, {include: [Vote, User]}).then(dbPost => {
             if (dbPost) {
                 this.setScore(dbPost);
                 dbPost = this.addVotingStatus(dbPost, userId);
@@ -44,7 +44,7 @@ export class PostService {
     public async getAll(sortBy: string, userId: string | undefined): Promise<Post[]> {
         return  Post.findAll({
             attributes: ['postId', 'title', 'image', 'text', 'category', 'UserUserId'],
-            include: Vote
+            include: [Vote, User]
         }).then(dbPosts => {
             const postsWithScore: Post[] = [];
             for (let dbPost of dbPosts) {
@@ -55,7 +55,7 @@ export class PostService {
             return postsWithScore.sort( (postA, postB) => {
                 if (sortBy === '1') {
                     // @ts-ignore
-                    return postA.getDataValue('score') - postB.getDataValue('score');
+                    return postB.getDataValue('score') - postA.getDataValue('score');
                 } else {
                     return postB.postId - postA.postId;
                 }
