@@ -48,10 +48,7 @@ export class RegistrationComponent extends BaseFormComponent implements OnInit {
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.isLoading = true; //wait with DOM until form is initialized
     super.initializeForm();
-    console.log(this.form);
-    this.isLoading = false;
   }
 
 

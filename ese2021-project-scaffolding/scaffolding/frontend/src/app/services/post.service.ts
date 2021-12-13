@@ -62,19 +62,15 @@ export class PostService {
     console.log('given votestate: ' + votingStatus);
     switch (votingStatus){
       case 'not voted': {
-        console.log('found votestate: Not voted')
         return VotingState.NotVoted;
       }
       case 'upvoted': {
-        console.log('found votestate: upvoted')
         return VotingState.Upvoted;
       }
       case 'downvoted': {
-        console.log('found votestate: downvoted')
         return VotingState.Downvoted;
       }
       default: {
-        console.log('found votestate: not allowed')
         return VotingState.NotAllowed;
       }
     }

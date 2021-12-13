@@ -9,6 +9,9 @@ import { CategoryService } from '../services/category.service';
 import { PermissionService } from '../services/permission.service';
 import { UserService } from '../services/user.service';
 import {House} from "../models/house";
+import { Observable, combineLatest, zip } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { CategoryType } from '../models/category-type';
 
 @Component({
   selector: 'app-base',
@@ -68,23 +71,51 @@ export class BaseComponent implements OnInit, OnChanges {
    ******************************************************************************************************************/
 
   ngOnChanges(): void {
-    this.checkUserStatus();
+    //this.checkUserStatus();
   }
 
 
   ngOnInit(): void {
-    this.initializeUser();
-    this.initializeCategories();
+
+    //gets current values for loggedIn, currentUser, postCategories, productCategories
+   this.initializeCurrentValues()
+      .subscribe((res:any) => {
+        this.loggedIn = res[1];
+        this.currentUser = res[2];
+        this.postCategories = res[3];
+        this.productCategories = res[4];
+      })
+
+    //set up listeners
+    this.setUpListeners();
   }
 
 
-  checkUserStatus(): void {
-    this.userService.checkUserStatus();
-  }
+
 
   /*******************************************************************************************************************
    * HELPER METHODS
    ******************************************************************************************************************/
+
+  initializeCurrentValues(): Observable<[User| boolean, boolean, User | undefined, Category[], Category[]]>{
+    return combineLatest(this.userService.loginUserFromLocalStorage(), this.userService.loggedIn$, this.userService.user$,
+      this.categoryService.getPostCategoriesFromBackendAsObservable(), this.categoryService.getProductCategoriesFromBackendAsObservable());
+  }
+
+  setUpListeners(): void {
+    this.userService.loggedIn$.subscribe(res => this.loggedIn = res);
+    this.userService.user$.subscribe(res => this.currentUser = res);
+    this.categoryService.productCategories$.subscribe(res => this.productCategories = res);
+    this.categoryService.postCategories$.subscribe(res => this.postCategories = res);
+  }
+
+
+  /**
+   * Checks if user is already logged in in local storage.
+   */
+  checkUserStatus(): void {
+    //this.userService.checkUserStatus();
+  }
 
   /**
    * Gets current user from UserService and sets up listener.
@@ -101,7 +132,7 @@ export class BaseComponent implements OnInit, OnChanges {
     this.currentUser = this.userService.getUser();
 
     //listener
-    this.userService.loading$.subscribe(res => this.isLoadingUser = res);
+    //this.userService.loading$.subscribe(res => this.isLoadingUser = res);
 
     this.checkUserStatus();
   }
@@ -151,7 +182,7 @@ export class BaseComponent implements OnInit, OnChanges {
     this.postCategories = this.categoryService.getPostCategories();
 
     //listener
-    this.userService.loading$.subscribe(res => this.isLoadingCategories = res);
+    //this.userService.loading$.subscribe(res => this.isLoadingCategories = res);
   }
 
 
