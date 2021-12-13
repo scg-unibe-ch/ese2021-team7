@@ -55,6 +55,9 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
     const dialogRef = this.dialog.open(SelectHouseComponent, {
       maxWidth: '400px',
       closeOnNavigation: true,
+      data: {
+        userId: this.currentUser?.userId
+      }
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
       console.log("dialog closed");
