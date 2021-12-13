@@ -55,7 +55,7 @@ export class PostService {
             return postsWithScore.sort( (postA, postB) => {
                 if (sortBy === '1') {
                     // @ts-ignore
-                    return postA.getDataValue('score') - postB.getDataValue('score');
+                    return postB.getDataValue('score') - postA.getDataValue('score');
                 } else {
                     return postB.postId - postA.postId;
                 }
