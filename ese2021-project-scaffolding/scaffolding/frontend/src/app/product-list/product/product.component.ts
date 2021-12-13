@@ -72,11 +72,8 @@ export class ProductComponent extends BaseComponent implements OnInit {
    ******************************************************************************************************************/
 
   constructor(
-    //public userService: UserService,
     private route: ActivatedRoute,
     public injector: Injector,
-    //private router: Router,
-    //private permissionService: PermissionService,
     @Optional () private dialogRef: MatDialogRef<ProductComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: {showDetails: boolean, product: Product, user: User, isLoggedIn: boolean} //used to get Data in Dialog Box
   ) {
@@ -141,7 +138,7 @@ export class ProductComponent extends BaseComponent implements OnInit {
 
   updateProduct(): void {
     // Emits event to parent component that Product got updated
-    if (this.showDeleteAndUpdateButton){
+    if (this.showDeleteAndUpdateButton && !this.productToDisplay.sold){
       this.update.emit(this.productToDisplay);
       this.dialogRef?.close({updateProduct: true, product: this.productToDisplay});
     }
@@ -149,7 +146,7 @@ export class ProductComponent extends BaseComponent implements OnInit {
 
   deleteProduct(): void {
     // Emits event to parent component that Product got deleted
-    if (this.showDeleteAndUpdateButton){
+    if (this.showDeleteAndUpdateButton  && !this.productToDisplay.sold){
       this.delete.emit(this.productToDisplay);
       this.dialogRef?.close({deleteProduct: true, product: this.productToDisplay});
     }
@@ -157,13 +154,11 @@ export class ProductComponent extends BaseComponent implements OnInit {
 
   showProductDetails(): void{
     this.showDetails.emit(this.productToDisplay);
-    //this.router.navigate(['/product'],{queryParams: {productId: this.productToDisplay.productId, showDetailedView: 'true'}}).then(r =>{});
   }
 
   closeDetailedView(): void{
     this.showDetailedView = false;
     this.dialogRef?.close(); //closes dialog box
-    //this.router.navigate(['/shop']).then(r =>{});
   }
 
   buyProduct(): void {
@@ -174,7 +169,6 @@ export class ProductComponent extends BaseComponent implements OnInit {
         this.dialogRef?.close({buyProduct: true, product: this.productToDisplay});
       }
       else {
-        //console.log("Login to buy this product")
         // redirect to login if user is not logged in
         this.router.navigate(['/login'],{queryParams: {fromShop: 'true'}}).then(r =>{});
         this.dialogRef?.close({buyProduct: true, product: this.productToDisplay});
