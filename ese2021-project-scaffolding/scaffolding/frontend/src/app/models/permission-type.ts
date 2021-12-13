@@ -17,5 +17,6 @@ export enum PermissionType {
   AccessHome = "AccessHome",
   AccessFeed = "AccessFeed",
   AccessShop = "AccessShop",
-  CreatePost = "CreatePost"
+  CreatePost = "CreatePost",
+  SelectHouse = "SelectHouse"
 }

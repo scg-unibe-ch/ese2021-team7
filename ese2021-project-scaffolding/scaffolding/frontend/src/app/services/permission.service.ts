@@ -44,14 +44,16 @@ export class PermissionService {
     true, //productUpdateDelete
     false, // purchaseProduct
     true, // addProduct
-    false // createPost
+    false, // createPost
+    false //select House
   );
 
   private userFeaturePermissions: FeaturePermission = new FeaturePermission(
     false, //productUpdateDelete
     true, // purchaseProduct
     false, // addProduct
-    true // createPost
+    true, // createPost
+    false // select House
   );
 
   /*******************************************************************************************************************
@@ -91,9 +93,9 @@ export class PermissionService {
         if(this.guestPermissions.includes(permissionToAccess)) return true; //check guest array
         else return false;
       } else return false;
-    } else {
-      return user.accessPermissions.checkPermissions(permissionToAccess); //otherwise evaluate
-    }
+    } else if(user.accessPermissions) return user.accessPermissions.checkPermissions(permissionToAccess); //otherwise evaluate
+      else return false;
+
   }
 
   /*******************************************************************************************************************

@@ -19,6 +19,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
   address : String | undefined;
   birthday: String | undefined;
 
+  showSelectHouseButton: boolean = false;
+
   constructor(public injector: Injector,
               private dialog: MatDialog,
 
@@ -29,6 +31,11 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
 
     super.initializeUser();
+
+    if(this.currentUser != undefined) {
+      this.userService.checkSelectHousePermission(this.currentUser)
+        .subscribe(res => this.showSelectHouseButton = res);
+    }
 
     //current Value
     //this.loggedIn = this.userService.getLoggedIn();
