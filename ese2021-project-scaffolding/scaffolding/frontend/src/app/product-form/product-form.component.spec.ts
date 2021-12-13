@@ -28,6 +28,13 @@ describe('ProductFormComponent', () => {
   let component: ProductFormComponent;
   let fixture: ComponentFixture<ProductFormComponent>;
 
+  class MatDialogMock {
+    close(value = ''){
+    }
+  }
+
+  const dialog = new MatDialogMock();
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -58,7 +65,7 @@ describe('ProductFormComponent', () => {
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: {} },
-        { provide: MatDialogRef, useValue: MatDialogMock }
+        { provide: MatDialogRef, useValue: dialog }
       ],
       declarations: [ ProductFormComponent ]
     })
@@ -71,19 +78,10 @@ describe('ProductFormComponent', () => {
     fixture.detectChanges();
   });
 
-  /*
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-   */
 });
 
-
-
-class MatDialogMock {
-  close(value = ''){
-
-  }
-}
 
