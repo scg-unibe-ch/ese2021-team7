@@ -21,6 +21,7 @@
 
 .group7-sidenav-container{
   background-color:transparent !important;
+  min-height: 650px;
 }
 
 .group7-sidenav-content{

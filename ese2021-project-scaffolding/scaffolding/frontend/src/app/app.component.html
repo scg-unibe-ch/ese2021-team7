@@ -10,7 +10,7 @@
     <button mat-list-item class="group7-sidenav-button" routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
     <button mat-list-item class="group7-sidenav-button"  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
     <button mat-list-item class="group7-sidenav-button" routerLink="/shop" routerLinkActive="active">Shop</button>
-    <button mat-menu-item  (click)="logoutUser()" *ngIf="loggedIn"><mat-icon>logout</mat-icon>Logout</button>
+    <button mat-list-item class="group7-sidenav-button" (click)="logoutUser()" *ngIf="loggedIn">Logout</button>
     </mat-action-list>
 
   </mat-sidenav>
@@ -40,13 +40,3 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
-
-
-
-
-
-
-<!-- The routed views render in the <router-outlet>-->
-<!--
-<router-outlet></router-outlet>
--->
