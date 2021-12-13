@@ -20,6 +20,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
   birthday: String | undefined;
 
   showSelectHouseButton: boolean = false;
+  houseChosen: boolean = false;
 
   constructor(public injector: Injector,
               private dialog: MatDialog,
@@ -46,12 +47,14 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
           if (this.currentUser.birthday) this.birthday = this.currentUser.birthday.substring(8, 10) + "." + this.currentUser.birthday.substring(5, 7) + "." + this.currentUser.birthday.substring(0, 4);
           else this.birthday = "";
           // check house permission
-          if (this.currentUser.house == 0) {
+          if (!this.currentUser.house) {
             this.userService.checkSelectHousePermission(this.currentUser)
               .subscribe(res => {
                 console.log("show button" + JSON.stringify(res));
                 this.showSelectHouseButton = res;
               });
+          } else {
+            this.houseChosen = true;
           }
         }
       });
@@ -72,6 +75,10 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
       }
     });
     dialogRef.afterClosed().subscribe(dialogResult => {
+      if(dialogResult) {
+        this.houseChosen = dialogResult;
+      }
+      this.houseChosen = true;
       console.log("dialog closed");
     });
   }

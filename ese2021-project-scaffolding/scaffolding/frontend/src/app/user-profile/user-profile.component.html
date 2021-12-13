@@ -18,9 +18,10 @@
       <h2 label="email" id="email">{{currentUser?.email}}</h2>
       <mat-label>Phone Number</mat-label>
       <h2 label="phoneNumber" id="phoneNumber">{{currentUser?.phoneNumber}}</h2>
-      <div *ngIf="currentUser?.house != 0">
+
+      <div *ngIf="currentUser?.house && houseChosen">
       <mat-label>House</mat-label>
-      <h2 label="house" id="house">{{currentUser?.house}}</h2>
+      <h2 label="house" id="house">{{currentUser?.house?.houseName}}</h2>
       </div>
 
       <button mat-flat-button (click)="viewOrders()" class="group7-forms-button">

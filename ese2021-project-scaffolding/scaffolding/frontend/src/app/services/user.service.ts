@@ -8,9 +8,9 @@ import { FeaturePermission } from '../models/feature-permission';
 import { PermissionService } from './permission.service';
 import { FormGroup } from '@angular/forms';
 import {delay, map, tap } from 'rxjs/operators';
-import { House } from '../models/house';
 import { OrderListServiceService } from './order-list-service.service';
 import { Order } from '../models/order';
+import { House } from '../models/house';
 
 @Injectable({
   providedIn: 'root'
@@ -157,7 +157,7 @@ export class UserService {
   createUserFromBackendReponse(res: any): User {
     let user = new User(res.userId, res.userName, res.password, res.admin, res.firstName,
       res.lastName, res.email, res.street, res.houseNumber, res.zipCode, res.city,
-      res.birthday, res.phoneNumber, res.house? res.house : House.default);
+      res.birthday, res.phoneNumber, res.house? new House(res.house) : undefined);
     //set correct permissions
     if (res.admin) {
       user.setAccessPermissions(this.permissionService.getAdminAccessPermissions());
@@ -167,11 +167,6 @@ export class UserService {
       user.setFeaturesPermissions(this.permissionService.getUserFeaturePermissions());
     }
     //check if user can select House
-    if (res.house) {
-      if (user.featuresPermissions) user.featuresPermissions.setSelectHousePermission(false);
-    } else {
-    if (user.featuresPermissions) user.featuresPermissions.setSelectHousePermission(true);
-    }
     return user;
   }
 
@@ -220,7 +215,7 @@ export class UserService {
     }).pipe(
       tap(res => console.log(JSON.stringify(res))),
       tap((house: any) => this.user?.setHouse(house.house)),
-      delay(1000)
+      delay(2000)
     );
   }
 

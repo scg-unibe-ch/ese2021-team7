@@ -1,6 +1,7 @@
 import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BaseComponent } from '../base/base.component';
+import { House } from '../models/house';
 import { SelectHouseComponent } from '../select-house/select-house.component';
 import { UserService } from '../services/user.service';
 
@@ -13,7 +14,7 @@ export class HouseSelectorComponent extends BaseComponent implements OnInit {
 
   houseChosen: boolean = false;
   isLoading: boolean = false;
-  house: string = "";
+  house: House | undefined;
   clicked: boolean = false;
 
   constructor(
@@ -36,13 +37,14 @@ export class HouseSelectorComponent extends BaseComponent implements OnInit {
     this.clicked = true;
     this.userService.selectHouse(this.dialogData.userId)
       .subscribe(house => {
-        this.house = JSON.stringify(house);
-        this.isLoading = false;
-        },
-        error => {
-        this.house = JSON.stringify(error);
+        this.house = new House(house);
         this.isLoading = false;
         this.houseChosen = true;
+
+        },
+        error => {
+        console.log(error);
+        this.isLoading = false;
         }
       );
 
@@ -50,7 +52,7 @@ export class HouseSelectorComponent extends BaseComponent implements OnInit {
 
 
   close(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(true);
   }
 
 
