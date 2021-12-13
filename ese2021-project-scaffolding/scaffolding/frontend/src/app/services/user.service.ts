@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
-import {BehaviorSubject, Observable, Subject } from 'rxjs';
+import {BehaviorSubject, EMPTY, Observable, of, Subject } from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import { AccessPermission } from '../models/access-permission';
@@ -88,22 +88,26 @@ export class UserService {
    * CHECK STATUS
    ******************************************************************************************************************/
 
-  checkUserStatus(): void {
+  loginUserFromLocalStorage(): Observable<User | boolean> {
     //this.loadingSource.next(true);
     if(!this.loggedIn) {
       //console.log("loggedin " + this.loggedIn);
       let userId = localStorage.getItem('userId');
       if (userId) {
         //console.log("User Id from local storage: " + userId);
-        this.getUserByIdAsObservable(Number(userId))
-          .subscribe(user => {
-            //console.log("relogin: " + JSON.stringify(user));
-            this.setUser(this.createUserFromBackendReponse(user));
-            this.setLoggedIn(true);
-          })
+       return this.getUserByIdAsObservable(Number(userId)).pipe(
+         tap(  user =>     {
+           this.setUser(this.createUserFromBackendReponse(user));
+           this.setLoggedIn(true);
+           }),
+         map(user => this.createUserFromBackendReponse(user))
+         );
       } else {
         this.setLoggedIn(false);
+        return of(false);
       }
+    } else {
+      return of(false);
     }
    // this.loadingSource.next(false);
   }

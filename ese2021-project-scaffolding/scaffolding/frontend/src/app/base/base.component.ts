@@ -80,11 +80,10 @@ export class BaseComponent implements OnInit, OnChanges {
     //gets current values for loggedIn, currentUser, postCategories, productCategories
    this.initializeCurrentValues()
       .subscribe((res:any) => {
-        this.loggedIn = res[0];
-        this.currentUser = res[1];
-        this.postCategories = res[2];
-        this.productCategories = res[3];
-        this.checkUserStatus();
+        this.loggedIn = res[1];
+        this.currentUser = res[2];
+        this.postCategories = res[3];
+        this.productCategories = res[4];
       })
 
     //set up listeners
@@ -98,8 +97,8 @@ export class BaseComponent implements OnInit, OnChanges {
    * HELPER METHODS
    ******************************************************************************************************************/
 
-  initializeCurrentValues(): Observable<[boolean, User | undefined, Category[], Category[]]>{
-    return zip(this.userService.loggedIn$, this.userService.user$,
+  initializeCurrentValues(): Observable<[User| boolean, boolean, User | undefined, Category[], Category[]]>{
+    return combineLatest(this.userService.loginUserFromLocalStorage(), this.userService.loggedIn$, this.userService.user$,
       this.categoryService.getPostCategoriesFromBackendAsObservable(), this.categoryService.getProductCategoriesFromBackendAsObservable());
   }
 
@@ -115,7 +114,7 @@ export class BaseComponent implements OnInit, OnChanges {
    * Checks if user is already logged in in local storage.
    */
   checkUserStatus(): void {
-    this.userService.checkUserStatus();
+    //this.userService.checkUserStatus();
   }
 
   /**
