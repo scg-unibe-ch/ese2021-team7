@@ -30,6 +30,11 @@ export class Server {
     private sequelize: Sequelize;
     private port = process.env.PORT || 3000;
 
+    /***
+     * If testdata should be generated, the call for the method makeTestData should have no parameter or true. If no
+     * testdata should be generated, i.e. a database with only the table but no content, then the call for makeTestData
+     * should have the parameter false
+     */
     constructor() {
         this.server = this.configureServer();
         this.sequelize = this.configureSequelize();
