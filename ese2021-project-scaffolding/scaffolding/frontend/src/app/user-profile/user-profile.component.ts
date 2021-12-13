@@ -6,6 +6,8 @@ import { AccessPermission } from '../models/access-permission';
 import { BaseComponent } from '../base/base.component';
 import { SelectHouseComponent } from '../select-house/select-house.component';
 import { MatDialog } from '@angular/material/dialog';
+import { HouseSelectorComponent } from '../house-selector/house-selector.component';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -14,8 +16,6 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class UserProfileComponent extends BaseComponent implements OnInit {
 
-  //loggedIn: boolean | undefined;
-  //currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false, false));
   address : String | undefined;
   birthday: String | undefined;
 
@@ -29,17 +29,33 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    super.ngOnInit();
+    super.initializeCurrentValues().subscribe(
+      res => {
+        console.log("arrival" + JSON.stringify(res));
 
-    if(this.currentUser != undefined) {
-      this.userService.checkSelectHousePermission(this.currentUser)
-        .subscribe(res => this.showSelectHouseButton = res);
-    }
+        this.loggedIn = res[1];
+        this.currentUser = res[2];
+        this.postCategories = res[3];
+        this.productCategories = res[4];
 
-    if(typeof this.currentUser != 'undefined'){
-      this.address = this.currentUser.street + " " + this.currentUser.houseNumber + ", " + this.currentUser.zipCode + " " + this.currentUser.city;
-      this.birthday = this.currentUser.birthday.substring(8,10) + "." + this.currentUser.birthday.substring(5,7) + "." + this.currentUser.birthday.substring(0,4);
-    }
+        console.log("user" + JSON.stringify(this.currentUser));
+
+        //set birthday and address
+        if (this.currentUser != undefined) {
+          this.address = this.currentUser.street + " " + this.currentUser.houseNumber + ", " + this.currentUser.zipCode + " " + this.currentUser.city;
+          if (this.currentUser.birthday) this.birthday = this.currentUser.birthday.substring(8, 10) + "." + this.currentUser.birthday.substring(5, 7) + "." + this.currentUser.birthday.substring(0, 4);
+          else this.birthday = "";
+          // check house permission
+          if (this.currentUser.house == 0) {
+            this.userService.checkSelectHousePermission(this.currentUser)
+              .subscribe(res => {
+                console.log("show button" + JSON.stringify(res));
+                this.showSelectHouseButton = res;
+              });
+          }
+        }
+      });
+    super.setUpListeners();
   }
 
   viewOrders():void {
@@ -48,7 +64,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
 
 
   chooseHouse(): void{
-    const dialogRef = this.dialog.open(SelectHouseComponent, {
+    const dialogRef = this.dialog.open(HouseSelectorComponent, {
       maxWidth: '400px',
       closeOnNavigation: true,
       data: {

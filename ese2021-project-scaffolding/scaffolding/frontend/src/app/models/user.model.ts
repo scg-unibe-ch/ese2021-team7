@@ -31,4 +31,8 @@ export class User {
     this.featuresPermissions = featuresPermissions;
   }
 
+  setHouse(houseId: number): void {
+    this.house = houseId;
+  }
+
 }

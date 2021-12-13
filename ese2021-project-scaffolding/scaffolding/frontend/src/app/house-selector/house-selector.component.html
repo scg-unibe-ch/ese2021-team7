@@ -1,0 +1,19 @@
+<mat-card-header>
+  <mat-card-title>
+    <h1 class="card-title">Choose your house</h1>
+  </mat-card-title>
+</mat-card-header>
+<mat-card-content>
+  <p>Congratulations! Your are loyal customer. The gods will now assign you a house:</p>
+  <button mat-button *ngIf="!houseChosen && !clicked" class="group7-forms-button" (click)="selectHouse()">Let the gods decide</button>
+  <div>
+    <div class="spinner-container" *ngIf="isLoading" >
+      <mat-spinner></mat-spinner>
+    </div>
+    <div>{{house}}</div>
+  </div>
+  <br/>
+  <br/>
+  <button *ngIf="houseChosen" (click)="close()">Close</button>
+</mat-card-content>
+
