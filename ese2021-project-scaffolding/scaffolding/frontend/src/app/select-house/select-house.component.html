@@ -6,7 +6,7 @@
 <mat-card-content>
   <p>Congratulations. Your are a good customer and can now choose your house:</p>
   <div class="form-wrapper">
-    <form [formGroup]="form" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
+    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="onSubmit(formDirective)" #formDirective="ngForm" class="registration-form-form">
       <mat-form-field appearance="outline">
         <mat-label >House</mat-label>
         <mat-select formControlName="house" id="house"   required>

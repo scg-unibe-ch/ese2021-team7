@@ -21,6 +21,10 @@ VALUES (/* productId: */ 1, /* title: */ 'Brightroar', /* image: */
                                         4500, /* productCategory: */ 1, /* createdAt: */ DATE (), /* updatedAt: */ DATE ())
     ,  (/* productId: */ 6, /* title: */ 'Invitation to cosplay party', /* image: */
                                         'https://imgix.ranker.com/list_img_v2/19641/1759641/original/game-of-thrones-cosplay-sdcc-2014?w=817&h=427&fm=jpg&q=50&fit=crop?fm=pjpg&q=80', /* description: */
-                                        'An invitation to a private cosplaying event. All funds raised are going to G.R.R. Martin in order for him to finally finish his serie', /* price: */
-                                        460, /* productCategory: */ 4, /* createdAt: */ DATE (), /* updatedAt: */ DATE ());
+                                        'An invitation to a private cosplaying event. All funds raised are going to G.R.R. Martin in order for him to finally finish his series', /* price: */
+                                        460, /* productCategory: */ 4, /* createdAt: */ DATE (), /* updatedAt: */ DATE ())
+,  (/* productId: */ 7, /* title: */ 'Dothraki wardrobe', /* image: */
+                                        'https://www.telltalesonline.com/wp-content/uploads/2017/09/dothraki-armor.jpg?_t=1584360622', /* description: */
+                                        'A whole dothraki wardrobe as depicted in Game of Thrones', /* price: */
+                                        333, /* productCategory: */ 4, /* createdAt: */ DATE (), /* updatedAt: */ DATE ());
 

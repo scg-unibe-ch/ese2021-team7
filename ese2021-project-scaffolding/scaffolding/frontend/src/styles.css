@@ -255,6 +255,14 @@ button, input {
   overflow:hidden;
 }
 
+.product-detailed-view{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  max-width: 400px;
+  height: 500px;
+}
+
 .admin-dashboard-card{
   cursor: pointer;
 }
@@ -266,6 +274,7 @@ button, input {
 .admin-dashboard-content{
   height: 50px;
   width: 100px;
+  /* width: 100% !important; */
   text-align: center;
   align-content: center;
   padding: 0px;
