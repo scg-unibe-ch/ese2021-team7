@@ -1,16 +1,12 @@
 import { Component, Injector, OnChanges, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AccessPermission } from '../models/access-permission';
 import { Category } from '../models/category';
-import { FeaturePermission } from '../models/feature-permission';
 import { PermissionType } from '../models/permission-type';
 import { User } from '../models/user.model';
 import { CategoryService } from '../services/category.service';
 import { PermissionService } from '../services/permission.service';
 import { UserService } from '../services/user.service';
-import { Observable, combineLatest, zip } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { CategoryType } from '../models/category-type';
+import { Observable, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-base',
@@ -30,7 +26,6 @@ export class BaseComponent implements OnInit, OnChanges {
 
   //User
   loggedIn = false;
-
   currentUser: User | undefined;
 
   // Loading flags
@@ -75,7 +70,7 @@ export class BaseComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
 
-    //gets current values for loggedIn, currentUser, postCategories, productCategories
+   //gets current values for loggedIn, currentUser, postCategories, productCategories
    this.initializeCurrentValues()
       .subscribe((res:any) => {
         this.loggedIn = res[1];

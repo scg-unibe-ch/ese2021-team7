@@ -90,6 +90,10 @@ button, input {
   color: white !important;
 }
 
+.group7-toRegistration-button{
+  color: blue;
+ }
+
 .registration-form-form > *{
   width:100% !important;
 }

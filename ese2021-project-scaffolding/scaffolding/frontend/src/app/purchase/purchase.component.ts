@@ -1,19 +1,12 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import {MatCardModule} from '@angular/material/card';
 import { User } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { UserService } from '../services/user.service';
-import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
+import { FormGroup, FormBuilder, FormGroupDirective} from '@angular/forms';
 import { Product } from '../models/product.model';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { CategoryService } from '../services/category.service';
+import { ActivatedRoute } from '@angular/router';
 import { Category } from '../models/category';
 import { BaseFormComponent } from '../base-form/base-form.component';
 import { PurchaseFormService } from '../services/purchase-form.service';
 import { ShopService } from '../services/shop.service';
-import { PermissionService } from '../services/permission.service';
-import { AccessPermission } from '../models/access-permission';
 import { PermissionType } from '../models/permission-type';
 
 @Component({
@@ -59,10 +52,10 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
 
   constructor(public fb: FormBuilder,
               public route: ActivatedRoute,
-              public purchaseFormSerivce: PurchaseFormService,
+              public purchaseFormService: PurchaseFormService,
               private shopService: ShopService,
               public injector: Injector) {
-    super(purchaseFormSerivce, injector);
+    super(purchaseFormService, injector);
   }
 
   /*******************************************************************************************************************
@@ -71,7 +64,6 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
 
   ngOnInit(): void {
     super.initializeUser();
-    //super.evaluateAccessPermissions();
     super.initializeCategories();
 
       this.isLoading = true; //set loading flag
@@ -81,7 +73,7 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
       });
       if (productId != null) {
         if(this.currentUser == undefined) {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/login']).then(r => {});
         }
         else {
           this.shopService.getProductByIdAsObservable(productId).subscribe(product => {
@@ -108,7 +100,7 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
       (res: any) => {
         this.isSubmitted = false;
         this.shopService.refresh();
-        this.router.navigate(['/shop']);
+        this.router.navigate(['/shop']).then(r => {});
       },
       (error: any) =>{
         console.log(error);
@@ -124,10 +116,10 @@ export class PurchaseComponent extends BaseFormComponent implements OnInit {
 
   //overrirdes Base Component
   protected reRouteIfNoAccess(route: string, queryParams?: any): void {
-    if(this.currentUser == undefined) this.router.navigate(['/login']);
+    if(this.currentUser == undefined) this.router.navigate(['/login']).then(r => {});
     else if (this.currentUser.isAdmin) {
-      this.router.navigate([this.routeIfNoAccess]);
-    } else {this.router.navigate(['/login']);}
+      this.router.navigate([this.routeIfNoAccess]).then(r => {});
+    } else {this.router.navigate(['/login']).then(r => {});}
   }
 
 

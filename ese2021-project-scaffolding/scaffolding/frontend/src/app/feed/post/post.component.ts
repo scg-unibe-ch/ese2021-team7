@@ -1,7 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { AccessPermission } from 'src/app/models/access-permission';
 import { Category } from 'src/app/models/category';
-import { FeaturePermission } from 'src/app/models/feature-permission';
 import { PermissionService } from 'src/app/services/permission.service';
 import {Post} from "../../models/post.model";
 import {User} from "../../models/user.model";
@@ -18,8 +16,6 @@ export class PostComponent implements OnInit{
    * VARIABLES
    ******************************************************************************************************************/
 
-  //post: Post | undefined;
-  //postId: number | undefined;
   Score: number = 0;
 
   //flags for permissions
@@ -75,8 +71,6 @@ export class PostComponent implements OnInit{
 
 
   ngOnInit() {
-    //this.evaluateUpdateDeletePermission();
-    //this.evaluateVotingButtonsPermission();
     this.showDeleteAndUpdateButton = this.permissionService.checkPermissionsPostUpdateAndDelete(this.loggedIn, this.currentUser, this.postToDisplay);
     this.showVotingButtons = this.permissionService.checkPermissionsShowVotingButtons(this.loggedIn, this.currentUser, this.postToDisplay);
     this.enableUpvote = this.permissionService.checkPermissionsUpvote(this.loggedIn, this.currentUser, this.postToDisplay);
@@ -85,75 +79,34 @@ export class PostComponent implements OnInit{
   }
 
   ngOnChanges(){
-    //this.evaluateUpdateDeletePermission();
-    //this.evaluateVotingButtonsPermission();
     this.showDeleteAndUpdateButton = this.permissionService.checkPermissionsPostUpdateAndDelete(this.loggedIn, this.currentUser, this.postToDisplay);
     this.showVotingButtons = this.permissionService.checkPermissionsShowVotingButtons(this.loggedIn, this.currentUser, this.postToDisplay);
     this.enableUpvote = this.permissionService.checkPermissionsUpvote(this.loggedIn, this.currentUser, this.postToDisplay);
     this.enableDownvote = this.permissionService.checkPermissionsDownvote(this.loggedIn, this.currentUser, this.postToDisplay);
   }
 
-  /*evaluateUpdateDeletePermission(): void {
-    // set true if user is admin or if user is creator of post
-    if (typeof this.currentUser != 'undefined') {
-      if (this.currentUser.isAdmin) this.showDeleteAndUpdateButton = true;
-      else if (this.loggedIn && this.currentUser.userId == this.postToDisplay.CreationUser) this.showDeleteAndUpdateButton = true;
-      else this.showDeleteAndUpdateButton = false;
-    }
-    else this.showDeleteAndUpdateButton = false;
-  }
-
-  evaluateVotingButtonsPermission(){
-    // set true only if logged in and user is not creator
-    if (typeof this.currentUser != 'undefined') {
-      if (this.currentUser.isAdmin){
-        this.showVotingButtons = false;
-        this.enableUpvote = this.enableDownvote = false;
-      }
-      else if (this.loggedIn && this.currentUser.userId != this.postToDisplay.CreationUser){
-        this.showVotingButtons = true;
-        // check if user already voted
-        switch (this.postToDisplay.votingState){
-          case VotingState.NotVoted: {
-            this.enableUpvote = this.enableDownvote = true;
-            break;
-          }
-          case VotingState.Upvoted: {
-            this.enableUpvote = false;
-            this.enableDownvote = true;
-            break;
-          }
-          case VotingState.Downvoted: {
-            this.enableUpvote = true;
-            this.enableDownvote = false;
-            break;
-          }
-          default: {
-            this.enableDownvote = this.enableUpvote = false;
-          }
-        }
-      }
-      else this.showVotingButtons = false;
-    }
-    else this.showVotingButtons = false;
-  }*/
-
+  /**
+   * Emits event to parent component that Post got updated
+   */
   updatePost(): void {
-    // Emits event to parent component that Post got updated
     if (this.showDeleteAndUpdateButton){
       this.update.emit(this.postToDisplay);
     }
   }
 
+  /**
+   * Emits event to parent component that Post got deleted
+   */
   deletePost(): void {
-    // Emits event to parent component that Post got deleted
     if (this.showDeleteAndUpdateButton){
       this.delete.emit(this.postToDisplay);
     }
   }
 
+  /**
+   * Emits event to parent component that Post got upvoted
+   */
   upvotePost(): void {
-    // Emits event to parent component that Post got upvoted
     if (this.showVotingButtons && this.enableUpvote){
       this.postToDisplay.votingState = VotingState.Upvoted;
       this.enableDownvote = true;
@@ -162,8 +115,10 @@ export class PostComponent implements OnInit{
     }
   }
 
-  downvotePost(): void{
-    // Emits event to parent component that Post got downvoted
+  /**
+   * Emits event to parent component that Post got downvoted
+   */
+  downvotePost(): void {
     if (this.showVotingButtons && this.enableDownvote) {
       this.postToDisplay.votingState = VotingState.Downvoted;
       this.enableDownvote = false;
