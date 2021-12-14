@@ -1,7 +1,6 @@
 import {Order} from '../models/order.model';
 import {User} from '../models/user.model';
 import {Product} from '../models/product.model';
-import {Post} from '../models/post.model';
 
 export enum OrderStatus {
     PENDNIG,

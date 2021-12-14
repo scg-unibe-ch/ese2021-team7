@@ -1,4 +1,4 @@
-import { Model, Sequelize, DataTypes } from 'sequelize';
+import {DataTypes, Model, Sequelize} from 'sequelize';
 
 export interface ProductAttributes {
     productId: number;
@@ -19,27 +19,27 @@ export class Product extends Model<ProductAttributes> implements ProductAttribut
 
     public static initialize(sequelize: Sequelize) {
         Product.init({
-            productId: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
+                productId: {
+                    type: DataTypes.INTEGER,
+                    autoIncrement: true,
+                    primaryKey: true
+                },
+                title: {
+                    type: DataTypes.STRING
+                },
+                image: {
+                    type: DataTypes.STRING
+                },
+                description: {
+                    type: DataTypes.STRING
+                },
+                price: {
+                    type: DataTypes.DECIMAL
+                },
+                productCategory: {
+                    type: DataTypes.INTEGER
+                }
             },
-            title: {
-                type: DataTypes.STRING
-            },
-            image: {
-                type: DataTypes.STRING
-            },
-            description: {
-                type: DataTypes.STRING
-            },
-            price: {
-                type: DataTypes.DECIMAL
-            },
-            productCategory: {
-                type: DataTypes.INTEGER
-            }
-        },
             {
                 sequelize,
                 tableName: 'product'

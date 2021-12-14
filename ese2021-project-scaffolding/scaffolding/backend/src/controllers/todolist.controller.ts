@@ -1,6 +1,5 @@
-import express from 'express';
-import { Router, Request, Response } from 'express';
-import { TodoList } from '../models/todolist.model';
+import express, {Request, Response, Router} from 'express';
+import {TodoList} from '../models/todolist.model';
 
 const todoListController: Router = express.Router();
 
@@ -31,7 +30,7 @@ todoListController.delete('/:id', (req: Request, res: Response) => {
         .then(found => {
             if (found != null) {
                 found.destroy()
-                    .then(item => res.status(200).send({ deleted: item }))
+                    .then(item => res.status(200).send({deleted: item}))
                     .catch(err => res.status(500).send(err));
             } else {
                 res.sendStatus(404);
@@ -42,7 +41,7 @@ todoListController.delete('/:id', (req: Request, res: Response) => {
 
 todoListController.get('/', (req: Request, res: Response) => {
     // this automatically fills each todolist with the according todoitems
-    TodoList.findAll({ include: [TodoList.associations.todoItems] })
+    TodoList.findAll({include: [TodoList.associations.todoItems]})
         .then(list => res.status(200).send(list))
         .catch(err => res.status(500).send(err));
 });

@@ -1,13 +1,17 @@
-import { Post } from '../models/post.model';
+import {Post} from '../models/post.model';
 import {User} from '../models/user.model';
-import { VoteService } from './vote.service';
-import { Vote } from '../models/vote.model';
+import {VoteService} from './vote.service';
+import {Vote} from '../models/vote.model';
 import {CategoryService, CategoryType} from './category.service';
 
 export class PostService {
 
     private categoryService = new CategoryService();
     private voteService: VoteService;
+
+    constructor() {
+        this.voteService = new VoteService();
+    }
 
     public async getPostById(postId: string, userId: string | undefined): Promise<Post> {
         return Post.findByPk(postId, {include: [Vote, User]}).then(dbPost => {
@@ -21,28 +25,8 @@ export class PostService {
         });
     }
 
-    /***
-     * Calculate the score, i.e. the sum of the upvotes and sets it as a new DataValue. Upvotes are recorded as 1,
-     * downvotes as -1
-     * @param post The post for which the score should be calculated
-     * @private The score is added to the model and accessible as a datavalue, hence this method is private
-     */
-    private setScore(post: Post) {
-        let score = 0;
-        // @ts-ignore
-        for (const vote of post.Votes) {
-            if (vote.upvote === 1) {
-                score += 1;
-            } else {
-                score -= 1;
-            }
-        }
-        // @ts-ignore
-        post.setDataValue('score', score);
-    }
-
     public async getAll(sortBy: string, userId: string | undefined): Promise<Post[]> {
-        return  Post.findAll({
+        return Post.findAll({
             attributes: ['postId', 'title', 'image', 'text', 'category', 'UserUserId'],
             include: [Vote, User]
         }).then(dbPosts => {
@@ -52,7 +36,7 @@ export class PostService {
                 dbPost = this.addVotingStatus(dbPost, userId);
                 postsWithScore.push(dbPost);
             }
-            return postsWithScore.sort( (postA, postB) => {
+            return postsWithScore.sort((postA, postB) => {
                 if (sortBy === '1') {
                     // @ts-ignore
                     return postB.getDataValue('score') - postA.getDataValue('score');
@@ -151,15 +135,37 @@ export class PostService {
         return createdPost.save().then(() => this.getPostById('' + createdPost.postId, '' + userId));
     }
 
+    /***
+     * Calculate the score, i.e. the sum of the upvotes and sets it as a new DataValue. Upvotes are recorded as 1,
+     * downvotes as -1
+     * @param post The post for which the score should be calculated
+     * @private The score is added to the model and accessible as a datavalue, hence this method is private
+     */
+    private setScore(post: Post) {
+        let score = 0;
+        // @ts-ignore
+        for (const vote of post.Votes) {
+            if (vote.upvote === 1) {
+                score += 1;
+            } else {
+                score -= 1;
+            }
+        }
+        // @ts-ignore
+        post.setDataValue('score', score);
+    }
+
     private addVotingStatus(post: Post, userId: string | undefined) {
         // @ts-ignore
         post.setDataValue('votingStatus', 'not voted');
-        if (userId === 'undefined') { return post; }
+        if (userId === 'undefined') {
+            return post;
+        }
         const userIdAsInt = parseInt(userId, 10);
         let i = 0;
 
         // @ts-ignore
-        while (!(post.getDataValue('votingStatus') !== 'not voted')  && i < post.Votes.length) {
+        while (!(post.getDataValue('votingStatus') !== 'not voted') && i < post.Votes.length) {
             // @ts-ignore
             if (post.Votes[i].upvote === 1 && post.Votes[i].UserUserId === userIdAsInt) {
                 // @ts-ignore
@@ -173,9 +179,5 @@ export class PostService {
         }
 
         return post;
-    }
-
-    constructor() {
-        this.voteService = new VoteService();
     }
 }

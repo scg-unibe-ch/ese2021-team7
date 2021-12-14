@@ -5,11 +5,6 @@
     <div fxFlex></div>
   </mat-card-header>
 
-  <!--
-  <mat-card-actions *ngIf="showDetailedView" class="product-close-button" align="end">
-    <button mat-button fxLayoutAlign="right top" (click)="closeDetailedView()">Close detailed view<mat-icon class="product-close-button" [style.color]=" 'red' ">close</mat-icon></button>
-  </mat-card-actions>
--->
   <div class="product-image-wrapper">
     <img class="product-image" mat-card-image src="{{productToDisplay.image}}">
   </div>
@@ -31,17 +26,17 @@
     <button mat-button *ngIf="!showDetailedView" class="group7-product-actions-button" (click)="showProductDetails()">Details</button>
 
     <!-- Should only be usable for logged in users -->
-    <button mat-button *ngIf="!productToDisplay.sold" [disabled]="!showBuyNowButton || productToDisplay.sold " class="group7-product-actions-button"><mat-icon (click)="buyProduct()" class="group7-product-actions">shopping_cart</mat-icon></button>
+    <button mat-button *ngIf="!productToDisplay.sold" [disabled]="!showBuyNowButton || productToDisplay.sold" class="group7-product-actions-button"><mat-icon (click)="buyProduct()" class="group7-product-actions">shopping_cart</mat-icon></button>
     <button mat-button *ngIf="productToDisplay.sold" class="group7-product-actions-button" [style.color]=" 'red' ">SOLD OUT</button>
 
     <!-- Should only be usable for admins -->
-    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" class="group7-product-actions-button"><mat-icon (click)="updateProduct()" class="group7-product-actions">edit</mat-icon></button>
-    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" color="warn" class="group7-product-actions-button"><mat-icon (click)="deleteProduct()" class="group7-product-actions">delete</mat-icon></button>
+    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton || productToDisplay.sold" class="group7-product-actions-button"><mat-icon (click)="updateProduct()" class="group7-product-actions">edit</mat-icon></button>
+    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton || productToDisplay.sold" color="warn" class="group7-product-actions-button"><mat-icon (click)="deleteProduct()" class="group7-product-actions">delete</mat-icon></button>
   </mat-card-actions>
 </mat-card>
 </div>
 
-<div *ngIf="showDetailedView">
+<div class = "product-detailed-view" *ngIf="showDetailedView">
   <mat-card-header>
     <div fxFlex></div>
   </mat-card-header>
@@ -75,8 +70,8 @@
     <button mat-button *ngIf="productToDisplay.sold" class="group7-product-actions-button" [style.color]=" 'red' ">SOLD OUT</button>
 
     <!-- Should only be usable for admins -->
-    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" class="group7-product-actions-button"><mat-icon (click)="updateProduct()" class="group7-product-actions">edit</mat-icon></button>
-    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton" color="warn" class="group7-product-actions-button"><mat-icon (click)="deleteProduct()" class="group7-product-actions">delete</mat-icon></button>
+    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton || productToDisplay.sold" class="group7-product-actions-button"><mat-icon (click)="updateProduct()" class="group7-product-actions">edit</mat-icon></button>
+    <button mat-button fxLayoutAlign="right top" [disabled]="!showDeleteAndUpdateButton || productToDisplay.sold" color="warn" class="group7-product-actions-button"><mat-icon (click)="deleteProduct()" class="group7-product-actions">delete</mat-icon></button>
   </mat-card-actions>
 
 </div>

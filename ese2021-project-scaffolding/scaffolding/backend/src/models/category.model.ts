@@ -1,4 +1,4 @@
-import { Model, Sequelize, DataTypes } from 'sequelize';
+import {DataTypes, Model, Sequelize} from 'sequelize';
 
 export interface CategoryAttributes {
     categoryId: number;
@@ -13,18 +13,18 @@ export class Category extends Model<CategoryAttributes> implements CategoryAttri
 
     public static initialize(sequelize: Sequelize) {
         Category.init({
-            categoryId: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
+                categoryId: {
+                    type: DataTypes.INTEGER,
+                    autoIncrement: true,
+                    primaryKey: true
+                },
+                name: {
+                    type: DataTypes.STRING
+                },
+                type: {
+                    type: DataTypes.INTEGER
+                },
             },
-            name: {
-                type: DataTypes.STRING
-            },
-            type: {
-                type: DataTypes.INTEGER
-            },
-        },
             {
                 sequelize,
                 tableName: 'category'

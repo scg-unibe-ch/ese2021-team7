@@ -1,9 +1,7 @@
-import express from 'express';
-import {Router, Request, Response} from 'express';
+import express, {Request, Response, Router} from 'express';
 import {TodoItem} from '../models/todoitem.model';
 import {ItemService} from '../services/item.service';
 import {MulterRequest} from '../models/multerRequest.model';
-
 
 
 const todoItemController: Router = express.Router();

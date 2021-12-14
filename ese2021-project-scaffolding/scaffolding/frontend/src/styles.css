@@ -255,14 +255,35 @@ button, input {
   overflow:hidden;
 }
 
+.product-detailed-view{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  max-width: 400px;
+  height: 500px;
+}
+
+.admin-dashboard-card{
+  cursor: pointer;
+}
+
 .admin-dashboard-title{
   text-align: center;
 }
+
 .admin-dashboard-content{
-  width: 100% !important;
+  height: 50px;
+  width: 100px;
+  /* width: 100% !important; */
   text-align: center;
+  align-content: center;
   padding: 0px;
 }
+
+.admin-dashboard-actions{
+  text-align: center;
+}
+
 .admin-dashboard-icons{
   font-size: 5em;
   color: #262626;
@@ -271,6 +292,7 @@ button, input {
 .table-wrapper{
   margin-left: auto;
   margin-right: auto;
+  min-height: 500px;
   width:100%;
   height: 100% !important;
 }
@@ -283,12 +305,11 @@ table {
   width: 100% !important;
 }
 
-
 .group7-small-table-wrapper{
   max-width: 900px !important;
   background-color: #eeeeee !important;
+  min-height: 500px;
 }
-
 
 .buttons-wrapper{
   width: 100%;
