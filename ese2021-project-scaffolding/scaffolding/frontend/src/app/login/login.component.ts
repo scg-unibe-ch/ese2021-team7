@@ -92,6 +92,14 @@ export class LoginComponent extends BaseComponent implements OnInit{
       });
   }
 
+  /**
+   * Redirects user to registration form.
+   *
+   */
+  goToRegistration(): void {
+    this.router.navigate(['/registration']).then(r => {});
+  }
+
   /*******************************************************************************************************************
    * HELPER METHODS
    ******************************************************************************************************************/
