@@ -21,31 +21,22 @@ export class AccessPermission implements IPermission {
     switch(permissionType) {
       case PermissionType.AccessPurchaseForm:
         return this.accessPurchaseForm;
-        break;
       case PermissionType.AccessAdminDashBoard:
         return this.accessAdminDashBoard;
-        break;
       case PermissionType.AccessCategoryForm:
         return this.accessCategoryForm;
-        break;
       case PermissionType.AccessCategoryList:
         return this.accessCategoryList;
-        break;
       case PermissionType.AccessProductForm:
         return this.accessProductForm;
-        break;
       case PermissionType.AccessHome:
         return this.accessHome;
-        break;
       case PermissionType.AccessFeed:
         return this.accessFeed;
-        break;
       case PermissionType.AccessShop:
         return this.accessShop;
-        break;
       default:
         return false;
-        break;
     }
   }
 }

@@ -1,21 +1,11 @@
 import {Component, Injector, OnInit} from '@angular/core';
-import {User} from "../models/user.model";
 import {HttpClient} from "@angular/common/http";
-import {Router} from "@angular/router";
-import {UserService} from "../services/user.service";
-import {environment} from "../../environments/environment";
-import {OrderState} from "../models/order-state";
 import { OrderListServiceService } from '../services/order-list-service.service';
 import { OrdersDataSourceService } from '../services/orders-data-source.service';
-import {MatTable, MatTableModule} from '@angular/material/table';
 import { ProductService } from '../services/product.service';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {  ViewChild } from '@angular/core';
-import { concat } from 'rxjs';
 import { ConfirmationDialogModel } from '../ui/confirmation-dialog/confirmation-dialog';
 import { ConfirmationDialogComponent } from '../ui/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { AccessPermission } from '../models/access-permission';
 import { BaseComponent } from '../base/base.component';
 
 @Component({
@@ -29,9 +19,6 @@ export class OrderListComponent extends BaseComponent implements OnInit {
   /*******************************************************************************************************************
    * VARIABLES
    ******************************************************************************************************************/
-
-  //currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false, false));
-  //isAdmin: boolean | undefined;
 
   //used for table design
   displayedColumns: string[] = [];

@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import { Observable } from 'rxjs';
-import { from } from 'rxjs';
-import { of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { Product } from '../models/product.model';
+import { tap } from 'rxjs/operators';
 
 
 @Injectable({
@@ -15,7 +12,11 @@ export class ProductService {
 
   constructor(public httpClient: HttpClient) { }
 
-
+  /**
+   * Get product information from the database
+   *
+   * @param productId: product where the information is requested
+   */
   public getProductById(productId: number): Observable<any> {
     return this.httpClient.get(environment.endpointURL + "product/byId", {
       params: {

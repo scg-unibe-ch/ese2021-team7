@@ -1,24 +1,15 @@
-import {Component, DoCheck, Injector, OnInit, ViewChild} from '@angular/core';
-import {environment} from "../../environments/environment";
+import {Component, Injector, OnInit, ViewChild} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Post} from "../models/post.model";
-import {Router} from "@angular/router";
-import {UserService} from "../services/user.service";
-import {User} from "../models/user.model";
 import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
 import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {VotingState} from "../models/voting-state";
-import { CategoryService } from '../services/category.service';
-import { Category } from '../models/category';
 import { PostService } from '../services/post.service';
-import { AccessPermission } from '../models/access-permission';
 import { BaseComponent } from '../base/base.component';
 import { PermissionType } from '../models/permission-type';
 import { FeedService } from '../services/feed.service';
 import { MatSelect } from '@angular/material/select';
 import { PostFormComponent } from '../post-form/post-form.component';
-import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-feed',
@@ -43,9 +34,6 @@ export class FeedComponent extends BaseComponent implements OnInit {
 
   canCreatePosts: boolean = false;
 
-  //array with post categories
-  //postCategories: Category[] = [];
-
   // overrides BaseComponent
   permissionToAccess = PermissionType.AccessHome;
   routeIfNoAccess: string = "/home";
@@ -69,8 +57,6 @@ export class FeedComponent extends BaseComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-
-    //super.ngOnInit();
     super.initializeCurrentValues().subscribe(
       res => {
         this.loggedIn = res[1];
@@ -79,7 +65,6 @@ export class FeedComponent extends BaseComponent implements OnInit {
         this.productCategories = res[4];
 
         //loads Data
-        //this.feedService.setUserAndLoggedIn(this.loggedIn, this.currentUser);
         this.feedService.refreshPosts(this.loggedIn, this.currentUser);
         //listener
         this.feedService.posts$.subscribe(res => this.postList = res);
@@ -154,11 +139,18 @@ export class FeedComponent extends BaseComponent implements OnInit {
     });
   }
 
-
+  /**
+   * Refreshes the posts in the feed
+   */
   reloadFeed() {
    this.feedService.refreshPosts(this.loggedIn, this.currentUser);
   }
 
+  /**
+   * Asks the user or admin to confirm the deletion of the post
+   *
+   * @param post: Post that the user or admin wants to delete
+   */
   confirmDelete(post: Post): void {
   const dialogData = new ConfirmationDialogModel('Confirm', 'Are you sure you want to delete this post?','Cancel','Delete post');
   const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -174,19 +166,26 @@ export class FeedComponent extends BaseComponent implements OnInit {
     });
   }
 
-
+  /**
+   * Upvote the Post: the score is increased by 1
+   *
+   * @param post: the post to be upvoted
+   */
   upvotePost(post: Post) {
     this.feedService.upvotePost(post.postId).subscribe((res: any) => {
       post.score = res.score;
     });
   }
 
+  /**
+   * Downvote the Post: the score is decreased by 1
+   *
+   * @param post: the post to be downvoted
+   */
   downvotePost(post: Post) {
     return this.feedService.downvotePost(post.postId)
       .subscribe((res: any) => {
       post.score = res.score;
     });
   }
-
-
 }

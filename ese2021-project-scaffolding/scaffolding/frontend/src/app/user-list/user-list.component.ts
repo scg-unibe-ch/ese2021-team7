@@ -1,6 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseComponent } from '../base/base.component';
-import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-user-list',

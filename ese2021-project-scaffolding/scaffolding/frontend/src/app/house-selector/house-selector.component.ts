@@ -3,7 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BaseComponent } from '../base/base.component';
 import { House } from '../models/house';
 import { SelectHouseComponent } from '../select-house/select-house.component';
-import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-house-selector',
@@ -17,6 +16,9 @@ export class HouseSelectorComponent extends BaseComponent implements OnInit {
   house: House | undefined;
   clicked: boolean = false;
 
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
   constructor(
     public injector: Injector,
     private dialogRef: MatDialogRef<SelectHouseComponent>,
@@ -25,13 +27,21 @@ export class HouseSelectorComponent extends BaseComponent implements OnInit {
     super(injector);
   }
 
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
+
   ngOnInit(): void {
     super.ngOnInit();
   }
 
+  /*******************************************************************************************************************
+   * USER ACTIONS
+   ******************************************************************************************************************/
 
-
-
+  /**
+   * After two shipped orders, the user can select a house for a different UI Layout
+   */
   selectHouse(): void {
     this.isLoading = true;
     this.clicked = true;

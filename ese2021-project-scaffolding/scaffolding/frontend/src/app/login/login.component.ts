@@ -1,12 +1,9 @@
 import { Component, Injector } from '@angular/core';
 import { User } from '../models/user.model';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { UserService } from '../services/user.service';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { OnInit } from '@angular/core';
 import { AccessPermission } from '../models/access-permission';
-import { PermissionService } from '../services/permission.service';
 import { BaseComponent } from '../base/base.component';
 import { FeaturePermission } from '../models/feature-permission';
 
@@ -94,7 +91,6 @@ export class LoginComponent extends BaseComponent implements OnInit{
 
   /**
    * Redirects user to registration form.
-   *
    */
   goToRegistration(): void {
     this.router.navigate(['/registration']).then(r => {});
