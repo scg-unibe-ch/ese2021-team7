@@ -59,7 +59,6 @@ export class PostService {
 
 
   evaluateVotingState(votingStatus: string): VotingState {
-    console.log('given votestate: ' + votingStatus);
     switch (votingStatus){
       case 'not voted': {
         return VotingState.NotVoted;

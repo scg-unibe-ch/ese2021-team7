@@ -84,11 +84,9 @@ export class UserService {
    ******************************************************************************************************************/
 
   loginUserFromLocalStorage(): Observable<User | boolean> {
-    //this.loadingSource.next(true);
     if(!this.loggedIn) {
       let userId = localStorage.getItem('userId');
       if (userId) {
-        //console.log("User Id from local storage: " + userId);
        return this.getUserByIdAsObservable(Number(userId)).pipe(
          tap(  user =>     {
            this.setUser(this.createUserFromBackendReponse(user));
@@ -103,7 +101,6 @@ export class UserService {
     } else {
       return of(false);
     }
-   // this.loadingSource.next(false);
   }
 
 
@@ -207,7 +204,6 @@ export class UserService {
     return this.httpClient.post(environment.endpointURL + "user/discoverHouse", {
       userId: userId
     }).pipe(
-      tap(res => console.log(JSON.stringify(res))),
       tap((house: any) => this.user?.setHouse(house.house)),
       delay(2000)
     );

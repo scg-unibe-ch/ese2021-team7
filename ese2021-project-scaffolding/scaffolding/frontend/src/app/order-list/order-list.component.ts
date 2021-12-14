@@ -96,10 +96,8 @@ export class OrderListComponent extends BaseComponent implements OnInit {
    * @param row: row in data table.
    */
   shipOrder(row: any): void {
-    console.log("shipping: " + JSON.stringify(row.orderId));
     this.orderListService.shipOrder(row.orderId)
       .subscribe((data: any) => {
-        console.log(JSON.stringify(data));
         this.refreshTable();
         }
         );
@@ -110,11 +108,8 @@ export class OrderListComponent extends BaseComponent implements OnInit {
    * @param row: in data table.
    */
   cancelOrder(row: any): void {
-    console.log("shipping: " + JSON.stringify(row.orderId));
-    //this.dataSource.shipOrder(row.orderId);
     this.orderListService.cancelOrder(row.orderId)
       .subscribe((data: any) => {
-          console.log(JSON.stringify(data));
           this.refreshTable(this.currentUser?.userId);
         }
       );

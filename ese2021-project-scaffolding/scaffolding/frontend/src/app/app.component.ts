@@ -1,6 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {ActivatedRoute, Router} from "@angular/router";
 import { BaseComponent } from './base/base.component';
 import { PermissionType } from './models/permission-type';
 
@@ -32,7 +31,6 @@ export class AppComponent extends BaseComponent implements OnInit {
 
   constructor(
     public httpClient: HttpClient,
-    private route: ActivatedRoute,
     public injector: Injector
   ) {
     super(injector);
@@ -55,7 +53,4 @@ export class AppComponent extends BaseComponent implements OnInit {
     this.userService.logoutUser();
     this.router.navigate(['../home']).then(r =>{});
   }
-
-
-
 }

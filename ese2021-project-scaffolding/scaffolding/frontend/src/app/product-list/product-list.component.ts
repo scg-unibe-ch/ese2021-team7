@@ -183,7 +183,6 @@ export class ProductListComponent extends BaseComponent implements OnInit {
             this.confirmDelete(res.product);
           }
         }
-        //console.log("PRoduct to buy: " + JSON.stringify(res));
       }
     );
   }

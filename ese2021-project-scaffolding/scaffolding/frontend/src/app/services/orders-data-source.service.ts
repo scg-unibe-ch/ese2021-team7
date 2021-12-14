@@ -62,9 +62,8 @@ export class OrdersDataSourceService implements DataSource<Order[]>{
       this.orderListService.getAllOrders(userId).pipe(
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false)),
-        tap((data:Order[]) => console.log("Tap call:" + data))
+        //tap((data:Order[]) => console.log("Tap call:" + data))
       ).subscribe((orders: Order[]) => {
-            console.log(orders);
             this.ordersSubject.next(orders)}); // pass on data to subject
     }
 

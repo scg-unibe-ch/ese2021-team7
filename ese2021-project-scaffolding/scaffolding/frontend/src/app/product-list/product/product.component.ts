@@ -76,7 +76,6 @@ export class ProductComponent extends BaseComponent implements OnInit {
       this.productToDisplay = this.dialogData?.product;
       this.currentUser = this.dialogData?.user;
       this.loggedIn = this.dialogData?.isLoggedIn;
-      console.log(JSON.stringify(this.currentUser));
     }
 
    if(this.currentUser == undefined) {
@@ -88,49 +87,26 @@ export class ProductComponent extends BaseComponent implements OnInit {
        this.showDeleteAndUpdateButton = this.currentUser?.featuresPermissions?.productUpdateDelete;
      }
    }
-
-   //this.setPermissions();
-    //this.evaluateUpdateDeletePermission();
-    //this.evaluateBuyNowPermission();
-
-
-    /*    this.route.queryParams.subscribe(params => {
-          if(params['showDetailedView'] == 'true'){
-            // get Product
-            this.httpClient.get(environment.endpointURL + "product/byId", {
-              params: {
-                productId: params['productId']
-              }
-            }).subscribe((product: any) => {
-                this.productToDisplay = new Product(product.productId,  product.title, product.description, product.image, product.price, this.categoryService.getCategoryById(product.productCategory), !product.isAvailable);
-                console.log(this.categoryService.getCategoryById(product.productCategory));
-                this.showDetailedView = true;
-              });
-          }
-          else{
-            this.showDetailedView = false;
-          }
-        });*/
-  }
-
-  ngOnChange(): void {
-    //this.setPermissions();
   }
 
   /*******************************************************************************************************************
    * USER ACTIONS
    ******************************************************************************************************************/
 
+  /**
+   * Emits event to parent component that Product got updated
+   */
   updateProduct(): void {
-    // Emits event to parent component that Product got updated
     if (this.showDeleteAndUpdateButton && !this.productToDisplay.sold){
       this.update.emit(this.productToDisplay);
       this.dialogRef?.close({updateProduct: true, product: this.productToDisplay});
     }
   }
 
+  /**
+   * Emits event to parent component that Product got deleted
+   */
   deleteProduct(): void {
-    // Emits event to parent component that Product got deleted
     if (this.showDeleteAndUpdateButton  && !this.productToDisplay.sold){
       this.delete.emit(this.productToDisplay);
       this.dialogRef?.close({deleteProduct: true, product: this.productToDisplay});
@@ -146,8 +122,10 @@ export class ProductComponent extends BaseComponent implements OnInit {
     this.dialogRef?.close(); //closes dialog box
   }
 
+  /**
+   * Emits event to parent component that Product is purchased
+   */
   buyProduct(): void {
-    // Emits event to parent component that Product is purchased
     if (this.showBuyNowButton){
       if (this.loggedIn){
         this.buy.emit(this.productToDisplay);
@@ -160,16 +138,5 @@ export class ProductComponent extends BaseComponent implements OnInit {
       }
     }
   }
-
-/*  /!*******************************************************************************************************************
-   * PERMISSIONS
-   ******************************************************************************************************************!/
-
-  setPermissions(): void{
-    this.showDeleteAndUpdateButton = this.permissionService.evaluateUpdateDeletePermission(this.loggedIn, this.currentUser);
-    this.showBuyNowButton = this.permissionService.evaluateBuyNowPermission(this.loggedIn, this.currentUser);
-  }*/
-
-
 
 }

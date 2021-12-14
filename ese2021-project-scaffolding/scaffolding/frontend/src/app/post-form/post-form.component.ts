@@ -94,7 +94,6 @@ export class PostFormComponent extends BaseFormComponent implements OnInit {
           postId: this.dialogData.postId
         }
       }).subscribe((post: any) => {
-        //console.log(post);
         let category = this.categoryService.getCategoryById(post.category);
         this.httpClient.get(environment.endpointURL + "user/getById", {
           params: {
@@ -102,9 +101,7 @@ export class PostFormComponent extends BaseFormComponent implements OnInit {
           }
         }).subscribe( (user:any) => {
             this.post = this.postService.createPostFromBackendResponse(post, category, user);
-            console.log("Post to populate form: " + this.post);
             super.initializeForm(this.post); //initialize form with preset
-            //this.postForm = this.postFormService.buildForm(post);
           this.isLoading = false;
           }
         );
@@ -116,7 +113,6 @@ export class PostFormComponent extends BaseFormComponent implements OnInit {
       this.isCreate= true;
       this.requestType = "post/create";
       this.initializeForm(); //initialize form empty
-      console.log(this.form);
     }
   }
 
