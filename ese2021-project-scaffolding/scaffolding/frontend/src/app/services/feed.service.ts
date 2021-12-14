@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {BehaviorSubject, forkJoin } from 'rxjs';
-import {map, mergeMap, tap } from 'rxjs/operators';
+import {map, mergeMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Category } from '../models/category';
 import { Post } from '../models/post.model';

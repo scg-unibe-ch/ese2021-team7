@@ -47,20 +47,6 @@ export class PurchaseFormService implements FormService {
       productId: [preSets.presetProduct.productId],
       userId: [preSets.presetUser.userId]
     });
-
-/*    paymentMethods: this.fb.group({
-      paymentMethod: new FormControl("1", Validators.required)
-    }),
-      shippingAddress: this.fb.group
-    firstName: new FormControl(preSets.presetUser.firstName, Validators.required),
-      lastName: new FormControl(preSets.presetUser.lastName, Validators.required),
-      street: new FormControl(preSets.presetUser.street, Validators.required),
-      houseNumber: new FormControl(preSets.presetUser.houseNumber),
-      zipCode: new FormControl(preSets.presetUser.zipCode),
-      city: new FormControl(preSets.presetUser.city),
-      productId: new FormControl(preSets.presetProduct.productId),
-      userId: new FormControl(preSets.presetUser.userId)
-  });*/
   }
 
   /*******************************************************************************************************************

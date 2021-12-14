@@ -51,9 +51,6 @@ export class CategoryFormComponent extends BaseFormComponent implements OnInit {
    ******************************************************************************************************************/
   ngOnInit(): void {
     super.ngOnInit();
-    //super.initializeUser();
-    //super.initializeForm(); // implemented in parent class
-    //super.evaluateAccessPermissions();
   }
 
   /*******************************************************************************************************************

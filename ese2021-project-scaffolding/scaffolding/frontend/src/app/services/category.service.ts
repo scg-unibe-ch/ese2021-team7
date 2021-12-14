@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Category } from '../models/category';
 import { CategoryType } from '../models/category-type';
@@ -47,8 +47,6 @@ export class CategoryService {
   categories$ = this.categoriesSource.asObservable();
   productCategories$ = this.productCategoriesSource.asObservable();
   postCategories$ = this.postCategoriesSource.asObservable();
-  //categoriesLoadgin$ = this.cateogiresLoadingSource.asObservable();
-
 
   /*******************************************************************************************************************
    * Constructor
@@ -66,7 +64,6 @@ export class CategoryService {
    * * @return: Category[]
    */
   getAllCategories(): Category[] {
-    //console.log("All Categories: " + this.categories);
     return this.categories;
   }
 
@@ -76,7 +73,6 @@ export class CategoryService {
    * @return: Category[]
    */
   getProductCategories(): Category[] {
-    //console.log("Product Categories: " + this.categories);
     return this.productCategories;
   }
 
@@ -86,7 +82,6 @@ export class CategoryService {
    * @return: Category[]
    */
   getPostCategories(): Category[] {
-    //console.log("Post Categories: " + this.categories);
     return this.postCategories;
   }
 
@@ -98,17 +93,13 @@ export class CategoryService {
    */
   getCategoryById(id: number): Category {
     let returnCategory: Category = new Category(0, "undefined", 0, "undefined");
-    //this.getCategoriesFromBackend(); //update categories from backend
-    //console.log("Selection Id array: " + this.categories);
     this.categories.forEach(
       (category: Category) => {
-        //console.log("filter category:" + JSON.stringify(category));
         if(category.id == id){
           returnCategory = category;
         }
       }
       );
-    //console.log("Category filtered: " + returnCategory);
     return returnCategory;
   }
 

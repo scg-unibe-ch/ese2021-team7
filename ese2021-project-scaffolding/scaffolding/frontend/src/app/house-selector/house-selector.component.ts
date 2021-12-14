@@ -2,7 +2,6 @@ import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BaseComponent } from '../base/base.component';
 import { House } from '../models/house';
-import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-house-selector',

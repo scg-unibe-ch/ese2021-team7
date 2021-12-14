@@ -2,7 +2,6 @@ import {CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { Category } from '../models/category';
 import { CategoryService } from './category.service';
 
