@@ -1,5 +1,5 @@
 # /user
-TODO: copy existing endpoints from readme.md
+
 ## GET /user/getById
 ### Request
 HTTP query param: userId: int
