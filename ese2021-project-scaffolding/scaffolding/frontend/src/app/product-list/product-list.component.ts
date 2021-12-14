@@ -1,26 +1,14 @@
-import { Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
-import {environment} from "../../environments/environment";
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Product} from "../models/product.model";
-import {ProductList} from "../models/product-list.model";
-import {Router} from "@angular/router";
-import {UserService} from "../services/user.service";
-import {User} from "../models/user.model";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmationDialogModel} from "../ui/confirmation-dialog/confirmation-dialog";
 import {ConfirmationDialogComponent} from "../ui/confirmation-dialog/confirmation-dialog.component";
-import {Post} from "../models/post.model";
 import { Category } from '../models/category';
-import { CategoryService } from '../services/category.service';
 import { ShopService } from '../services/shop.service';
-import {DataSource } from '@angular/cdk/collections';
-import { ShopDataSourceService } from '../services/shop-data-source.service';
-import { Observable, of } from 'rxjs';
 import { MatSelect } from '@angular/material/select';
 import { ProductFormComponent } from '../product-form/product-form.component';
 import { ProductComponent } from './product/product.component';
-import { PermissionService } from '../services/permission.service';
-import { AccessPermission } from '../models/access-permission';
 import { BaseComponent } from '../base/base.component';
 import { PermissionType } from '../models/permission-type';
 

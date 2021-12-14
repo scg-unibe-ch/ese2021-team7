@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
-import {BehaviorSubject, EMPTY, Observable, of, Subject } from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import { AccessPermission } from '../models/access-permission';
-import { FeaturePermission } from '../models/feature-permission';
 import { PermissionService } from './permission.service';
-import { FormGroup } from '@angular/forms';
 import {delay, map, tap } from 'rxjs/operators';
 import { OrderListServiceService } from './order-list-service.service';
 import { Order } from '../models/order';
@@ -23,8 +20,6 @@ export class UserService {
 
   private loggedIn: boolean = false;
   private user: User | undefined;
-
-  private isLoading: boolean = false;
 
   /*******************************************************************************************************************
    * OBSERVABLE SOURCES & STREAMS
@@ -91,7 +86,6 @@ export class UserService {
   loginUserFromLocalStorage(): Observable<User | boolean> {
     //this.loadingSource.next(true);
     if(!this.loggedIn) {
-      //console.log("loggedin " + this.loggedIn);
       let userId = localStorage.getItem('userId');
       if (userId) {
         //console.log("User Id from local storage: " + userId);

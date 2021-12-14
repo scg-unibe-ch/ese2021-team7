@@ -1,9 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { TodoList } from './models/todo-list.model';
-import { environment } from '../environments/environment';
-import { UserService } from './services/user.service';
-import { User } from './models/user.model';
 import {ActivatedRoute, Router} from "@angular/router";
 import { BaseComponent } from './base/base.component';
 import { PermissionType } from './models/permission-type';
@@ -49,7 +45,6 @@ export class AppComponent extends BaseComponent implements OnInit {
   ngOnInit() {
     super.initializeUser();
     super.evaluateAccessPermissions();
-    //this.getCurrentUser();
   }
 
   /*******************************************************************************************************************

@@ -16,6 +16,9 @@ export class HouseSelectorComponent extends BaseComponent implements OnInit {
   house: House | undefined;
   clicked: boolean = false;
 
+  /*******************************************************************************************************************
+   * CONSTRUCTOR
+   ******************************************************************************************************************/
   constructor(
     public injector: Injector,
     private dialogRef: MatDialogRef<HouseSelectorComponent>,
@@ -24,13 +27,21 @@ export class HouseSelectorComponent extends BaseComponent implements OnInit {
     super(injector);
   }
 
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
+
   ngOnInit(): void {
     super.ngOnInit();
   }
 
+  /*******************************************************************************************************************
+   * USER ACTIONS
+   ******************************************************************************************************************/
 
-
-
+  /**
+   * After two shipped orders, the user can select a house for a different UI Layout
+   */
   selectHouse(): void {
     this.isLoading = true;
     this.clicked = true;

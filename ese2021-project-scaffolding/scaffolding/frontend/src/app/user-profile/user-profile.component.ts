@@ -1,12 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import {User} from "../models/user.model";
-import {UserService} from "../services/user.service";
-import {Router} from "@angular/router";
-import { AccessPermission } from '../models/access-permission';
 import { BaseComponent } from '../base/base.component';
 import { MatDialog } from '@angular/material/dialog';
 import { HouseSelectorComponent } from '../house-selector/house-selector.component';
-import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -60,8 +55,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
   }
 
   viewOrders():void {
-    this.router.navigate(['/order'], {queryParams : {userId : this.currentUser?.userId}})
-  }
+    this.router.navigate(['/order'], {queryParams: {userId: this.currentUser?.userId}}).then(r =>{});
+   }
 
 
   chooseHouse(): void{

@@ -1,12 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '../base/base.component';
-import { AccessPermission } from '../models/access-permission';
 import { PermissionType } from '../models/permission-type';
-import { User } from '../models/user.model';
-import { PermissionService } from '../services/permission.service';
-import { UserService } from '../services/user.service';
-
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -38,10 +32,7 @@ export class AdminDashboardComponent extends BaseComponent implements OnInit {
    ******************************************************************************************************************/
 
   ngOnInit(): void {
-    //super.initializeUser();
-    //super.evaluateAccessPermissions();
     super.ngOnInit();
     super.evaluateAccessPermissions();
   }
-
 }

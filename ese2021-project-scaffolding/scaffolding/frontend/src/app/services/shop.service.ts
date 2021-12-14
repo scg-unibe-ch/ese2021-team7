@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Product } from '../models/product.model';
 import { CategoryService } from './category.service';
@@ -149,7 +149,7 @@ export class ShopService {
 
   /**
    * Takes backend response and returns Product object.
-   * @param backendRes: response from backend
+   * @param product: response from backend
    * @return Product
    * @private
    */

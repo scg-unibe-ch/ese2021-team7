@@ -1,11 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { User } from '../models/user.model';
-import { environment } from '../../environments/environment';
-import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
-import { Observable, from, of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { BaseComponent } from '../base/base.component';
+import {AbstractControl} from '@angular/forms';
 import { RegistrationFormService } from '../services/registration-form.service';
 import { BaseFormComponent } from '../base-form/base-form.component';
 

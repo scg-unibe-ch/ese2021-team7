@@ -4,7 +4,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ProductRequestParams } from '../models/product-request-params';
-import { Product } from '../models/product.model';
 import { FormService } from './form.service';
 import { ShopService } from './shop.service';
 import { ValidatorService } from './validator.service';

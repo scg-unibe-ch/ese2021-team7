@@ -1,25 +1,12 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import {MatCardModule} from '@angular/material/card';
-import { User } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { UserService } from '../services/user.service';
-import {FormControl, FormGroup, FormBuilder, Validators, ValidationErrors, ValidatorFn, AbstractControl, FormGroupDirective} from '@angular/forms';
-import { Product } from '../models/product.model';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { CategoryService } from '../services/category.service';
-import { Category } from '../models/category';
-import { ProductService } from '../services/product.service';
+import { FormGroup} from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { BaseFormComponent } from '../base-form/base-form.component';
 import { FormType } from '../models/form-type';
 import { ProductFormService } from '../services/product-form.service';
 import { ShopService } from '../services/shop.service';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import { PermissionService } from '../services/permission.service';
-import { AccessPermission } from '../models/access-permission';
 import { PermissionType } from '../models/permission-type';
 
 @Component({
@@ -38,7 +25,6 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
   requestType = "";
 
   //override Base Component
-  // overrides
   permissionToAccess = PermissionType.AccessProductForm;
   routeIfNoAccess: string = "/shop";
 

@@ -1,16 +1,9 @@
 import { Component, EventEmitter, Inject, Injector, Input, OnInit, Optional, Output} from '@angular/core';
 import {Product} from "../../models/product.model";
 import {User} from "../../models/user.model";
-import {ActivatedRoute, Router} from "@angular/router";
-import {environment} from "../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {UserService} from "../../services/user.service";
+import {ActivatedRoute} from "@angular/router";
 import { Category } from '../../models/category';
-import { CategoryService } from 'src/app/services/category.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PermissionService } from 'src/app/services/permission.service';
-import { AccessPermission } from 'src/app/models/access-permission';
-import { FeaturePermission } from 'src/app/models/feature-permission';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BaseComponent } from 'src/app/base/base.component';
 
 @Component({
@@ -24,9 +17,6 @@ export class ProductComponent extends BaseComponent implements OnInit {
    * VARIABLES
    ******************************************************************************************************************/
 
-  //product: Product | undefined;
-  //productId: number | undefined;
-
   // DOM related switches
   showDeleteAndUpdateButton : boolean = false;
   showBuyNowButton: boolean = false;
@@ -35,9 +25,6 @@ export class ProductComponent extends BaseComponent implements OnInit {
   /*******************************************************************************************************************
    * INPUTS
    ******************************************************************************************************************/
-
-/*  @Input()
-  productCategories: Category[] = [];*/
 
   @Input()
   loggedIn : boolean  = false;

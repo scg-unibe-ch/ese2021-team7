@@ -7,8 +7,11 @@
     <mat-card-title>
       <h1 class="card-title">LOGIN</h1>
     </mat-card-title>
+    <mat-card-subtitle *ngIf="!fromRegistration">
+      Don't have an account?
+      <button mat-flat-button (click)="goToRegistration()" class="group7-toRegistration-button">Sign up</button>
+    </mat-card-subtitle>
   </mat-card-header>
-
 
     <div *ngIf="!loggedIn">
     <div style="color: red">

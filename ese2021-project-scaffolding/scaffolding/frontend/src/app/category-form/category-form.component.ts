@@ -1,15 +1,10 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import {ActivatedRoute, Router } from '@angular/router';
 import { BaseFormComponent } from '../base-form/base-form.component';
-import { AccessPermission } from '../models/access-permission';
 import { FormType } from '../models/form-type';
 import { PermissionType } from '../models/permission-type';
-import { User } from '../models/user.model';
 import { CategoryFormService } from '../services/category-form.service';
-import { PermissionService } from '../services/permission.service';
-import { UserService } from '../services/user.service';
+
 
 @Component({
   selector: 'app-category-form',

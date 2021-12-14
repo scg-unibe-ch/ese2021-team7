@@ -1,12 +1,8 @@
-import { Component, Inject, Injector, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, FormGroupDirective } from '@angular/forms';
-import {ActivatedRoute, Router } from '@angular/router';
+import { Component, Injector, OnInit } from '@angular/core';
+import {FormGroup, FormGroupDirective } from '@angular/forms';
 import { BaseComponent } from '../base/base.component';
-import { Category } from '../models/category';
 import { FormType } from '../models/form-type';
-import { CategoryFormService } from '../services/category-form.service';
 import { FormService } from '../services/form.service';
-import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-base-form',
