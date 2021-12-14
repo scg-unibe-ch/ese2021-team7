@@ -45,6 +45,7 @@ import { BaseFormComponent } from './base-form/base-form.component';
 import { BaseComponent } from './base/base.component';
 import {MatStepperModule} from '@angular/material/stepper';
 import { SelectHouseComponent } from './select-house/select-house.component';
+import { HouseSelectorComponent } from './house-selector/house-selector.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { SelectHouseComponent } from './select-house/select-house.component';
     CategoryFormComponent,
     BaseFormComponent,
     BaseComponent,
-    SelectHouseComponent
+    SelectHouseComponent,
+    HouseSelectorComponent
   ],
   entryComponents:[
     CategoryFormComponent,

@@ -8,7 +8,6 @@ import { User } from '../models/user.model';
 import { CategoryService } from '../services/category.service';
 import { PermissionService } from '../services/permission.service';
 import { UserService } from '../services/user.service';
-import {House} from "../models/house";
 import { Observable, combineLatest, zip } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { CategoryType } from '../models/category-type';
@@ -32,7 +31,6 @@ export class BaseComponent implements OnInit, OnChanges {
   //User
   loggedIn = false;
 
-  //currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
   currentUser: User | undefined;
 
   // Loading flags

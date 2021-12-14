@@ -30,7 +30,8 @@ export class SelectHouseFormService implements FormService {
    */
   buildForm(preSets?: any): FormGroup {
     return this.fb.group({
-      house: [preSets? preSets.houseId : "", Validators.required]
+      house: [preSets? preSets.houseId : "", Validators.required],
+      userId: [preSets.userId]
     });
 
   }
@@ -47,6 +48,7 @@ export class SelectHouseFormService implements FormService {
    */
   sendForm(form: FormGroup, requestType: any): Observable<any> {
     return this.httpClient.post(environment.endpointURL + requestType, {
+      userId: Number(form.value.userId),
       houseId: Number(form.value.house) //number
     } );
   }

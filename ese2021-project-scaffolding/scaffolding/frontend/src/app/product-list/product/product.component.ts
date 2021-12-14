@@ -12,7 +12,6 @@ import { PermissionService } from 'src/app/services/permission.service';
 import { AccessPermission } from 'src/app/models/access-permission';
 import { FeaturePermission } from 'src/app/models/feature-permission';
 import { BaseComponent } from 'src/app/base/base.component';
-import {House} from "../../models/house";
 
 @Component({
   selector: 'app-product',
@@ -44,7 +43,6 @@ export class ProductComponent extends BaseComponent implements OnInit {
   loggedIn : boolean  = false;
 
   @Input()
-  //currentUser: User = new User(0, '', '', false,'','','','','','','','','', new AccessPermission(false, false, false, false, false, false, false, false), new FeaturePermission(false, false, false, false));
   currentUser: User | undefined;
 
   @Input()
