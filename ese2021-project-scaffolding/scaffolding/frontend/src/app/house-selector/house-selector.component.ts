@@ -2,7 +2,7 @@ import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BaseComponent } from '../base/base.component';
 import { House } from '../models/house';
-import { SelectHouseComponent } from '../select-house/select-house.component';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-house-selector',
@@ -21,7 +21,7 @@ export class HouseSelectorComponent extends BaseComponent implements OnInit {
    ******************************************************************************************************************/
   constructor(
     public injector: Injector,
-    private dialogRef: MatDialogRef<SelectHouseComponent>,
+    private dialogRef: MatDialogRef<HouseSelectorComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: {userId: number}
   ) {
     super(injector);
@@ -47,10 +47,10 @@ export class HouseSelectorComponent extends BaseComponent implements OnInit {
     this.clicked = true;
     this.userService.selectHouse(this.dialogData.userId)
       .subscribe(house => {
-        this.house = new House(house);
+        this.house = new House(house.house);
         this.isLoading = false;
-        this.houseChosen = true;
-
+        this.houseChosen = true
+        this.currentUser?.setHouse(this.house);
         },
         error => {
         console.log(error);

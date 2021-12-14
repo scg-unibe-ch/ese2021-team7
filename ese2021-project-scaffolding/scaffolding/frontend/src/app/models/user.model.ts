@@ -18,6 +18,7 @@ export class User {
     public city: string,
     public birthday: string, // form yyyy-mm-dd
     public phoneNumber: string,
+    public houseChosen: boolean,
     public house?: House, // house for different UI layout
     public accessPermissions?: AccessPermission, // access permissions of user
     public featuresPermissions?: FeaturePermission, // (static/independent) permissions for certain features
@@ -31,8 +32,12 @@ export class User {
     this.featuresPermissions = featuresPermissions;
   }
 
-  setHouse(houseId: number): void {
-    this.house = new House(houseId);
+  setHouse(house: House): void {
+    this.house = house;
+  }
+
+  setHouseChosen(chosenHouse: boolean): void {
+    this.houseChosen = chosenHouse;
   }
 
 }

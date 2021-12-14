@@ -151,7 +151,7 @@ export class UserService {
   createUserFromBackendReponse(res: any): User {
     let user = new User(res.userId, res.userName, res.password, res.admin, res.firstName,
       res.lastName, res.email, res.street, res.houseNumber, res.zipCode, res.city,
-      res.birthday, res.phoneNumber, res.house? new House(res.house) : undefined);
+      res.birthday, res.phoneNumber, res.house? true : false, res.house? new House(res.house) : undefined);
     //set correct permissions
     if (res.admin) {
       user.setAccessPermissions(this.permissionService.getAdminAccessPermissions());

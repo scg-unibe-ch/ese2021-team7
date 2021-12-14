@@ -21,7 +21,7 @@
 
       <div *ngIf="currentUser?.house && houseChosen">
       <mat-label>House</mat-label>
-      <h2 label="house" id="house">{{currentUser?.house?.houseName}}</h2>
+      <h2 label="house" id="house">House of {{currentUser?.house?.houseName}}     <img class="house-sigil" [src]="loadImage(currentUser?.house?.houseId)"></h2>
       </div>
 
       <button mat-flat-button (click)="viewOrders()" class="group7-forms-button">

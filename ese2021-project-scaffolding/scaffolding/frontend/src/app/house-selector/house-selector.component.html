@@ -10,12 +10,12 @@
     <div class="spinner-container" *ngIf="isLoading" >
       <mat-spinner></mat-spinner>
     </div>
-    <div *ngIf="houseChosen"><p>Your house: {{currentUser?.house?.houseName}}</p></div>
+    <div *ngIf="houseChosen"><p>Your house: {{house.houseName}}</p></div>
   </div>
   <br/>
   <br/>
   <div *ngIf="houseChosen">
-    <button mat-button (click)="close()">Close</button>
+    <button mat-button (click)="close()" class="group7-forms-button">Close</button>
   </div>
 </mat-card-content>
 

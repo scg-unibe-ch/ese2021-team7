@@ -87,9 +87,9 @@ export class FeedService {
                 map(
                   (user: any) => {
                     if(requestUser == undefined || requestUser.isAdmin || !loggedIn){
-                      return this.createPostFromBackendResponse(post, this.categoryService.getCategoryById(post.category), user, VotingState.NotAllowed);  // join together and give back one OrderToDisplay
+                      return this.createPostFromBackendResponse(post, this.categoryService.getCategoryById(post.category), user, requestUser, VotingState.NotAllowed);  // join together and give back one OrderToDisplay
                     } else {
-                      return this.createPostFromBackendResponse(post, this.categoryService.getCategoryById(post.category), user);  // join together and give back one OrderToDisplay
+                      return this.createPostFromBackendResponse(post,  this.categoryService.getCategoryById(post.category), user, requestUser);  // join together and give back one OrderToDisplay
                     }
                     }
                 )
@@ -183,7 +183,7 @@ export class FeedService {
    * @param user backend response
    * @private
    */
-  createPostFromBackendResponse(post: any, category: Category, user: any, votingState?: VotingState): Post {
+  createPostFromBackendResponse(post: any, category: Category, user: any, requestUser?: User, votingState?: VotingState): Post {
     return new Post(
       post.postId,
       post.title,
@@ -192,7 +192,7 @@ export class FeedService {
       post.score,
       category,
       post.UserUserId,
-      user.userName,
+      post.UserUserId==requestUser?.userId? "Your post" : user.userName,
       votingState? votingState: this.evaluateVotingState(post.votingStatus));
   }
 

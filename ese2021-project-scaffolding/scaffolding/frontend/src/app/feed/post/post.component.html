@@ -1,6 +1,6 @@
 <mat-card class ="post">
 <mat-card-header class="group7-post-header">
-      <mat-card-subtitle>By: {{postToDisplay.CreationUserName}}</mat-card-subtitle><br/>
+      <mat-card-subtitle>{{postToDisplay.CreationUserName=="Your post"? postToDisplay.CreationUserName: "By: " + postToDisplay.CreationUserName}}</mat-card-subtitle><br/>
 
   <div fxFlex></div>
 

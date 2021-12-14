@@ -44,7 +44,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
           if (!this.currentUser.house) {
             this.userService.checkSelectHousePermission(this.currentUser)
               .subscribe(res => {
-                console.log("show button" + JSON.stringify(res));
                 this.showSelectHouseButton = res;
               });
           } else {
@@ -71,9 +70,10 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
     dialogRef.afterClosed().subscribe(dialogResult => {
       if(dialogResult) {
         this.houseChosen = dialogResult;
+        this.currentUser?.setHouseChosen(true);
       }
+      this.currentUser?.setHouseChosen(true);
       this.houseChosen = true;
-      console.log("dialog closed");
     });
   }
 

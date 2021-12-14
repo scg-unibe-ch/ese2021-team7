@@ -28,6 +28,8 @@ export class BaseComponent implements OnInit, OnChanges {
   loggedIn = false;
   currentUser: User | undefined;
 
+
+
   // Loading flags
   isLoadingUser: boolean = false;
   isLoadingCategories: boolean = false;
@@ -176,6 +178,134 @@ export class BaseComponent implements OnInit, OnChanges {
 
     //listener
     //this.userService.loading$.subscribe(res => this.isLoadingCategories = res);
+  }
+
+
+  /*******************************************************************************************************************
+   * DOM
+   ******************************************************************************************************************/
+
+  /**
+   * Sets the correct .css class for the background of the top navigation.
+   */
+  loadStyles(): string {
+    switch(this.currentUser?.house?.houseId) {
+      case 1:
+        return 'house-stark';
+        break;
+      case 2:
+        return 'house-lannister';
+        break;
+      case 3:
+        return 'house-arryn';
+        break;
+      case 4:
+        return 'house-tully';
+        break;
+      case 5:
+        return 'house-baratheon';
+        break;
+      case 6:
+        return 'house-greyjoy';
+        break;
+      case 7:
+        return 'house-targaryen';
+        break;
+      case 8:
+        return 'house-martell';
+        break;
+      case 9:
+        return 'house-tyrell';
+        break;
+      default:
+        return '';
+        break;
+    }
+  }
+
+  /**
+   * Returns the path to the house sigil.
+   */
+  loadImage(houseId: number): string {
+    switch(houseId) {
+      case 1:
+        return 'assets/houses/sigil/stark.png';
+        break;
+      case 2:
+        return 'assets/houses/sigil/lannister.png';
+        break;
+      case 3:
+        return 'assets/houses/sigil/arryn.png';
+        break;
+      case 4:
+        return 'assets/houses/sigil/tully.png';
+        break;
+      case 5:
+        return 'assets/houses/sigil/barratheon.png';
+        break;
+      case 6:
+        return 'assets/houses/sigil/greyjoy.png';
+        break;
+      case 7:
+        return 'assets/houses/sigil/targaryen.png';
+        break;
+      case 8:
+        return 'assets/houses/sigil/martell.png';
+        break;
+      case 9:
+        return 'assets/houses/sigil/tyrell.png';
+        break;
+      default:
+        return '';
+        break;
+    }
+  }
+
+  /**
+   * Returns path to the house background image.
+   */
+  getBackground(user: User | undefined ): string {
+    if(user == undefined) return '';
+    else {
+      if (user.isAdmin) return 'group7-admin-main-content';
+      else {
+        if (!user.houseChosen) return '';
+        else {
+          switch (user.house?.houseId) {
+            case 1:
+              return 'house-stark-background';
+              break;
+            case 2:
+              return 'house-lannister-background';
+              break;
+            case 3:
+              return 'house-arryn-background';
+              break;
+            case 4:
+              return 'house-tully-background';
+              break;
+            case 5:
+              return 'house-baratheon-background';
+              break;
+            case 6:
+              return 'house-greyjoy-background';
+              break;
+            case 7:
+              return 'house-targaryen-background';
+              break;
+            case 8:
+              return 'house-martell-background';
+              break;
+            case 9:
+              return 'house-tyrell-background';
+              break;
+            default:
+              return '';
+              break;
+          }
+        }
+      }
+    }
   }
 
 
