@@ -1,20 +1,27 @@
 <div class="card-wrapper-center">
-  <div class="shop-wrapper" *ngIf="!isLoadingUser && !isLoadingCategories">
-    <div class="buttons-wrapper">
-    <button mat-flat-button *ngIf="canAddProduct" (click)="addProduct()" class="group7-forms-button">
-      Add new product
-    </button>
-    <button mat-flat-button (click) ="refreshShop()" class="group7-forms-button">
-      Reload shop
-    </button>
 
-    <mat-form-field appearance="outline">
-      <mat-select  placeholder="Choose category:" (selectionChange)="filterShop($event.value)" #selectFilter class="group7-select">
-        <mat-option value="0">No Filter</mat-option>
-        <mat-option *ngFor="let category of productCategories" [value]="category.id">{{category.name}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    </div>
+  <mat-card>
+    <mat-card-content class="feed-tools">
+
+        <button mat-flat-button *ngIf="canAddProduct" (click)="addProduct()" class="group7-forms-button feed-tools-fields">
+          Add new product
+        </button>
+        <button mat-flat-button (click) ="refreshShop()" class="group7-forms-button feed-tools-fields" >
+          Reload shop
+        </button>
+
+        <mat-form-field appearance="outline" class="feed-tools-fields">
+          <mat-select  placeholder="Filter by category:" (selectionChange)="filterShop($event.value)" #selectFilter class="group7-select">
+            <mat-option value="0">No Filter</mat-option>
+            <mat-option *ngFor="let category of productCategories" [value]="category.id">{{category.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+    </mat-card-content>
+  </mat-card>
+
+
+  <div class="shop-wrapper" *ngIf="!isLoadingUser && !isLoadingCategories">
 
     <div  *ngFor="let productToDisplay of productList" class="group7-grid-tile shop-item">
       <app-product

@@ -26,14 +26,10 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     super.initializeCurrentValues().subscribe(
       res => {
-        console.log("arrival" + JSON.stringify(res));
-
         this.loggedIn = res[1];
         this.currentUser = res[2];
         this.postCategories = res[3];
         this.productCategories = res[4];
-
-        console.log("user" + JSON.stringify(this.currentUser));
 
         //set birthday and address
         if (this.currentUser != undefined) {
@@ -58,7 +54,9 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
     this.router.navigate(['/order'], {queryParams: {userId: this.currentUser?.userId}}).then(r =>{});
    }
 
-
+  /**
+   * Allows user to select a house for a different UI Layout
+   */
   chooseHouse(): void{
     const dialogRef = this.dialog.open(HouseSelectorComponent, {
       maxWidth: '400px',
@@ -74,6 +72,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
       }
       this.currentUser?.setHouseChosen(true);
       this.houseChosen = true;
+      this.showSelectHouseButton = false;
     });
   }
 

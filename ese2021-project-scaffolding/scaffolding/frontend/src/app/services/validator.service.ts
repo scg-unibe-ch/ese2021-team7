@@ -43,20 +43,16 @@ export class ValidatorService {
    */
   checkProduct(form: FormGroup): {[s: string]: boolean} | null{
     if(form.value.productImage == "" && form.value.productDescription == ""){
-      console.log("error");
       return {'missingProductContent': true};
     }
-    console.log("correct");
     return null;
   };
 
 
   checkPost(form: FormGroup): {[s: string]: boolean} | null{
     if(form.value.postImage == "" && form.value.postText == ""){
-      console.log("error");
       return {'missingPostContent': true};
     }
-    console.log("correct");
     return null;
   };
 

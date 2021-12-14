@@ -20,8 +20,6 @@ export class ShopDataSourceService extends DataSource<Product[]> {
   // used for loading
   private loadingSource = new BehaviorSubject<boolean>(false);
 
-  // stream of loading
-  public loading$ = this.loadingSource.asObservable();
 
   /*******************************************************************************************************************
    * Constructor
