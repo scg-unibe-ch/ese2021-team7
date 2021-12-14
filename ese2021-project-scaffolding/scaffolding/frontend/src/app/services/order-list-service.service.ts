@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import { Observable } from 'rxjs';
-import { from } from 'rxjs';
-import { of } from 'rxjs';
-import {catchError, concatAll, concatMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import { ProductService } from './product.service';
 import { forkJoin } from 'rxjs';
 import { Order } from '../models/order';
@@ -138,16 +136,12 @@ export class OrderListServiceService {
     switch(orderStatus){
       case 0:
         return "Pending";
-        break;
       case 1:
         return "Shipped";
-        break;
       case 2:
         return "Cancelled";
-        break;
       default:
         return "Undefined";
-        break;
     }
   }
 
@@ -155,13 +149,10 @@ export class OrderListServiceService {
     switch(paymentMethod){
       case 1:
         return "Invoice";
-        break;
       case 2:
         return "Credit Card";
-        break;
       default:
         return "Undefined";
-        break;
     }
   }
 

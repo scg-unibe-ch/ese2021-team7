@@ -18,7 +18,7 @@ import { Observable, combineLatest } from 'rxjs';
  *
  * Handles user management and permissions.
  */
-export class BaseComponent implements OnInit, OnChanges {
+export class BaseComponent implements OnInit {
 
   /*******************************************************************************************************************
    * VARIABLES
@@ -64,11 +64,6 @@ export class BaseComponent implements OnInit, OnChanges {
   /*******************************************************************************************************************
    * LIFECYCLE HOOKS
    ******************************************************************************************************************/
-
-  ngOnChanges(): void {
-    //this.checkUserStatus();
-  }
-
 
   ngOnInit(): void {
 
@@ -127,8 +122,6 @@ export class BaseComponent implements OnInit, OnChanges {
     this.currentUser = this.userService.getUser();
 
     //listener
-    //this.userService.loading$.subscribe(res => this.isLoadingUser = res);
-
     this.checkUserStatus();
   }
 
@@ -175,9 +168,6 @@ export class BaseComponent implements OnInit, OnChanges {
     this.categoryService.postCategories$.subscribe(res => this.postCategories = res);
     //current value of post categories
     this.postCategories = this.categoryService.getPostCategories();
-
-    //listener
-    //this.userService.loading$.subscribe(res => this.isLoadingCategories = res);
   }
 
 
@@ -192,34 +182,24 @@ export class BaseComponent implements OnInit, OnChanges {
     switch(this.currentUser?.house?.houseId) {
       case 1:
         return 'house-stark';
-        break;
       case 2:
         return 'house-lannister';
-        break;
       case 3:
         return 'house-arryn';
-        break;
       case 4:
         return 'house-tully';
-        break;
       case 5:
         return 'house-baratheon';
-        break;
       case 6:
         return 'house-greyjoy';
-        break;
       case 7:
         return 'house-targaryen';
-        break;
       case 8:
         return 'house-martell';
-        break;
       case 9:
         return 'house-tyrell';
-        break;
       default:
         return '';
-        break;
     }
   }
 
@@ -230,34 +210,24 @@ export class BaseComponent implements OnInit, OnChanges {
     switch(houseId) {
       case 1:
         return 'assets/houses/sigil/stark.png';
-        break;
       case 2:
         return 'assets/houses/sigil/lannister.png';
-        break;
       case 3:
         return 'assets/houses/sigil/arryn.png';
-        break;
       case 4:
         return 'assets/houses/sigil/tully.png';
-        break;
       case 5:
         return 'assets/houses/sigil/barratheon.png';
-        break;
       case 6:
         return 'assets/houses/sigil/greyjoy.png';
-        break;
       case 7:
         return 'assets/houses/sigil/targaryen.png';
-        break;
       case 8:
         return 'assets/houses/sigil/martell.png';
-        break;
       case 9:
         return 'assets/houses/sigil/tyrell.png';
-        break;
       default:
         return '';
-        break;
     }
   }
 

@@ -161,7 +161,6 @@ export class OrderListComponent extends BaseComponent implements OnInit {
    * @param isAdmin
    */
   initializeDataSource(isAdmin: undefined | boolean): void{
-    //this.getListOfOrder();
     this.dataSource = new OrdersDataSourceService(this.orderListService, this.productService, this.httpClient);
     if(isAdmin) {
       this.dataSource.loadOrders();

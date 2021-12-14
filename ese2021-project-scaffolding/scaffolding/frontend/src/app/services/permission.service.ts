@@ -159,15 +159,12 @@ export class PermissionService {
       switch (post.votingState){
         case VotingState.NotVoted: {
           return true;
-          break;
         }
         case VotingState.Upvoted: {
           return false;
-          break;
         }
         case VotingState.Downvoted: {
           return true;
-          break;
         }
         default: {
          return false;
@@ -190,15 +187,12 @@ export class PermissionService {
       switch (post.votingState) {
         case VotingState.NotVoted: {
           return true;
-          break;
         }
         case VotingState.Upvoted: {
           return true;
-          break;
         }
         case VotingState.Downvoted: {
           return false;
-          break;
         }
         default: {
           return false;
