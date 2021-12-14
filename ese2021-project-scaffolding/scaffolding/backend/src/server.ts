@@ -1,12 +1,8 @@
 import express, {Application} from 'express';
 import morgan from 'morgan';
-import {TodoItemController} from './controllers/todoitem.controller';
-import {TodoListController} from './controllers/todolist.controller';
 import {UserController} from './controllers/user.controller';
 import {SecuredController} from './controllers/secured.controller';
 import {Sequelize} from 'sequelize';
-import {TodoList} from './models/todolist.model';
-import {TodoItem} from './models/todoitem.model';
 import {User} from './models/user.model';
 import {Post} from './models/post.model';
 import {Product} from './models/product.model';
@@ -17,7 +13,6 @@ import {Category} from './models/category.model';
 
 import cors from 'cors';
 import {AdminController} from './controllers/admin.controller';
-import {ItemImage} from './models/itemImage.model';
 import {PostController} from './controllers/post.controller';
 import {CategoryController} from './controllers/category.controller';
 import {ProductController} from './controllers/product.controller';
@@ -39,18 +34,12 @@ export class Server {
         this.server = this.configureServer();
         this.sequelize = this.configureSequelize();
 
-        TodoItem.initialize(this.sequelize); // creates the tables if they dont exist
-        TodoList.initialize(this.sequelize);
         User.initialize(this.sequelize);
-        ItemImage.initialize(this.sequelize);
         Post.initialize(this.sequelize);
         Product.initialize(this.sequelize);
         Order.initialize(this.sequelize);
         Vote.initialize(this.sequelize);
         Category.initialize(this.sequelize);
-        TodoItem.createAssociations();
-        TodoList.createAssociations();
-        ItemImage.createAssociations();
         Post.createAssociations();
         Order.createAssociations();
         Vote.createAssociations();
@@ -84,9 +73,7 @@ export class Server {
         return express()
             .use(cors())
             .use(express.json())                    // parses an incoming json to an object
-            .use(morgan('tiny'))                    // logs incoming requests
-            .use('/todoitem', TodoItemController)   // any request on this path is forwarded to the TodoItemController
-            .use('/todolist', TodoListController)
+            .use(morgan('tiny'))
             .use('/user', UserController)
             .use('/post', PostController)
             .use('/order', OrderController)

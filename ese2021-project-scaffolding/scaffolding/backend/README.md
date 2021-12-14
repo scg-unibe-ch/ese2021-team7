@@ -41,7 +41,6 @@ These are links to some of the files that we have implemented/modified when deve
 - Registration:
 	- [service](./src/services/user.service.ts)
 	- [controller](./src/controllers/user.controller.ts)
-- [crud](./src/controllers/todolist.controller.ts)
 - [typescript config](./src/tsconfig.json)
 - [routing](./src/controllers)
 - [API construction](./src/server.ts)
