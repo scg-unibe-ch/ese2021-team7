@@ -1,10 +1,10 @@
-<mat-sidenav-container class="group7-sidenav-container" >
+<mat-sidenav-container class="group7-sidenav-container" [ngClass]="getBackground(currentUser? currentUser : undefined)">
 
   <!-- Side navigation -->
-  <mat-sidenav #sidenav  mode="push" [(opened)]="opened" (opened)="events.push('open!')"
-               (closed)="events.push('close!')" class="group7-sidenav">
+  <mat-sidenav class="group7-sidenav" #sidenav  mode="push" [(opened)]="opened" (opened)="events.push('open!')"
+               (closed)="events.push('close!')" >
     <div class="group7-sidenav-close">
-      <button class="group7-sidenav-closebutton" mat-icon-button (click)="sidenav.close()"> <mat-icon>close</mat-icon></button>
+      <button  mat-icon-button (click)="sidenav.close()"> <mat-icon>close</mat-icon></button>
     </div>
     <mat-action-list class="group7-sidenav-list" (click)="sidenav.close()">
     <button mat-list-item class="group7-sidenav-button"  routerLink="/feed" routerLinkActive="active">Feed</button>
@@ -22,22 +22,24 @@
 
     <!-- Toggle button -->
     <mat-toolbar>
-      <button mat-icon-button class="menu-icon" aria-label="Menu" (click)="sidenav.toggle()"  >
+      <button mat-icon-button aria-label="Menu" (click)="sidenav.toggle()"  >
         <mat-icon>menu</mat-icon>
       </button>
 
       <!-- Logo -->
-      <span><a routerLink="/home"><img src="assets/got-logo.png"  width="150px"/></a></span>
+      <span class="main-logo"><a routerLink="/home"><img src="assets/got-logo.png"  width="150px"/></a></span>
 
       <!-- House Icon -->
       <span class="house-icon-navigation-bar" *ngIf="currentUser?.houseChosen"><img [src]="loadImage(currentUser? currentUser.house?.houseId : 0)"  class="house-sigil"></span>
       <span class="spacer"></span>
 
       <!-- Profile icon -->
-      <button mat-icon-button class="profile-icon" aria-label="Profile" [matMenuTriggerFor]="profile">
+      <div class="profile-icon">
+      <button mat-icon-button class="profile-icon-button" aria-label="Profile" [matMenuTriggerFor]="profile">
         <mat-icon *ngIf="!loggedIn">help</mat-icon>
         <span *ngIf="loggedIn" color="white">{{currentUser?.username || "ERROR"}}</span>
       </button>
+      </div>
 
       <!-- Profile menu -->
       <mat-menu #profile="matMenu">
