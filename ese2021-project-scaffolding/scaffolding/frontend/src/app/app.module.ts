@@ -35,7 +35,6 @@ import { ConfirmationDialogComponent } from './ui/confirmation-dialog/confirmati
 import {MatSidenavModule} from '@angular/material/sidenav';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import {MatTableModule} from '@angular/material/table';
-import { UserListComponent } from './user-list/user-list.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CategoryFormComponent } from './category-form/category-form.component';
@@ -61,7 +60,6 @@ import { HouseSelectorComponent } from './house-selector/house-selector.componen
     ProductFormComponent,
     ConfirmationDialogComponent,
     AdminDashboardComponent,
-    UserListComponent,
     CategoryListComponent,
     CategoryFormComponent,
     BaseFormComponent,
@@ -109,7 +107,6 @@ import { HouseSelectorComponent } from './house-selector/house-selector.componen
       { path: 'product', component: ProductComponent},
       { path: 'order', component: OrderListComponent},
       { path: 'admin-dashboard', component: AdminDashboardComponent},
-      { path: 'user-list', component:UserListComponent},
       { path: 'category-list', component: CategoryListComponent},
       { path: 'category-form', component: CategoryFormComponent}
     ]),

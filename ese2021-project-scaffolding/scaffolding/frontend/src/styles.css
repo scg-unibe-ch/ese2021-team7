@@ -1,31 +1,108 @@
+
+/* General*/
+html, body { height: 100%; }
 body {
-  margin: 30px;
+  margin: 0px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   background-attachment: fixed;
   height: 100%;
   background-image: url("assets/the_wall.jpg");
+  padding: 0px;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Sidenav */
+
+.group7-sidenav{
+  background-color: #bcb8b8 !important; /* Black*/
+  padding-top: 15px !important; /* Place content 60px from the top */
+  border: none !important;
+  margin: 0px !important;
+  height: 100% !important;
+  overflow-x: hidden !important; /* Disable horizontal scroll */
+  opacity: 85%;
+  border: 1px solid #262626;
+}
+
+.group7-sidenav-container{
+  background-color:transparent !important;
+  height: 100%;
+  width: 100%;
+}
+
+.main-logo {
+  margin-left: 15px !important;
+}
+
+.group7-sidenav-close{
+  margin-right: 0px;
+  margin-left: 0px;
+  text-align: right !important;
+}
+
+.group7-sidenav-list{
+  padding: 0px !important;
+  overflow: hidden;
+  margin: 0px;
+}
+
+.mat-list-item{
+  font-size: 25px !important;
+  color: #262626;
+  width: 200px !important;
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+
+
+.group7-sidenav-button{
+  font-size: 40px;
+  color: #262626;
+  padding: 0px !important;
+  margin: 0px;
+}
+
+
+.spacer{
+  flex: 1 1 auto;
+}
+
+.profile-icon {
+  width: 100px;
+  align: left !important;
+  text-align: middle !important;
+  overflow: hidden;
+}
 
 
 .group7-main-content{
   height: 100%;
   width: 100%;
+  margin:0px !important;
+  padding: 0px !important;
 }
 
+
+/* Different background for admin */
 .group7-admin-main-content{
   background-color: #eeeeee !important;
   background-image: none !important;
 }
 
-
-
-button, input {
-  margin-left: 15px !important;
-  margin-right: 15px !important;
+.mat-toolbar{
+  background-color: #262626;
+  color: #fff;
 }
 
+
+
+
+/* Mat Cards */
+
+.group7-card{
+  background-color:white !important;
+}
 
 .mat-card {
   margin: 20px;
@@ -37,14 +114,26 @@ button, input {
   margin-right: 0px;
 }
 
+.card-title{
+  font-family: 'Libre Baskerville', serif !important;
+}
 
 .card-wrapper-center{
   margin-left: auto;
   margin-right: auto;
-  max-width: 400px;
+  max-width: 800px;
   height: 100% !important;
 }
 
+
+
+/* Registration Form and Login */
+
+.login-wrapper {
+  max-width: 400px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 
 .form-wrapper{
@@ -62,27 +151,16 @@ button, input {
   text-align: right;
 }
 
-.card-title{
-  font-family: 'Libre Baskerville', serif !important;
-}
-
 .group7-color-overlay{
   color: #262626 !important;
 }
 
-.mat-toolbar{
-  background-color: #262626;
-  color: #fff;
-}
-
-.group7-card{
-  background-color:white !important;
-}
 
 .group7-forms-button{
   background-color: #191919 !important;
   color: #fff;
   border-radius: 0px !important;
+  margin: 15px !important;
 }
 
 .group7-forms-button:disabled{
@@ -98,18 +176,17 @@ button, input {
   width:100% !important;
 }
 
-.mat-list-item{
-  display: inline-block;
-  margin: 40px;
 
-}
+
+
+
+/* Feed and Post*/
 
 
 .feed-wrapper{
   display: inline-block;
   margin: 0 auto;
   text-align: center;
-  margin-top: 40px !important;
 }
 
 .feed-item{
@@ -127,10 +204,6 @@ button, input {
 
 }
 
-.group7-post-header{
-
-
-}
 
 .group7-post-content{
   color: #262626;
@@ -144,10 +217,7 @@ button, input {
   font-family: 'Libre Baskerville', serif !important;
 }
 
-.post-header-wrapper{
 
-
-}
 
 .post-profile{
 
@@ -195,15 +265,44 @@ button, input {
   max-height: 200px;
 }
 
-.post-category {
-
-}
 .post-score{
   font-size: 1em !important;
   color: #262626 !important;
   vertical-align: bottom !important;
   height: 100% !important
 }
+
+
+.buttons-wrapper{
+  width: 100%;
+  height: 100%;
+  background-color: #eeeeee !important;
+}
+
+.group7-upvoted {
+  color: #228b22 !important;
+  background-color: #e1e1e1 !important;
+}
+
+.group7-downvoted {
+  color: #cc1212 !important;
+  background-color: #e1e1e1 !important;
+}
+
+.feed-tools {
+  text-align: center !important;
+  padding: 0px;
+}
+
+.feed-tools-fields {
+  margin: 10px !important;
+}
+
+
+
+
+
+/* Shop and Products */
 
 .purchase-form{
   max-width: 800px !important;
@@ -267,6 +366,11 @@ button, input {
   height: 500px;
 }
 
+
+
+
+/* Admin Dashboard */
+
 .admin-dashboard-card{
   cursor: pointer;
 }
@@ -293,12 +397,16 @@ button, input {
   color: #262626;
 }
 
+
+
+
+/* Tables */
+
 .table-wrapper{
   margin-left: auto;
   margin-right: auto;
   min-height: 500px;
   width:100%;
-  height: 100% !important;
 }
 table {
   width: 100%;
@@ -315,26 +423,10 @@ table {
   min-height: 500px;
 }
 
-.buttons-wrapper{
-  width: 100%;
-  height: 100%;
-  background-color: #eeeeee !important;
-}
 
-.group7-upvoted {
-  color: #228b22 !important;
-  background-color: #e1e1e1 !important;
-}
 
-.group7-downvoted {
-  color: #cc1212 !important;
-  background-color: #e1e1e1 !important;
-}
 
-.spacer{
-  flex: 1 1 auto;
-}
-
+/* Profile page */
 
 .group7-profile-page-wrapper{
   max-width: 700px !important;

@@ -35,7 +35,6 @@ export class PostFormService implements FormService {
    * @param preSets: post to be updated (if applicable)
    */
   buildForm(preSets?: any): FormGroup{
-    //console.log("Presets: " + JSON.stringify(preSets));
     return this.fb.group({
       "postTitle": new FormControl(preSets? preSets.title : "", Validators.required),
       "postImage": new FormControl(preSets? preSets.image : ""),

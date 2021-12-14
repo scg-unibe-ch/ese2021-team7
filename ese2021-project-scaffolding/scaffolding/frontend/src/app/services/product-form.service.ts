@@ -36,7 +36,6 @@ export class ProductFormService implements FormService{
    * @param preSets: product to be updated (if applicable)
    */
   buildForm(preSets?: any): FormGroup{
-    console.log("Presets: " + JSON.stringify(preSets));
     return this.fb.group({
       'productId' : new FormControl(preSets? preSets.productId : ""),
       'productTitle': new FormControl(preSets? preSets.title : "", Validators.required),
@@ -94,17 +93,4 @@ export class ProductFormService implements FormService{
       return {...params, productId: Number(form.value.productId)};
     }
   }
-
-/*
-  checkProduct(form: FormGroup): {[s: string]: boolean} | null {
-    if(form.value.productImage == "" && form.value.productDescription == ""){
-      console.log("error");
-      return {'missingProductContent': true};
-    }
-    console.log("correct");
-    return null;
-  };
-*/
-
-
 }

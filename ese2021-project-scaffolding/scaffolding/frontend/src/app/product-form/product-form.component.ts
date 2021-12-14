@@ -28,11 +28,11 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
   permissionToAccess = PermissionType.AccessProductForm;
   routeIfNoAccess: string = "/shop";
 
-  //used to decide wheter update or create form
+  //used to decide whether update or create form
   isUpdate: boolean = false;
   isCreate: boolean = false;
 
-  // used because of asyn call
+  // used because of async call
   isLoading: boolean = false;
 
   /*******************************************************************************************************************
@@ -104,14 +104,12 @@ export class ProductFormComponent extends BaseFormComponent implements OnInit {
       subscribe(product => {
         this.initializeForm(product); //initialize form with preset
         this.isLoading = false;
-        console.log(this.form);
       });
     } else if(this.dialogData.isCreate) {
       this.isUpdate = false;
       this.isCreate= true;
       this.requestType = "product/create";
       this.initializeForm(); //initialize form empty
-      console.log(this.form);
     }
   }
 
