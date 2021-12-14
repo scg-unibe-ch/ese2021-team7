@@ -26,18 +26,9 @@ export class AppComponent extends BaseComponent implements OnInit {
   permissionToAccess = PermissionType.AccessHome;
   routeIfNoAccess: string = "/home";
 
-
-
-
-
- // enableCreatePost: boolean = false;
-
   //used for sidenav
   events: string[] = [];
   opened: boolean | undefined;
-
-  //used for Admin Dashboard
-  //isAdmin = false;
 
   /*******************************************************************************************************************
    * CONSTRUCTOR
@@ -51,50 +42,25 @@ export class AppComponent extends BaseComponent implements OnInit {
     super(injector);
   }
 
+  /*******************************************************************************************************************
+   * LIFECYCLE HOOKS
+   ******************************************************************************************************************/
+
   ngOnInit() {
     super.initializeUser();
     super.evaluateAccessPermissions();
     //this.getCurrentUser();
   }
 
-  /*getCurrentUser(): void {
-    // listen for changes in loggedIn
-    this.userService.loggedIn$.subscribe(res => {
-      this.loggedIn = res
-    }, error => {
-      this.enableCreatePost = false;
-    });
-    // listen for changes in current user
-    this.userService.user$.subscribe(res => {
-      //this.enableCreatePost = true;
-      this.user = res;
-      this.enableCreatePost = this.checkPermissionConditions(res?.isAdmin);
-      this.isAdmin = res?.isAdmin;
-    }, error => {
-      this.enableCreatePost = false;
-      this.checkPermissionConditions(false)
-    });
-    // Current value
-    this.user = this.userService.getUser();
-    this.enableCreatePost = this.checkPermissionConditions(this.user?.isAdmin);
-  }*/
-
-/*  checkPermissionConditions(isAdmin: boolean | undefined): boolean {
-    if(this.userService.getLoggedIn() && !isAdmin){
-      return true;
-    }
-    return  false;
-  }*/
+  /*******************************************************************************************************************
+   * USER ACTIONS
+   ******************************************************************************************************************/
 
   logoutUser(): void {
     this.userService.logoutUser();
     this.router.navigate(['../home']).then(r =>{});
-    /*    localStorage.removeItem('userId');
-        localStorage.removeItem('userToken');
-
-        this.userService.setLoggedIn(false);
-        this.userService.setUser(undefined);
-        this.router.navigate(['../home']).then(r =>{});*/
   }
+
+
 
 }

@@ -118,7 +118,7 @@ button, input {
 .post{
   margin: 0px !important;
   max-width: 400px;
-  background-color: #white !important;
+  background-color: white !important;
   border: 0px !important;
 
 }
@@ -316,3 +316,104 @@ table {
   margin-left: auto;
   margin-right: auto;
 }
+
+
+/* House icon placement*/
+
+.house-icon-navigation-bar {
+  padding-left: 30px;
+}
+
+.house-sigil {
+  width: 25px !important;
+}
+
+
+/* Styles for houses background navigation*/
+
+.house-greyjoy {
+  background-color: #1a1a1a !important;
+}
+
+.house-arryn {
+  background-color: #59a8ea !important;
+}
+
+.house-baratheon {
+  background-color: #fecf02 !important;
+}
+
+.house-lannister {
+  background-color: #f5ec5f !important;
+}
+
+.house-martell {
+  background-color: #f0863a !important;
+}
+
+.house-stark {
+  background-color: #d4cdb2 !important;
+}
+
+.house-targaryen {
+  background-color: #282828 !important;
+}
+
+.house-tully {
+  background-color: #ad432e !important;
+}
+
+.house-tyrell {
+  background-color: #8d9f80 !important;
+}
+
+/* Backgrounds for houses */
+
+.house-stark-background {
+  background-attachment: fixed;
+  background-image: url("assets/houses/backgrounds/stark-background.jpg");
+}
+
+.house-lannister-background {
+  background-attachment: fixed;
+  background-image: url("assets/houses/backgrounds/lannister-background.jpg") !important;
+}
+
+.house-baratheon-background {
+  background-attachment: fixed;
+  background-image: url("assets/houses/backgrounds/baratheon-background.jpg");
+}
+
+
+.house-martell-background {
+  background-attachment: fixed;
+  background-image: url("assets/houses/backgrounds/martell-background.jpg");
+}
+
+.house-targaryen-background {
+  background-attachment: fixed;
+  background-image: url("assets/houses/backgrounds/targaryen-background.jpg");
+}
+
+.house-tully-background {
+  background-attachment: fixed;
+  background-image: url("assets/houses/backgrounds/tully-background.jpg");
+}
+
+.house-tyrell-background {
+  background-attachment: fixed;
+  background-image: url("assets/houses/backgrounds/tyrell-background.jpg");
+}
+
+.house-greyjoy-background {
+  background-attachment: fixed;
+  background-image: url("assets/houses/backgrounds/greyjoy-background.jpg");
+}
+
+.house-arryn-background {
+  background-attachment: fixed;
+  background-image: url("assets/houses/backgrounds/arryn-background.jpg");
+}
+
+
+

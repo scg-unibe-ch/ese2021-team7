@@ -37,10 +37,11 @@ export class HouseSelectorComponent extends BaseComponent implements OnInit {
     this.clicked = true;
     this.userService.selectHouse(this.dialogData.userId)
       .subscribe(house => {
-        this.house = new House(house);
+        this.house = new House(house.house);
         this.isLoading = false;
-        this.houseChosen = true;
-
+        this.houseChosen = true
+        console.log("House: "  + JSON.stringify(this.house));
+        this.currentUser?.setHouse(this.house);
         },
         error => {
         console.log(error);

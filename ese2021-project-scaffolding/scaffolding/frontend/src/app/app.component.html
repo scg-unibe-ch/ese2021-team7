@@ -1,4 +1,6 @@
 <mat-sidenav-container class="group7-sidenav-container" >
+
+  <!-- Side navigation -->
   <mat-sidenav #sidenav  mode="push" [(opened)]="opened" (opened)="events.push('open!')"
                (closed)="events.push('close!')" class="group7-sidenav">
     <div class="group7-sidenav-close">
@@ -19,17 +21,28 @@
   </mat-sidenav>
   <mat-sidenav-content class="group7-sidenav-content">
 
+    <!-- Toolbar -->
+
+    <!-- Toggle button -->
     <mat-toolbar>
       <button mat-icon-button class="menu-icon" aria-label="Menu" (click)="sidenav.toggle()"  >
         <mat-icon>menu</mat-icon>
       </button>
 
-      <span><a routerLink="/home" class="logo"><img src="assets/got-logo.png"  width="150px"/></a></span>
+      <!-- Logo -->
+      <span><a routerLink="/home"><img src="assets/got-logo.png"  width="150px"/></a></span>
+
+      <!-- House Icon -->
+      <span class="house-icon-navigation-bar" *ngIf="currentUser?.houseChosen"><img [src]="loadImage(currentUser? currentUser.house?.houseId : 0)"  class="house-sigil"></span>
       <span class="spacer"></span>
+
+      <!-- Profile icon -->
       <button mat-icon-button class="profile-icon" aria-label="Profile" [matMenuTriggerFor]="profile">
         <mat-icon *ngIf="!loggedIn">help</mat-icon>
         <span *ngIf="loggedIn" color="white">{{currentUser?.username || "ERROR"}}</span>
       </button>
+
+      <!-- Profile menu -->
       <mat-menu #profile="matMenu">
         <button mat-menu-item  routerLink="/admin-dashboard" routerLinkActive="active" *ngIf="currentUser?.isAdmin">Admin dashboard</button>
         <button mat-menu-item  routerLink="/profile" routerLinkActive="active" *ngIf="loggedIn">Profile</button>
@@ -38,7 +51,9 @@
         <button mat-menu-item  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
       </mat-menu>
     </mat-toolbar>
-    <div class="group7-main-content" [ngClass]="currentUser?.isAdmin? 'group7-admin-main-content' : ''">
+
+    <!-- Main content -->
+    <div class="group7-main-content" [ngClass]="getBackground(currentUser? currentUser : undefined)">
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
