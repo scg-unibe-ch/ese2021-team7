@@ -255,6 +255,14 @@ button, input {
   overflow:hidden;
 }
 
+.product-detailed-view{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  max-width: 400px;
+  height: 500px;
+}
+
 .admin-dashboard-title{
   text-align: center;
 }

@@ -16,8 +16,6 @@
     </mat-form-field>
     </div>
 
-
-
     <div  *ngFor="let productToDisplay of productList" class="group7-grid-tile shop-item">
       <app-product
         [productToDisplay]="productToDisplay"
@@ -27,10 +25,8 @@
         (update)="updateProduct($event)"
         (buy)="buyProduct($event)"
         (showDetails)="showProductDetails($event)">
-      <!--  [productCategories]="productCategories"-->
       </app-product>
     </div>
-
 
   </div>
 </div>
