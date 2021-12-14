@@ -1,25 +1,25 @@
 <h1>Welcome to the Admin Dashboard, {{currentUser.username}}!</h1>
-<mat-grid-list cols="3" rowHeight="2:1">
+<mat-grid-list cols="2" rowHeight="3:1">
   <mat-grid-tile>
-    <mat-card>
+    <mat-card class = "admin-dashboard-card" routerLink="/feed" routerLinkActive="active">
       <mat-card-title class="admin-dashboard-title">
-        Users
+        Feed
       </mat-card-title>
       <mat-card-content class="admin-dashboard-content">
             <mat-icon class="material-icons-outlined admin-dashboard-icons">
-          account_circle
+          article
           </mat-icon>
       </mat-card-content>
-      <mat-card-actions>
-        <button mat-button class="group7-forms-button" routerLink="/user-list" routerLinkActive="active">
-          Manage Users
+      <mat-card-actions class="admin-dashboard-actions">
+        <button mat-button class="group7-forms-button" routerLink="/feed" routerLinkActive="active">
+          Manage Posts
         </button>
       </mat-card-actions>
     </mat-card>
   </mat-grid-tile>
   <mat-grid-tile>
-    <mat-card>
-      <mat-card-title>
+    <mat-card class = "admin-dashboard-card" routerLink="/order" routerLinkActive="active">
+      <mat-card-title class="admin-dashboard-title">
         Orders
       </mat-card-title>
       <mat-card-content class="admin-dashboard-content">
@@ -27,7 +27,7 @@
           local_shipping
         </mat-icon>
       </mat-card-content>
-      <mat-card-actions>
+      <mat-card-actions class="admin-dashboard-actions">
         <button mat-button class="group7-forms-button"  routerLink="/order" routerLinkActive="active">
           Manage Orders
         </button>
@@ -35,8 +35,8 @@
     </mat-card>
   </mat-grid-tile>
   <mat-grid-tile>
-    <mat-card>
-      <mat-card-title>
+    <mat-card class = "admin-dashboard-card" routerLink="/category-list" routerLinkActive="active">
+      <mat-card-title class="admin-dashboard-title">
         Categories
       </mat-card-title>
       <mat-card-content class="admin-dashboard-content">
@@ -44,7 +44,7 @@
           topic
         </mat-icon>
       </mat-card-content>
-      <mat-card-actions>
+      <mat-card-actions  class="admin-dashboard-actions">
         <button mat-button class="group7-forms-button" routerLink="/category-list" routerLinkActive="active">
           Manage Categories
         </button>
@@ -52,16 +52,16 @@
     </mat-card>
   </mat-grid-tile>
   <mat-grid-tile>
-    <mat-card>
-      <mat-card-title>
-        Products
+    <mat-card class = "admin-dashboard-card" routerLink="/shop" routerLinkActive="active">
+      <mat-card-title class="admin-dashboard-title">
+        Shop
       </mat-card-title>
       <mat-card-content class="admin-dashboard-content">
         <mat-icon class="material-icons-outlined admin-dashboard-icons">
           inventory_2
         </mat-icon>
       </mat-card-content>
-      <mat-card-actions>
+      <mat-card-actions class="admin-dashboard-actions">
         <button mat-button class="group7-forms-button" routerLink="/shop" routerLinkActive="active">
           Manage Products
         </button>
