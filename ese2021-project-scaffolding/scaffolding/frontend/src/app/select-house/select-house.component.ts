@@ -43,7 +43,7 @@ export class SelectHouseComponent extends BaseFormComponent implements OnInit {
     //this.preSets = this.dialogData.userId;
     //super.ngOnInit();
     this.isLoading = true
-    super.initializeForm(this.dialogData.userId);
+    super.initializeForm(this.dialogData?.userId | 0); // put 0 for test not to crash. Otherwise initialize with undefined
     this.isLoading = false;
   }
 
