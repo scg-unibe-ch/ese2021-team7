@@ -6,14 +6,11 @@
     </div>
     <mat-action-list class="group7-sidenav-list" (click)="sidenav.close()">
     <button mat-list-item class="group7-sidenav-button"  routerLink="/feed" routerLinkActive="active">Feed</button>
-    <!--<button mat-list-item class="group7-sidenav-button" [routerLink]="['/post-form']" [queryParams]="{create: 'true'}" *ngIf="currentUser?.featuresPermissions?.createPost" >Create Post</button> -->
     <button mat-list-item class="group7-sidenav-button" routerLink="/order" routerLinkActive="active" *ngIf="loggedIn">Orders</button>
     <button mat-list-item class="group7-sidenav-button" routerLink="/login" routerLinkActive="active" *ngIf="!loggedIn">Login</button>
     <button mat-list-item class="group7-sidenav-button"  routerLink="/registration" routerLinkActive="active"*ngIf="!loggedIn">Registration</button>
-    <!--<button mat-list-item class="group7-sidenav-button" routerLink="/product-form" *ngIf="loggedIn" [queryParams]="{create: true}" routerLinkActive="active">Product Form</button>-->
-   <!--<button mat-list-item class="group7-sidenav-button" [routerLink]="['/purchase']" [queryParams]="{productId: 1}" routerLinkActive="active">Purchase</button>-->
-      <button mat-list-item class="group7-sidenav-button" routerLink="/shop" routerLinkActive="active">Shop</button>
-
+    <button mat-list-item class="group7-sidenav-button" routerLink="/shop" routerLinkActive="active">Shop</button>
+    <button mat-list-item class="group7-sidenav-button" (click)="logoutUser()" *ngIf="loggedIn">Logout</button>
     </mat-action-list>
 
   </mat-sidenav>
@@ -43,13 +40,3 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
-
-
-
-
-
-
-<!-- The routed views render in the <router-outlet>-->
-<!--
-<router-outlet></router-outlet>
--->

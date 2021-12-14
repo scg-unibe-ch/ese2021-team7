@@ -1,6 +1,6 @@
-import { Vote, VoteAttributes } from '../models/vote.model';
-import { Post } from '../models/post.model';
-import { User } from '../models/user.model';
+import {Vote, VoteAttributes} from '../models/vote.model';
+import {Post} from '../models/post.model';
+import {User} from '../models/user.model';
 
 export class VoteService {
     public async alreadyVoted(postId: number, userId: number, upvote: boolean): Promise<boolean> {

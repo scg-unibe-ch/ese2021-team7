@@ -166,7 +166,7 @@ export class OrderListComponent extends BaseComponent implements OnInit {
       else {
         this.displayedColumns =   ['orderId',  'productName',
           'firstName', 'lastName',
-          'street', 'houseNumber', 'zipCode', 'city', 'productPrice',
+          'street', 'houseNumber', 'zipCode', 'city', 'paymentMethod', 'productPrice',
           'orderStatus', 'actions'];
       }
   }

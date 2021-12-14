@@ -1,12 +1,19 @@
-export enum House {
-  default = 0,
-  Stark = 1,
-  Lannister =2,
-  Arryn = 3,
-  Tully = 4,
-  Baratheon = 5,
-  Greyjoy = 6,
-  Targaryen = 7,
-  Martell = 8,
-  Tyrell = 9
+export class House {
+  public houseName: string;
+  private houses = ["Stark",
+    "Lannister",
+    "Arryn",
+    "Tully",
+    "Baratheon",
+    "Greyjoy",
+    "Targaryen",
+    "Martell",
+    "Tyrell"
+  ];
+
+  constructor(
+    public houseId: number
+  ) {
+    this.houseName = this.houses[houseId-1];
+  }
 }

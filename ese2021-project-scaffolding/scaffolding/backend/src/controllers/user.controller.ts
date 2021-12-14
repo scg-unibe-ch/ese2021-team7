@@ -1,7 +1,5 @@
-
-import express, { Router, Request, Response } from 'express';
-import { UserService } from '../services/user.service';
-import { verifyToken } from '../middlewares/checkAuth';
+import express, {Request, Response, Router} from 'express';
+import {UserService} from '../services/user.service';
 
 const userController: Router = express.Router();
 const userService = new UserService();

@@ -13,7 +13,7 @@ export class ItemService {
                 } else {
                     return new Promise<ItemImageAttributes>((resolve, reject) => {
                         upload.single('image')(req, null, (error: any) => {
-                            ItemImage.create({ fileName: req.file.filename, todoItemId: found.todoItemId })
+                            ItemImage.create({fileName: req.file.filename, todoItemId: found.todoItemId})
                                 .then(created => resolve(created))
                                 .catch(() => reject('Could not upload image!'));
                         });
@@ -34,7 +34,6 @@ export class ItemService {
             })
             .catch(() => Promise.reject('could not fetch the image!'));
     }
-
 
 
 }

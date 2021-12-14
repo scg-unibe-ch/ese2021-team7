@@ -1,6 +1,6 @@
-import { Model, Sequelize, DataTypes } from 'sequelize';
+import {DataTypes, Model, Sequelize} from 'sequelize';
 
-import { User } from './user.model';
+import {User} from './user.model';
 
 export interface PostAttributes {
     postId: number;
@@ -19,24 +19,24 @@ export class Post extends Model<PostAttributes> implements PostAttributes {
 
     public static initialize(sequelize: Sequelize) {
         Post.init({
-            postId: {
-                type: DataTypes.INTEGER,
-                autoIncrement: true,
-                primaryKey: true
+                postId: {
+                    type: DataTypes.INTEGER,
+                    autoIncrement: true,
+                    primaryKey: true
+                },
+                title: {
+                    type: DataTypes.STRING
+                },
+                image: {
+                    type: DataTypes.STRING
+                },
+                text: {
+                    type: DataTypes.STRING
+                },
+                category: {
+                    type: DataTypes.INTEGER
+                }
             },
-            title: {
-                type: DataTypes.STRING
-            },
-            image: {
-                type: DataTypes.STRING
-            },
-            text: {
-                type: DataTypes.STRING
-            },
-            category: {
-                type: DataTypes.INTEGER
-            }
-        },
             {
                 sequelize,
                 tableName: 'post'

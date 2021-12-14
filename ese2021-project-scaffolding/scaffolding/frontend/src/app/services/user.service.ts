@@ -7,10 +7,10 @@ import { AccessPermission } from '../models/access-permission';
 import { FeaturePermission } from '../models/feature-permission';
 import { PermissionService } from './permission.service';
 import { FormGroup } from '@angular/forms';
-import { map, tap } from 'rxjs/operators';
-import { House } from '../models/house';
+import {delay, map, tap } from 'rxjs/operators';
 import { OrderListServiceService } from './order-list-service.service';
 import { Order } from '../models/order';
+import { House } from '../models/house';
 
 @Injectable({
   providedIn: 'root'
@@ -157,7 +157,7 @@ export class UserService {
   createUserFromBackendReponse(res: any): User {
     let user = new User(res.userId, res.userName, res.password, res.admin, res.firstName,
       res.lastName, res.email, res.street, res.houseNumber, res.zipCode, res.city,
-      res.birthday, res.phoneNumber, House.default);
+      res.birthday, res.phoneNumber, res.house? new House(res.house) : undefined);
     //set correct permissions
     if (res.admin) {
       user.setAccessPermissions(this.permissionService.getAdminAccessPermissions());
@@ -167,11 +167,6 @@ export class UserService {
       user.setFeaturesPermissions(this.permissionService.getUserFeaturePermissions());
     }
     //check if user can select House
-    if (res.house) {
-      if (user.featuresPermissions) user.featuresPermissions.setSelectHousePermission(true);
-    } else {
-    if (user.featuresPermissions) user.featuresPermissions.setSelectHousePermission(false);
-    }
     return user;
   }
 
@@ -211,6 +206,16 @@ export class UserService {
           let filteredOrders: Order[] = orders.filter((order: Order) => order.orderStatus == "Shipped");
           return filteredOrders.length >= 2;
         }),
+    );
+  }
+
+  selectHouse(userId: number): Observable<any> {
+    return this.httpClient.post(environment.endpointURL + "user/discoverHouse", {
+      userId: userId
+    }).pipe(
+      tap(res => console.log(JSON.stringify(res))),
+      tap((house: any) => this.user?.setHouse(house.house)),
+      delay(2000)
     );
   }
 

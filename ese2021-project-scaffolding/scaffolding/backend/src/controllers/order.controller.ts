@@ -1,5 +1,4 @@
-
-import express, { Router, Request, Response } from 'express';
+import express, {Request, Response, Router} from 'express';
 import {OrderService} from '../services/oder.service';
 
 const router: Router = express.Router();

@@ -1,17 +1,17 @@
-import express, { Application , Request, Response } from 'express';
+import express, {Application} from 'express';
 import morgan from 'morgan';
-import { TodoItemController } from './controllers/todoitem.controller';
-import { TodoListController } from './controllers/todolist.controller';
-import { UserController } from './controllers/user.controller';
-import { SecuredController } from './controllers/secured.controller';
-import { Sequelize } from 'sequelize';
-import { TodoList } from './models/todolist.model';
-import { TodoItem } from './models/todoitem.model';
-import { User } from './models/user.model';
-import { Post } from './models/post.model';
-import { Product } from './models/product.model';
-import { Order } from './models/order.model';
-import { Vote } from './models/vote.model';
+import {TodoItemController} from './controllers/todoitem.controller';
+import {TodoListController} from './controllers/todolist.controller';
+import {UserController} from './controllers/user.controller';
+import {SecuredController} from './controllers/secured.controller';
+import {Sequelize} from 'sequelize';
+import {TodoList} from './models/todolist.model';
+import {TodoItem} from './models/todoitem.model';
+import {User} from './models/user.model';
+import {Post} from './models/post.model';
+import {Product} from './models/product.model';
+import {Order} from './models/order.model';
+import {Vote} from './models/vote.model';
 import {Category} from './models/category.model';
 
 
@@ -30,6 +30,11 @@ export class Server {
     private sequelize: Sequelize;
     private port = process.env.PORT || 3000;
 
+    /***
+     * If testdata should be generated, the call for the method makeTestData should have no parameter or true. If no
+     * testdata should be generated, i.e. a database with only the table but no content, then the call for makeTestData
+     * should have the parameter false
+     */
     constructor() {
         this.server = this.configureServer();
         this.sequelize = this.configureSequelize();
