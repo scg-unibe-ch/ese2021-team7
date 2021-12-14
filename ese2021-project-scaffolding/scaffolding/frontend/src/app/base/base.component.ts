@@ -278,7 +278,7 @@ export class BaseComponent implements OnInit, OnChanges {
         else {
           switch (user.house?.houseId) {
             case 1:
-              return 'use-stark-background';
+              return 'house-stark-background';
               break;
             case 2:
               return 'house-lannister-background';

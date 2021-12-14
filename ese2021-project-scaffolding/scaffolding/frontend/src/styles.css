@@ -372,46 +372,55 @@ table {
 .house-stark-background {
   background-attachment: fixed;
   background-image: url("assets/houses/backgrounds/stark-background.jpg");
+  background-size: 100%;
 }
 
 .house-lannister-background {
   background-attachment: fixed;
+  background-size: 100%;
   background-image: url("assets/houses/backgrounds/lannister-background.jpg") !important;
 }
 
 .house-baratheon-background {
   background-attachment: fixed;
+  background-size: 100%;
   background-image: url("assets/houses/backgrounds/baratheon-background.jpg");
 }
 
 
 .house-martell-background {
   background-attachment: fixed;
+  background-size: 100%;
   background-image: url("assets/houses/backgrounds/martell-background.jpg");
 }
 
 .house-targaryen-background {
   background-attachment: fixed;
+  background-size: 100%;
   background-image: url("assets/houses/backgrounds/targaryen-background.jpg");
 }
 
 .house-tully-background {
   background-attachment: fixed;
+  background-size: 100%;
   background-image: url("assets/houses/backgrounds/tully-background.jpg");
 }
 
 .house-tyrell-background {
   background-attachment: fixed;
+  background-size: 100%;
   background-image: url("assets/houses/backgrounds/tyrell-background.jpg");
 }
 
 .house-greyjoy-background {
   background-attachment: fixed;
+  background-size: 100%;
   background-image: url("assets/houses/backgrounds/greyjoy-background.jpg");
 }
 
 .house-arryn-background {
   background-attachment: fixed;
+  background-size: 100%;
   background-image: url("assets/houses/backgrounds/arryn-background.jpg");
 }
 

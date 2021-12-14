@@ -4,7 +4,6 @@ import {UserService} from "../services/user.service";
 import {Router} from "@angular/router";
 import { AccessPermission } from '../models/access-permission';
 import { BaseComponent } from '../base/base.component';
-import { SelectHouseComponent } from '../select-house/select-house.component';
 import { MatDialog } from '@angular/material/dialog';
 import { HouseSelectorComponent } from '../house-selector/house-selector.component';
 import { Observable, of } from 'rxjs';
